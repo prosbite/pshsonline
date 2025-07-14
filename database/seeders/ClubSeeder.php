@@ -14,6 +14,17 @@ class ClubSeeder extends Seeder
      */
     public function run(): void
     {
+        $club = Club::create([
+            'name' => 'Homemakers',
+            'description' => 'Description for Club Homemakers',
+            'status' => 'active',
+        ]);
+        $club->clubRegister()->create([
+            'club_id' => $club->id,
+            'user_id' => 2,
+            'school_year_id' => SchoolYear::current()->id,
+            'status' => 'active',
+        ]);
         for($i = 1; $i <= 20; $i++) {
             $club = Club::create([
                 'name' => 'Club ' . $i,
@@ -22,7 +33,7 @@ class ClubSeeder extends Seeder
             ]);
             $club->clubRegister()->create([
                 'club_id' => $club->id,
-                'user_id' => $i + 1,
+                'user_id' => 2 + $i,
                 'school_year_id' => SchoolYear::current()->id,
                 'status' => 'active',
             ]);

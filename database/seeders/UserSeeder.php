@@ -19,11 +19,18 @@ class UserSeeder extends Seeder
             'role' => 'admin',
             'status' => 'active',
         ]);
+        \App\Models\User::factory()->create([
+            'name' => 'Loida Mae Payao',
+            'email' => 'loidamaepayao@gmail.com',
+            'password' => '12345678',
+            'role' => 'club adviser',
+            'status' => 'active',
+        ]);
         for($i = 1; $i <= 20; $i++) {
             \App\Models\User::factory()->create([
                 'name' => 'Club Adviser ' . $i,
                 'email' => 'club_adviser' . $i . '@clubadviser.com',
-                'password' => 'club_adviser_' . $i,
+                'password' => '12345678',
                 'role' => 'club adviser',
                 'status' => 'active',
             ]);
