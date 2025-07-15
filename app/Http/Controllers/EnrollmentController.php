@@ -16,7 +16,7 @@ class EnrollmentController extends Controller
     {
         return Inertia::render('Enrollment', [
             'gradeLevels' => GradeLevel::with('sections')->get(),
-            'learners' => Learner::with(['currentEnrollment.section'])->get(),
+            'learners' => Learner::clubEntrants(),
             'sections' => Section::all(),
         ]);
     }

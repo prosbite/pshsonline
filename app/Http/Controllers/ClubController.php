@@ -14,7 +14,7 @@ class ClubController extends Controller
 {
     public function membersList()
     {
-        $learners = Learner::with(['currentClub.currentRegister', 'currentEnrollment.section'])->get();
+        $learners = Learner::clubEntrants();
         return Inertia::render('ClubMembers', [
             'learners' => $learners,
         ]);
@@ -22,10 +22,6 @@ class ClubController extends Controller
 
     public function registerMember(Request $request)
     {
-        // $request->validate([
-        //     'learner_id' => 'required',
-        //     'club_id' => 'required',
-        // ]);
         $request->validate([
             'learner_id' => 'required|integer',
             'club_id' => [
@@ -35,6 +31,7 @@ class ClubController extends Controller
                                  ->where('school_year_id', SchoolYear::current()->id);
                 }),
             ],
+            'grade_level' => ['required', 'integer', 'lte:10'],
         ]);
         $learner = Learner::find($request->learner_id);
         $learner->clubs()->attach($request->club_id, [

@@ -30,7 +30,7 @@
                                 </td> -->
                                 <td class="py-2">{{learner.last_name}}, {{learner.first_name}}</td>
                                 <td class="py-2">{{learner.current_enrollment.section.grade_level.grade_level + ' - ' + learner.current_enrollment.section.section_name}}</td>
-                                <td class="py-2 text-gray-500">{{ learner.current_club?.length > 0 ? learner.current_club?.[0].name : 'No club yet' }}</td>
+                                <td class="py-2 text-gray-500">{{ joinedClubs(learner) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span
                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -127,13 +127,37 @@ const props = defineProps({
 })
 const selectedClub = ref({})
 const hasClub = (learner: any) => {
-    return learner.current_club?.length > 0
+    let hasClub = false
+    if(club.value?.club?.nature.slice(0, 3).toLowerCase() === 'alp') {
+        learner.current_club?.map((clb: any) => {
+            if(clb.nature.slice(0, 3).toLowerCase() === club.value?.club?.nature.slice(0, 3).toLowerCase()) {
+                hasClub = true
+            }
+        })
+    } else {
+        learner.current_club?.map((clb: any) => {
+            if(clb.id === club.value?.club?.id) {
+                hasClub = true
+            }
+        })
+    }
+    return hasClub
 }
-
+const joinedClubs = (learner: any) => {
+    let clubs = []
+    if(learner.current_club?.length === 0) {
+        return 'No clubs yet'
+    }
+    learner.current_club?.map((clb: any) => {
+        clubs.push(clb.name)
+    })
+    return clubs.join(', ')
+}
 const addNewMember = (learner: any) => {
     const data = {
         learner_id: learner.id,
         club_id: club.value?.id,
+        grade_level: learner.current_enrollment.section.grade_level.grade_level,
     }
     router.post(route('club.register'), data, {
         onSuccess: () => {

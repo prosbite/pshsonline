@@ -50,12 +50,20 @@ class Learner extends Model
                 ->withTimestamps()
                 ->withPivot('school_year_id')
                 ->wherePivot('school_year_id', SchoolYear::current()->id)
-                ->orderBy('club_learner.created_at') // or another field
-                ->limit(1);
+                ->orderBy('club_learner.created_at');
     }
 
     public function learnersWithoutClubs()
     {
         return $this->whereDoesntHave('clubs');
+    }
+
+    public static function clubEntrants()
+    {
+        return self::with(['currentClub.currentRegister', 'currentEnrollment.section.gradeLevel'])
+        ->whereHas('currentEnrollment.section.gradeLevel', function ($query) {
+            $query->whereNotIn('grade_level', [11, 12]);
+        })
+        ->get();
     }
 }
