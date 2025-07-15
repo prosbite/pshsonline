@@ -21,7 +21,7 @@
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
         <tr
-          v-for="(club, index) in props.clubs" :key="club.id"
+          v-for="(club, index) in sortedClubs" :key="club.id"
         >
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 {{ index + 1 }}
@@ -33,13 +33,13 @@
                 </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ parseInt('10') }}
+                {{ club.club.learners?.length }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ parseInt('5') }}
+                {{ club.club.learners?.filter((learner) => learner.gender === 'male').length }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ parseInt('5') }}
+                {{ club.club.learners?.filter((learner) => learner.gender === 'female').length }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <button class="px-3 py-1 bg-red-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-red-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
@@ -61,7 +61,11 @@
 
 <script lang="ts" setup>
 import { ucWords, middleInitials } from '@/composables/utilities';
+import { computed } from 'vue';
 const props = defineProps({
     clubs: Array,
+})
+const sortedClubs = computed(() => {
+  return [...props.clubs].sort((a, b) => b.club.learners.length - a.club.learners.length)
 })
 </script>

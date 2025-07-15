@@ -109,25 +109,25 @@ class ClubSeeder extends Seeder
                 'nature' => 'ALP 12',
                 'name' => 'Red Cross Youth Club',
                 'description' => 'Red Cross Youth Club',
-                'adviser' => 4,
+                'adviser' => 17,
             ],
             [
                 'nature' => 'ALP 13',
                 'name' => 'Math Club',
                 'description' => 'Math Club (For Accreditation)',
-                'adviser' => 6,
+                'adviser' => 18,
             ],
             [
                 'nature' => 'ALP 14',
                 'name' => 'Football Club',
                 'description' => 'Football Club',
-                'adviser' => 17,
+                'adviser' => 19,
             ],
             [
                 'nature' => 'ALP 15',
                 'name' => 'Frisbee Club',
                 'description' => 'Frisbee Club',
-                'adviser' => 18,
+                'adviser' => 20,
             ],
         ];
 

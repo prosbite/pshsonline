@@ -10,7 +10,7 @@ const props = defineProps({
     users: Array,
 });
 onMounted(() => {
-    console.log(props.clubs);
+    // console.log(props.clubs);
 })
 </script>
 <template>
@@ -20,7 +20,7 @@ onMounted(() => {
         <div class="page">
             <h1 class="text-4xl font-extrabold text-gray-900 mb-8 w-full">Clubs List</h1>
             <div class="flex gap-4 w-full">
-                <ClubForm :users="props.users" class="flex-1 w-full" />
+                <ClubForm :users="props.users" class="flex-1 w-full hidden" />
                 <Clubs :clubs="props.clubs" class="flex-2" />
             </div>
         </div>

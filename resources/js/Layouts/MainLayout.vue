@@ -1,8 +1,11 @@
 <template>
-    <div class="flex min-h-screen font-sans">
-      <Sidebar v-if="user.club_registers?.length > 0 || user.role === 'admin'" />
-      <div v-if="user.club_registers?.length > 0 || user.role === 'admin'" class="flex-grow p-8 overflow-y-auto bg-gray-100">
-        <slot />
+    <div class="flex min-h-screen font-sans relative">
+      <Sidebar v-if="user.club_registers?.length > 0 || user.role === 'admin'" class="ml-[-16rem] lg:ml-0" />
+      <div v-if="user.club_registers?.length > 0 || user.role === 'admin'" class="flex flex-col flex-1 flex-grow overflow-y-auto bg-gray-100">
+        <TopNav class="lg:hidden" />
+        <div class="px-8 py-8">
+          <slot />
+        </div>
       </div>
       <div v-else class="flex-grow p-8 overflow-y-auto bg-gray-100">
         <p class="text-center text-gray-600">You are not enrolled in any club yet.</p>
@@ -16,6 +19,8 @@
   import 'vue3-toastify/dist/index.css'
   import { usePage } from '@inertiajs/vue3'
   import { onMounted, computed } from 'vue'
+  import TopNav from '@/Components/TopNav.vue'
+
   const page = usePage()
   const props = defineProps({
     success: {
