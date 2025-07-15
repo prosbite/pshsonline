@@ -117,6 +117,18 @@ class ClubSeeder extends Seeder
                 'description' => 'Math Club (For Accreditation)',
                 'adviser' => 6,
             ],
+            [
+                'nature' => 'ALP 14',
+                'name' => 'Football Club',
+                'description' => 'Football Club',
+                'adviser' => 17,
+            ],
+            [
+                'nature' => 'ALP 15',
+                'name' => 'Frisbee Club',
+                'description' => 'Frisbee Club',
+                'adviser' => 18,
+            ],
         ];
 
         foreach ($clubs as $club) {

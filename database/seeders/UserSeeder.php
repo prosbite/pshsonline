@@ -61,7 +61,7 @@ class UserSeeder extends Seeder
                 'middle_name' => 'C.',
                 'first_name' => 'Nerry',
                 'gender' => 'male',
-                'email' => 'nerrynuñez@alp.com',
+                'email' => 'nerrynunez@alp.com',
             ],
             [
                 'last_name' => 'Valencia',
@@ -118,6 +118,20 @@ class UserSeeder extends Seeder
                 'first_name' => 'Hannah Elizabeth',
                 'gender' => 'female',
                 'email' => 'hannahelizabethgarrido@alp.com',
+            ],
+            [
+                'last_name' => 'Club',
+                'middle_name' => 'A.',
+                'first_name' => 'Football',
+                'gender' => 'male',
+                'email' => 'footballclub@alp.com',
+            ],
+            [
+                'last_name' => 'Club',
+                'middle_name' => 'A.',
+                'first_name' => 'Frisbee',
+                'gender' => 'male',
+                'email' => 'frisbeeclub@alp.com',
             ],
         ];
 

@@ -18,13 +18,13 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr v-for="learner,index in props.learners" :key="index">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ ucWords(learner.last_name)}}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucWords(learner.first_name) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucWords(learner.middle_name) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucWords(learner.gender) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucWords(learner.grade_level) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucWords(learner.section) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ learner.email }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ ucWords(learner?.last_name)}}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucWords(learner?.first_name) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucWords(learner?.middle_name) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucWords(identifyGender(learner?.gender)) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucWords(learner?.grade_level) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ ucWords(learner?.section) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ learner?.email }}</td>
                         <!-- <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                         </td> -->
@@ -80,7 +80,7 @@ const processedData = computed(() => {
             last_name: ucWords(learner.last_name),
             first_name: ucWords(learner.first_name),
             middle_name: ucWords(learner.middle_name),
-            gender: learner.gender.toLowerCase(),
+            gender: identifyGender(learner.gender),
             grade_level_id: findGradeLevel(learner.grade_level),
             section_id: findSection(learner.section),
             email: learner.email,
@@ -88,7 +88,9 @@ const processedData = computed(() => {
     })
     return learners.value
 })
-
+const identifyGender = (gender:string) => {
+    return gender?.toLowerCase()[0] === 'm' ? 'male' : 'female'
+}
 const findGradeLevel = (grade_level:string) => {
     return props.gradeLevels.find((grade) => parseInt(grade.id) + 6 === parseInt(grade_level))?.id
 }
