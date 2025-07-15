@@ -23,11 +23,6 @@ class Club extends Model
         return $this->belongsTo(User::class, 'adviser_id');
     }
 
-    public function coAdviser()
-    {
-        return $this->belongsTo(User::class, 'co_adviser_id');
-    }
-
     public function clubRegister()
     {
         return $this->hasMany(ClubRegister::class);

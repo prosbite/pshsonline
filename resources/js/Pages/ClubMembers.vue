@@ -1,18 +1,16 @@
 <template>
     <MainLayout>
         <div class="page">
-            <h1 class="text-4xl font-extrabold text-gray-900 mb-8">{{club?.name}} Enlistment</h1>
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-8">{{ club?.club?.name }} Enlistment</h1>
 
             <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
                 <div class="flex flex-col md:flex-row gap-4">
                     <input v-model="searchInput" type="text" placeholder="Search by Name" class="flex-grow p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    <!-- <select class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="">Filter by Grade</option>
-                        <option value="10">Grade 10</option>
-                        <option value="11">Grade 11</option>
-                        <option value="12">Grade 12</option>
+                    <select v-if="clubs?.length > 1" v-model="selectedClub" class="p-3 border border-gray-300 w-56 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <!-- <option disabled value="">Select Club</option> -->
+                        <option v-for="club in clubs" :key="club.id" :value="club.id">{{ club.club.name }}</option>
                     </select>
-                    <select class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                   <!--  <select class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                         <option value="">Filter by Role</option>
                         <option value="leader">Leader</option>
                         <option value="member">Member</option>
@@ -75,7 +73,6 @@
                         <tr v-for="member,index in clubMembers" :key="index">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ member.last_name }}, {{ member.first_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ member.grade_section.grade_level.grade_level + ' - ' + member.grade_section.section_name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Member</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span
                                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
@@ -83,6 +80,7 @@
                                 >{{ ucWords(member.gender) }}</span>
                                 <!-- <span :class="{'bg-green-100 text-green-800': member.status === 'Active', 'bg-red-100 text-red-800': member.status === 'Inactive'}" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">{{ member.status }}</span> -->
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Member</td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <!-- <a href="#" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a> -->
                                 <a @click.prevent="unregisterMember(member)" href="#" class="text-red-600 hover:text-red-900">Remove</a>
@@ -101,7 +99,7 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr v-if="club.learners.length === 0">
+                        <tr v-if="club?.learners?.length === 0">
                             <td colspan="5" class="text-left px-6 py-4 text-gray-500">No members yet.</td>
                         </tr>
                     </tbody>
@@ -113,7 +111,7 @@
 
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
@@ -127,6 +125,7 @@ const props = defineProps({
         default: () => []
     },
 })
+const selectedClub = ref({})
 const hasClub = (learner: any) => {
     return learner.current_club?.length > 0
 }
@@ -134,9 +133,8 @@ const hasClub = (learner: any) => {
 const addNewMember = (learner: any) => {
     const data = {
         learner_id: learner.id,
-        club_id: club.value.id,
+        club_id: club.value?.id,
     }
-    console.log(data)
     router.post(route('club.register'), data, {
         onSuccess: () => {
             toast.success('Member registered successfully.', {
@@ -158,7 +156,7 @@ const addNewMember = (learner: any) => {
 }
 
 const clubMembers = computed(() => {
-    let members = JSON.parse(JSON.stringify(club.value.learners))
+    let members = club.value?.club?.learners ? JSON.parse(JSON.stringify(club.value?.club?.learners)) : []
     members.map((member: any) => {
         props.learners.map((learner: any) => {
             if (learner.id === member.id) {
@@ -175,9 +173,8 @@ const unregisterMember = (learner: any) => {
     }
     const data = {
         learner_id: learner.id,
-        club_id: club.value.id,
+        club_id: club.value?.id,
     }
-    console.log(data)
     router.post(route('club.unregister'), data, {
         onSuccess: () => {
             toast.success('Member unregistered successfully.', {
@@ -197,18 +194,29 @@ const unregisterMember = (learner: any) => {
     })
 }
 
+const clubs = computed(() => {
+    return page.props.auth.user?.club_registers
+})
+
 const searchInput = ref('')
 const searchResults = computed(() => {
-    if (searchInput.value.length < 2) {
+    if (searchInput.value?.length < 2) {
         return []
     }
     return props.learners.filter((learner: any) => {
-        return learner.last_name.toLowerCase().includes(searchInput.value.toLowerCase()) ||
-        learner.first_name.toLowerCase().includes(searchInput.value.toLowerCase())
+        return learner.last_name.toLowerCase().includes(searchInput.value?.toLowerCase()) ||
+        learner.first_name.toLowerCase().includes(searchInput.value?.toLowerCase())
     })
 })
 
 const club = computed(() => {
-    return page.props.auth.user?.club_registers?.[0]?.club
+    return clubs.value?.filter((club: any) => {
+        return club.id === selectedClub.value
+    })[0]
+})
+onMounted(() => {
+    if(clubs.value?.length > 0) {
+        selectedClub.value = clubs.value[0].id
+    }
 })
 </script>

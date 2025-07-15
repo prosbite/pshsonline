@@ -52,6 +52,6 @@ class User extends Authenticatable
 
     public function clubRegisters()
     {
-        return $this->hasMany(ClubRegister::class)->where('school_year_id', SchoolYear::current()->id)->limit(1);
+        return $this->hasMany(ClubRegister::class)->where('school_year_id', SchoolYear::current()->id);
     }
 }

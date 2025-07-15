@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 });
 Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');
+Route::get('/clubs', [ClubController::class, 'clubsList'])->name('club.list');
 Route::post('/club/register', [ClubController::class, 'registerMember'])->name('club.register');
 Route::post('/club/unregister', [ClubController::class, 'unregisterMember'])->name('club.unregister');
 Route::get('/club-management', function () {

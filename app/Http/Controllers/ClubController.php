@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Learner;
-use App\Models\Club;
 use App\Models\ClubRegister;
+use App\Models\User;
 use App\Models\SchoolYear;
 use Illuminate\Validation\Rule;
 
@@ -52,5 +52,14 @@ class ClubController extends Controller
         $learner = Learner::find($request->learner_id);
         $learner->clubs()->detach($request->club_id);
         return redirect()->route('club.members')->with('success', 'Member unregistered successfully.');
+    }
+
+    public function clubsList()
+    {
+        $clubs = ClubRegister::where('school_year_id', SchoolYear::current()->id)->with(['club', 'user', 'schoolYear'])->get();
+        return Inertia::render('Clubs', [
+            'clubs' => $clubs,
+            'users' => User::all(),
+        ]);
     }
 }
