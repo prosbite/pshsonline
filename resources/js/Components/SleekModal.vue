@@ -1,6 +1,6 @@
 <template>
     <transition name="modal-fade">
-      <div v-if="isVisible" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50" @click.self="closeModal">
+      <div v-if="isVisible" class="fixed inset-0 z-50 flex justify-center p-4 bg-black bg-opacity-50" @click.self="closeModal">
         <div
           :class="modalClasses"
           class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all duration-300 ease-out flex flex-col overflow-hidden"
@@ -54,10 +54,15 @@
         type: Boolean,
         default: false
       },
+      position: {
+        type: String,
+        default: 'center', // 'center', 'top', 'bottom', 'left', 'right'
+        validator: (value) => ['center', 'top', 'bottom', 'left', 'right'].includes(value)
+      },
       size: {
         type: String,
         default: 'md', // 'sm', 'md', 'lg', 'xl', '2xl'
-        validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl','3xl','4xl'].includes(value)
+        validator: (value) => ['sm', 'md', 'lg', 'xl', '2xl','3xl','4xl','5xl','6xl','7xl'].includes(value)
       }
     },
     emits: ['close'],
@@ -78,6 +83,12 @@
             return 'max-w-3xl w-full h-auto max-h-[90vh]';
           case '4xl':
             return 'max-w-4xl w-full h-auto max-h-[90vh]';
+          case '5xl':
+            return 'max-w-5xl w-full h-auto max-h-[90vh]';
+          case '6xl':
+            return 'max-w-6xl w-full h-auto max-h-[90vh]';
+          case '7xl':
+            return 'max-w-7xl w-full h-auto max-h-[90vh]';
           default:
             return 'max-w-md w-full h-auto max-h-[90vh]';
         }

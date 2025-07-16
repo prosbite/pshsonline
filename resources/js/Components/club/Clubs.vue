@@ -69,7 +69,7 @@
       </tbody>
     </table>
   </div>
-  <SleekModal :is-visible="showModal" @close="showModal = false" size="4xl">
+  <SleekModal :is-visible="showModal" @close="showModal = false" size="7xl">
         <template v-if="showEnlisted" #header>
             <div class="flex justify-between flex-1 pr-8">
                 <div>
@@ -122,9 +122,31 @@
         </template>
   </SleekModal>
 
-  <SleekModal :is-visible="showClubDetailsModal" @close="showClubDetailsModal = false" size="4xl">
+  <SleekModal :is-visible="showClubDetailsModal" @close="showClubDetailsModal = false" size="7xl">
+    <template #header>
+        <div class="flex justify-between items-center flex-1 pr-8">
+            <div>
+                <h3 class="text-2xl font-semibold text-gray-800">{{ selectedClubDetails.club.name }}</h3>
+                <p class="text-gray-600 text-sm">Adviser: {{ selectedClubDetails.user.name }}</p>
+            </div>
+            <select
+                id="sectionFilter"
+                v-model="selectedClub"
+                class="block w-full md:w-64 px-4 border h-11 border-gray-300 text-gray-700 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+                <option :value="null" disabled>Select Club</option>
+            <option
+                v-for="club in sortedClubs"
+                :key="club.id"
+                :value="club.id"
+            >
+            {{ club.club.name }}
+            </option>
+        </select>
+    </div>
+    </template>
     <template #body>
-        Club Details
+        <ClubDetails :club="selectedClubDetails" />
     </template>
   </SleekModal>
 </div>
@@ -137,12 +159,14 @@ import { computed, onMounted, ref } from 'vue';
 import SleekModal from '../SleekModal.vue';
 import Enlisted from './Enlisted.vue';
 import Notlisted from './Notlisted.vue';
+import ClubDetails from './ClubDetails.vue';
 
 const showModal = ref(false)
 const showClubDetailsModal =ref(false)
 const showEnlisted = ref(true)
 const selectedSection = ref(null)
 const selectedNotListedSection = ref(null)
+const selectedClub = ref(null)
 
 const enlistedSections = computed(() => {
     let sections = []
@@ -187,11 +211,15 @@ const props = defineProps({
 })
 const showClubDetails = (club: any) => {
     showClubDetailsModal.value = true
-    console.log(club)
+    selectedClub.value = club.id
 }
+const selectedClubDetails = computed(() => {
+    return props.clubs.filter((club: any) => club.id === selectedClub.value)[0]
+})
 onMounted(() => {
     selectedSection.value = enlistedSections?.value[0].id
     selectedNotListedSection.value = notListedSections?.value[0].id
+    selectedClub.value = sortedClubs?.value[0].id
     // console.log(unlisted.value)
 })
 
