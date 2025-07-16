@@ -3,7 +3,7 @@
         <div class="page">
             <h1 class="text-4xl font-extrabold text-gray-900 mb-8">{{ club?.club?.name }} Enlistment</h1>
 
-            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
+            <div v-if="!maximumMembers" class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
                 <div class="flex flex-col md:flex-row gap-4">
                     <input v-model="searchInput" type="text" placeholder="Search by Name" class="flex-grow p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                     <select v-if="clubs?.length > 1" v-model="selectedClub" class="p-3 border border-gray-300 w-56 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
@@ -57,11 +57,14 @@
                     <!-- <button class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-colors duration-200">Assign from School DB</button> -->
                 </div>
             </div>
-
+            <div v-else class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
+                <span class="text-left text-gray-500">Maximum number of members reached.</span>
+            </div>
             <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade/Section</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
@@ -71,6 +74,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr v-for="member,index in clubMembers" :key="index">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ member.last_name }}, {{ member.first_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ member.grade_section.grade_level.grade_level + ' - ' + member.grade_section.section_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -124,6 +128,9 @@ const props = defineProps({
         required: true,
         default: () => []
     },
+})
+const maximumMembers = computed(() => {
+    return club.value?.club?.learners?.length >= 40
 })
 const selectedClub = ref({})
 const hasClub = (learner: any) => {

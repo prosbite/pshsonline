@@ -35,6 +35,7 @@
       <tbody class="bg-white divide-y divide-gray-200">
         <tr
           v-for="(club, index) in sortedClubs" :key="club.id"
+          class="hover:bg-gray-100 cursor-pointer"
         >
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                 {{ index + 1 }}
@@ -55,8 +56,8 @@
                 {{ club.club.learners?.filter((learner) => learner.gender === 'female').length }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <button class="px-3 py-1 bg-red-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-red-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                    Remove
+                <button @click="showClubDetails(club)" class="px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    View Details
                 </button>
             </td>
         </tr>
@@ -120,6 +121,12 @@
             <Notlisted :notlisted="unlisted" :currentSection="selectedNotListedSection" />
         </template>
   </SleekModal>
+
+  <SleekModal :is-visible="showClubDetailsModal" @close="showClubDetailsModal = false" size="4xl">
+    <template #body>
+        Club Details
+    </template>
+  </SleekModal>
 </div>
 
 </template>
@@ -132,6 +139,7 @@ import Enlisted from './Enlisted.vue';
 import Notlisted from './Notlisted.vue';
 
 const showModal = ref(false)
+const showClubDetailsModal =ref(false)
 const showEnlisted = ref(true)
 const selectedSection = ref(null)
 const selectedNotListedSection = ref(null)
@@ -177,6 +185,10 @@ const props = defineProps({
     entrants: Array,
     sections: Array
 })
+const showClubDetails = (club: any) => {
+    showClubDetailsModal.value = true
+    console.log(club)
+}
 onMounted(() => {
     selectedSection.value = enlistedSections?.value[0].id
     selectedNotListedSection.value = notListedSections?.value[0].id
