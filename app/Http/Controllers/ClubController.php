@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Learner;
 use App\Models\ClubRegister;
+use App\Models\Section;
 use App\Models\User;
 use App\Models\SchoolYear;
 use Illuminate\Validation\Rule;
@@ -56,7 +57,9 @@ class ClubController extends Controller
         $clubs = ClubRegister::where('school_year_id', SchoolYear::current()->id)->with(['club', 'user', 'schoolYear'])->get();
         return Inertia::render('Clubs', [
             'clubs' => $clubs,
+            'entrants' => Learner::clubEntrants(),
             'users' => User::all(),
+            'sections' => Section::all(),
         ]);
     }
 }
