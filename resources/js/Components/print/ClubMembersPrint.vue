@@ -104,7 +104,7 @@ const sortedMembers = ref(props.members.sort((a, b) => {
     return 0;
 }))
 onMounted(() => {
-    console.log(sortedMembers.value)
+    // console.log(sortedMembers.value)
 })
 </script>
 

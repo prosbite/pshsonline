@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/club-management', function () {
         return Inertia::render('Club');
     });
+    Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
 });
 
 Route::middleware('auth')->group(function () {

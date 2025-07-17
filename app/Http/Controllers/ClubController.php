@@ -62,4 +62,23 @@ class ClubController extends Controller
             'sections' => Section::all(),
         ]);
     }
+
+    public function updateClub(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer',
+            'name' => 'required|string',
+            'user_id' => 'required|integer',
+            'description' => 'string',
+        ]);
+        $club = ClubRegister::find($request->id);
+        $club->update([
+            'user_id' => $request->user_id,
+        ]);
+        $club->club()->update([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+        return redirect()->route('club.list')->with('success', 'Club updated successfully.');
+    }
 }

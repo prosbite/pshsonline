@@ -11,6 +11,13 @@ const props = defineProps({
     entrants: Array,
     sections: Array
 });
+const editClub = ref(false)
+const selectedClub = ref(null)
+const editClubDetails = (club) => {
+    editClub.value = true
+    selectedClub.value = club
+    console.log(selectedClub.value)
+}
 onMounted(() => {
     // console.log(props.clubs);
 })
@@ -20,10 +27,10 @@ onMounted(() => {
 
     <MainLayout>
         <div class="page">
-            <h1 class="text-4xl font-extrabold text-gray-900 mb-8 w-full">Clubs List</h1>
-            <div class="flex gap-4 w-full">
-                <ClubForm :users="props.users" class="flex-1 w-full hidden" />
-                <Clubs :clubs="props.clubs" :entrants="props.entrants" :sections="props.sections" class="flex-2" />
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-8 flex-1">Clubs List</h1>
+            <div class="grid grid-cols-3 gap-4">
+                <ClubForm @updated="editClub = false" :users="props.users" :club="selectedClub" class="col-span-1" v-if="editClub" />
+                <Clubs @edit="editClubDetails" class="col-span-2" :class="!editClub ? 'col-span-3' : 'col-span-2'" :clubs="props.clubs" :entrants="props.entrants" :sections="props.sections" />
             </div>
         </div>
     </MainLayout>

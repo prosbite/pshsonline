@@ -1,5 +1,5 @@
 <template>
-<div class="w-full md:w-4/5 bg-white p-8 rounded-xl shadow-md border border-gray-200">
+<div class="w-full bg-white p-8 rounded-xl shadow-md border border-gray-200">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 space-y-4 md:space-y-0">
         <!-- Left: Title -->
         <div>
@@ -25,11 +25,11 @@
       <thead class="bg-gray-50">
         <tr>
             <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2">#</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Club Name</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Members</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Male</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Female</th>
-            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-6">Club Name</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Members</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Male</th>
+            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Female</th>
+            <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
@@ -55,9 +55,23 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {{ club.club.learners?.filter((learner) => learner.gender === 'female').length }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <button @click="showClubDetails(club)" class="px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    View Details
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+                <button @click="showClubDetails(club)" class="px-3 mr-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 hover:text-white text-blue-100 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                </button>
+                <button @click="editClub(club)" class="px-3 py-1 bg-green-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="6" y="6" width="30" height="36" rx="2" ry="2" stroke="black" stroke-width="2" fill="white"/>
+                        <line x1="10" y1="14" x2="30" y2="14" stroke="black" stroke-width="2"/>
+                        <line x1="10" y1="20" x2="30" y2="20" stroke="black" stroke-width="2"/>
+                        <line x1="10" y1="26" x2="24" y2="26" stroke="black" stroke-width="2"/>
+                        <path d="M32 30l6 6-10 10H22v-6l10-10z" stroke="black" stroke-width="2" fill="none"/>
+                        <line x1="30" y1="32" x2="36" y2="38" stroke="black" stroke-width="2"/>
+                    </svg>
+
                 </button>
             </td>
         </tr>
@@ -204,11 +218,15 @@ const unlisted = computed(() => {
     })
     return students
 })
+const emit = defineEmits(['edit'])
 const props = defineProps({
     clubs: Array,
     entrants: Array,
     sections: Array
 })
+const editClub = (club: any) => {
+    emit('edit', club)
+}
 const showClubDetails = (club: any) => {
     showClubDetailsModal.value = true
     selectedClub.value = club.id
