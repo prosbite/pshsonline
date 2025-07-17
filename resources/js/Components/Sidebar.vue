@@ -85,7 +85,8 @@
             <div class="flex flex-col">
                 <span class="text-md font-medium">{{ user.name }}</span>
                 <span class="text-sm text-gray-400 mb-4">{{ ucWords(user.role) }}</span>
-                <button @click="logout" class="text-sm text-gray-400 hover:text-white">Logout</button>
+                <Link :href="route('change-password')" class="text-sm text-left text-gray-400 hover:text-white">Change Password</Link>
+                <button @click="logout" class="text-sm text-left text-gray-400 hover:text-white">Logout</button>
             </div>
         </a>
     </div>

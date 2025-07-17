@@ -60,4 +60,19 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function changePassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'old_password' => ['required', 'current_password'],
+            'new_password' => ['required', 'string', 'min:5', 'max:255', 'confirmed'],
+        ]);
+        $user = Auth::user();
+
+        $user->password = bcrypt($request->new_password);
+        $user->save();
+
+        return Redirect::route('change-password');
+    }
+
 }

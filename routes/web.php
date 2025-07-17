@@ -21,6 +21,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/clubs', [ClubController::class, 'clubsList'])->name('club.list');
     Route::post('/club/register', [ClubController::class, 'registerMember'])->name('club.register');
     Route::post('/club/unregister', [ClubController::class, 'unregisterMember'])->name('club.unregister');
+    Route::get('/change-password', function () {
+        return Inertia::render('ChangePassword');
+    })->name('change-password');
+    Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('change-password.store');
     Route::get('/club-management', function () {
         return Inertia::render('Club');
     });
