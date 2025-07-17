@@ -209,8 +209,8 @@
                         </table>
 
                         <div class="flex flex-col gap-6 mt-12" :class="{ 'page-break-before': breakpoint }">
-                            <div class="flex justify-between">
-                                <div class="flex flex-col">
+                            <div class="flex justify-start">
+                                <div class="flex flex-col flex-1">
                                     <span class="mb-6 text-sm">Prepared by:</span>
                                     <span class="font-bold underline text-md uppercase">
                                         {{ page.props.auth.user.name }}
@@ -220,7 +220,7 @@
                                     </span>
                                 </div>
 
-                                <div class="flex flex-col">
+                                <div class="flex flex-col flex-1">
                                     <span class="mb-6 text-sm">Reviewed by:</span>
                                     <span class="font-bold underline text-md uppercase">
                                         Gretchen Mae B. Empuesto

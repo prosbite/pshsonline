@@ -13,6 +13,7 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 Route::middleware('auth')->group(function () {
+    Route::get('/users', [ProfileController::class, 'index'])->name('users');
     Route::get('/enrollment', [EnrollmentController::class, 'index'])->name('enrollment');
     Route::post('/enrollment', [EnrollmentController::class, 'store'])->name('enrollment.store');
     Route::post('/enrollment/bulk', [EnrollmentController::class, 'storeBulk'])->name('enrollment.bulk');

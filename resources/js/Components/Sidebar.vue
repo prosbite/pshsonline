@@ -77,6 +77,13 @@
                 </a> -->
             </div>
         </div>
+
+        <Link v-if="user.role === 'admin'" :href="route('users')" :class="{'bg-gray-700': route().current('users')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-200 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6 5.87v-2a4 4 0 00-3-3.87m6 5.87v-2a4 4 0 013-3.87M15 11a3 3 0 100-6 3 3 0 000 6zM9 11a3 3 0 100-6 3 3 0 000 6z" />
+            </svg>
+            <span class="text-lg">Users</span>
+        </Link>
     </nav>
     <!-- User Profile/Settings at the bottom -->
     <div class="mt-auto pt-6 border-t border-gray-700">

@@ -10,12 +10,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\User;
+use App\Models\Teacher;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
+    public function index()
+    {
+        return Inertia::render('UserPage', [
+            'users' => User::with('teacher')->get(),
+        ]);
+    }
     public function edit(Request $request): Response
     {
         return Inertia::render('Profile/Edit', [

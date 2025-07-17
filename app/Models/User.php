@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(ClubRegister::class)->where('school_year_id', SchoolYear::current()->id);
     }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
+    }
 }
