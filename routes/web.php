@@ -4,6 +4,7 @@ use App\Http\Controllers\ClubController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,7 @@ Route::get('/', function () {
 });
 Route::middleware('auth')->group(function () {
     Route::get('/users', [ProfileController::class, 'index'])->name('users');
+    Route::post('/users/update', [UserController::class, 'update'])->name('users.update');
     Route::get('/enrollment', [EnrollmentController::class, 'index'])->name('enrollment');
     Route::post('/enrollment', [EnrollmentController::class, 'store'])->name('enrollment.store');
     Route::post('/enrollment/bulk', [EnrollmentController::class, 'storeBulk'])->name('enrollment.bulk');

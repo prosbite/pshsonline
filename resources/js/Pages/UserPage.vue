@@ -14,19 +14,19 @@ const user = ref({
     name: '',
     email: '',
     role: '',
+    gender: '',
 })
-const editUser = (user) => {
+const editUser = (usr) => {
     edit.value = true;
-    user.value = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-    };
-    console.log(user)
+    user.value.id = usr.id;
+    user.value.name = usr.name;
+    user.value.email = usr.email;
+    user.value.role = usr.role;
+    user.value.gender = usr.teacher.gender;
+    window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 const updateUser = async () => {
-    router.post(route('user.update'), user.value, {
+    router.post(route('users.update'), user.value, {
         onSuccess: () => {
             toast.success('User updated successfully.', {
                 autoClose: 5000,
@@ -37,7 +37,9 @@ const updateUser = async () => {
                 name: '',
                 email: '',
                 role: '',
+                gender: '',
             }
+            edit.value = false;
         },
         onError: () => {
             toast.error('Failed to update user.', {
@@ -81,15 +83,19 @@ onMounted(() => {
                                     class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                                 <option value="">Select Role</option>
                                 <option value="admin">Admin</option>
-                                <option value="teacher">Teacher</option>
+                                <option value="club adviser">Club Adviser</option>
                                 <option value="student">Student</option>
                             </select>
                         </div>
 
                         <!-- Buttons -->
                         <div class="flex justify-end space-x-4 pt-4">
+                            <button @click="edit = false"
+                                    class="px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                Cancel
+                            </button>
                             <button type="submit"
-                                    class="px-4 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                    class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                 Update User
                             </button>
                         </div>
@@ -100,35 +106,35 @@ onMounted(() => {
                     <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2">#</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2">#</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr
                         v-for="(user, index) in props.users" :key="user.id"
-                        class="hover:bg-gray-100 cursor-pointer"
+                        class="hover:bg-gray-50 cursor-pointer"
                         >
-                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {{ index + 1 }}
                             </td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {{ user.name }}
                             </td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ user.role }}
                             </td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ user.teacher?.gender }}
                             </td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ user.email }}
                             </td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
                                 <button @click="editUser(user)" class="px-3 py-1 bg-green-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                                     <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect x="6" y="6" width="30" height="36" rx="2" ry="2" stroke="black" stroke-width="2" fill="white"/>
@@ -143,7 +149,7 @@ onMounted(() => {
                             </td>
                         </tr>
                         <tr v-if="props.users.length === 0">
-                            <td colspan="6" class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 No users found.
                             </td>
                         </tr>
