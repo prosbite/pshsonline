@@ -10,9 +10,10 @@ export function ucWords(str: string) {
 }
 
 export function middleInitials(str: string) {
-    if (str === '') {
+    if (str === '' || !str) {
         return '';
     }
     return str.replace(/\b\w/g, (match) => match.toUpperCase()).slice(0, 1) + '.';
 }
+
 

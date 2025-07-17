@@ -1,5 +1,5 @@
 <template>
-    <MainLayout>
+    <MainLayout class="z-50 no-print">
         <div class="page">
             <h1 class="text-4xl font-extrabold text-gray-900 mb-8">{{ club?.club?.name }} Enlistment</h1>
 
@@ -73,9 +73,9 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr v-for="member,index in clubMembers" :key="index">
+                        <tr v-for="member,index in sortedMembers" :key="index">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ member.last_name }}, {{ member.first_name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ member.last_name }}, {{ member.first_name }} {{ middleInitials(member.middle_name ?? '') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ member.grade_section.grade_level.grade_level + ' - ' + member.grade_section.section_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span
@@ -108,8 +108,144 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="flex justify-end w-full pb-12 px-8">
+                    <button @click.prevent="printClubMembers" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="w-5 h-5 text-gray-900 dark:text-white"
+                        >
+                            <!-- Printer body -->
+                            <path d="M6 9V2h12v7" />
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                            <rect x="6" y="14" width="12" height="8" rx="2" ry="2" />
+                            <!-- Paper coming out -->
+                            <line x1="8" y1="18" x2="8" y2="22" />
+                            <line x1="16" y1="18" x2="16" y2="22" />
+                        </svg>
+                        Print
+                    </button>
+                </div>
             </div>
         </div>
+        <Teleport to="body">
+            <table class="to-print w-full">
+                <thead>
+                    <tr>
+                        <th id="header" class="flex items-center justify-between mb-6">
+                            <div class="flex gap-2 items-center">
+                                <img src="/img/pisaylogo.png" class="h-[70px]" alt="Pisay Logo">
+                                <div class="flex flex-col gap-0">
+                                    <span class="text-left">
+                                        Republic of the Philippines
+                                    </span>
+                                    <span class="text-left text-xs leading-normal">
+                                        DEPARTMENT OF SCIENCE AND TECHNOLOGY
+                                    </span>
+                                    <span class="text-left font-bold text-xs leading-normal">
+                                        PHILIPPINE SCIENCE HIGH SCHOOL CARAGA-REGION CAMPUS
+                                    </span>
+                                    <span class="text-left text-xs leading-normal">
+                                        CURRICULUM AND INSTRUCTION DIVISION
+                                    </span>
+                                </div>
+                            </div>
+                            <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <div id="printContent" class="w-full flex flex-col bg-white">
+                        <div class="flex-col w-full font-bold text-lg mb-6">
+                            <span class="text-center block uppercase">
+                                {{ club?.club?.name }}
+                            </span>
+                            <span class="text-center block uppercase mb-4">
+                                SY {{ page.props.sy?.year_start }} - {{ page.props.sy?.year_end }}
+                            </span>
+                            <span class="text-center block uppercase">
+                                List of Club Members
+                            </span>
+                        </div>
+
+                        <table class="w-full border border-black border-collapse mb-10">
+                            <thead>
+                                <tr class="text-center">
+                                    <th></th>
+                                    <th class="flex flex-col text-lg" colspan="2">
+                                        <span clas="block">
+                                            Name
+                                        </span>
+                                    </th>
+                                    <th class="border border-black">
+                                        Grade Level
+                                    </th>
+                                    <th class="border border-black">
+                                        Section
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="learner,index in sortedMembers">
+                                    <td class="border border-black px-0 py-1 text-center">
+                                        {{ index + 1 }}
+                                    </td>
+                                    <td class="border border-black px-2 py-1 text-left">
+                                        {{ ucWords(learner?.last_name) + ', ' + ucWords(learner?.first_name) + ' ' + middleInitials(learner?.middle_name?? '') }}
+                                    </td>
+                                    <td class="border border-black px-2 py-1 text-center">
+                                        {{ learner.grade_section?.grade_level.grade_level }}
+                                    </td>
+                                    <td class="border border-black px-2 py-1 text-center uppercase">
+                                        {{ learner.grade_section?.section_name }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="flex flex-col gap-6 mt-12" :class="{ 'page-break-before': breakpoint }">
+                            <div class="flex justify-between">
+                                <div class="flex flex-col">
+                                    <span class="mb-6 text-sm">Prepared by:</span>
+                                    <span class="font-bold underline text-md uppercase">
+                                        {{ page.props.auth.user.name }}
+                                    </span>
+                                    <span class="text-md">
+                                        {{ club?.club?.name }} Adviser
+                                    </span>
+                                </div>
+
+                                <div class="flex flex-col">
+                                    <span class="mb-6 text-sm">Reviewed by:</span>
+                                    <span class="font-bold underline text-md uppercase">
+                                        Gretchen Mae B. Empuesto
+                                    </span>
+                                    <span class="text-md">
+                                        ALP Coordinator
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between">
+                                <div class="flex flex-col">
+                                    <span class="mb-6 text-sm">Approved by:</span>
+                                    <span class="font-bold underline text-md uppercase">
+                                        JOHN RIDAN D. DECHUSA
+                                    </span>
+                                    <span class="text-md">
+                                        Assistant CID Chief for Student Affairs
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tbody>
+            </table>
+        </Teleport>
     </MainLayout>
 </template>
 
@@ -119,7 +255,7 @@ import { computed, onMounted, ref } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
-import { ucWords } from '@/composables/utilities'
+import { middleInitials, ucWords } from '@/composables/utilities'
 
 const page = usePage()
 const props = defineProps({
@@ -129,6 +265,7 @@ const props = defineProps({
         default: () => []
     },
 })
+const printHeight = ref(0)
 const maximumMembers = computed(() => {
     return club.value?.club?.learners?.length >= 40
 })
@@ -245,9 +382,52 @@ const club = computed(() => {
         return club.id === selectedClub.value
     })[0]
 })
+const sortedMembers = computed(() => {
+  return [...clubMembers.value].sort((a, b) =>
+    a.last_name.localeCompare(b.last_name)
+  )
+})
+const breakpoint = computed(() => {
+    return sortedMembers.value.length > 15 && sortedMembers.value.length < 23
+})
+const printClubMembers = () => {
+    window.print()
+}
 onMounted(() => {
+    printHeight.value = document.getElementById('printContent')?.offsetHeight
     if(clubs.value?.length > 0) {
         selectedClub.value = clubs.value[0].id
     }
 })
 </script>
+
+<style>
+.to-print {
+    display: none;
+}
+@page {
+    margin-left: 1in;
+    margin-right: 1in;
+    margin-top: 1.27cm;
+    margin-bottom: 1.27cm;
+    @top-center {
+        content: element(header);
+    }
+}
+
+header {
+  position: running(header);
+}
+@media print {
+    .no-print {
+        display: none;
+    }
+    .to-print {
+        display: table;
+    }
+    .page-break-before {
+        break-before: page; /* Standard property */
+        page-break-before: always; /* Older property for broader compatibility */
+    }
+}
+</style>

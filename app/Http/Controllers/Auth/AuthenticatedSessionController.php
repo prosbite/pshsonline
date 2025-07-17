@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\SchoolYear;
 use Inertia\Response;
 
 class AuthenticatedSessionController extends Controller
@@ -32,6 +33,9 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        // Store current school year in session
+        $schoolYear = SchoolYear::current();
+        $request->session()->put('sy', $schoolYear);
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

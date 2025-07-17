@@ -1,6 +1,12 @@
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { Head } from '@inertiajs/vue3';
+
+const props = defineProps({
+    clubs: Array,
+    todayEvents: Array,
+    recentAttendance: Array,
+});
 </script>
 
 <template>
