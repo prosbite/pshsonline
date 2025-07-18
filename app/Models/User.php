@@ -35,8 +35,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $with = ['clubRegisters.club'];
-
     /**
      * Get the attributes that should be cast.
      *

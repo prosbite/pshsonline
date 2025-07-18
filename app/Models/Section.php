@@ -11,7 +11,6 @@ class Section extends Model
         'grade_level_id',
         'status',
     ];
-    protected $with = ['gradeLevel'];
     public function gradeLevel()
     {
         return $this->belongsTo(GradeLevel::class);

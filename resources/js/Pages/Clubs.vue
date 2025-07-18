@@ -16,7 +16,6 @@ const selectedClub = ref(null)
 const editClubDetails = (club) => {
     editClub.value = true
     selectedClub.value = club
-    console.log(selectedClub.value)
 }
 onMounted(() => {
     // console.log(props.clubs);

@@ -50,7 +50,7 @@ const updateUser = async () => {
     })
 }
 onMounted(() => {
-    console.log(props.users);
+    // console.log(props.users);
 })
 </script>
 <template>

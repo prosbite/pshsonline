@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\SchoolYear;
 use Inertia\Response;
+use App\Models\ClubRegister;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -35,6 +36,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
         // Store current school year in session
         $schoolYear = SchoolYear::current();
+        Auth::user()->clubs = ClubRegister::where('school_year_id', $schoolYear->id)->where('user_id', auth()->user()->id)->with(['club', 'user', 'schoolYear', 'club.learners.currentEnrollment.section'])->get();
         $request->session()->put('sy', $schoolYear);
 
         return redirect()->intended(route('dashboard', absolute: false));

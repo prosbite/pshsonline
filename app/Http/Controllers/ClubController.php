@@ -15,9 +15,9 @@ class ClubController extends Controller
 {
     public function membersList()
     {
-        $learners = Learner::clubEntrants();
+        $my_clubs = ClubRegister::where('school_year_id', SchoolYear::current()->id)->where('user_id', auth()->user()->id)->with(['club', 'schoolYear', 'club.learners.currentEnrollment.section'])->get();
         return Inertia::render('ClubMembers', [
-            'learners' => $learners,
+            'clubs' => $my_clubs,
         ]);
     }
 

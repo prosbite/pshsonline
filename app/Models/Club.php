@@ -16,8 +16,6 @@ class Club extends Model
         'status',
     ];
 
-    protected $with = ['learners'];
-
     public function adviser()
     {
         return $this->belongsTo(User::class, 'adviser_id');
