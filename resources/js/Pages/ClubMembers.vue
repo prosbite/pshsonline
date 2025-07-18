@@ -1,7 +1,7 @@
 <template>
     <MainLayout class="z-50 no-print">
         <div class="page">
-            <h1 class="text-4xl font-extrabold text-gray-900 mb-8">{{ club?.club?.name }} Enlistment</h1>
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-8">{{ club?.club?.name }}</h1>
 
             <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
                 <div class="flex flex-col md:flex-row gap-4">
