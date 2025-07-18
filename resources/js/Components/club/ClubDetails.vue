@@ -25,7 +25,7 @@
                     {{ ucWords(learner?.last_name) + ', ' + ucWords(learner?.first_name) + ' ' + middleInitials(learner?.middle_name?? '') }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ learner.current_enrollment?.section?.grade_level.grade_level + ' - ' + learner?.current_enrollment?.section?.section_name }}
+                    {{ parseInt(learner.current_enrollment?.section?.grade_level_id) + 6 + ' - ' + learner?.current_enrollment?.section?.section_name }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {{ ucWords(learner?.gender) }}

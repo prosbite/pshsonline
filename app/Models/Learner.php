@@ -60,8 +60,8 @@ class Learner extends Model
 
     public static function clubEntrants()
     {
-        return self::with(['currentClub.currentRegister', 'currentEnrollment.section.gradeLevel'])
-        ->whereHas('currentEnrollment.section.gradeLevel', function ($query) {
+        return Enrollment::with(['learner.currentClub', 'section.gradeLevel'])
+        ->whereHas('section.gradeLevel', function ($query) {
             $query->whereNotIn('grade_level', [11, 12]);
         })
         ->get();

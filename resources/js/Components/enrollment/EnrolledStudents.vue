@@ -18,7 +18,7 @@
           :key="section.id"
           :value="section.id"
         >
-          {{ parseInt(section.grade_level.id) + 6 }} - {{ section.section_name }}
+          {{ parseInt(section.grade_level_id) + 6 }} - {{ section.section_name }}
         </option>
       </select>
     </div>
@@ -43,13 +43,13 @@
                 {{ index + 1 }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {{ ucWords(learner.last_name) + ', ' + ucWords(learner.first_name) + ' ' + middleInitials(learner.middle_name?? '') }}
+                {{ ucWords(learner?.learner?.last_name) + ', ' + ucWords(learner?.learner?.first_name) + ' ' + middleInitials(learner?.learner?.middle_name?? '') }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ parseInt(learner.current_enrollment.section.grade_level.id) + 6 }} - {{ learner.current_enrollment.section.section_name }}
+                {{ parseInt(learner?.section?.grade_level_id) + 6 }} - {{ learner?.section?.section_name }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            {{ ucWords(learner.gender) }}
+            {{ ucWords(learner?.learner?.gender) }}
           </td>
         </tr>
         <tr v-if="filteredLearners.length === 0">
@@ -72,7 +72,7 @@ const filteredLearners = computed(() => {
     if (!selectedSection.value) {
         return props.learners
     }
-    return props.learners.filter((learner) => learner.current_enrollment.section_id === selectedSection.value)
+    return props.learners.filter((learner) => learner.section_id === selectedSection.value)
 })
 const props = defineProps({
     learners: Array,

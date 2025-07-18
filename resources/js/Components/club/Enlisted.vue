@@ -22,13 +22,13 @@
                     {{ index + 1 }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ ucWords(learner?.last_name) + ', ' + ucWords(learner?.first_name) + ' ' + middleInitials(learner?.middle_name?? '') }}
+                    {{ ucWords(learner?.learner?.last_name) + ', ' + ucWords(learner?.learner?.first_name) + ' ' + middleInitials(learner?.learner?.middle_name?? '') }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ learner.current_enrollment?.section?.grade_level.grade_level + ' - ' + learner?.current_enrollment?.section?.section_name }}
+                    {{ parseInt(learner?.section?.grade_level_id) + 6 + ' - ' + learner?.section?.section_name }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ ucWords(learner?.gender) }}
+                    {{ ucWords(learner?.learner?.gender) }}
                 </td>
             </tr>
             <tr v-if="props.enlisted?.length === 0">
@@ -55,7 +55,7 @@
         if (!props.currentSection) {
             return props.enlisted
         }
-        return props.enlisted.filter((learner) => learner.current_enrollment.section_id === props.currentSection)
+        return props.enlisted.filter((learner) => learner.section_id === props.currentSection)
     })
     onMounted(() => {
         // console.log(props.enlisted)

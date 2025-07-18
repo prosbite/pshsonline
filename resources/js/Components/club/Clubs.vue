@@ -101,7 +101,7 @@
                         :key="section.id"
                         :value="section.id"
                     >
-                    {{ parseInt(section.grade_level.id) + 6 }} - {{ section.section_name }}
+                    {{ parseInt(section.grade_level_id) + 6 }} - {{ section.section_name }}
                     </option>
                 </select>
             </div>
@@ -121,12 +121,13 @@
                     class="block w-full md:w-64 px-4 border h-11 border-gray-300 text-gray-700 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                     <option :value="null" disabled>Select Section</option>
+                    <option :value="null">All Sections</option>
                     <option
                         v-for="section in notListedSections"
                         :key="section.id"
                         :value="section.id"
                     >
-                    {{ parseInt(section.grade_level.id) + 6 }} - {{ section.section_name }}
+                    {{ parseInt(section.grade_level_id) + 6 }} - {{ section.section_name }}
                     </option>
                 </select>
             </div>
@@ -185,7 +186,7 @@ const selectedClub = ref(null)
 const enlistedSections = computed(() => {
     let sections = []
     props.sections.map((section: any) => {
-        if(enlisted.value.filter((learner: any) => learner.current_enrollment.section_id === section.id).length > 0) {
+        if(enlisted.value.filter((learner: any) => learner.section.id === section.id).length > 0) {
             sections.push(section)
         }
     })
@@ -194,7 +195,7 @@ const enlistedSections = computed(() => {
 const notListedSections = computed(() => {
     let sections = []
     props.sections.map((section: any) => {
-        if(unlisted.value.filter((learner: any) => learner.current_enrollment.section_id === section.id).length > 0) {
+        if(unlisted.value.filter((learner: any) => learner.section.id === section.id).length > 0) {
             sections.push(section)
         }
     })
@@ -203,7 +204,7 @@ const notListedSections = computed(() => {
 const enlisted = computed(() => {
     let students = []
     props.entrants?.map((entrant: any) => {
-        if(entrant.current_club.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length > 0) {
+        if(entrant.learner?.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length > 0) {
             students.push(entrant)
         }
     })
@@ -212,7 +213,7 @@ const enlisted = computed(() => {
 const unlisted = computed(() => {
     let students = []
     props.entrants?.map((entrant: any) => {
-        if(entrant.current_club.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length === 0) {
+        if(entrant.learner?.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length === 0) {
             students.push(entrant)
         }
     })
