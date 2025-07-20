@@ -32,13 +32,12 @@ class ClubController extends Controller
                                  ->where('school_year_id', SchoolYear::current()->id);
                 }),
             ],
-            'grade_level' => ['required', 'integer', 'lte:10'],
         ]);
         $learner = Learner::find($request->learner_id);
         $learner->clubs()->attach($request->club_id, [
             'school_year_id' => SchoolYear::current()->id,
         ]);
-        return redirect()->route('club.members')->with('success', 'Member registered successfully.');
+        return redirect()->route('admin.club.show', $request->club_reg_id)->with('success', 'Member registered successfully.');
     }
 
     public function unregisterMember(Request $request)
@@ -79,6 +78,6 @@ class ClubController extends Controller
             'name' => $request->name,
             'description' => $request->description,
         ]);
-        return redirect()->route('club.list')->with('success', 'Club updated successfully.');
+        return redirect()->route('admin.club.list')->with('success', 'Club updated successfully.');
     }
 }

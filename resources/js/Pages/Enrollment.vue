@@ -24,10 +24,10 @@ onMounted(() => {
 
     <MainLayout>
         <div class="page">
-            <h1 class="text-4xl font-extrabold text-gray-900 mb-8 w-full">Manage Enrollment</h1>
+            <!-- <h1 class="text-4xl font-extrabold text-gray-900 mb-8 w-full">Manage Enrollment</h1> -->
             <EnrollBulk @bulk-students="setBulkStudents" v-if="bulkStudents.length > 0" :learners="bulkStudents" :gradeLevels="props.gradeLevels" :sections="props.sections" class="w-full" />
             <div v-else class="flex gap-4 w-full">
-                <EnrollmentForm @bulk-students="setBulkStudents" :gradeLevels="props.gradeLevels" class="flex-1 hidden lg:block" />
+                <!-- <EnrollmentForm @bulk-students="setBulkStudents" :gradeLevels="props.gradeLevels" class="flex-1 hidden lg:block" /> -->
                 <EnrolledStudents :learners="props.learners" :sections="props.sections" class="flex-2" />
             </div>
         </div>

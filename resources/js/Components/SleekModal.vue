@@ -10,11 +10,11 @@
           aria-describedby="modal-body"
         >
           <!-- Header Slot -->
-          <div v-if="$slots.header" class="px-6 py-8 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+          <div v-if="$slots.header" class="px-6 py-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
             <slot name="header"></slot>
             <button
               @click="closeModal"
-              class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200 text-2xl leading-none focus:outline-none"
+              class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200 text-4xl leading-none focus:outline-none"
               aria-label="Close modal"
             >
               &times;

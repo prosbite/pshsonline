@@ -10,7 +10,7 @@
         <!-- Desktop Navigation -->
         <div class="flex space-x-8 items-center">
             <a :href="route('dashboard')" :class="{'!text-black': route().current('dashboard')}" class="text-gray-500 hover:text-indigo-600 font-medium">Dashboard</a>
-            <a v-if="user.role === 'admin'" :href="route('club.list')" :class="{'!text-black': route().current('club.list')}" class="text-gray-500 hover:text-indigo-600 font-medium">Club</a>
+            <a v-if="user.role === 'admin'" :href="route('admin.club.list')" :class="{'!text-black': route().current('admin.club.list')}" class="text-gray-500 hover:text-indigo-600 font-medium">Club</a>
             <a v-if="user.role === 'club adviser'" :href="route('club.members')" :class="{'!text-black': route().current('club.members')}" class="text-gray-500 hover:text-indigo-600 font-medium">Club Enlistment</a>
             <a v-if="user.role === 'admin'" :href="route('enrollment')" :class="{'!text-black': route().current('enrollment')}" class="text-gray-500 hover:text-indigo-600 font-medium">Enrollment</a>
         </div>
