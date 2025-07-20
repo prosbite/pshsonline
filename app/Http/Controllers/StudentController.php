@@ -26,7 +26,6 @@ class StudentController extends Controller
             'last_name' => 'required|string',
             'middle_name' => 'string',
             'gender' => 'required|string',
-            'email' => 'required|email',
         ]);
         $learner = Enrollment::find($validated['id']);
         $learner->learner->update($validated);
