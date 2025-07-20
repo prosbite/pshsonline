@@ -8,6 +8,7 @@ use App\Models\Section;
 use App\Models\SchoolYear;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Enrollment;
 use Illuminate\Support\Facades\DB;
 
 class EnrollmentController extends Controller
@@ -16,7 +17,7 @@ class EnrollmentController extends Controller
     {
         return Inertia::render('Enrollment', [
             'gradeLevels' => GradeLevel::with('sections')->get(),
-            'learners' => Learner::clubEntrants(),
+            'learners' => Enrollment::with(['learner', 'section.gradeLevel'])->get(),
             'sections' => Section::all(),
         ]);
     }

@@ -20,15 +20,14 @@ class StudentController extends Controller
     }
     public function update(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'id' => 'required|integer',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'middle_name' => 'string',
             'gender' => 'required|string',
         ]);
-        $learner = Enrollment::find($validated['id']);
-        $learner->learner->update($validated);
+        $learner = Enrollment::find($request->id);
+        $learner->learner->update($request->all());
         return redirect()->route('enrollment')->with('success', 'Member updated successfully.');
     }
 }
