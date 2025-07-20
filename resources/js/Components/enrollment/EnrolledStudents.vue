@@ -111,7 +111,7 @@
                 <!-- Email -->
                 <div>
                     <label for="email" class="block text-gray-700 text-md font-medium mb-1">Email:</label>
-                    <input type="email" id="email" required
+                    <input type="email" id="email"
                         v-model="selectedLearner.email"
                         class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
