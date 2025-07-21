@@ -76,17 +76,15 @@ const props = defineProps({
                 </div>
 
                 <!-- External Resources -->
-                <section class="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6 mt-6 mb-12">
+                <!-- <section class="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6 mt-6 mb-12">
                     <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">External Resources</h2>
                     <ul class="grid gap-4 md:grid-cols-3">
 
-                        <!-- Reaccreditation -->
                         <li>
                         <a href="https://drive.google.com/drive/folders/1p64mL17b3Cz1lqvBZnBaKt0F4UFPfTBw?usp=sharing"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
                             <div class="flex items-center space-x-3">
-                            <!-- Clipboard-check icon -->
                             <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -102,13 +100,11 @@ const props = defineProps({
                         </a>
                         </li>
 
-                        <!-- Accreditation -->
                         <li>
                         <a href="https://drive.google.com/drive/folders/17JkHFcdwhVxDmDdulqxmfoJcpZhjCX2m?usp=sharing"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
                             <div class="flex items-center space-x-3">
-                            <!-- Shield-check icon -->
                             <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -126,13 +122,11 @@ const props = defineProps({
                         </a>
                         </li>
 
-                        <!-- Presentation -->
                         <li>
                         <a href="https://www.canva.com/design/DAGtyO5Eqaw/dfo5TzluL8Y0f3mqRJlKqg/edit?utm_content=DAGtyO5Eqaw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
                             <div class="flex items-center space-x-3">
-                            <!-- Presentation icon -->
                             <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -149,7 +143,7 @@ const props = defineProps({
                         </li>
 
                     </ul>
-                </section>
+                </section> -->
             </div>
     </MainLayout>
 </template>
