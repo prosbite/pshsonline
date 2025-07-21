@@ -14,10 +14,10 @@
                         <div class="text-sm font-medium">Enlisted</div>
                         <div class="text-xl font-bold">{{ enlisted }}</div>
                     </a>
-                    <!-- <Link :href="route('admin.club.unlisted')" class="bg-red-100 text-red-800 px-4 py-3 rounded-lg shadow-sm hover:bg-red-200 transition-colors duration-200 cursor-pointer">
+                    <a href="#" class="bg-red-100 text-red-800 px-4 py-3 rounded-lg shadow-sm hover:bg-red-200 transition-colors duration-200 cursor-pointer">
                         <div class="text-sm font-medium">Not Enlisted</div>
                         <div class="text-xl font-bold">{{ unlisted }}</div>
-                    </Link> -->
+                    </a>
                 </div>
             </div>
 
@@ -220,7 +220,7 @@
     }
 
     onMounted(() => {
-        console.log(props.unlisted_learners)
+        // console.log(props.unlisted_learners)
         // console.log(unlisted.value)
     })
     </script>

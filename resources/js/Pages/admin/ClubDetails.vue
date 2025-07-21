@@ -176,7 +176,8 @@
     })
 
     const hasClub = (learner: any) => {
-        if(learner.learner.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length > 0) {
+        if(learner.learner.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length > 0
+        && props.club.club.nature.slice(0, 3).toLowerCase() === 'alp') {
             return true
         }
         return false

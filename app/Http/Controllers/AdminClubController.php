@@ -9,6 +9,7 @@ use App\Models\SchoolYear;
 use Illuminate\Support\Facades\DB;
 use App\Models\Enrollment;
 use App\Models\Club;
+use App\Models\Learner;
 class AdminClubController extends Controller
 {
     public function index()
