@@ -225,7 +225,7 @@
                                 </tbody>
                             </table>
 
-                            <div class="flex flex-col gap-6 mt-12" :class="{ 'page-break-before': breakpoint }">
+                            <div class="flex flex-col gap-6 mt-2" :class="{ 'page-break-before': breakpoint }">
                                 <div class="flex justify-start">
                                     <div class="flex flex-col flex-1">
                                         <span class="mb-6 text-sm">Prepared by:</span>
@@ -235,6 +235,7 @@
                                         <span class="text-md">
                                             {{ club?.club?.name }} Adviser
                                         </span>
+                                        <span class="text-sm">Date Printed: <span id="printed-date">{{ new Date().toLocaleString() }}</span></span>
                                     </div>
 
                                     <div class="flex flex-col flex-1">
@@ -416,10 +417,10 @@ const club = computed(() => {
 const sortedMembers = computed(() => {
   return [...clubMembers.value].sort((a, b) =>
     a.last_name.localeCompare(b.last_name)
-  )
+  ).slice(0, 34)
 })
 const breakpoint = computed(() => {
-    return sortedMembers.value.length > 15 && sortedMembers.value.length < 23
+    return (sortedMembers.value.length > 25 && sortedMembers.value.length < 33)
 })
 const printClubMembers = () => {
     window.print()
@@ -456,6 +457,11 @@ header {
     .no-print {
         display: none;
     }
+    /* body {
+        transform: scale(0.75);
+        transform-origin: top left;
+        width: 133.33%;
+    } */
     .to-print {
         display: table;
     }
