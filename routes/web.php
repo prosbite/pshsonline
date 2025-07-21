@@ -7,7 +7,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminClubController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ClubAttendanceController;
 use Illuminate\Support\Facades\Route;
+use App\Models\ClubRegister;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -43,8 +45,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 });
 
 // Club Adviser Routes
-Route::prefix('club-adviser')->middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');
+    Route::get('/club/{club_register_id}/attendance', [ClubAttendanceController::class, 'index'])->name('club.attendance');
     Route::post('/club/unregister', [ClubController::class, 'unregisterMember'])->name('club.unregister');
 });
 
