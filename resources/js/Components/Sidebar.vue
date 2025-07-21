@@ -1,7 +1,7 @@
 <template>
   <!-- Sidebar Navigation -->
   <aside class="w-64 bg-gray-800 text-white p-6 flex flex-col shadow-lg rounded-r-xl">
-    <div class="text-2xl font-bold mb-8 text-indigo-300">Pisay Online</div>
+    <div class="text-2xl font-bold mb-8 text-indigo-300">CID Online</div>
     <nav class="space-y-4 flex-grow">
         <Link :href="route('dashboard')" :class="{'bg-gray-700': route().current('dashboard')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
             <svg class="w-6 h-6 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001 1h3v-3m-3 3h3v-3m-3 0V9a1 1 0 011-1h2a1 1 0 011 1v10m-6 0h6"></path></svg>

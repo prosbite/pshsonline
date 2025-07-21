@@ -4,7 +4,7 @@
         <div class="flex justify-between h-16">
         <!-- Logo or App Name -->
         <div class="flex items-center">
-            <span class="text-xl font-semibold text-indigo-600">Pisay Online</span>
+            <span class="text-xl font-semibold text-indigo-600">CID Online</span>
         </div>
 
         <!-- Desktop Navigation -->
