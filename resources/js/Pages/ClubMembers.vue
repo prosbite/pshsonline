@@ -382,6 +382,7 @@ const startSearch = computed(() => {
     }
 })
 const searchResults = computed(() => {
+    console.log(sortedMembers.value)
     if (searchInput.value.length < startSearch.value) {
         return sortedMembers.value
     }
@@ -417,7 +418,7 @@ const club = computed(() => {
 const sortedMembers = computed(() => {
   return [...clubMembers.value].sort((a, b) =>
     a.last_name.localeCompare(b.last_name)
-  ).slice(0, 34)
+  )
 })
 const breakpoint = computed(() => {
     return (sortedMembers.value.length > 25 && sortedMembers.value.length < 33)
