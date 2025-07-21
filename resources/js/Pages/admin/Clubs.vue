@@ -14,10 +14,10 @@
                         <div class="text-sm font-medium">Enlisted</div>
                         <div class="text-xl font-bold">{{ enlisted }}</div>
                     </a>
-                    <a href="#" class="bg-red-100 text-red-800 px-4 py-3 rounded-lg shadow-sm hover:bg-red-200 transition-colors duration-200 cursor-pointer">
+                    <Link :href="route('admin.club.unlisted')" class="bg-red-100 text-red-800 px-4 py-3 rounded-lg shadow-sm hover:bg-red-200 transition-colors duration-200 cursor-pointer">
                         <div class="text-sm font-medium">Not Enlisted</div>
                         <div class="text-xl font-bold">{{ unlisted }}</div>
-                    </a>
+                    </Link>
                 </div>
             </div>
 
@@ -180,7 +180,8 @@
     const props = defineProps({
         registered_clubs: Array,
         sy: Object,
-        club_student_count: Number
+        club_student_count: Number,
+        unlisted_learners: Array
     })
     const sortBy = ref('name');
 
@@ -219,7 +220,7 @@
     }
 
     onMounted(() => {
-        // console.log(enlisted.value)
+        console.log(props.unlisted_learners)
         // console.log(unlisted.value)
     })
     </script>

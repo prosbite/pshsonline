@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Club extends Model
 {
@@ -35,5 +36,15 @@ class Club extends Model
     public function learners()
     {
         return $this->belongsToMany(Learner::class, 'club_learner', 'club_id', 'learner_id')->withTimestamps();
+    }
+
+    public static function unlistedMembers()
+    {
+        return Learner::with('currentClub')
+            ->has('currentClub', '<', 2)
+            ->whereDoesntHave('currentClub', function (Builder $query) {
+                $query->where('nature', 'like', 'alp%');
+            })
+            ->get();
     }
 }

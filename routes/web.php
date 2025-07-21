@@ -39,10 +39,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/club/{club}', [AdminClubController::class, 'show'])->name('admin.club.show');
     Route::post('/club/register', [ClubController::class, 'registerMember'])->name('club.register');
     Route::post('/club/unregister', [AdminClubController::class, 'unregisterMember'])->name('admin.club.unregister');
-    Route::get('/change-password', function () {
-        return Inertia::render('ChangePassword');
-    })->name('change-password');
-    Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('change-password.store');
     Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
 });
 
@@ -50,13 +46,16 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 Route::prefix('club-adviser')->middleware('auth')->group(function () {
     Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');
     Route::post('/club/unregister', [ClubController::class, 'unregisterMember'])->name('club.unregister');
-    Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('change-password.store');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/change-password', function () {
+        return Inertia::render('ChangePassword');
+    })->name('change-password');
+    Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('change-password.store');
 });
 
 require __DIR__.'/auth.php';

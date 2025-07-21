@@ -13,10 +13,10 @@
                     <div class="text-sm font-medium">Enlisted</div>
                     <div class="text-xl font-bold">{{ enlisted.length }}</div>
                 </a>
-                <a href="#" @click="showEnlisted = false; showModal = true" class="bg-red-100 text-red-800 px-4 py-3 rounded-lg shadow-sm hover:bg-red-200 transition-colors duration-200 cursor-pointer">
+                <Link href="{{ route('admin.club.unlisted') }}" class="bg-red-100 text-red-800 px-4 py-3 rounded-lg shadow-sm hover:bg-red-200 transition-colors duration-200 cursor-pointer">
                     <div class="text-sm font-medium">Not Enlisted</div>
                     <div class="text-xl font-bold">{{ unlisted.length }}</div>
-                </a>
+                </Link>
             </div>
         </div>
 
@@ -175,6 +175,7 @@ import SleekModal from '../SleekModal.vue';
 import Enlisted from './Enlisted.vue';
 import Notlisted from './Notlisted.vue';
 import ClubDetails from './ClubDetails.vue';
+import { Link } from '@inertiajs/vue3';
 
 const showModal = ref(false)
 const showClubDetailsModal =ref(false)

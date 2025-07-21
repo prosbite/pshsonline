@@ -8,8 +8,7 @@ use App\Models\ClubRegister;
 use App\Models\SchoolYear;
 use Illuminate\Support\Facades\DB;
 use App\Models\Enrollment;
-use App\Models\Learner;
-
+use App\Models\Club;
 class AdminClubController extends Controller
 {
     public function index()
@@ -31,6 +30,8 @@ class AdminClubController extends Controller
             ->orderBy('clubs.name', 'asc') // Order by the club's name
             ->get();
 
+        $unlisted_learners = Club::unlistedMembers();
+
         $club_student_count = Enrollment::whereHas('section.gradeLevel', function ($query) {
                     $query->whereNotIn('grade_level', [11, 12]);
                 })
@@ -39,6 +40,7 @@ class AdminClubController extends Controller
         return Inertia::render('admin/Clubs', [
             'registered_clubs' => $registered_clubs,
             'club_student_count' => $club_student_count,
+            'unlisted_learners' => $unlisted_learners
         ]);
     }
 
