@@ -7,8 +7,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminClubController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ClubAttendanceController;
 use Illuminate\Support\Facades\Route;
+use App\Models\ClubRegister;
 use Inertia\Inertia;
+use App\Http\Middleware\RoleMiddleware;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -24,7 +27,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware('auth', RoleMiddleware::class, 'admin')->group(function () {
     Route::get('/users', [ProfileController::class, 'index'])->name('users');
     Route::post('/users/update', [UserController::class, 'update'])->name('users.update');
 
@@ -43,9 +46,13 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 });
 
 // Club Adviser Routes
-Route::prefix('club-adviser')->middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');
+    Route::get('/club/{club_register_id}/attendance', [ClubAttendanceController::class, 'index'])->name('club.attendance');
+    Route::get('/club/{club_register_id}/attendance/create', [ClubAttendanceController::class, 'create'])->name('club.attendance.create');
+    Route::get('/club/attendance/{attendance_id}/show', [ClubAttendanceController::class, 'show'])->name('club.attendance.show');
     Route::post('/club/unregister', [ClubController::class, 'unregisterMember'])->name('club.unregister');
+    Route::post('/club/attendance', [ClubAttendanceController::class, 'store'])->name('club.attendance.store');
 });
 
 Route::middleware('auth')->group(function () {

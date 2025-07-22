@@ -382,7 +382,6 @@ const startSearch = computed(() => {
     }
 })
 const searchResults = computed(() => {
-    console.log(sortedMembers.value)
     if (searchInput.value.length < startSearch.value) {
         return sortedMembers.value
     }
