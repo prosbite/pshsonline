@@ -11,7 +11,7 @@ const props = defineProps({
     todayEvents: Array,
     recentAttendance: Array,
 });
-const externalink = computed(() => page.props?.auth?.user.club_registers?.[0].externalinks?.[0].link)
+const externalink = computed(() => page.props?.auth?.user.club_registers?.[0].externalinks?.[0].link ?? '#')
 </script>
 
 <template>
