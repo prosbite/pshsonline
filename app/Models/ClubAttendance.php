@@ -12,6 +12,7 @@ class ClubAttendance extends Model
     protected $fillable = [
         'club_register_id',
         'school_year_id',
+        'activity',
         'date',
         'remarks',
     ];
@@ -26,6 +27,6 @@ class ClubAttendance extends Model
     public function clubAttendanceLearner()
     {
         return $this->belongsToMany(Learner::class, 'club_attendance_learner', 'club_attendance_id', 'learner_id')
-            ->withPivot('is_present', 'remarks');
+            ->withPivot('status', 'remarks');
     }
 }

@@ -162,7 +162,6 @@ const logout = () => {
     router.post(route('logout'))
 }
 onMounted(() => {
-    console.log(page.props)
     if (route().current('club.members') || route().current('club.attendance') || route().current('club.reports') || route().current('club.list')) {
         isClubManagementGroupOpen.value = true
     }

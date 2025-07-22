@@ -16,4 +16,10 @@ export function middleInitials(str: string) {
     return str.replace(/\b\w/g, (match) => match.toUpperCase()).slice(0, 1) + '.';
 }
 
-
+export function fullDate(date: string) {
+    return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+}
