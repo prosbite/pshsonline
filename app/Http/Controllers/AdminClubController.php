@@ -50,7 +50,7 @@ class AdminClubController extends Controller
         $club = $club;
         $registered_clubs = ClubRegister::with(['club'])->where('school_year_id', SchoolYear::current()->id)->get();
         return Inertia::render('admin/ClubDetails', [
-            'club' => $club->load(['club.learners.currentEnrollment.section.gradeLevel', 'user', 'schoolYear']),
+            'club' => $club->load(['club.learners.currentEnrollment.section.gradeLevel', 'user', 'schoolYear', 'externalinks']),
             'registered_clubs' => $registered_clubs,
             'current_club' => $club->id
         ]);

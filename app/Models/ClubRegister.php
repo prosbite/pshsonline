@@ -30,4 +30,9 @@ class ClubRegister extends Model
     {
         return $this->belongsTo(SchoolYear::class);
     }
+
+    public function externalinks()
+    {
+        return $this->hasMany(Externalink::class);
+    }
 }

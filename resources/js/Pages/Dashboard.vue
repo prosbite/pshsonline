@@ -1,12 +1,17 @@
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { Head } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+
+const page = usePage()
 
 const props = defineProps({
     clubs: Array,
     todayEvents: Array,
     recentAttendance: Array,
 });
+const externalink = computed(() => page.props?.auth?.user.club_registers?.[0].externalinks?.[0].link)
 </script>
 
 <template>
@@ -76,7 +81,7 @@ const props = defineProps({
                 </div>
 
                 <!-- External Resources -->
-                <!-- <section class="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6 mt-6 mb-12">
+                <section class="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6 mt-6 mb-12">
                     <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">External Resources</h2>
                     <ul class="grid gap-4 md:grid-cols-3">
 
@@ -101,7 +106,7 @@ const props = defineProps({
                         </li>
 
                         <li>
-                        <a href="https://drive.google.com/drive/folders/17JkHFcdwhVxDmDdulqxmfoJcpZhjCX2m?usp=sharing"
+                        <a :href="externalink"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
                             <div class="flex items-center space-x-3">
@@ -143,7 +148,7 @@ const props = defineProps({
                         </li>
 
                     </ul>
-                </section> -->
+                </section>
             </div>
     </MainLayout>
 </template>
