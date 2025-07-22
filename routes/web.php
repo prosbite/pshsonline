@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->middleware('auth', RoleMiddleware::class, 'admin')->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/users', [ProfileController::class, 'index'])->name('users');
     Route::post('/users/update', [UserController::class, 'update'])->name('users.update');
 
