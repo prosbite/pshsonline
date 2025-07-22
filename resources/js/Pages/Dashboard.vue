@@ -86,7 +86,7 @@ const externalink = computed(() => page.props?.auth?.user.club_registers?.[0]?.e
                     <ul class="grid gap-4 md:grid-cols-3">
 
                         <li>
-                        <a href="https://drive.google.com/drive/folders/1p64mL17b3Cz1lqvBZnBaKt0F4UFPfTBw?usp=sharing"
+                        <a :href="externalink ?? '#'"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
                             <div class="flex items-center space-x-3">
