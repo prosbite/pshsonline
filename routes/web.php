@@ -8,6 +8,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminClubController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ClubAttendanceController;
+use App\Http\Controllers\AdminAttendanceController;
+use App\Http\Controllers\AdminAssessmentController;
 use Illuminate\Support\Facades\Route;
 use App\Models\ClubRegister;
 use Inertia\Inertia;
@@ -30,6 +32,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/users', [ProfileController::class, 'index'])->name('users');
     Route::post('/users/update', [UserController::class, 'update'])->name('users.update');
+    Route::post('/user/login', [UserController::class, 'adminLogin'])->name('admin.user.login');
 
     Route::get('/enrollment', [EnrollmentController::class, 'index'])->name('enrollment');
     Route::post('/enrollment', [EnrollmentController::class, 'store'])->name('enrollment.store');
@@ -43,6 +46,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/club/register', [ClubController::class, 'registerMember'])->name('club.register');
     Route::post('/club/unregister', [AdminClubController::class, 'unregisterMember'])->name('admin.club.unregister');
     Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
+    Route::get('/club/attendance/delinquents', [AdminAttendanceController::class, 'absentStudents'])->name('admin.attendance.delinquents');
+
+    Route::get('/assessment/mixmatch', [AdminAssessmentController::class, 'mixmatch'])->name('admin.assessment.mixmatch');
+    Route::post('/assessment/match', [AdminAssessmentController::class, 'matchAssessment'])->name('admin.assessment.match');
 });
 
 // Club Adviser Routes

@@ -177,90 +177,92 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <div id="printContent" class="w-full flex flex-col bg-white">
-                            <div class="flex-col w-full font-bold text-lg mb-6">
-                                <span class="text-center block uppercase">
-                                    {{ club?.club?.name }}
-                                </span>
-                                <span class="text-center block uppercase mb-4">
-                                    SY {{ page.props.sy?.year_start }} - {{ page.props.sy?.year_end }}
-                                </span>
-                                <span class="text-center block uppercase">
-                                    List of Club Members
-                                </span>
-                            </div>
+                        <td>
+                            <div id="printContent" class="w-full flex flex-col bg-white">
+                                <div class="flex-col w-full font-bold text-lg mb-6">
+                                    <span class="text-center block uppercase">
+                                        {{ club?.club?.name }}
+                                    </span>
+                                    <span class="text-center block uppercase mb-4">
+                                        SY {{ page.props.sy?.year_start }} - {{ page.props.sy?.year_end }}
+                                    </span>
+                                    <span class="text-center block uppercase">
+                                        List of Club Members
+                                    </span>
+                                </div>
 
-                            <table class="w-full border border-black border-collapse mb-10">
-                                <thead>
-                                    <tr class="text-center">
-                                        <th></th>
-                                        <th class="flex flex-col text-lg" colspan="2">
-                                            <span clas="block">
-                                                Name
+                                <table class="w-full border border-black border-collapse mb-10">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th></th>
+                                            <th class="flex flex-col text-lg" colspan="2">
+                                                <span clas="block">
+                                                    Name
+                                                </span>
+                                            </th>
+                                            <th class="border border-black">
+                                                Grade Level
+                                            </th>
+                                            <th class="border border-black">
+                                                Section
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="learner,index in sortedMembers">
+                                            <td class="border border-black px-0 py-1 text-center">
+                                                {{ index + 1 }}
+                                            </td>
+                                            <td class="border border-black px-2 py-1 text-left">
+                                                {{ ucWords(learner?.last_name) + ', ' + ucWords(learner?.first_name) + ' ' + middleInitials(learner?.middle_name?? '') }}
+                                            </td>
+                                            <td class="border border-black px-2 py-1 text-center">
+                                                {{ parseInt(learner.current_enrollment?.section.grade_level_id) + 6 }}
+                                            </td>
+                                            <td class="border border-black px-2 py-1 text-center uppercase">
+                                                {{ learner.current_enrollment?.section.section_name }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="flex flex-col gap-6 mt-2" :class="{ 'page-break-before': breakpoint }">
+                                    <div class="flex justify-start">
+                                        <div class="flex flex-col flex-1">
+                                            <span class="mb-6 text-sm">Prepared by:</span>
+                                            <span class="font-bold underline text-md uppercase">
+                                                {{ page.props.auth.user.name }}
                                             </span>
-                                        </th>
-                                        <th class="border border-black">
-                                            Grade Level
-                                        </th>
-                                        <th class="border border-black">
-                                            Section
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="learner,index in sortedMembers">
-                                        <td class="border border-black px-0 py-1 text-center">
-                                            {{ index + 1 }}
-                                        </td>
-                                        <td class="border border-black px-2 py-1 text-left">
-                                            {{ ucWords(learner?.last_name) + ', ' + ucWords(learner?.first_name) + ' ' + middleInitials(learner?.middle_name?? '') }}
-                                        </td>
-                                        <td class="border border-black px-2 py-1 text-center">
-                                            {{ parseInt(learner.current_enrollment?.section.grade_level_id) + 6 }}
-                                        </td>
-                                        <td class="border border-black px-2 py-1 text-center uppercase">
-                                            {{ learner.current_enrollment?.section.section_name }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                            <span class="text-md">
+                                                {{ club?.club?.name }} Adviser
+                                            </span>
+                                            <span class="text-sm">Date Printed: <span id="printed-date">{{ new Date().toLocaleString() }}</span></span>
+                                        </div>
 
-                            <div class="flex flex-col gap-6 mt-2" :class="{ 'page-break-before': breakpoint }">
-                                <div class="flex justify-start">
-                                    <div class="flex flex-col flex-1">
-                                        <span class="mb-6 text-sm">Prepared by:</span>
-                                        <span class="font-bold underline text-md uppercase">
-                                            {{ page.props.auth.user.name }}
-                                        </span>
-                                        <span class="text-md">
-                                            {{ club?.club?.name }} Adviser
-                                        </span>
-                                        <span class="text-sm">Date Printed: <span id="printed-date">{{ new Date().toLocaleString() }}</span></span>
+                                        <div class="flex flex-col flex-1">
+                                            <span class="mb-6 text-sm">Reviewed by:</span>
+                                            <span class="font-bold underline text-md uppercase">
+                                                Gretchen Mae B. Empuesto
+                                            </span>
+                                            <span class="text-md">
+                                                ALP Coordinator
+                                            </span>
+                                        </div>
                                     </div>
-
-                                    <div class="flex flex-col flex-1">
-                                        <span class="mb-6 text-sm">Reviewed by:</span>
-                                        <span class="font-bold underline text-md uppercase">
-                                            Gretchen Mae B. Empuesto
-                                        </span>
-                                        <span class="text-md">
-                                            ALP Coordinator
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between">
-                                    <div class="flex flex-col">
-                                        <span class="mb-6 text-sm">Approved by:</span>
-                                        <span class="font-bold underline text-md uppercase">
-                                            JOHN RIDAN D. DECHUSA
-                                        </span>
-                                        <span class="text-md">
-                                            Assistant CID Chief for Student Affairs
-                                        </span>
+                                    <div class="flex justify-between">
+                                        <div class="flex flex-col">
+                                            <span class="mb-6 text-sm">Approved by:</span>
+                                            <span class="font-bold underline text-md uppercase">
+                                                JOHN RIDAN D. DECHUSA
+                                            </span>
+                                            <span class="text-md">
+                                                Assistant CID Chief for Student Affairs
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
