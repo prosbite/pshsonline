@@ -21,7 +21,7 @@ class AdminAssessmentController extends Controller
         // )
         // ->get();
         $assessments = Assessment::where(['enrollment_id' => null, 'entryCode' => 'diagnostic-2025'])->get();
-        $assessments->each(function ($assessment) use ($learners) {
+        $assessments->each(function ($assessment) {
             $assessment->match = null;
         });
         // $learnerMap = $learners->keyBy(fn($l) => strtolower(trim($l->first_name . ' ' . $l->last_name)));
