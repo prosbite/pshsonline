@@ -138,7 +138,7 @@ const externalink = computed(() => page.props?.auth?.user.club_registers?.[0]?.e
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 4a1 1 0 011-1h16a1 1 0 011 1v9a1 1 0 01-1 1h-6l2 5H9l2-5H4a1 1 0 01-1-1V4z" />
                             </svg>
-                            <span class="text-gray-700 dark:text-gray-200 font-medium">Presentation</span>
+                            <span class="text-gray-700 dark:text-gray-200 font-medium">ALP Orientation (July 23, 2025)</span>
                             </div>
                             <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
