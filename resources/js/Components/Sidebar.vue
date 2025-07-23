@@ -169,13 +169,21 @@ const logout = () => {
     router.post(route('logout'))
 }
 onMounted(() => {
-    if (route().current('club.members') || route().current('club.attendance') || route().current('club.reports') || route().current('club.list')) {
+    if (route().current('club.members')
+        || route().current('club.attendance')
+        || route().current('club.reports')
+        || route().current('club.list')
+        )
+    {
         isClubManagementGroupOpen.value = true
     }
     if (route().current('enrollment')) {
         isEnrollmentGroupOpen.value = true
     }
     if (route().current('admin.club.list')) {
+        isClubManagementGroupOpen.value = true
+    }
+    if (route().current('admin.attendance.delinquents')) {
         isClubManagementGroupOpen.value = true
     }
 })

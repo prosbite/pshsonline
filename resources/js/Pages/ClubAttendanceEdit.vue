@@ -184,7 +184,7 @@
 import { fullDate, middleInitials } from '@/composables/utilities';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { usePage, Link, useForm } from '@inertiajs/vue3';
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 
@@ -212,8 +212,14 @@ const updateAttendance = () => {
         }
     })
 }
+const sortedMembers = computed(() => {
+    return [...props.attendance.club_attendance_learner].sort((a, b) => {
+        return a.last_name.localeCompare(b.last_name)
+    })
+})
 onMounted(() => {
     attendanceForm.attendance = props.attendance
+    attendanceForm.attendance.club_attendance_learner = sortedMembers.value
 })
 </script>
 

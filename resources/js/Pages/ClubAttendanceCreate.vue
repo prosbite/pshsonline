@@ -107,7 +107,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="(member, index) in clubAttendance.members" :key="index">
+                            <tr v-for="(member, index) in sortedMembers" :key="index">
                                 <td
                                     class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                                 >
@@ -218,6 +218,11 @@ const setClubAttendance = () => {
         })
     })
 }
+const sortedMembers = computed(() => {
+    return [...clubAttendance.members].sort((a, b) => {
+        return a.learner_name.localeCompare(b.learner_name)
+    })
+})
 const submitAttendance = () => {
     clubAttendance.post(route('club.attendance.store'), {
         onSuccess: () => {

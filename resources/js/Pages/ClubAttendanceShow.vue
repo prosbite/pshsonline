@@ -100,7 +100,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="(member, index) in props?.attendance?.club_attendance_learner" :key="index">
+                            <tr v-for="(member, index) in sortedMembers" :key="index">
                                 <td
                                     class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                                 >
@@ -181,7 +181,7 @@
 import { fullDate, middleInitials } from '@/composables/utilities';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { usePage, Link } from '@inertiajs/vue3';
-import { onMounted } from 'vue';
+import { onMounted, computed } from 'vue';
 
 defineOptions({
     layout: MainLayout
@@ -192,6 +192,11 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+})
+const sortedMembers = computed(() => {
+    return [...props.attendance.club_attendance_learner].sort((a, b) => {
+        return a.last_name.localeCompare(b.last_name)
+    })
 })
 </script>
 
