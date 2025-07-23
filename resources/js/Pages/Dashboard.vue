@@ -85,7 +85,7 @@ const externalink = computed(() => page.props?.auth?.user.club_registers?.[0]?.e
                     <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">External Resources</h2>
                     <ul class="grid gap-4 md:grid-cols-3">
 
-                        <li>
+                        <!-- <li>
                         <a :href="externalink ?? '#'"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
@@ -103,7 +103,7 @@ const externalink = computed(() => page.props?.auth?.user.club_registers?.[0]?.e
                                     d="M9 5l7 7-7 7"></path>
                             </svg>
                         </a>
-                        </li>
+                        </li> -->
 
                         <li>
                         <a :href="externalink ?? '#'"

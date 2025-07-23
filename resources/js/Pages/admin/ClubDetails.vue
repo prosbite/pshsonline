@@ -28,6 +28,17 @@
                                 class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                             + Add New Member
                         </button>
+                        <button @click.prevent="downloadCSV"
+                                class="px-3 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white hover:text-green-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <!-- File icon with folded corner -->
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <!-- Download arrow -->
+                                    <path d="M12 11v6"/>
+                                    <path d="M9 14l3 3 3-3"/>
+                                </svg>
+                        </button>
                     </div>
                 </div>
 
@@ -150,7 +161,7 @@
     </template>
 
     <script lang="ts" setup>
-    import { ucWords } from '@/composables/utilities'
+    import { exportToCSV, ucWords } from '@/composables/utilities'
     import { computed, onMounted, ref, watch } from 'vue'
     import MainLayout from '@/Layouts/MainLayout.vue'
     import { usePage, router } from '@inertiajs/vue3'
@@ -277,6 +288,30 @@
             loading.value = false
         }
     })
+    const sortedClubMembers = computed(() => {
+        return [...clubMembers.value].sort((a, b) =>
+            a.last_name.localeCompare(b.last_name)
+        )
+    })
+    const csvFormat = computed(() => {
+        let data = []
+        sortedClubMembers.value.map((learner: any) => {
+            data.push({
+                'Last Name': learner.last_name,
+                'First Name': learner.first_name,
+                'Middle Name': learner.middle_name ?? '',
+                'Gender': learner.gender,
+                'Grade Level': learner.current_enrollment?.section?.grade_level?.grade_level,
+                'Section': learner.current_enrollment?.section?.section_name,
+                'Club': props.club?.club?.name,
+            })
+        })
+        return data
+    })
+
+    const downloadCSV = () => {
+        exportToCSV(csvFormat.value, `${props.club?.club?.name} members.csv`)
+    }
 
     // const sortedClubs = computed(() => {
     //     if (sortBy.value === 'name') {
