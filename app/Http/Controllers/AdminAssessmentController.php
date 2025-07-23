@@ -10,31 +10,31 @@ class AdminAssessmentController extends Controller
 {
     public function mixmatch()
     {
-        $learners = Enrollment::join('learners', 'learners.id', '=', 'enrollments.learner_id')
-        ->select(
-            'enrollments.id as enrollment_id',
-            'learners.id as learner_id',
-            'learners.first_name',
-            'learners.last_name',
-            'learners.gender',
-            'learners.middle_name',
-        )
-        ->get();
+        // $learners = Enrollment::join('learners', 'learners.id', '=', 'enrollments.learner_id')
+        // ->select(
+        //     'enrollments.id as enrollment_id',
+        //     'learners.id as learner_id',
+        //     'learners.first_name',
+        //     'learners.last_name',
+        //     'learners.gender',
+        //     'learners.middle_name',
+        // )
+        // ->get();
         $assessments = Assessment::where(['enrollment_id' => null, 'entryCode' => 'diagnostic-2025'])->get();
-        // $assessments->each(function ($assessment) {
-        //     $assessment->match = null;
-        // });
-        $learnerMap = $learners->keyBy(fn($l) => strtolower(trim($l->first_name . ' ' . $l->last_name)));
+        $assessments->each(function ($assessment) {
+            $assessment->match = null;
+        });
+        // $learnerMap = $learners->keyBy(fn($l) => strtolower(trim($l->first_name . ' ' . $l->last_name)));
         $matched = [];
-        foreach ($assessments as $assessment) {
-            $fullName = strtolower(trim($assessment->firstName . ' ' . $assessment->lastName));
+        // foreach ($assessments as $assessment) {
+        //     $fullName = strtolower(trim($assessment->firstName . ' ' . $assessment->lastName));
 
-            if ($learner = $learnerMap->get($fullName)) {
-                $assessment->enrollment_id = $learner->enrollment_id;
-                // $matched[] = $assessment;
-                $assessment->save(); // or batch store later
-            }
-        }
+        //     if ($learner = $learnerMap->get($fullName)) {
+        //         $assessment->enrollment_id = $learner->enrollment_id;
+        //         $matched[] = $assessment;
+        //         $assessment->save(); // or batch store later
+        //     }
+        // }
         // dd($assessments);
         return Inertia::render('admin/AssessmentMixmatch', [
             'assessments' => $assessments,
