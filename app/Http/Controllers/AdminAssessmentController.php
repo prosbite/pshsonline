@@ -31,7 +31,7 @@ class AdminAssessmentController extends Controller
 
             if ($learner = $learnerMap->get($fullName)) {
                 $assessment->enrollment_id = $learner->enrollment_id;
-                $matched[] = $assessment;
+                // $matched[] = $assessment;
                 $assessment->save(); // or batch store later
             }
         }
