@@ -3,6 +3,7 @@ import MainLayout from '@/Layouts/MainLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 
 const page = usePage()
 
@@ -65,12 +66,12 @@ const externalink = computed(() => page.props?.auth?.user.club_registers?.[0]?.e
                 </div>
 
                 <!-- Quick Links Section -->
-                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                <!-- <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Quick Links</h2>
                     <div class="flex flex-wrap gap-4">
-                        <button class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <Link :href="route('attendance.create')" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                             Add Attendance
-                        </button>
+                        </Link>
                         <button class="px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                             View Members
                         </button>
@@ -78,7 +79,7 @@ const externalink = computed(() => page.props?.auth?.user.club_registers?.[0]?.e
                             Generate Reports
                         </button>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- External Resources -->
                 <section class="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6 mt-6 mb-12">
