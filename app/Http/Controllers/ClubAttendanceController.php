@@ -70,4 +70,39 @@ class ClubAttendanceController extends Controller
             'attendance' => $attendance,
         ]);
     }
+    public function edit(Request $request)
+    {
+        $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner'])->findOrFail($request->attendance_id);
+        return Inertia::render('ClubAttendanceEdit', [
+            'attendance' => $attendance,
+        ]);
+    }
+    public function update(Request $request)
+    {
+        $request->validate([
+            'attendance.club_register_id' => 'required',
+            'attendance.date' => 'required',
+            'attendance.activity' => 'required',
+            'attendance.club_attendance_learner' => 'required|array',
+        ]);
+        $request['school_year_id'] = SchoolYear::current()->id;
+        $club = ClubRegister::findOrFail($request->attendance['club_register_id']);
+        if ($club->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized access.');
+        }
+        $clubAttendance = ClubAttendance::findOrFail($request->attendance['id']);
+        $clubAttendance->update($request->attendance);
+        $cleanMembers = collect($request->attendance['club_attendance_learner'])->mapWithKeys(function ($member, $index) use ($clubAttendance) {
+            return [
+                $index => [
+                    'club_attendance_id' => $clubAttendance->id,
+                    'learner_id' => $member['id'],
+                    'status' => $member['pivot']['status'] ?? 'absent',
+                    'remarks' => $member['pivot']['remarks'] ?? null,
+                ],
+            ];
+        })->toArray();
+        $clubAttendance->clubAttendanceLearner()->sync($cleanMembers);
+        return redirect()->route('club.attendance', ['club_register_id' => $club->id]);
+    }
 }
