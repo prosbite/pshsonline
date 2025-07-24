@@ -27,7 +27,7 @@ class AdminAttendanceController extends Controller
         ->join('enrollments', 'enrollments.learner_id', '=', 'learners.id')
         ->join('sections', 'sections.id', '=', 'enrollments.section_id')
         ->join('grade_levels', 'grade_levels.id', '=', 'sections.grade_level_id')
-        ->whereDate('club_attendances.date', $today)
+        // ->whereDate('club_attendances.date', $today)
         ->where('club_attendance_learner.status', 'absent')
         ->select(
             'learners.id as learner_id',
