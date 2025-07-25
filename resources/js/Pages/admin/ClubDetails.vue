@@ -64,6 +64,7 @@
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-blue-500 cursor-pointer" @click="sortBy = 'members'">Grade/Section</th>
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elistment Date</th>
                     <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
@@ -88,6 +89,9 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         Member
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ fullDateTime(learner.pivot.created_at) }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
                         <button @click="unlist(learner)" class="bg-red-100 hover:bg-red-200 text-red-100 hover:text-red-600 px-4 py-2 rounded-lg transition-colors duration-200">
@@ -169,6 +173,7 @@
     import { toast } from 'vue3-toastify'
     import 'vue3-toastify/dist/index.css'
     import axios from 'axios'
+    import { fullDateTime } from '@/composables/utilities'
 
     const page = usePage()
     const selectedClub = ref(null)
