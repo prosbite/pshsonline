@@ -12,7 +12,15 @@ const props = defineProps({
     todayEvents: Array,
     recentAttendance: Array,
 });
-const externalink = computed(() => page.props?.auth?.user.club_registers?.[0]?.externalinks?.[0]?.link ?? '#')
+const externalink = computed(() => {
+    if (page.props.auth.user?.role === 'club adviser') {
+        return page.props?.auth?.user.club_registers?.[0]?.externalinks?.[0]?.link ?? '#'
+    }
+    if (page.props.auth.user?.role === 'admin') {
+        return 'https://drive.google.com/drive/folders/17CZsXYIKWQSbLXYRRSypnpM954GfnyMB?usp=drive_link'
+    }
+    return '#'
+})
 </script>
 
 <template>
