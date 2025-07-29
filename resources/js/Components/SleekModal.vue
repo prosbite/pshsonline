@@ -1,9 +1,9 @@
 <template>
     <transition name="modal-fade">
-      <div v-if="isVisible" class="fixed inset-0 z-50 flex justify-center p-4 bg-black bg-opacity-50" @click.self="closeModal">
+      <div v-if="isVisible" class="fixed inset-0 z-50 min-h-[100vh] flex justify-center items-center p-4 bg-black bg-opacity-50" @click.self="closeModal">
         <div
           :class="modalClasses"
-          class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all duration-300 ease-out flex flex-col overflow-hidden"
+          class="bg-white h-fit dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all duration-300 ease-out flex flex-col overflow-hidden"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-header"

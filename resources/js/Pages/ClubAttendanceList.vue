@@ -15,9 +15,7 @@
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Present</th>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Absent</th>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Late</th>
+                        <th v-for="status in attendanceStatus()" :key="status.value" scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ status.abv }}</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
@@ -36,8 +34,10 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">{{ attendance.activity }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-green-500">{{ totalPresent(attendance) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-red-500">{{ totalAbsent(attendance) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-yellow-500">{{ totalLate(attendance) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">{{ totalExcusedAbsent(attendance) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-red-500">{{ totalUnexcusedAbsent(attendance) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-yellow-500">{{ totalTardy(attendance) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">{{ totalCuttingClasses(attendance) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">{{ totalMembers(attendance) }}</td>
                         <td class="flex items-center px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                             <Link :href="route('club.attendance.show', { attendance_id: attendance.id })" class="text-indigo-600 mr-3 hover:text-indigo-900">View</Link>
@@ -64,7 +64,7 @@ import { ref } from 'vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
-import { fullDate } from '@/composables/utilities'
+import { fullDate, attendanceStatus } from '@/composables/utilities'
 
 defineOptions({
   layout: MainLayout
@@ -79,8 +79,17 @@ const totalPresent = (attendance: any) => {
 const totalMembers = (attendance: any) => {
     return attendance.club_attendance_learner.length
 }
-const totalAbsent = (attendance: any) => {
-    return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'absent').length
+const totalUnexcusedAbsent = (attendance: any) => {
+    return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'unexcused_absence').length
+}
+const totalExcusedAbsent = (attendance: any) => {
+    return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'excused_absence').length
+}
+const totalTardy = (attendance: any) => {
+    return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'tardy').length
+}
+const totalCuttingClasses = (attendance: any) => {
+    return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'cutting_classes').length
 }
 const totalLate = (attendance: any) => {
     return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'late').length

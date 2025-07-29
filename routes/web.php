@@ -10,6 +10,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ClubAttendanceController;
 use App\Http\Controllers\AdminAttendanceController;
 use App\Http\Controllers\AdminAssessmentController;
+use App\Http\Controllers\ClubSubmissionController;
 use Illuminate\Support\Facades\Route;
 use App\Models\ClubRegister;
 use Inertia\Inertia;
@@ -62,6 +63,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/club/unregister', [ClubController::class, 'unregisterMember'])->name('club.unregister');
     Route::put('/club/attendance/update', [ClubAttendanceController::class, 'update'])->name('club.attendance.update');
     Route::post('/club/attendance', [ClubAttendanceController::class, 'store'])->name('club.attendance.store');
+    Route::get('/club/submissions', [ClubSubmissionController::class, 'index'])->name('club.submissions');
+    Route::post('/club/submissions', [ClubSubmissionController::class, 'store'])->name('club.submissions.store');
 });
 
 Route::middleware('auth')->group(function () {

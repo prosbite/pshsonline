@@ -17,7 +17,7 @@ class ClubAttendanceController extends Controller
         if ($club->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access.');
         }
-        $attendance = ClubAttendance::with('clubAttendanceLearner')->where('club_register_id', $request->club_register_id)->get();
+        $attendance = ClubAttendance::with('clubAttendanceLearner')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->get();
         return Inertia::render('ClubAttendanceList', [
             'attendance' => $attendance,
         ]);
