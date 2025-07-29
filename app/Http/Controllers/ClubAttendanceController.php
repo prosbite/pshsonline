@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\ClubAttendance;
 use App\Models\ClubRegister;
+use App\Models\AttendanceDelinquence;
 use App\Models\SchoolYear;
 
 class ClubAttendanceController extends Controller
@@ -16,6 +17,11 @@ class ClubAttendanceController extends Controller
 
         if ($club->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access.');
+        }
+        $previousAttendance = ClubAttendance::with('delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
+        if ($previousAttendance) {
+            $delinquents = AttendanceDelinquence::today($previousAttendance->id);
+            dd($delinquents);
         }
         $attendance = ClubAttendance::with('clubAttendanceLearner')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->get();
         return Inertia::render('ClubAttendanceList', [
