@@ -37,6 +37,7 @@
                         >Date:</label
                     >
                     <input
+                        disabled
                         required
                         v-model="clubAttendance.date"
                         type="date"
@@ -45,7 +46,7 @@
                         class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                     />
                 </div>
-                <div>
+                <div class="mb-6">
                     <label
                         for="session-activity"
                         class="block text-gray-700 text-md font-medium mb-1"
@@ -61,16 +62,25 @@
                     />
                 </div>
 
-                <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-4">
-                    Member Attendance
-                </h3>
-                <div class="overflow-x-auto rounded-lg border border-gray-200">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                <div class="flex justify-between items-center mt-6">
+                    <h3 class="text-xl font-semibold text-gray-800">
+                        Member Attendance
+                    </h3>
+                    <div class="flex flex-wrap gap-4 text-sm text-gray-700">
+                        <span><span class="font-semibold text-indigo-600">P</span> - Present</span>
+                        <span><span class="font-semibold text-green-500">EA</span> - Excused Absence</span>
+                        <span><span class="font-semibold text-red-500">UA</span> - Unexcused Absence</span>
+                        <span><span class="font-semibold text-yellow-500">T</span> - Tardy</span>
+                        <span><span class="font-semibold text-gray-600">CC</span> - Cutting Classes</span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto rounded-lg border border-gray-200 h-[700px] overflow-auto scrollbar-hide">
+                    <table class="min-w-full divide-y divide-gray-200 table-auto">
+                        <thead class="bg-gray-50 sticky top-0 z-10 shadow">
                             <tr>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
                                     #
                                 </th>
@@ -81,12 +91,14 @@
                                     Name
                                 </th>
                                 <th
+                                    v-for="status in attendanceStatus()"
+                                    :key="status.value"
                                     scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Present
+                                    {{ status.abv }}
                                 </th>
-                                <th
+                                <!-- <th
                                     scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
@@ -97,7 +109,7 @@
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
                                     Late
-                                </th>
+                                </th> -->
                                 <th
                                     scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -106,8 +118,8 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="(member, index) in sortedMembers" :key="index">
+                        <tbody class="bg-white divide-y divide-gray-200 overflow-y-auto">
+                            <tr v-for="(member, index) in sortedMembers" :key="index" class="hover:bg-gray-50">
                                 <td
                                     class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                                 >
@@ -119,18 +131,20 @@
                                     {{ member?.learner_name }}
                                 </td>
                                 <td
+                                    v-for="status in attendanceStatus()"
+                                    :key="status.value"
                                     class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                                 >
                                     <input
                                         v-model="member.status"
                                         type="radio"
                                         :name="`member-${member.learner_id}-status`"
-                                        value="present"
-                                        checked
-                                        class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                                        :value="status.value"
+                                        class="form-radio h-4 w-4 transition duration-150 ease-in-out"
+                                        :class="status.color"
                                     />
                                 </td>
-                                <td
+                                <!-- <td
                                     class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                                 >
                                     <input
@@ -151,7 +165,7 @@
                                         value="late"
                                         class="form-radio h-4 w-4 text-yellow-600 transition duration-150 ease-in-out"
                                     />
-                                </td>
+                                </td> -->
                                 <td
                                     class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                                 >
@@ -181,7 +195,7 @@
 </template>
 
 <script lang="ts" setup>
-import { middleInitials } from '@/composables/utilities';
+import { attendanceStatus, middleInitials } from '@/composables/utilities';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { onMounted, computed } from 'vue';
@@ -238,4 +252,13 @@ onMounted(() => {
 })
 </script>
 
-<style></style>
+<style scoped>
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Opera */
+}
+</style>

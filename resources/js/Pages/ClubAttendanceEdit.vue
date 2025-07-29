@@ -72,22 +72,11 @@
                                     Name
                                 </th>
                                 <th
+                                    v-for="status in attendanceStatus()" :key="status.value"
                                     scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Present
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Absent
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Late
+                                    {{ status.abv }}
                                 </th>
                                 <th
                                     scope="col"
@@ -110,39 +99,17 @@
                                     {{ member?.last_name }}, {{ member?.first_name }} {{ middleInitials(member?.middle_name ?? '') }}
                                 </td>
                                 <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                                >
-                                    <input
-
-                                        v-model="member.pivot.status"
-                                        type="radio"
-                                        :name="`member-${member.id}-status`"
-                                        value="present"
-                                        checked
-                                        class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                                    />
-                                </td>
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                                >
-                                    <input
-
-                                        v-model="member.pivot.status"
-                                        type="radio"
-                                        :name="`member-${member.id}-status`"
-                                        value="absent"
-                                        class="form-radio h-4 w-4 text-red-600 transition duration-150 ease-in-out"
-                                    />
-                                </td>
-                                <td
+                                    v-for="status in attendanceStatus()" :key="status.value"
                                     class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                                 >
                                     <input
                                         v-model="member.pivot.status"
                                         type="radio"
                                         :name="`member-${member.id}-status`"
-                                        value="late"
-                                        class="form-radio h-4 w-4 text-yellow-600 transition duration-150 ease-in-out"
+                                        :value="status.value"
+                                        :checked="member.pivot.status === status.value"
+                                        class="form-radio h-4 w-4 transition duration-150 ease-in-out"
+                                        :class="status.color"
                                     />
                                 </td>
                                 <td
@@ -181,7 +148,7 @@
 </template>
 
 <script lang="ts" setup>
-import { fullDate, middleInitials } from '@/composables/utilities';
+import { fullDate, middleInitials, attendanceStatus } from '@/composables/utilities';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { usePage, Link, useForm } from '@inertiajs/vue3';
 import { onMounted, computed } from 'vue';

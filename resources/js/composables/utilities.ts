@@ -63,3 +63,71 @@ export function exportToCSV(data: any[], filename: string = 'export.csv') {
 
       URL.revokeObjectURL(url);
 }
+
+export function removeUnderScore(str: string) {
+    return str.replace(/_/g, ' ');
+}
+
+export function attendanceStatus() {
+    return [
+        {
+            label: 'Present',
+            value: 'present',
+            color: 'text-indigo-500',
+            abv: 'P'
+        },
+        {
+            label: 'Excused Absence',
+            value: 'excused_absence',
+            color: 'text-green-500',
+            abv: 'EA'
+        },
+        {
+            label: 'Unexcused Absence',
+            value: 'unexcused_absence',
+            color: 'text-red-500',
+            abv: 'UA'
+        },
+        {
+            label: 'Tardy',
+            value: 'tardy',
+            color: 'text-yellow-500',
+            abv: 'T'
+        },
+        {
+            label: 'Cutting Classes',
+            value: 'cutting_classes',
+            color: 'text-gray-500',
+            abv: 'CC'
+        }
+    ]
+}
+
+export function submissionType() {
+    return [
+        {
+            label: 'Accreditation Documents',
+            value: 'accreditation_documents',
+        },
+        {
+            label: 'Reaccreditation Documents',
+            value: 'reaccreditation_documents',
+        },
+        {
+            label: 'Activity Proposal',
+            value: 'activity_proposal',
+        },
+        {
+            label: 'Activity Report',
+            value: 'activity_report',
+        },
+        {
+            label: 'Attendance Report',
+            value: 'attendance_report',
+        },
+        {
+            label: 'Summary of Attendance',
+            value: 'summary_of_attendance',
+        },
+    ]
+}

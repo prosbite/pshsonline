@@ -35,4 +35,9 @@ class ClubRegister extends Model
     {
         return $this->hasMany(Externalink::class);
     }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class);
+    }
 }
