@@ -123,6 +123,63 @@ const externalink = computed(() => {
                         </a>
                         </li>
 
+                        <li>
+                        <a href="https://docs.google.com/document/d/1HzSSLS2JbFBFJwGLObMXxqV-tcvsbaKy/edit?usp=drive_link&ouid=103896997284313246840&rtpof=true&sd=true"
+                            target="_blank"
+                            class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
+                            <div class="flex items-center space-x-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <circle cx="12" cy="12" r="10" stroke-width="2" />
+                                    <circle cx="12" cy="12" r="6" stroke-width="2" />
+                                    <circle cx="12" cy="12" r="2" stroke-width="2" fill="currentColor" />
+                                </svg>
+                            <span class="text-gray-700 dark:text-gray-200 font-medium">IPCR Targets (July - December 2025)</span>
+                            </div>
+                            <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                        </li>
+
+                        <li>
+                        <a href="https://docs.google.com/spreadsheets/d/1zT7VzHnif2W-f2j2_0_0MNdCN7QqO7cI/edit?usp=drive_link&ouid=103896997284313246840&rtpof=true&sd=true"
+                            target="_blank"
+                            class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
+                            <div class="flex items-center space-x-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h4l2-4 4 8 2-4h6" />
+                                </svg>
+                            <span class="text-gray-700 dark:text-gray-200 font-medium">Activity Proposal</span>
+                            </div>
+                            <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                        </li>
+
+                        <li>
+                        <a href="https://docs.google.com/spreadsheets/d/1sL41qnc4QQU9cs5R5b-6XDlQiGR2ov5G/edit?usp=sharing&ouid=103896997284313246840&rtpof=true&sd=true"
+                            target="_blank"
+                            class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
+                            <div class="flex items-center space-x-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5h6M9 3h6a2 2 0 012 2v1h1a2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h1V5a2 2 0 012-2zM9 12h6M9 16h3" />
+                                </svg>
+                            <span class="text-gray-700 dark:text-gray-200 font-medium">Activity Report</span>
+                            </div>
+                            <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                        </li>
+
                     </ul>
                 </section>
 

@@ -21,4 +21,12 @@ class AdminClubSubmissionController extends Controller
             'submissions' => $submissions
         ]);
     }
+
+    public function update(Submission $submission)
+    {
+        $submission->update([
+            'status' => request('status')
+        ]);
+        return redirect()->back();
+    }
 }

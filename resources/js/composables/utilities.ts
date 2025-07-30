@@ -147,3 +147,24 @@ export function submissionType() {
         },
     ]
 }
+
+export function submissionProgression() {
+    return [
+        {
+            label: 'Pending',
+            value: 'pending',
+        },
+        {
+            label: 'Ongoing Review',
+            value: 'ongoing_review',
+        },
+        {
+            label: 'Completed (For Revision)',
+            value: 'completed_for_revision',
+        },
+        {
+            label: 'Completed (For Printing)',
+            value: 'completed_for_printing',
+        },
+    ]
+}

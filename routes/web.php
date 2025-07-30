@@ -50,6 +50,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin')->gr
     Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
     Route::get('/club/attendance/delinquents', [AdminAttendanceController::class, 'absentStudents'])->name('admin.attendance.delinquents');
     Route::get('/clubs/submissions', [AdminClubSubmissionController::class, 'index'])->name('admin.club.submissions');
+    Route::put('/clubs/submissions/{submission}', [AdminClubSubmissionController::class, 'update'])->name('admin.club.submissions.update');
 
     Route::get('/assessment/mixmatch', [AdminAssessmentController::class, 'mixmatch'])->name('admin.assessment.mixmatch');
     Route::post('/assessment/match', [AdminAssessmentController::class, 'matchAssessment'])->name('admin.assessment.match');
