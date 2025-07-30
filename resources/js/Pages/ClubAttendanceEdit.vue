@@ -75,7 +75,7 @@
                             <span class="text-gray-500 italic">{{ delinquent.resolved ? 'Submitted' : 'Not Submitted' }}</span>
                             </td>
                             <td class="px-4 py-3">
-                                <button v-if="!delinquent.resolved" @click.prevent="resolveAttendance(delinquent.id)" class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-md">
+                                <button v-if="!delinquent.resolved" @click.prevent="resolveAttendance(delinquent)" class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-md">
                                     Resolve
                                 </button>
                                 <span v-else class="text-green-500 italic">Resolved</span>
@@ -189,6 +189,7 @@ import { usePage, Link, useForm, router } from '@inertiajs/vue3';
 import { onMounted, computed } from 'vue';
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import axios from 'axios'
 
 defineOptions({
     layout: MainLayout
@@ -223,25 +224,19 @@ const sortedMembers = computed(() => {
         return a.last_name.localeCompare(b.last_name)
     })
 })
-const resolveAttendance = (id: number) => {
-    router.put(route('club.attendance.resolve', { id }), {}, {
-        onSuccess: () => {
-            toast.success('Attendance resolved successfully.', {
-                autoClose: 2000,
-                position: toast.POSITION.TOP_RIGHT,
+const resolveAttendance = (delinquent: any) => {
+    axios.put(route('club.attendance.resolve', { id: delinquent.id }))
+        .then(() => {
+            toast.success('Admission slip submitted.', {
+                autoClose: 1000,
             })
-            router.visit(route('club.attendance.edit', {
-                club_register_id: props.attendance.club_register_id,
-                attendance_id: props.attendance.club_attendance_id
-            }));
-        },
-        onError: () => {
-            toast.error('Failed to resolve attendance.', {
-                autoClose: 2000,
-                position: toast.POSITION.TOP_RIGHT,
+            delinquent.resolved = true
+        })
+        .catch(() => {
+            toast.error('Failed to resolve attendance', {
+                autoClose: 1000,
             })
-        },
-    });
+        })
 }
 
 onMounted(() => {

@@ -1,5 +1,8 @@
 <template>
-    <div class="page">
+    <div class="page relative">
+        <div v-if="loading" class="fixed flex items-center justify-center top-0 left-0 right-0 w-full h-screen z-50 bg-black opacity-50">
+            <img src="/img/intertwind_loader.gif" class="w-24 h-24" alt="">
+        </div>
         <h1 class="text-4xl font-extrabold text-gray-900 mb-8">
             Attendance Recording
         </h1>
@@ -84,9 +87,10 @@
                             <span class="text-gray-500 italic">{{ delinquent.resolved ? 'Submitted' : 'Not Submitted' }}</span>
                             </td>
                             <td class="px-4 py-3">
-                            <button @click.prevent="resolveAttendance(delinquent.id)" class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-md">
-                                Resolve
-                            </button>
+                                <button v-if="!delinquent.resolved" @click.prevent="resolveAttendance(delinquent.id)" class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-md">
+                                    Resolve
+                                </button>
+                                <span v-else class="text-green-500 italic">Resolved</span>
                             </td>
                         </tr>
 
@@ -232,13 +236,16 @@
 import { attendanceStatus, middleInitials, removeUnderScore, ucWords } from '@/composables/utilities';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { useForm, usePage } from '@inertiajs/vue3';
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import axios from 'axios'
+import { router } from '@inertiajs/vue3'
 
 defineOptions({
     layout: MainLayout
 })
+const loading = ref(false)
 const page = usePage()
 const props = defineProps({
     club: {
@@ -286,14 +293,21 @@ const submitAttendance = () => {
     })
 }
 const resolveAttendance = (id: number) => {
-    clubAttendance.post(route('club.attendance.resolve', { id }), {
-        onSuccess: () => {
-            toast.success('Attendance resolved successfully')
-        },
-        onError: () => {
-            toast.error('Failed to resolve attendance')
-        }
-    })
+    loading.value = true
+    axios.put(route('club.attendance.resolve', { id }))
+        .then(() => {
+            toast.success('Admission slip submitted.', {
+                autoClose: 1000,
+            })
+            loading.value = false
+            router.visit(route('club.attendance.create', { club_register_id: props.club?.id }))
+        })
+        .catch(() => {
+            toast.error('Failed to resolve attendance', {
+                autoClose: 1000,
+            })
+            loading.value = false
+        })
 }
 onMounted(() => {
     setClubAttendance()

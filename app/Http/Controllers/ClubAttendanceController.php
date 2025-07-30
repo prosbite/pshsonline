@@ -139,7 +139,7 @@ class ClubAttendanceController extends Controller
         $delinquent = AttendanceDelinquence::findOrFail($request->id);
         $delinquent->resolved = true;
         $delinquent->save();
-        $clubAttendance = ClubAttendance::findOrFail($delinquent->club_attendance_id);
-        return redirect()->route('club.attendance', ['club_register_id' => $clubAttendance->club_register_id]);
+        // $clubAttendance = ClubAttendance::findOrFail($delinquent->club_attendance_id);
+        return 1;
     }
 }
