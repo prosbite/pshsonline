@@ -22,7 +22,7 @@ class ClubSubmissionController extends Controller
         $request->validate([
             'name' => 'required',
             'club_register_id' => 'required',
-            'url' => 'required',
+            'url' => 'nullable',
             'remarks' => 'required',
             'user_id' => 'required',
         ]);

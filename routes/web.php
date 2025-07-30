@@ -61,10 +61,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/club/{club_register_id}/attendance', [ClubAttendanceController::class, 'index'])->name('club.attendance');
     Route::get('/club/{club_register_id}/attendance/create', [ClubAttendanceController::class, 'create'])->name('club.attendance.create');
     Route::get('/club/attendance/{attendance_id}/show', [ClubAttendanceController::class, 'show'])->name('club.attendance.show');
-    Route::get('/club/attendance/{attendance_id}/edit', [ClubAttendanceController::class, 'edit'])->name('club.attendance.edit');
+    Route::get('/club/{club_register_id}/attendance/{attendance_id}/edit', [ClubAttendanceController::class, 'edit'])->name('club.attendance.edit');
     Route::post('/club/unregister', [ClubController::class, 'unregisterMember'])->name('club.unregister');
     Route::put('/club/attendance/update', [ClubAttendanceController::class, 'update'])->name('club.attendance.update');
     Route::post('/club/attendance', [ClubAttendanceController::class, 'store'])->name('club.attendance.store');
+    Route::put('/club/attendance/resolve', [ClubAttendanceController::class, 'resolve'])->name('club.attendance.resolve');
     Route::get('/club/submissions', [ClubSubmissionController::class, 'index'])->name('club.submissions');
     Route::post('/club/submissions', [ClubSubmissionController::class, 'store'])->name('club.submissions.store');
 });

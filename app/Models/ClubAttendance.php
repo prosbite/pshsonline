@@ -33,4 +33,15 @@ class ClubAttendance extends Model
     {
         return $this->belongsTo(Learner::class, 'club_attendance_learner', 'club_attendance_id', 'learner_id');
     }
+
+    public function delinquents()
+    {
+        return $this->hasMany(AttendanceDelinquence::class);
+    }
+    public function delinquentsPivot()
+    {
+        return $this->belongsToMany(Learner::class, 'club_attendance_learner', 'club_attendance_id', 'learner_id')
+            ->withPivot('id', 'status', 'remarks')
+            ->wherePivotIn('status', ['unexcused_absence', 'cutting_classes']);
+    }
 }

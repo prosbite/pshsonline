@@ -23,12 +23,17 @@
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="submission, index in props.submissions" :key="index">
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ index + 1 }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ ucWords(removeUnderScore(submission.name ?? '')) }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                        <div class="flex flex-col gap-1">
+                            <span class="font-semibold text-slate-600">{{ ucWords(submissionName(submission.name)) }}</span>
+                            <span class="text-xs text-slate-600">{{ ucWords(submission.club_register?.user?.name ?? '') }}</span>
+                        </div>
+                    </td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ fullDate(submission.created_at) }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ ucWords(submission.club_register?.club?.name ?? '') }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ ucWords(submission.status ?? '') }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                        <a :href="submission.url" target="_blank" class="text-indigo-600 hover:text-indigo-900">Visit</a>
+                        <a :href="submission.url" target="_blank" class="text-indigo-400 hover:text-indigo-600">Visit</a>
                     </td>
                 </tr>
                 <tr v-if="props.submissions.length === 0" >
@@ -54,4 +59,7 @@
     const props = defineProps({
         submissions: Array,
     });
+    const submissionName = (submission: any) => {
+        return submissionType().filter((type: any) => type.value === submission)?.[0]?.label ?? ''
+    }
     </script>

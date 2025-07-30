@@ -18,14 +18,24 @@ class ClubAttendanceController extends Controller
         if ($club->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access.');
         }
-        $previousAttendance = ClubAttendance::with('delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
-        if ($previousAttendance) {
-            $delinquents = AttendanceDelinquence::today($previousAttendance->id);
-            dd($delinquents);
+        $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
+        if ($previousAttendance->delinquentsPivot->isNotEmpty() && $previousAttendance->delinquents->isEmpty()) {
+            foreach ($previousAttendance->delinquentsPivot as $delinquent) {
+                $previousAttendance->delinquents()->create([
+                    'club_attendance_id' => $previousAttendance->id,
+                    'club_attendance_learner_id' => $delinquent->pivot->id,
+                    'resolved' => false,
+                    'link' => null,
+                    'resolved_by' => null,
+                    'remarks' => null,
+                ]);
+            }
         }
+        $delinquents = AttendanceDelinquence::today($previousAttendance->id);
         $attendance = ClubAttendance::with('clubAttendanceLearner')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->get();
         return Inertia::render('ClubAttendanceList', [
             'attendance' => $attendance,
+            'delinquents' => $delinquents,
         ]);
     }
 
@@ -36,9 +46,12 @@ class ClubAttendanceController extends Controller
         if ($club->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access.');
         }
+        $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
         $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
+        $delinquents = AttendanceDelinquence::today($previousAttendance->id);
         return Inertia::render('ClubAttendanceCreate', [
             'club' => $club,
+            'delinquents' => $delinquents,
         ]);
     }
 
@@ -79,8 +92,14 @@ class ClubAttendanceController extends Controller
     public function edit(Request $request)
     {
         $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner'])->findOrFail($request->attendance_id);
+        $previousAttendance = ClubAttendance::where('club_register_id', $attendance->club_register_id)
+        ->where('created_at', '<', $attendance->created_at)
+        ->orderBy('created_at', 'desc')
+        ->first();
+        $delinquents = AttendanceDelinquence::today($previousAttendance->id);
         return Inertia::render('ClubAttendanceEdit', [
             'attendance' => $attendance,
+            'delinquents' => $delinquents
         ]);
     }
     public function update(Request $request)
@@ -110,5 +129,17 @@ class ClubAttendanceController extends Controller
         })->toArray();
         $clubAttendance->clubAttendanceLearner()->sync($cleanMembers);
         return redirect()->route('club.attendance', ['club_register_id' => $club->id]);
+    }
+
+    public function resolve(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+        ]);
+        $delinquent = AttendanceDelinquence::findOrFail($request->id);
+        $delinquent->resolved = true;
+        $delinquent->save();
+        $clubAttendance = ClubAttendance::findOrFail($delinquent->club_attendance_id);
+        return redirect()->route('club.attendance', ['club_register_id' => $clubAttendance->club_register_id]);
     }
 }
