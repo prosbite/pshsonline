@@ -23,7 +23,6 @@ class ClubSubmissionController extends Controller
             'name' => 'required',
             'club_register_id' => 'required',
             'url' => 'nullable',
-            'remarks' => 'required',
             'user_id' => 'required',
         ]);
         Submission::create($request->all());

@@ -29,7 +29,7 @@
                             <span class="text-xs text-slate-600">{{ ucWords(submission.club_register?.user?.name ?? '') }}</span>
                         </div>
                     </td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ fullDate(submission.created_at) }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ fullDateTime(submission.created_at) }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ ucWords(submission.club_register?.club?.name ?? '') }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ ucWords(submission.status ?? '') }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
@@ -51,7 +51,7 @@
     <script lang="ts" setup>
     import SleekModal from '@/Components/SleekModal.vue';
     import MainLayout from '@/Layouts/MainLayout.vue';
-    import { fullDate, submissionType, removeUnderScore, ucWords } from '@/composables/utilities';
+    import { fullDate, submissionType, removeUnderScore, ucWords, fullDateTime } from '@/composables/utilities';
     import { onMounted, ref } from 'vue';
     import { useForm } from '@inertiajs/vue3';
     import { toast } from 'vue3-toastify';
