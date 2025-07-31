@@ -112,7 +112,7 @@
                         <span><span class="font-semibold text-gray-600">CC</span> - Cutting Classes</span>
                     </div>
                 </div>
-                <div class="overflow-x-auto rounded-lg border border-gray-200 h-[700px] overflow-auto scrollbar-hide">
+                <div class="overflow-x-auto rounded-lg border border-gray-200">
                     <table class="min-w-full divide-y divide-gray-200 table-auto">
                         <thead class="bg-gray-50 sticky top-0 z-10 shadow">
                             <tr>

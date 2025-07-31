@@ -48,6 +48,7 @@ class ClubAttendanceController extends Controller
         // $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
         // $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
         // $delinquents = AttendanceDelinquence::today($previousAttendance->id);
+        $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
         return Inertia::render('ClubAttendanceCreate', [
             'club' => $club,
             'delinquents' => [],
