@@ -45,12 +45,12 @@ class ClubAttendanceController extends Controller
         if ($club->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access.');
         }
-        $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
-        $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
-        $delinquents = AttendanceDelinquence::today($previousAttendance->id);
+        // $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
+        // $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
+        // $delinquents = AttendanceDelinquence::today($previousAttendance->id);
         return Inertia::render('ClubAttendanceCreate', [
             'club' => $club,
-            'delinquents' => $delinquents,
+            'delinquents' => [],
         ]);
     }
 
@@ -91,14 +91,14 @@ class ClubAttendanceController extends Controller
     public function edit(Request $request)
     {
         $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner'])->findOrFail($request->attendance_id);
-        $previousAttendance = ClubAttendance::where('club_register_id', $attendance->club_register_id)
-        ->where('created_at', '<', $attendance->created_at)
-        ->orderBy('created_at', 'desc')
-        ->first();
-        $delinquents = AttendanceDelinquence::today($previousAttendance->id);
+        // $previousAttendance = ClubAttendance::where('club_register_id', $attendance->club_register_id)
+        // ->where('created_at', '<', $attendance->created_at)
+        // ->orderBy('created_at', 'desc')
+        // ->first();
+        // $delinquents = AttendanceDelinquence::today($previousAttendance->id);
         return Inertia::render('ClubAttendanceEdit', [
             'attendance' => $attendance,
-            'delinquents' => $delinquents
+            'delinquents' => []
         ]);
     }
     public function update(Request $request)
