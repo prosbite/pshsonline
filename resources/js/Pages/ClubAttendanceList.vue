@@ -51,7 +51,7 @@
                 </tbody>
                 <tbody v-else class="bg-white divide-y divide-gray-200">
                     <tr>
-                        <td colspan="7" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">No attendance records yet.</td>
+                        <td colspan="9" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">No attendance records yet.</td>
                     </tr>
                 </tbody>
             </table>
