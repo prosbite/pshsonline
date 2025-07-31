@@ -19,18 +19,18 @@ class ClubAttendanceController extends Controller
             abort(403, 'Unauthorized access.');
         }
         $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
-        if ($previousAttendance->delinquentsPivot->isNotEmpty() && $previousAttendance->delinquents->isEmpty()) {
-            foreach ($previousAttendance->delinquentsPivot as $delinquent) {
-                $previousAttendance->delinquents()->create([
-                    'club_attendance_id' => $previousAttendance->id,
-                    'club_attendance_learner_id' => $delinquent->pivot->id,
-                    'resolved' => false,
-                    'link' => null,
-                    'resolved_by' => null,
-                    'remarks' => null,
-                ]);
-            }
-        }
+        // if ($previousAttendance->delinquentsPivot->isNotEmpty() && $previousAttendance->delinquents->isEmpty()) {
+        //     foreach ($previousAttendance->delinquentsPivot as $delinquent) {
+        //         $previousAttendance->delinquents()->create([
+        //             'club_attendance_id' => $previousAttendance->id,
+        //             'club_attendance_learner_id' => $delinquent->pivot->id,
+        //             'resolved' => false,
+        //             'link' => null,
+        //             'resolved_by' => null,
+        //             'remarks' => null,
+        //         ]);
+        //     }
+        // }
         $delinquents = AttendanceDelinquence::today($previousAttendance->id);
         $attendance = ClubAttendance::with('clubAttendanceLearner')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->get();
         return Inertia::render('ClubAttendanceList', [
