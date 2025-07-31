@@ -15,7 +15,7 @@ class AdminClubSubmissionController extends Controller
         ->whereHas('clubRegister', function ($q) {
             $q->where('school_year_id', SchoolYear::current()->id);
         })
-        ->orderBy('created_at', 'desc')
+        ->orderBy('created_at', 'asc')
         ->get();
         return Inertia::render('admin/ClubSubmissions', [
             'submissions' => $submissions

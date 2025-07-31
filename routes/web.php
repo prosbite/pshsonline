@@ -12,6 +12,7 @@ use App\Http\Controllers\AdminAttendanceController;
 use App\Http\Controllers\AdminAssessmentController;
 use App\Http\Controllers\AdminClubSubmissionController;
 use App\Http\Controllers\ClubSubmissionController;
+use App\Http\Controllers\AdminClubAttendanceController;
 use Illuminate\Support\Facades\Route;
 use App\Models\ClubRegister;
 use Inertia\Inertia;
@@ -48,6 +49,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin')->gr
     Route::post('/club/register', [ClubController::class, 'registerMember'])->name('club.register');
     Route::post('/club/unregister', [AdminClubController::class, 'unregisterMember'])->name('admin.club.unregister');
     Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
+    Route::get('/attendances', [AdminClubAttendanceController::class, 'index'])->name('admin.attendance');
     Route::get('/club/attendance/delinquents', [AdminAttendanceController::class, 'absentStudents'])->name('admin.attendance.delinquents');
     Route::get('/clubs/submissions', [AdminClubSubmissionController::class, 'index'])->name('admin.club.submissions');
     Route::put('/clubs/submissions/{submission}', [AdminClubSubmissionController::class, 'update'])->name('admin.club.submissions.update');
