@@ -253,8 +253,8 @@
 
                                         <div class="flex flex-col flex-1">
                                             <span class="mb-6 text-sm">Reviewed by:</span>
-                                            <span class="font-bold underline text-md uppercase">
-                                                Gretchen Mae B. Empuesto, PhD
+                                            <span class="font-bold underline text-md">
+                                                GRETCHEN MAE B. EMPUESTO, PhD
                                             </span>
                                             <span class="text-md">
                                                 ALP Coordinator
