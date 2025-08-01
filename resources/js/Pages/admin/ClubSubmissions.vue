@@ -4,7 +4,7 @@
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 space-y-4 md:space-y-0">
                 <div >
                     <h3 class="text-2xl font-semibold text-gray-800">Submissions</h3>
-                    <p class="text-gray-600 text-sm mb-4">Submission History and Status</p>
+                    <p class="text-gray-600 text-md mb-4">Submission History and Status</p>
                 </div>
             </div>
 
@@ -12,31 +12,31 @@
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
-                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2">#</th>
-                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-blue-500 cursor-pointer" @click="sortBy = 'name'">Name of Submission</th>
-                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hover:text-blue-500 cursor-pointer" @click="sortBy = 'members'">Date Submitted</th>
-                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Club</th>
-                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
-                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider w-2">#</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider hover:text-blue-500 cursor-pointer" @click="sortBy = 'name'">Name of Submission</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider hover:text-blue-500 cursor-pointer" @click="sortBy = 'members'">Date Submitted</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Club</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Link</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="submission, index in props.submissions" :key="index">
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ index + 1 }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                    <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">{{ index + 1 }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">
                         <div class="flex flex-col gap-1">
                             <span class="font-semibold text-slate-600">{{ ucWords(submissionName(submission.name)) }}</span>
-                            <span class="text-xs text-slate-600">{{ ucWords(submission.club_register?.user?.name ?? '') }}</span>
+                            <span class="text-sm text-slate-600">{{ ucWords(submission.club_register?.user?.name ?? '') }}</span>
                         </div>
                     </td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ fullDateTime(submission.created_at) }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ ucWords(submission.club_register?.club?.name ?? '') }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-green-600">{{ ucWords(removeUnderScore(submission.status ?? '')) }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                    <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">{{ fullDateTime(submission.created_at) }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">{{ ucWords(submission.club_register?.club?.name ?? '') }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-md text-green-600">{{ ucWords(removeUnderScore(submission.status ?? '')) }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">
                         <a :href="submission.url" target="_blank" class="text-indigo-400 hover:text-indigo-600">Visit</a>
                     </td>
-                    <td class="flex flex-col gap-1 px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                    <td class="flex flex-col gap-1 px-4 py-3 whitespace-nowrap text-md text-gray-500">
                         <button
                             @click="updateSubmissionStatus(status, submission)"
                             v-for="status in proceedSubmission(submission?.status)"
@@ -47,7 +47,7 @@
                             </svg>
                             {{ status.label }}
                         </button>
-                        <span v-if="proceedSubmission(submission?.status).length === 0" class="text-xs text-green-500">
+                        <span v-if="proceedSubmission(submission?.status).length === 0" class="text-sm text-green-500">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>
@@ -55,7 +55,7 @@
                     </td>
                 </tr>
                 <tr v-if="props.submissions.length === 0" >
-                    <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td colspan="6" class="px-6 py-4 whitespace-nowrap text-md text-gray-500">
                         No submissions yet.
                     </td>
                 </tr>
