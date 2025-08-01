@@ -47,7 +47,7 @@ const externalink = computed(() => {
                             <a href="/pdf/final_alp_avenues.pdf"
                                 target="_blank"
                                 class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
-                                <div class="flex items-center space-x-3">
+                                <div class="flex items-start space-x-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-500" viewBox="0 0 64 64" fill="none">
                                         <rect width="64" height="64" rx="8" fill="#E53E3E"/>
                                         <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="white" font-weight="bold">PDF</text>
@@ -66,7 +66,7 @@ const externalink = computed(() => {
                             <a href="/pdf/student_org_venues.pdf"
                                 target="_blank"
                                 class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
-                                <div class="flex items-center space-x-3">
+                                <div class="flex items-start space-x-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-500" viewBox="0 0 64 64" fill="none">
                                         <rect width="64" height="64" rx="8" fill="#E53E3E"/>
                                         <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="white" font-weight="bold">PDF</text>
@@ -82,10 +82,48 @@ const externalink = computed(() => {
                         </li>
 
                         <li>
+                            <a href="/word/activity_proposal_checklist.docx"
+                                target="_blank"
+                                class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
+                                <div class="flex items-start space-x-3">
+                                    <svg class="w-5 h-5 text-indigo-500" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="64" height="64" rx="8" fill="#2B579A"/>
+                                        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="32" font-family="Segoe UI, sans-serif" fill="white" font-weight="bold">W</text>
+                                    </svg>
+                                <span class="text-gray-700 dark:text-gray-200 font-medium">Activity Proposal Checklist</span>
+                                </div>
+                                <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/word/cover_letter_format.docx"
+                                target="_blank"
+                                class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
+                                <div class="flex items-start space-x-3">
+                                    <svg class="w-5 h-5 text-indigo-500" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="64" height="64" rx="8" fill="#2B579A"/>
+                                        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="32" font-family="Segoe UI, sans-serif" fill="white" font-weight="bold">W</text>
+                                    </svg>
+                                <span class="text-gray-700 dark:text-gray-200 font-medium">Activity Proposal Checklist</span>
+                                </div>
+                                <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
+                        </li>
+
+                        <li>
                         <a :href="externalink ?? '#'"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-start space-x-3">
                             <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -107,7 +145,7 @@ const externalink = computed(() => {
                         <a href="https://www.canva.com/design/DAGtyO5Eqaw/dfo5TzluL8Y0f3mqRJlKqg/edit?utm_content=DAGtyO5Eqaw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-start space-x-3">
                             <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -127,7 +165,7 @@ const externalink = computed(() => {
                         <a href="https://docs.google.com/document/d/1HzSSLS2JbFBFJwGLObMXxqV-tcvsbaKy/edit?usp=drive_link&ouid=103896997284313246840&rtpof=true&sd=true"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-start space-x-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <circle cx="12" cy="12" r="10" stroke-width="2" />
                                     <circle cx="12" cy="12" r="6" stroke-width="2" />
@@ -147,7 +185,7 @@ const externalink = computed(() => {
                         <a href="https://docs.google.com/spreadsheets/d/1zT7VzHnif2W-f2j2_0_0MNdCN7QqO7cI/edit?usp=drive_link&ouid=103896997284313246840&rtpof=true&sd=true"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-start space-x-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h4l2-4 4 8 2-4h6" />
                                 </svg>
@@ -165,7 +203,7 @@ const externalink = computed(() => {
                         <a href="https://docs.google.com/spreadsheets/d/1sL41qnc4QQU9cs5R5b-6XDlQiGR2ov5G/edit?usp=sharing&ouid=103896997284313246840&rtpof=true&sd=true"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
-                            <div class="flex items-center space-x-3">
+                            <div class="flex items-start space-x-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 5h6M9 3h6a2 2 0 012 2v1h1a2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h1V5a2 2 0 012-2zM9 12h6M9 16h3" />
