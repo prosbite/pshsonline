@@ -183,7 +183,7 @@
 </template>
 
 <script lang="ts" setup>
-import { fullDate, middleInitials, attendanceStatus, removeUnderScore, ucWords } from '@/composables/utilities';
+import { fullDate, middleInitials, attendanceStatus, removeUnderScore, ucWords, replicate } from '@/composables/utilities';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { usePage, Link, useForm, router } from '@inertiajs/vue3';
 import { onMounted, computed } from 'vue';
@@ -197,6 +197,7 @@ defineOptions({
 const page = usePage()
 const attendanceForm = useForm({
     attendance: {},
+    delinquents: [],
 })
 const props = defineProps({
     attendance: {
@@ -210,6 +211,7 @@ const props = defineProps({
 })
 
 const updateAttendance = () => {
+    attendanceForm.delinquents = replicate(sortedDelinquents.value)
     attendanceForm.put(route('club.attendance.update'), {
         onSuccess: () => {
             toast.success('Attendance updated successfully')
@@ -220,24 +222,81 @@ const updateAttendance = () => {
     })
 }
 const sortedMembers = computed(() => {
-    return [...props.attendance.club_attendance_learner].sort((a, b) => {
+    const learners = replicate(props.attendance.club_attendance_learner)
+    return [...learners].sort((a, b) => {
         return a.last_name.localeCompare(b.last_name)
     })
 })
 const resolveAttendance = (delinquent: any) => {
-    axios.put(route('club.attendance.resolve', { id: delinquent.id }))
-        .then(() => {
+    router.put(route('club.attendance.resolve', { id: delinquent.id }),{},{
+        onSuccess: () => {
             toast.success('Admission slip submitted.', {
                 autoClose: 1000,
             })
             delinquent.resolved = true
-        })
-        .catch(() => {
+        },
+        onError: () => {
             toast.error('Failed to resolve attendance', {
                 autoClose: 1000,
             })
-        })
+        }
+    })
 }
+
+// const sortedDelinquents = computed(() => {
+//     const delinquents = []
+//     attendanceForm.attendance.club_attendance_learner.forEach((learner: any) => {
+//         if (learner.pivot.status === 'unexcused_absence' || learner.pivot.status === 'cutting_classes') {
+//             delinquents.push(learner)
+//             let count = 0
+//             props.delinquents.forEach((delinquent: any) => {
+//                 if (learner.pivot.id === delinquent.club_attendance_learner_id) {
+//                     count++
+//                     delinquents.push(delinquent)
+//                 }
+//             })
+//             if (count === 0) {
+//                 delinquents.push({
+//                     club_attendance_learner_id: learner.pivot.id,
+//                     resolved: false,
+//                     link: null,
+//                     resolved_by: null,
+//                     remarks: null,
+//                 })
+//             }
+//         }
+//     })
+//     return delinquents
+// })
+const sortedDelinquents = computed(() => {
+    const delinquents = []
+    attendanceForm.attendance.club_attendance_learner.forEach((learner: any) => {
+        if (
+            learner.pivot.status === 'unexcused_absence' ||
+            learner.pivot.status === 'cutting_classes'
+        ) {
+            const existing = props.attendance.delinquents.find(
+                (delinquent: any) =>
+                    learner.pivot.id === delinquent.club_attendance_learner_id
+            )
+
+            if (existing) {
+                delinquents.push(existing)
+            } else {
+                delinquents.push({
+                    club_attendance_id: attendanceForm.attendance.id,
+                    club_attendance_learner_id: learner.pivot.id,
+                    resolved: false,
+                    link: null,
+                    resolved_by: null,
+                    remarks: null,
+                })
+            }
+        }
+    })
+    return delinquents
+})
+
 
 onMounted(() => {
     attendanceForm.attendance = props.attendance

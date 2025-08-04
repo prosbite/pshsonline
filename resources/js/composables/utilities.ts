@@ -159,12 +159,16 @@ export function submissionProgression() {
             value: 'ongoing_review',
         },
         {
-            label: 'Completed (For Revision)',
-            value: 'completed_for_revision',
+            label: 'For Revision',
+            value: 'for_revision',
         },
         {
             label: 'Completed (For Printing)',
             value: 'completed_for_printing',
         },
     ]
+}
+
+export function replicate(object: any) {
+    return JSON.parse(JSON.stringify(object));
 }

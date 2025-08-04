@@ -37,15 +37,15 @@
                     <label
                         for="session-date"
                         class="block text-gray-700 text-md font-medium mb-1"
-                        >Date:</label
+                        >Date <i class="text-red-500">(Input ALP Class Date)</i>:</label
                     >
                     <input
-                        disabled
                         required
                         v-model="clubAttendance.date"
                         type="date"
                         :max="new Date().toISOString().split('T')[0]"
                         id="session-date"
+                        placeholder="Input ALP Class Date"
                         class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                     />
                 </div>
@@ -53,7 +53,7 @@
                     <label
                         for="session-activity"
                         class="block text-gray-700 text-md font-medium mb-1"
-                        >Activity:</label
+                        >Activity <i class="text-red-500">(Specify activity for the day)</i>:</label
                     >
                     <input
                         required
@@ -65,7 +65,7 @@
                     />
                 </div>
 
-                <div v-if="delinquents.length > 0" class="overflow-x-auto py-8">
+                <div v-if="delinquents.length > 0" class="overflow-x-auto py-4">
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">
                         Attendance Concerns to Resolve
                     </h2>
@@ -87,9 +87,7 @@
                             <span class="text-gray-500 italic">{{ delinquent.resolved ? 'Submitted' : 'Not Submitted' }}</span>
                             </td>
                             <td class="px-4 py-3">
-                                <button v-if="!delinquent.resolved" @click.prevent="resolveAttendance(delinquent.id)" class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-md">
-                                    Resolve
-                                </button>
+                                <span v-if="!delinquent.resolved" class="text-red-500 italic">Resolved</span>
                                 <span v-else class="text-green-500 italic">Resolved</span>
                             </td>
                         </tr>
@@ -219,7 +217,13 @@
                     </table>
                 </div>
 
-                <div class="flex justify-end mt-6">
+                <div class="flex justify-end mt-6 gap-4">
+                    <Link
+                        :href="route('club.attendance', { club_register_id: props.club?.id })"
+                        class="px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    >
+                        Cancel
+                    </Link>
                     <button
                         type="submit"
                         class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -239,8 +243,7 @@ import { useForm, usePage } from '@inertiajs/vue3';
 import { onMounted, computed, ref } from 'vue';
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
-import axios from 'axios'
-import { router } from '@inertiajs/vue3'
+import { router, Link } from '@inertiajs/vue3'
 
 defineOptions({
     layout: MainLayout
@@ -265,7 +268,7 @@ let clubAttendance = useForm({
 })
 const setClubAttendance = () => {
     clubAttendance.club_register_id = props.club?.id
-    clubAttendance.date = new Date().toISOString().split('T')[0]
+    clubAttendance.date = null
     clubAttendance.activity = 'Weekly Meeting'
     clubAttendance.members = []
     props.club?.club?.learners.forEach((learner: any) => {
@@ -285,29 +288,30 @@ const sortedMembers = computed(() => {
 const submitAttendance = () => {
     clubAttendance.post(route('club.attendance.store'), {
         onSuccess: () => {
-            toast.success('Attendance submitted successfully')
+            toast.success('Attendance submitted successfully',{
+                autoClose: 1000,
+            })
         },
         onError: () => {
-            toast.error('Failed to submit attendance')
+            toast.error('Failed to submit attendance', {
+                autoClose: 1000,
+            })
         }
     })
 }
 const resolveAttendance = (id: number) => {
-    loading.value = true
-    axios.put(route('club.attendance.resolve', { id }))
-        .then(() => {
-            toast.success('Admission slip submitted.', {
-                autoClose: 1000,
-            })
-            loading.value = false
-            router.visit(route('club.attendance.create', { club_register_id: props.club?.id }))
-        })
-        .catch(() => {
-            toast.error('Failed to resolve attendance', {
-                autoClose: 1000,
-            })
-            loading.value = false
-        })
+    router.put(route('club.attendance.resolve', { id }),{}, {
+        onSuccess: () => {
+          toast.success('Attendance resolved successfully', {
+            autoClose: 1000,
+          })
+        },
+        onError: () => {
+          toast.error('Failed to resolve attendance', {
+            autoClose: 1000,
+          })
+        },
+    })
 }
 onMounted(() => {
     setClubAttendance()

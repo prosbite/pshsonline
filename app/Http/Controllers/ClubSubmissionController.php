@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ClubRegister;
 use Illuminate\Http\Request;
 use App\Models\Submission;
+use App\Models\SubmissionTracker;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -25,7 +26,33 @@ class ClubSubmissionController extends Controller
             'url' => 'nullable',
             'user_id' => 'required',
         ]);
-        Submission::create($request->all());
+        $submission = Submission::create($request->all());
+        SubmissionTracker::create([
+            'submission_id' => $submission->id,
+            'status' => 'pending',
+            'remarks' => $request->remarks,
+            'updated_by' => Auth::user()->id,
+        ]);
         return redirect()->route('club.submissions');
+    }
+
+    public function update(Submission $submission, Request $request)
+    {
+        $request->validate([
+            'status' => 'required',
+            'remarks' => 'nullable',
+            'url' => 'nullable',
+        ]);
+        $submission->update([
+            'status' => request('status'),
+            'remarks' => request('remarks'),
+            'url' => request('url'),
+        ]);
+        SubmissionTracker::create([
+            'submission_id' => $submission->id,
+            'status' => request('status'),
+            'updated_by' => Auth::user()->id,
+        ]);
+        return redirect()->back();
     }
 }

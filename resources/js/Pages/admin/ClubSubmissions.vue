@@ -8,7 +8,7 @@
                 </div>
             </div>
 
-          <div class="overflow-x-auto rounded-lg border border-gray-200">
+          <div class="rounded-lg border border-gray-200 min-h-[calc(100vh-200px)] mb-48">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
@@ -32,26 +32,33 @@
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">{{ fullDateTime(submission.created_at) }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">{{ ucWords(submission.club_register?.club?.name ?? '') }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-md text-green-600">{{ ucWords(removeUnderScore(submission.status ?? '')) }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-md text-green-600 cursor-pointer">
+                        <div class="group relative" :style="{'z-index': 999 - index}">
+                            <span class="text-sm font-medium text-blue-600">{{ ucWords(removeUnderScore(submission.status)) }}</span>
+                            <SubmissionTracker :data="submission.submission_trackers" />
+                        </div>
+                    </td>
                     <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">
                         <a :href="submission.url" target="_blank" class="text-indigo-400 hover:text-indigo-600">Visit</a>
                     </td>
-                    <td class="flex flex-col gap-1 px-4 py-3 whitespace-nowrap text-md text-gray-500">
-                        <button
-                            @click="updateSubmissionStatus(status, submission)"
-                            v-for="status in proceedSubmission(submission?.status)"
-                            :key="status.value"
-                            class="text-indigo-400 flex items-center gap-1 w-fit bg-indigo-50 text-[10px] hover:bg-indigo-600 px-2 py-1 rounded hover:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
-                            </svg>
-                            {{ status.label }}
-                        </button>
-                        <span v-if="proceedSubmission(submission?.status).length === 0" class="text-sm text-green-500">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
+                    <td class="px-4 py-3 whitespace-nowrap text-md h-full text-gray-500">
+                        <div class="flex flex-col items-start justify-center gap-2">
+                            <button
+                                @click="updateSubmissionStatus(status, submission)"
+                                v-for="status in proceedSubmission(submission?.status)"
+                                :key="status.value"
+                                class="text-indigo-400 flex items-center gap-1 w-fit bg-indigo-50 text-[10px] hover:bg-indigo-600 px-2 py-1 rounded hover:text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
+                                </svg>
+                                {{ status.label }}
+                            </button>
+                            <span v-if="proceedSubmission(submission?.status).length === 0" class="text-sm text-green-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </span>
+                        </div>
                     </td>
                 </tr>
                 <tr v-if="props.submissions.length === 0" >
@@ -74,6 +81,7 @@
     import { useForm } from '@inertiajs/vue3';
     import { toast } from 'vue3-toastify';
     import 'vue3-toastify/dist/index.css';
+    import SubmissionTracker from '@/Components/common/SubmissionTracker.vue';
 
     const currentStatus = ref({})
     const props = defineProps({
@@ -84,7 +92,7 @@
     }
     const proceedSubmission = (status: string) => {
         currentStatus.value = status
-        if(status.toLocaleLowerCase() === 'pending') {
+        if(status.toLocaleLowerCase() === 'pending' || status.toLocaleLowerCase() === 'revised') {
             return [{
                 label: 'Ongoing Review',
                 value: 'ongoing_review',
@@ -93,8 +101,8 @@
         if(status.toLocaleLowerCase() === 'ongoing_review') {
             return [
                 {
-                label: 'Completed (For Revision)',
-                    value: 'completed_for_revision',
+                    label: 'For Revision',
+                    value: 'for_revision',
                 },
                 {
                     label: 'Completed (For Printing)',

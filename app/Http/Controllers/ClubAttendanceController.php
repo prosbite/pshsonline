@@ -45,13 +45,16 @@ class ClubAttendanceController extends Controller
         if ($club->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access.');
         }
-        // $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
-        // $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
-        // $delinquents = AttendanceDelinquence::today($previousAttendance->id);
+        $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
+        // dd($previousAttendance);
+        $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
+        if ($previousAttendance) {
+            $delinquents = AttendanceDelinquence::today($previousAttendance->id);
+        }
         $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
         return Inertia::render('ClubAttendanceCreate', [
             'club' => $club,
-            'delinquents' => [],
+            'delinquents' => $delinquents ?? [],
         ]);
     }
 
@@ -69,7 +72,7 @@ class ClubAttendanceController extends Controller
             abort(403, 'Unauthorized access.');
         }
         $clubAttendance = ClubAttendance::create($request->all());
-        $cleanMembers = collect($request->members)->mapWithKeys(function ($member, $index) use ($clubAttendance) {
+        $clubMembers = collect($request->members)->mapWithKeys(function ($member, $index) use ($clubAttendance) {
             return [
                 $index => [
                     'club_attendance_id' => $clubAttendance->id,
@@ -79,27 +82,59 @@ class ClubAttendanceController extends Controller
                 ],
             ];
         })->toArray();
-        $clubAttendance->clubAttendanceLearner()->attach($cleanMembers);
+        $clubAttendance->clubAttendanceLearner()->attach($clubMembers);
+        $delinquentsMembers = $clubAttendance->clubAttendanceLearner
+        ->filter(function ($member) {
+            return in_array($member->pivot->status, ['unexcused_absence', 'cutting_classes']);
+        })
+        ->mapWithKeys(function ($member, $index) use ($clubAttendance) {
+            // Explicitly access pivot attributes to ensure they're available
+            return [
+                $index => [
+                    'club_attendance_id' => $clubAttendance->id,
+                    'club_attendance_learner_id' => $member->pivot->id, // Ensure pivot->id exists
+                    'learner_name' => $member->name, // For Vue display
+                    'status' => $member->pivot->status, // Explicitly include pivot status
+                    'resolved' => false,
+                    'link' => null,
+                    'resolved_by' => null,
+                    'remarks' => null,
+                ],
+            ];
+        })
+        ->values() // Reset keys to numeric indices
+        ->toArray();
+        $clubAttendance->delinquents()->createMany($delinquentsMembers);
         return redirect()->route('club.attendance', ['club_register_id' => $club->id]);
     }
     public function show(Request $request)
     {
         $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner'])->findOrFail($request->attendance_id);
+        $previousAttendance = ClubAttendance::where('club_register_id', $attendance->club_register_id)
+            ->where('created_at', '<', $attendance->created_at)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        if ($previousAttendance) {
+            $delinquents = AttendanceDelinquence::today($previousAttendance->id);
+        }
         return Inertia::render('ClubAttendanceShow', [
             'attendance' => $attendance,
+            'delinquents' => $delinquents ?? [],
         ]);
     }
     public function edit(Request $request)
     {
-        $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner'])->findOrFail($request->attendance_id);
-        // $previousAttendance = ClubAttendance::where('club_register_id', $attendance->club_register_id)
-        // ->where('created_at', '<', $attendance->created_at)
-        // ->orderBy('created_at', 'desc')
-        // ->first();
-        // $delinquents = AttendanceDelinquence::today($previousAttendance->id);
+        $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner', 'delinquents'])->findOrFail($request->attendance_id);
+        $previousAttendance = ClubAttendance::where('club_register_id', $attendance->club_register_id)
+            ->where('created_at', '<', $attendance->created_at)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        if ($previousAttendance) {
+            $delinquents = AttendanceDelinquence::today($previousAttendance->id);
+        }
         return Inertia::render('ClubAttendanceEdit', [
             'attendance' => $attendance,
-            'delinquents' => []
+            'delinquents' => $delinquents ?? [],
         ]);
     }
     public function update(Request $request)
@@ -115,19 +150,21 @@ class ClubAttendanceController extends Controller
         if ($club->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access.');
         }
-        $clubAttendance = ClubAttendance::findOrFail($request->attendance['id']);
-        $clubAttendance->update($request->attendance);
-        $cleanMembers = collect($request->attendance['club_attendance_learner'])->mapWithKeys(function ($member, $index) use ($clubAttendance) {
-            return [
-                $index => [
-                    'club_attendance_id' => $clubAttendance->id,
-                    'learner_id' => $member['id'],
-                    'status' => $member['pivot']['status'] ?? 'absent',
-                    'remarks' => $member['pivot']['remarks'] ?? null,
-                ],
+        $clubAttendanceLearners = [];
+        $clubAttendance = ClubAttendance::with('clubAttendanceLearner')->findOrFail($request->attendance['id']);
+        foreach ($request->attendance['club_attendance_learner'] as $learner) {
+            $clubAttendanceLearners[] = [
+                'id' => $learner['pivot']['id'],
+                'club_attendance_id' => $learner['pivot']['club_attendance_id'],
+                'learner_id' => $learner['pivot']['learner_id'],
+                'status' => $learner['pivot']['status'],
+                'remarks' => $learner['pivot']['remarks'],
             ];
-        })->toArray();
-        $clubAttendance->clubAttendanceLearner()->sync($cleanMembers);
+        }
+        $clubAttendance->update($request->attendance);
+        $clubAttendance->clubAttendanceLearner()->sync($clubAttendanceLearners);
+        $clubAttendance->delinquents()->delete();
+        $clubAttendance->delinquents()->createMany($request->delinquents);
         return redirect()->route('club.attendance', ['club_register_id' => $club->id]);
     }
 
@@ -139,7 +176,6 @@ class ClubAttendanceController extends Controller
         $delinquent = AttendanceDelinquence::findOrFail($request->id);
         $delinquent->resolved = true;
         $delinquent->save();
-        // $clubAttendance = ClubAttendance::findOrFail($delinquent->club_attendance_id);
-        return 1;
+        return redirect()->back();
     }
 }

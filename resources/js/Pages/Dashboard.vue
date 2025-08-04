@@ -109,7 +109,7 @@ const externalink = computed(() => {
                                         <rect width="64" height="64" rx="8" fill="#2B579A"/>
                                         <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="32" font-family="Segoe UI, sans-serif" fill="white" font-weight="bold">W</text>
                                     </svg>
-                                <span class="text-gray-700 dark:text-gray-200 font-medium">Activity Proposal Checklist</span>
+                                <span class="text-gray-700 dark:text-gray-200 font-medium">Cover Letter Format</span>
                                 </div>
                                 <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

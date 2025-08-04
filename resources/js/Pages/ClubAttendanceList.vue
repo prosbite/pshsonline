@@ -1,5 +1,5 @@
 <template>
-    <div class="p-6 tab-content">
+    <div class="tab-content">
         <div class="flex items-center justify-between mb-6">
             <div class="flex flex-col gap-2">
                 <h3 class="text-2xl font-semibold text-gray-800">Club Attendance Records</h3>

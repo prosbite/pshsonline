@@ -54,82 +54,118 @@
                     </span>
                 </div>
 
-                <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-4">
-                    Member Attendance
-                </h3>
-                <div class="overflow-x-auto rounded-lg border border-gray-200">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    #
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Name
-                                </th>
-                                <th
-                                    v-for="status in attendanceStatus()" :key="status.value"
-                                    scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    {{ status.abv }}
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Remarks
-                                </th>
-                            </tr>
+                <div v-if="delinquents.length > 0" class="overflow-x-auto py-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                        Attendance Concerns to Resolve
+                    </h2>
+                    <table class="min-w-full divide-y divide-gray-200 shadow-md rounded-lg">
+                        <thead class="bg-gray-100 text-gray-700 text-sm uppercase tracking-wider">
+                        <tr>
+                            <th class="px-4 py-3 text-left">Student Name</th>
+                            <th class="px-4 py-3 text-left">Attendance Status</th>
+                            <th class="px-4 py-3 text-left">Admission Slip</th>
+                            <th class="px-4 py-3 text-left">Action</th>
+                        </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="(member, index) in sortedMembers" :key="index">
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                                >
-                                    {{ index + 1 }}
-                                </td>
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-                                >
-                                    {{ member?.last_name }}, {{ member?.first_name }} {{ middleInitials(member?.middle_name ?? '') }}
-                                </td>
-                                <td
-                                    v-for="status in attendanceStatus()" :key="status.value"
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                                >
-                                    <input
-                                        disabled
-                                        v-model="member.pivot.status"
-                                        type="radio"
-                                        :name="`member-${member.id}-status`"
-                                        :value="status.value"
-                                        :checked="member.pivot.status === status.value"
-                                        class="form-radio h-4 w-4 transition duration-150 ease-in-out"
-                                        :class="status.color"
-                                    />
-                                </td>
+                        <tbody class="divide-y divide-gray-200 text-sm">
+                        <!-- Example Row -->
+                        <tr v-for="delinquent in delinquents" :key="delinquent.id" class="hover:bg-gray-50">
+                            <td class="px-4 py-3">{{ ucWords(delinquent.learner_last_name) }}, {{ ucWords(delinquent.learner_first_name) }} {{ middleInitials(delinquent.learner_middle_name ?? '') }}</td>
+                            <td class="px-4 py-3 text-red-600 font-semibold">{{ ucWords(removeUnderScore(delinquent.attendance_status)) }}</td>
+                            <td class="px-4 py-3">
+                            <span class="text-gray-500 italic">{{ delinquent.resolved ? 'Submitted' : 'Not Submitted' }}</span>
+                            </td>
+                            <td class="px-4 py-3">
+                                <button v-if="!delinquent.resolved" @click.prevent="resolveAttendance(delinquent.id)" class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-md">
+                                    Resolve
+                                </button>
+                                <span v-else class="text-green-500 italic">Resolved</span>
+                            </td>
+                        </tr>
 
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                                >
-                                    <input
-                                        disabled
-                                        v-model="member.pivot.remarks"
-                                        type="text"
-                                        placeholder="Optional remarks"
-                                        class="p-2 border border-gray-300 rounded-md text-sm w-full"
-                                    />
-                                </td>
-                            </tr>
+                        <!-- Repeat for more rows... -->
                         </tbody>
                     </table>
+                </div>
+
+                <div class="flex flex-col">
+                    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-4">
+                        Member Attendance
+                    </h3>
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        #
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        Name
+                                    </th>
+                                    <th
+                                        v-for="status in attendanceStatus()" :key="status.value"
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        {{ status.abv }}
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        Remarks
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr v-for="(member, index) in sortedMembers" :key="index">
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                    >
+                                        {{ index + 1 }}
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                    >
+                                        {{ member?.last_name }}, {{ member?.first_name }} {{ middleInitials(member?.middle_name ?? '') }}
+                                    </td>
+                                    <td
+                                        v-for="status in attendanceStatus()" :key="status.value"
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                    >
+                                        <input
+                                            disabled
+                                            v-model="member.pivot.status"
+                                            type="radio"
+                                            :name="`member-${member.id}-status`"
+                                            :value="status.value"
+                                            :checked="member.pivot.status === status.value"
+                                            class="form-radio h-4 w-4 transition duration-150 ease-in-out"
+                                            :class="status.color"
+                                        />
+                                    </td>
+
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                    >
+                                        <input
+                                            disabled
+                                            v-model="member.pivot.remarks"
+                                            type="text"
+                                            placeholder="Optional remarks"
+                                            class="p-2 border border-gray-300 rounded-md text-sm w-full"
+                                        />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="flex justify-end mt-6">
@@ -146,7 +182,7 @@
 </template>
 
 <script lang="ts" setup>
-import { fullDate, middleInitials, attendanceStatus } from '@/composables/utilities';
+import { fullDate, middleInitials, attendanceStatus, ucWords, removeUnderScore } from '@/composables/utilities';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { usePage, Link } from '@inertiajs/vue3';
 import { onMounted, computed } from 'vue';
@@ -158,6 +194,10 @@ const page = usePage()
 const props = defineProps({
     attendance: {
         type: Object,
+        required: true,
+    },
+    delinquents: {
+        type: Array,
         required: true,
     },
 })

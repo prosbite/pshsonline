@@ -3,8 +3,8 @@
       <Sidebar v-if="user.club_registers?.length > 0 || user.role === 'admin'" class="ml-[-16rem] lg:ml-0" />
       <div v-if="user.club_registers?.length > 0 || user.role === 'admin'" class="flex flex-col flex-1 flex-grow overflow-y-auto bg-gray-100">
         <TopNav class="lg:hidden" />
-        <div class="md:px-8 px-2 py-8">
-          <slot />
+        <div class="flex flex-col md:p-8 w-full">
+            <slot />
         </div>
       </div>
       <div v-else class="flex-grow p-8 overflow-y-auto bg-gray-100">

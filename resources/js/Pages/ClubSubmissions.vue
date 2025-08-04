@@ -9,7 +9,7 @@
                 <button @click="showModal = true" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg">+ New Submission</button>
             </div>
 
-          <div class="overflow-x-auto rounded-lg border border-gray-200">
+          <div class="rounded-lg border border-gray-200">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
@@ -25,9 +25,24 @@
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ index + 1 }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ ucWords(removeUnderScore(submission.name ?? '')) }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ fullDate(submission.created_at) }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ ucWords(submission.status ?? '') }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                        <div class="group relative" :style="{'z-index': 999 - index}">
+                            <span class="text-sm font-medium text-blue-600">{{ ucWords(removeUnderScore(submission.status)) }}</span>
+                            <SubmissionTracker :data="submission.submission_trackers" />
+                        </div>
+                    </td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
                         <a :href="submission.url" target="_blank" class="text-indigo-600 hover:text-indigo-900">Visit</a>
+                    </td>
+                    <td v-if="submission.status === 'for_revision'">
+                        <button
+                            @click="showRevisionModal(submission)"
+                            class="text-indigo-400 flex items-center gap-1 w-fit bg-indigo-50 text-[10px] hover:bg-indigo-600 px-2 py-1 rounded hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
+                            </svg>
+                            Submit Revision
+                        </button>
                     </td>
                 </tr>
                 <tr v-if="props.submissions.length === 0" >
@@ -39,7 +54,7 @@
             </table>
           </div>
 
-          <SleekModal :is-visible="showModal" @close="showModal = false" size="2xl">
+          <SleekModal :is-visible="showModal" @close="showModal = false" size="2xl" style="z-index: 99999">
             <template #header>
                 <h3 class="text-lg font-medium text-gray-900">Create Submission</h3>
             </template>
@@ -71,6 +86,39 @@
             </form>
             </template>
           </SleekModal>
+
+          <SleekModal :is-visible="revisionModal" @close="revisionModal = false" size="2xl" style="z-index: 99999">
+            <template #header>
+                <h3 class="text-lg font-medium text-gray-900">Revision of Submission</h3>
+            </template>
+            <template #body>
+                <form action="" @submit.prevent="submitRevision">
+                    <div class="mb-4">
+                        <label for="club" class="block text-sm font-medium text-gray-700">Club</label>
+                        <input type="text" id="club" name="club" disabled :value="props.clubRegister.club.name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700">Name of Submission</label>
+                        <select required id="name" name="name" disabled v-model="revisionForm.name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <option value="" disabled selected>Select Type</option>
+                            <option v-for="type in submissionType()" :key="type.value" :value="type.value">{{ type.label }}</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="url" class="block text-sm font-medium text-gray-700">Link (If applicable)</label>
+                        <input type="text" id="url" name="url" v-model="revisionForm.url" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-8">
+                        <label for="remarks" class="block text-sm font-medium text-gray-700">Remarks</label>
+                        <textarea id="remarks" name="remarks" v-model="revisionForm.remarks" class="resize-none mt-1 block w-full h-24 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="button" @click="showModal = false" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md">Cancel</button>
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md">Submit</button>
+                    </div>
+            </form>
+            </template>
+          </SleekModal>
         </div>
     </MainLayout>
     </template>
@@ -83,6 +131,7 @@
     import { useForm } from '@inertiajs/vue3';
     import { toast } from 'vue3-toastify';
     import 'vue3-toastify/dist/index.css';
+    import SubmissionTracker from '@/Components/common/SubmissionTracker.vue';
     const form = useForm({
         name: '',
         club_register_id: '',
@@ -106,6 +155,35 @@
             onError: () => {
                 toast.error('Failed to create submission');
                 showModal.value = true;
+            }
+        });
+    }
+    const showRevisionModal = (submission: any) => {
+        revisionModal.value = true;
+        revisionForm.id = submission.id;
+        revisionForm.name = submission.name;
+        revisionForm.status = "revised";
+        revisionForm.url = submission.url;
+    }
+    const revisionModal = ref(false);
+    const revisionForm = useForm({
+        id: '',
+        name: '',
+        url: '',
+        status: '',
+        remarks: '',
+    });
+    const submitRevision = () => {
+        revisionForm.put(route('club.submissions.update', revisionForm.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Submission updated successfully');
+                revisionModal.value = false;
+                revisionForm.reset();
+            },
+            onError: () => {
+                toast.error('Failed to update submission');
+                revisionModal.value = true;
             }
         });
     }

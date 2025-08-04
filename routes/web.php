@@ -71,6 +71,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/club/attendance/resolve', [ClubAttendanceController::class, 'resolve'])->name('club.attendance.resolve');
     Route::get('/club/submissions', [ClubSubmissionController::class, 'index'])->name('club.submissions');
     Route::post('/club/submissions', [ClubSubmissionController::class, 'store'])->name('club.submissions.store');
+    Route::put('/club/submissions/{submission}', [ClubSubmissionController::class, 'update'])->name('club.submissions.update');
 });
 
 Route::middleware('auth')->group(function () {
