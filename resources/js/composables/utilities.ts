@@ -145,6 +145,10 @@ export function submissionType() {
             label: 'Summary of Attendance',
             value: 'summary_of_attendance',
         },
+        {
+            label: 'Substitution Plan',
+            value: 'substitution_plan',
+        },
     ]
 }
 

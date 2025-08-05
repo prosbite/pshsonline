@@ -120,6 +120,25 @@ const externalink = computed(() => {
                         </li>
 
                         <li>
+                            <a href="/word/substitution_plan.docx"
+                                target="_blank"
+                                class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
+                                <div class="flex items-start space-x-3">
+                                    <svg class="w-5 h-5 text-indigo-500" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="64" height="64" rx="8" fill="#2B579A"/>
+                                        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="32" font-family="Segoe UI, sans-serif" fill="white" font-weight="bold">W</text>
+                                    </svg>
+                                <span class="text-gray-700 dark:text-gray-200 font-medium">Substitution Plan</span>
+                                </div>
+                                <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
+                        </li>
+
+                        <li>
                         <a :href="externalink ?? '#'"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
