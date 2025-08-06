@@ -16,6 +16,11 @@ class AttendanceDelinquence extends Model
         'remarks',
     ];
 
+    public function clubAttendanceLearner()
+    {
+        return $this->belongsTo(ClubAttendanceLearner::class);
+    }
+
     public function clubAttendance()
     {
         return $this->belongsTo(ClubAttendance::class);

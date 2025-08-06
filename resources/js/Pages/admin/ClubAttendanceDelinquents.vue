@@ -1,12 +1,16 @@
 <template>
     <MainLayout>
         <div class="w-full bg-white p-8 rounded-xl shadow-md border border-gray-200">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10 space-y-24 md:space-y-0">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-8 my-8">
                 <!-- Left: Title -->
                 <div>
                     <h3 class="text-2xl font-semibold text-gray-800">Delinquent Students</h3>
                     <p class="text-gray-600 text-sm">List of students who are delinquent in their club attendance</p>
                 </div>
+                <select @change="getAttendance($event)" id="attendanceDate" v-model="selectedDate" required class="border w-1/5 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="" disabled selected>Select Date</option>
+                    <option v-for="(date,index) in props.attendanceDates" :key="index" :value="date">{{ fullDate(date) }}</option>
+                </select>
             </div>
 
           <div class="overflow-x-auto rounded-lg border border-gray-200">
@@ -23,29 +27,29 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr
-                  v-for="(learner, index) in props.learners" :key="learner.id"
+                  v-for="(delinquent, index) in sortedDelinquents" :key="delinquent.id"
                   class="hover:bg-gray-100 cursor-pointer"
                 >
                     <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {{ index + 1 }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ ucWords(learner?.last_name ?? '') }}, {{ ucWords(learner?.first_name ?? '') }} {{ middleInitials(learner?.middle_name ?? '') }}
+                        {{ ucWords(delinquent?.club_attendance_learner?.learner?.last_name ?? '') }}, {{ ucWords(delinquent?.club_attendance_learner?.learner?.first_name ?? '') }} {{ middleInitials(delinquent?.club_attendance_learner?.learner?.middle_name ?? '') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ learner?.grade }} - {{ learner?.section }}
+                        {{ delinquent?.club_attendance_learner?.learner?.current_enrollment?.section?.grade_level?.grade_level }} - {{ delinquent?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ learner?.club_name }}
+                        {{ delinquent?.club_attendance_learner?.club_attendance?.club_register?.club?.name }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ ucWords(learner?.gender ?? '') }}
+                        {{ ucWords(delinquent?.club_attendance_learner?.learner?.gender ?? '') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{  ucWords(learner?.status) }}
+                        {{  ucWords(removeUnderScore(delinquent?.club_attendance_learner?.status)) }}
                     </td>
                 </tr>
-                <tr v-if="props.learners.length === 0">
+                <tr v-if="combinedDelinquents.length === 0">
                     <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         No delinquent learners found.
                     </td>
@@ -59,17 +63,36 @@
     </template>
 
     <script lang="ts" setup>
-    import { ucWords, middleInitials } from '@/composables/utilities';
+    import { ucWords, middleInitials, fullDate, removeUnderScore } from '@/composables/utilities';
     import { computed, onMounted, ref } from 'vue';
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { Link, usePage } from '@inertiajs/vue3';
     import { router } from '@inertiajs/vue3';
     const page = usePage();
     const props = defineProps({
-        learners: Array,
+        attendance: Object,
+        attendanceDates: Array,
+        date: String
     })
-
+    const selectedDate = ref(props.date)
+    const getAttendance = (event: any) => {
+        router.get(route('admin.attendance.delinquents', { date: event.target.value }))
+    }
+    const combinedDelinquents = computed(() => {
+        let delinquents = []
+        console.log(props.attendance)
+        for (let index = 0; index < props.attendance.length; index++) {
+            const attendance = props.attendance[index];
+            delinquents.push(...attendance.delinquents)
+        }
+        return delinquents
+    })
+    const sortedDelinquents = computed(() => {
+        return combinedDelinquents.value.sort((a: any, b: any) => {
+            return a.club_attendance_learner.club_attendance.club_register.club.name.localeCompare(b.club_attendance_learner.club_attendance.club_register.club.name)
+        })
+    })
     onMounted(() => {
-
+        selectedDate.value = props.date
     })
     </script>

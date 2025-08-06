@@ -1,11 +1,15 @@
 <template>
     <div class="w-full bg-white p-8 rounded-xl shadow-md border border-gray-200">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 space-y-4 md:space-y-0">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-8 my-8">
             <!-- Left: Title -->
             <div>
                 <h3 class="text-2xl font-semibold text-gray-800">Club Attendances</h3>
                 <p class="text-gray-600 text-sm">Attendance of each club</p>
             </div>
+            <select @change="getAttendance($event)" id="attendanceDate" v-model="selectedDate" required class="border w-1/5 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="" disabled selected>Select Date</option>
+                <option v-for="(date,index) in props.attendanceDates" :key="index" :value="date">{{ fullDate(date) }}</option>
+            </select>
         </div>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200">
@@ -35,11 +39,11 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-black text-center">{{ totalMembers(attendance) }}</td>
 
                     </tr>
-                <!-- <tr v-if="props.registered_clubs.length === 0">
+                <tr v-if="props.attendance.length === 0">
                     <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        No clubs found.
+                        No attendance found.
                     </td>
-                </tr> -->
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -48,7 +52,9 @@
 
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { attendanceStatus, fullDateTime } from '@/composables/utilities';
+import { attendanceStatus, fullDate, fullDateTime } from '@/composables/utilities';
+import { onMounted, ref, watch } from 'vue';
+import { router } from '@inertiajs/vue3';
 
 defineOptions({
     layout: MainLayout
@@ -57,8 +63,17 @@ const props = defineProps({
     attendance: {
         type: Array,
         required: true
+    },
+    attendanceDates: {
+        type: Array,
+        required: true
+    },
+    date: {
+        type: String,
+        required: true
     }
 })
+const selectedDate = ref("")
 const totalPresent = (attendance: any) => {
     return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'present').length
 }
@@ -80,6 +95,12 @@ const totalCuttingClasses = (attendance: any) => {
 const totalLate = (attendance: any) => {
     return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'late').length
 }
+const getAttendance = (event: any) => {
+    router.get(`/admin/attendances?date=${event.target.value}`)
+}
+onMounted(() => {
+    selectedDate.value = props.date
+})
 </script>
 
 <style>
