@@ -26,7 +26,7 @@
                     <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">{{ index + 1 }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">
                         <div class="flex flex-col gap-1">
-                            <span class="font-semibold text-slate-600">{{ ucWords(submissionName(submission.name)) }}</span>
+                            <span class="font-semibold text-slate-600">{{ ucWords(removeUnderScore(submission.name)) }}</span>
                             <span class="text-sm text-slate-600">{{ ucWords(submission.club_register?.user?.name ?? '') }}</span>
                         </div>
                     </td>
@@ -105,8 +105,20 @@
                     value: 'for_revision',
                 },
                 {
-                    label: 'Completed (For Printing)',
-                    value: 'completed_for_printing',
+                    label: 'For Printing',
+                    value: 'for_printing',
+                },
+                {
+                    label: 'Completed',
+                    value: 'completed',
+                }
+            ]
+        }
+        if(status.toLocaleLowerCase() === 'for_printing') {
+            return [
+                {
+                    label: 'Completed',
+                    value: 'completed',
                 }
             ]
         }

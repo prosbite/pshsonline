@@ -106,36 +106,16 @@ export function attendanceStatus() {
 export function submissionType() {
     return [
         {
-            label: 'Accreditation Documents (For Review)',
-            value: 'accreditation_documents_review',
+            label: 'Accreditation Documents',
+            value: 'accreditation_documents',
         },
         {
-            label: 'Accreditation Documents (Printed)',
-            value: 'accreditation_documents_printed',
+            label: 'Reaccreditation Documents',
+            value: 'reaccreditation_documents',
         },
         {
-            label: 'Reaccreditation Documents (For Review)',
-            value: 'reaccreditation_documents_review',
-        },
-        {
-            label: 'Reaccreditation Documents (Printed)',
-            value: 'reaccreditation_documents_printed',
-        },
-        {
-            label: 'Activity Proposal (For Review)',
-            value: 'activity_proposal_review',
-        },
-        {
-            label: 'Activity Proposal (Printed)',
-            value: 'activity_proposal_printed',
-        },
-        {
-            label: 'Activity Report (For Review)',
-            value: 'activity_report_review',
-        },
-        {
-            label: 'Activity Report (Printed)',
-            value: 'activity_report_printed',
+            label: 'Activity Report',
+            value: 'activity_report',
         },
         {
             label: 'Attendance Report',
@@ -167,8 +147,12 @@ export function submissionProgression() {
             value: 'for_revision',
         },
         {
-            label: 'Completed (For Printing)',
-            value: 'completed_for_printing',
+            label: 'For Printing',
+            value: 'for_printing',
+        },
+        {
+            label: 'Completed',
+            value: 'completed',
         },
     ]
 }

@@ -99,10 +99,11 @@
                     </div>
                     <div class="mb-4">
                         <label for="name" class="block text-sm font-medium text-gray-700">Name of Submission</label>
-                        <select required id="name" name="name" disabled v-model="revisionForm.name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <input type="text" id="name" name="name" disabled :value="ucWords(removeUnderScore(revisionForm.name))" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <!-- <select required id="name" name="name" disabled v-model="revisionForm.name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             <option value="" disabled selected>Select Type</option>
                             <option v-for="type in submissionType()" :key="type.value" :value="type.value">{{ type.label }}</option>
-                        </select>
+                        </select> -->
                     </div>
                     <div class="mb-4">
                         <label for="url" class="block text-sm font-medium text-gray-700">Link (If applicable)</label>
