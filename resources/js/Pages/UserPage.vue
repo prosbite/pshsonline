@@ -29,7 +29,7 @@ const updateUser = async () => {
     router.post(route('users.update'), user.value, {
         onSuccess: () => {
             toast.success('User updated successfully.', {
-                autoClose: 5000,
+                autoClose: 2000,
                 position: toast.POSITION.TOP_RIGHT,
             })
             user.value = {
@@ -43,7 +43,7 @@ const updateUser = async () => {
         },
         onError: () => {
             toast.error('Failed to update user.', {
-                autoClose: 5000,
+                autoClose: 2000,
                 position: toast.POSITION.TOP_RIGHT,
             })
         },

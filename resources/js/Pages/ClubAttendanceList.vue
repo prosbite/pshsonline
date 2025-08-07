@@ -33,7 +33,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">{{ attendance.activity }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-indigo-500">{{ totalPresent(attendance) }}</td>
+                        <td class="px-6 py-4 max-w-[200px] text-center text-sm text-indigo-500">{{ totalPresent(attendance) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-green-500">{{ totalExcusedAbsent(attendance) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-red-500">{{ totalUnexcusedAbsent(attendance) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-yellow-500">{{ totalTardy(attendance) }}</td>

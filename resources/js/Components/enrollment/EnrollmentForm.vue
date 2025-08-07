@@ -105,7 +105,7 @@ const enrollStudent = async () => {
     router.post(route('enrollment.store'), student.value, {
         onSuccess: () => {
             toast.success('Student enrolled successfully.', {
-                autoClose: 5000,
+                autoClose: 2000,
                 position: toast.POSITION.TOP_RIGHT,
             })
             student.value = {
@@ -120,7 +120,7 @@ const enrollStudent = async () => {
         },
         onError: () => {
             toast.error('Failed to enroll student.', {
-                autoClose: 5000,
+                autoClose: 2000,
                 position: toast.POSITION.TOP_RIGHT,
             })
         },

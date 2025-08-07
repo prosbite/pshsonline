@@ -36,7 +36,7 @@
             handler(value) {
                 if (value) {
                     toast.success(value, {
-                        autoClose: 5000,
+                        autoClose: 2000,
                         position: toast.POSITION.TOP_RIGHT,
                     })
                 }

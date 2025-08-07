@@ -59,7 +59,7 @@
         router.post(route('club.update'), club.value, {
             onSuccess: () => {
                 toast.success('Club updated successfully.', {
-                    autoClose: 5000,
+                    autoClose: 2000,
                     position: toast.POSITION.TOP_RIGHT,
                 })
                 club.value = {
@@ -72,7 +72,7 @@
             },
             onError: () => {
                 toast.error('Failed to create club.', {
-                    autoClose: 5000,
+                    autoClose: 2000,
                     position: toast.POSITION.TOP_RIGHT,
                 })
             },

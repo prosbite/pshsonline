@@ -57,7 +57,7 @@ const submit = () => {
     router.post(route('enrollment.bulk'), {learners: processedData.value}, {
         onSuccess: () => {
             toast.success('Students enrolled successfully.', {
-                autoClose: 5000,
+                autoClose: 2000,
                 position: toast.POSITION.TOP_RIGHT,
             })
         },
@@ -66,7 +66,7 @@ const submit = () => {
         },
         onError: () => {
             toast.error('Failed to enroll student.', {
-                autoClose: 5000,
+                autoClose: 2000,
                 position: toast.POSITION.TOP_RIGHT,
             })
         },

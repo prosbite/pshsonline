@@ -69,14 +69,14 @@ const submit = () => {
     form.post(route('change-password.store'), {
         onSuccess: () => {
             toast.success('Password changed successfully.', {
-                autoClose: 5000,
+                autoClose: 2000,
                 position: toast.POSITION.TOP_RIGHT,
             })
             form.reset();
         },
         onError: () => {
             toast.error('Failed to change password.', {
-                autoClose: 5000,
+                autoClose: 2000,
                 position: toast.POSITION.TOP_RIGHT,
             })
             form.reset();

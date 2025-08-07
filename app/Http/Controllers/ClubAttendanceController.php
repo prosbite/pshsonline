@@ -182,4 +182,11 @@ class ClubAttendanceController extends Controller
         $delinquent->save();
         return redirect()->back();
     }
+
+    public function monthlyAttendance(Request $request)
+    {
+        return Inertia::render('MonthlyAttendanceReport', [
+            'attendance' => [],
+        ]);
+    }
 }
