@@ -31,14 +31,14 @@
                             <span class="font-semibold text-black text-lg">{{ attendance.club_register?.club?.name }}</span>
                             <span class="text-blue-600 text-sm">{{ fullDateTime(attendance.created_at) }}</span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{{ attendance.activity }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-indigo-500 text-center">{{ totalPresent(attendance) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-500 text-center">{{ totalExcusedAbsent(attendance) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-500 text-center">{{ totalUnexcusedAbsent(attendance) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-500 text-center">{{ totalTardy(attendance) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ totalCuttingClasses(attendance) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-black text-center">{{ totalMembers(attendance) }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-black text-center">
+                        <td class="px-6 py-4 max-w-[200px] text-sm text-center text-gray-500">{{ attendance.activity }}</td>
+                        <td class="px-6 py-4 text-sm text-indigo-500 text-center">{{ totalPresent(attendance) }}</td>
+                        <td class="px-6 py-4 text-sm text-green-500 text-center">{{ totalExcusedAbsent(attendance) }}</td>
+                        <td class="px-6 py-4 text-sm text-red-500 text-center">{{ totalUnexcusedAbsent(attendance) }}</td>
+                        <td class="px-6 py-4 text-sm text-yellow-500 text-center">{{ totalTardy(attendance) }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 text-center">{{ totalCuttingClasses(attendance) }}</td>
+                        <td class="px-6 py-4 text-sm text-black text-center">{{ totalMembers(attendance) }}</td>
+                        <td class="px-6 py-4 text-sm text-black text-center">
                             <button @click="deleteAttendance(attendance.id)" class="text-red-600 hover:text-red-900">Delete</button>
                         </td>
 
