@@ -85,7 +85,7 @@ class ClubAttendanceController extends Controller
         $clubAttendance->clubAttendanceLearner()->attach($clubMembers);
         $delinquentsMembers = $clubAttendance->clubAttendanceLearner
         ->filter(function ($member) {
-            return in_array($member->pivot->status, ['unexcused_absence', 'cutting_classes']);
+            return $member->pivot->status !== 'present';
         })
         ->mapWithKeys(function ($member, $index) use ($clubAttendance) {
             // Explicitly access pivot attributes to ensure they're available
@@ -162,7 +162,9 @@ class ClubAttendanceController extends Controller
             ];
         }
         $clubAttendance->update($request->attendance);
-        $clubAttendance->clubAttendanceLearner()->sync($clubAttendanceLearners);
+        // $clubAttendance->clubAttendanceLearner()->sync($clubAttendanceLearners);
+        $clubAttendance->clubAttendanceLearner()->detach();
+        $clubAttendance->clubAttendanceLearner()->attach($clubAttendanceLearners);
         $clubAttendance->delinquents()->delete();
         $clubAttendance->delinquents()->createMany($request->delinquents);
         return redirect()->route('club.attendance', ['club_register_id' => $club->id]);
@@ -172,9 +174,11 @@ class ClubAttendanceController extends Controller
     {
         $request->validate([
             'id' => 'required',
+            'actions_taken' => 'required',
         ]);
         $delinquent = AttendanceDelinquence::findOrFail($request->id);
         $delinquent->resolved = true;
+        $delinquent->actions_taken = $request->actions_taken;
         $delinquent->save();
         return redirect()->back();
     }

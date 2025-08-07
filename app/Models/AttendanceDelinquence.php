@@ -43,6 +43,7 @@ class AttendanceDelinquence extends Model
             'attendance_delinquences.id',
             'attendance_delinquences.remarks',
             'attendance_delinquences.resolved',
+            'attendance_delinquences.actions_taken',
             'learners.last_name as learner_last_name',
             'learners.first_name as learner_first_name',
             'learners.middle_name as learner_middle_name',

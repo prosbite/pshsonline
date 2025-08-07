@@ -114,6 +114,10 @@ export function submissionType() {
             value: 'reaccreditation_documents',
         },
         {
+            label: 'Activity Proposal',
+            value: 'activity_proposal',
+        },
+        {
             label: 'Activity Report',
             value: 'activity_report',
         },
