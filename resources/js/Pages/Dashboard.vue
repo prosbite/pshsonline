@@ -44,7 +44,7 @@ const externalink = computed(() => {
                     <ul class="grid gap-4 md:grid-cols-3">
 
                         <li>
-                            <a href="/pdf/final_alp_avenues.pdf"
+                            <a href="/pdf/alp_classes_venue.pdf"
                                 target="_blank"
                                 class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
                                 <div class="flex items-start space-x-3">
@@ -62,7 +62,7 @@ const externalink = computed(() => {
                             </a>
                         </li>
 
-                        <li>
+                        <!-- <li>
                             <a href="/pdf/student_org_venues.pdf"
                                 target="_blank"
                                 class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
@@ -79,9 +79,9 @@ const externalink = computed(() => {
                                         d="M9 5l7 7-7 7"></path>
                                 </svg>
                             </a>
-                        </li>
+                        </li> -->
 
-                        <li>
+                        <!-- <li>
                             <a href="/word/activity_proposal_checklist.docx"
                                 target="_blank"
                                 class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
@@ -136,7 +136,7 @@ const externalink = computed(() => {
                                         d="M9 5l7 7-7 7"></path>
                                 </svg>
                             </a>
-                        </li>
+                        </li> -->
 
                         <li>
                         <a :href="externalink ?? '#'"
@@ -150,7 +150,7 @@ const externalink = computed(() => {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4" />
                             </svg>
-                            <span class="text-gray-700 dark:text-gray-200 font-medium">Accreditation and Reaccreditation</span>
+                            <span class="text-gray-700 dark:text-gray-200 font-medium">Accreditation & Reaccreditation (2025-2026)</span>
                             </div>
                             <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -161,7 +161,7 @@ const externalink = computed(() => {
                         </li>
 
                         <li>
-                        <a href="https://www.canva.com/design/DAGtyO5Eqaw/dfo5TzluL8Y0f3mqRJlKqg/edit?utm_content=DAGtyO5Eqaw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
+                        <a href="#"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
                             <div class="flex items-start space-x-3">
@@ -170,7 +170,7 @@ const externalink = computed(() => {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 4a1 1 0 011-1h16a1 1 0 011 1v9a1 1 0 01-1 1h-6l2 5H9l2-5H4a1 1 0 01-1-1V4z" />
                             </svg>
-                            <span class="text-gray-700 dark:text-gray-200 font-medium">ALP Orientation (July 23, 2025)</span>
+                            <span class="text-gray-700 dark:text-gray-200 font-medium">Accreditation & Reaccreditation (2026-2027)</span>
                             </div>
                             <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -201,14 +201,14 @@ const externalink = computed(() => {
                         </li>
 
                         <li>
-                        <a href="https://docs.google.com/spreadsheets/d/1zT7VzHnif2W-f2j2_0_0MNdCN7QqO7cI/edit?usp=drive_link&ouid=103896997284313246840&rtpof=true&sd=true"
+                        <a href="https://drive.google.com/drive/folders/1u4mYTQFDUPD73lNlefRT-zLcklnHD1v8?usp=sharing"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
                             <div class="flex items-start space-x-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h4l2-4 4 8 2-4h6" />
                                 </svg>
-                            <span class="text-gray-700 dark:text-gray-200 font-medium">Activity Proposal</span>
+                            <span class="text-gray-700 dark:text-gray-200 font-medium">Activity Proposal & Report</span>
                             </div>
                             <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -218,7 +218,7 @@ const externalink = computed(() => {
                         </a>
                         </li>
 
-                        <li>
+                        <!-- <li>
                         <a href="https://docs.google.com/spreadsheets/d/1sL41qnc4QQU9cs5R5b-6XDlQiGR2ov5G/edit?usp=sharing&ouid=103896997284313246840&rtpof=true&sd=true"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
@@ -235,7 +235,7 @@ const externalink = computed(() => {
                                     d="M9 5l7 7-7 7"></path>
                             </svg>
                         </a>
-                        </li>
+                        </li> -->
 
                     </ul>
                 </section>
