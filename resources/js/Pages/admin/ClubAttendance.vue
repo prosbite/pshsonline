@@ -25,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white">
-                    <tr v-for="(attendance, index) in props.attendance" :key="index" class="hover:bg-gray-100 cursor-pointer">
+                    <tr v-for="(attendance, index) in sortedAttendanceByClub" :key="index" class="hover:bg-gray-100 cursor-pointer">
                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ parseInt(index) + 1 }}</td>
                         <td class="flex flex-col gap-0 px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             <span class="font-semibold text-black text-lg">{{ attendance.club_register?.club?.name }}</span>
@@ -104,6 +104,11 @@ const deleteAttendance = (id: number) => {
         router.delete(route('admin.attendance.delete', id))
     }
 }
+const sortedAttendanceByClub = computed(() => {
+    return props.attendance.sort((a: any, b: any) => {
+        return a.club_register.club.name.localeCompare(b.club_register.club.name)
+    })
+})
 onMounted(() => {
     selectedDate.value = props.date
 })
