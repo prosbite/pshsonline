@@ -117,7 +117,7 @@ const externalink = computed(() => {
                                         d="M9 5l7 7-7 7"></path>
                                 </svg>
                             </a>
-                        </li>
+                        </li> -->
 
                         <li>
                             <a href="/word/substitution_plan.docx"
@@ -136,7 +136,7 @@ const externalink = computed(() => {
                                         d="M9 5l7 7-7 7"></path>
                                 </svg>
                             </a>
-                        </li> -->
+                        </li>
 
                         <li>
                         <a :href="externalink ?? '#'"

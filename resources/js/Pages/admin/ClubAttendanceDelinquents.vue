@@ -40,7 +40,7 @@
                         {{ delinquent?.club_attendance_learner?.learner?.current_enrollment?.section?.grade_level?.grade_level }} - {{ delinquent?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ delinquent?.club_attendance_learner?.club_attendance?.club_register?.club?.name }}
+                        {{ delinquent?.club_attendance?.club_register?.club?.name }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ ucWords(delinquent?.club_attendance_learner?.learner?.gender ?? '') }}
@@ -49,7 +49,7 @@
                         {{  ucWords(removeUnderScore(delinquent?.club_attendance_learner?.status)) }}
                     </td>
                 </tr>
-                <tr v-if="combinedDelinquents.length === 0">
+                <tr v-if="props.delinquents.length === 0">
                     <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         No delinquent learners found.
                     </td>
@@ -70,7 +70,7 @@
     import { router } from '@inertiajs/vue3';
     const page = usePage();
     const props = defineProps({
-        attendance: Object,
+        delinquents: Array,
         attendanceDates: Array,
         date: String
     })
@@ -78,18 +78,18 @@
     const getAttendance = (event: any) => {
         router.get(route('admin.attendance.delinquents', { date: event.target.value }))
     }
-    const combinedDelinquents = computed(() => {
-        let delinquents = []
-        console.log(props.attendance)
-        for (let index = 0; index < props.attendance.length; index++) {
-            const attendance = props.attendance[index];
-            delinquents.push(...attendance.delinquents)
-        }
-        return delinquents
-    })
+    // const combinedDelinquents = computed(() => {
+    //     let delinquents = []
+    //     console.log(props.attendance)
+    //     for (let index = 0; index < props.attendance.length; index++) {
+    //         const attendance = props.attendance[index];
+    //         delinquents.push(...attendance.delinquents)
+    //     }
+    //     return delinquents
+    // })
     const sortedDelinquents = computed(() => {
-        return combinedDelinquents.value.sort((a: any, b: any) => {
-            return a.club_attendance_learner.club_attendance.club_register.club.name.localeCompare(b.club_attendance_learner.club_attendance.club_register.club.name)
+        return props.delinquents.sort((a: any, b: any) => {
+            return a.club_attendance.club_register.club.name.localeCompare(b.club_attendance.club_register.club.name)
         })
     })
     onMounted(() => {

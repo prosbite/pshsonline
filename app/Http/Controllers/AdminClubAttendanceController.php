@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AttendanceDelinquence;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\ClubAttendance;
@@ -32,9 +33,18 @@ class AdminClubAttendanceController extends Controller
         if($attendanceDates->count() > 0 && !$request->date){
             $date = $attendanceDates->first();
         }
-        $attendance = ClubAttendance::with(['delinquents.clubAttendanceLearner.learner.currentEnrollment.section.gradeLevel','delinquents.clubAttendanceLearner.clubAttendance.clubRegister.club'])->orderBy('date', 'desc')->get()->where('date', $date);
+        // $attendance = ClubAttendance::with(['delinquents.clubAttendanceLearner.learner.currentEnrollment.section.gradeLevel','delinquents.clubAttendanceLearner.clubAttendance.clubRegister.club'])->orderBy('date', 'desc')->get()->where('date', $date);
+        $delinquents = AttendanceDelinquence::select('attendance_delinquences.*')
+        ->join('club_attendances', 'attendance_delinquences.club_attendance_id', '=', 'club_attendances.id')
+        ->where('club_attendances.date', $date)
+        ->orderBy('club_attendances.date', 'desc')
+        ->with([
+            'clubAttendance.clubRegister.club',
+            'clubAttendanceLearner.learner.currentEnrollment.section.gradeLevel',
+        ])
+        ->get();
         return Inertia::render('admin/ClubAttendanceDelinquents', [
-            'attendance' => $attendance,
+            'delinquents' => $delinquents,
             'attendanceDates' => $attendanceDates,
             'date' => $date
         ]);
