@@ -21,11 +21,12 @@
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
                         <th v-for="status in attendanceStatus()" :key="status.value" scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ status.abv }}</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
                     <tr v-for="(attendance, index) in props.attendance" :key="index" class="hover:bg-gray-100 cursor-pointer">
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ index + 1 }}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ parseInt(index) + 1 }}</td>
                         <td class="flex flex-col gap-0 px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             <span class="font-semibold text-black text-lg">{{ attendance.club_register?.club?.name }}</span>
                             <span class="text-blue-600 text-sm">{{ fullDateTime(attendance.created_at) }}</span>
@@ -37,6 +38,9 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-500 text-center">{{ totalTardy(attendance) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{{ totalCuttingClasses(attendance) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-black text-center">{{ totalMembers(attendance) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-black text-center">
+                            <button @click="deleteAttendance(attendance.id)" class="text-red-600 hover:text-red-900">Delete</button>
+                        </td>
 
                     </tr>
                 <tr v-if="props.attendance.length === 0">
@@ -53,7 +57,7 @@
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { attendanceStatus, fullDate, fullDateTime } from '@/composables/utilities';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 
 defineOptions({
@@ -92,11 +96,13 @@ const totalTardy = (attendance: any) => {
 const totalCuttingClasses = (attendance: any) => {
     return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'cutting_classes').length
 }
-const totalLate = (attendance: any) => {
-    return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'late').length
-}
 const getAttendance = (event: any) => {
     router.get(`/admin/attendances?date=${event.target.value}`)
+}
+const deleteAttendance = (id: number) => {
+    if (confirm('Are you sure you want to delete this attendance?')) {
+        router.delete(route('admin.attendance.delete', id))
+    }
 }
 onMounted(() => {
     selectedDate.value = props.date

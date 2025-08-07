@@ -19,10 +19,11 @@
                 <tr>
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2">#</th>
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-6">Name</th>
-                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade/Section</th>
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Club</th>
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remarks</th>
+                    <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions Taken</th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
@@ -34,10 +35,10 @@
                         {{ index + 1 }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ ucWords(delinquent?.club_attendance_learner?.learner?.last_name ?? '') }}, {{ ucWords(delinquent?.club_attendance_learner?.learner?.first_name ?? '') }} {{ middleInitials(delinquent?.club_attendance_learner?.learner?.middle_name ?? '') }}
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ delinquent?.club_attendance_learner?.learner?.current_enrollment?.section?.grade_level?.grade_level }} - {{ delinquent?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name }}
+                        <div class="flex flex-col gap-1">
+                            <span>{{ ucWords(delinquent?.club_attendance_learner?.learner?.last_name ?? '') }}, {{ ucWords(delinquent?.club_attendance_learner?.learner?.first_name ?? '') }} {{ middleInitials(delinquent?.club_attendance_learner?.learner?.middle_name ?? '') }}</span>
+                            <span class="text-sm text-gray-500">{{ delinquent?.club_attendance_learner?.learner?.current_enrollment?.section?.grade_level?.grade_level }} - {{ delinquent?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name }}</span>
+                        </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ delinquent?.club_attendance?.club_register?.club?.name }}
@@ -47,6 +48,12 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{  ucWords(removeUnderScore(delinquent?.club_attendance_learner?.status)) }}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500 max-w-[150px]">
+                        {{  delinquent?.remarks ? ucWords(delinquent?.remarks) : 'None' }}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500 max-w-[150px]">
+                        {{  delinquent?.resolved ? ucWords(removeUnderScore(delinquent?.actions_taken)) : 'Unresolved' }}
                     </td>
                 </tr>
                 <tr v-if="props.delinquents.length === 0">

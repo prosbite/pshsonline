@@ -17,8 +17,7 @@ class AdminClubAttendanceController extends Controller
         if($attendanceDates->count() > 0 && !$request->date){
             $date = $attendanceDates->first();
         }
-        $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner'])->orderBy('date', 'desc')->get()->where('date', $date);
-        // dd($attendance);
+        $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner'])->orderBy('date', 'desc')->where('date', $date)->get();
         return Inertia::render('admin/ClubAttendance', [
             'attendance' => $attendance->toArray(),
             'attendanceDates' => $attendanceDates,
@@ -48,5 +47,12 @@ class AdminClubAttendanceController extends Controller
             'attendanceDates' => $attendanceDates,
             'date' => $date
         ]);
+    }
+
+    public function deleteAttendance(Request $request)
+    {
+        $attendance = ClubAttendance::find($request->id);
+        $attendance->delete();
+        return redirect()->back();
     }
 }

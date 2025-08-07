@@ -218,16 +218,16 @@ const externalink = computed(() => {
                         </a>
                         </li>
 
-                        <!-- <li>
-                        <a href="https://docs.google.com/spreadsheets/d/1sL41qnc4QQU9cs5R5b-6XDlQiGR2ov5G/edit?usp=sharing&ouid=103896997284313246840&rtpof=true&sd=true"
+                        <li>
+                        <a href="https://docs.google.com/spreadsheets/d/1sXITfyDINfowCp5hRO9WMh3rF12NHbua/edit?usp=sharing&ouid=103896997284313246840&rtpof=true&sd=true"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
                             <div class="flex items-start space-x-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5h6M9 3h6a2 2 0 012 2v1h1a2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h1V5a2 2 0 012-2zM9 12h6M9 16h3" />
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-indigo-500" width="24" height="24">
+                                    <path d="M6 2C4.9 2 4 2.9 4 4v16l4-4h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H6z"/>
+                                    <path d="M9 7h6v2H9V7zm0 4h6v2H9v-2z"/>
                                 </svg>
-                            <span class="text-gray-700 dark:text-gray-200 font-medium">Activity Report</span>
+                            <span class="text-gray-700 dark:text-gray-200 font-medium">Anecdotal Report</span>
                             </div>
                             <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -235,7 +235,7 @@ const externalink = computed(() => {
                                     d="M9 5l7 7-7 7"></path>
                             </svg>
                         </a>
-                        </li> -->
+                        </li>
 
                     </ul>
                 </section>
