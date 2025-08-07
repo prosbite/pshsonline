@@ -174,11 +174,11 @@ class ClubAttendanceController extends Controller
     {
         $request->validate([
             'id' => 'required',
-            'actions_taken' => 'required',
+            'action_taken' => 'required',
         ]);
         $delinquent = AttendanceDelinquence::findOrFail($request->id);
         $delinquent->resolved = true;
-        $delinquent->actions_taken = $request->actions_taken;
+        $delinquent->actions_taken = $request->action_taken;
         $delinquent->save();
         return redirect()->back();
     }

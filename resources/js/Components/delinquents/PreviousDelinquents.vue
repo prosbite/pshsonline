@@ -18,8 +18,8 @@
                 <tr v-for="delinquent in sortedDelinquents" :key="delinquent.id" class="hover:bg-gray-50">
                     <td class="px-4 py-3">{{ ucWords(delinquent.learner_last_name) }}, {{ ucWords(delinquent.learner_first_name) }} {{ middleInitials(delinquent.learner_middle_name ?? '') }}</td>
                     <td class="px-4 py-3 text-red-600 font-semibold">{{ ucWords(removeUnderScore(delinquent.attendance_status)) }}</td>
-                    <td class="px-4 py-3">
-                    <span class="text-gray-500 italic">{{ delinquent.actions_taken ?? 'N/A' }}</span>
+                    <td class="px-4 py-3 max-w-[200px] overflow-hidden text-ellipsis">
+                        <span class="text-gray-500 italic">{{ delinquent.actions_taken ? ucWords(removeUnderScore(delinquent.actions_taken)) : 'N/A' }}</span>
                     </td>
                     <td class="px-4 py-3">
                         <button v-if="!delinquent.resolved" @click.prevent="showModal(delinquent)" class="px-2 py-1 bg-indigo-600 text-xs text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
@@ -143,6 +143,10 @@ const delinquent = ref({
 const showModal = (del: any) => {
     modal.value = true
     delinquent.value = del
+    actionsTaken.value = []
+    otherActions.value = ''
+    othersCheck.value = false
+    requiredActions.value = false
 }
 
 const sortedDelinquents = computed(() => {
@@ -169,16 +173,15 @@ const updateActionsTaken = (event: Event, action: string) => {
 }
 
 const resolveDelinquent = () => {
+    if(othersCheck.value && otherActions.value.trim() !== '') {
+        actionsTaken.value.push(otherActions.value.trim())
+    }
     if(actionsTaken.value.length === 0) {
         requiredActions.value = true
         return
     } else {
         requiredActions.value = false
         delinquent.value.actions_taken = actionsTaken.value.join(', ')
-        if(othersCheck.value && otherActions.value.trim() !== '') {
-            delinquent.value.actions_taken += ', ' + otherActions.value.trim()
-        }
-
         router.put(route('club.attendance.resolve', { id: delinquent.value.id, action_taken: delinquent.value.actions_taken }),{}, {
             onSuccess: () => {
             toast.success('Attendance resolved successfully', {
