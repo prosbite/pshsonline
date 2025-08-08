@@ -97,50 +97,52 @@
         </div>
 
         <!-- Club Management Group Header (now a toggle) -->
+
+        <Link v-if="user.role === 'club adviser'" :href="route('club.members')" :class="{'bg-gray-700': route().current('club.members')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+            <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h2a2 2 0 002-2V7a2 2 0 00-2-2h-2v12m0 0l-1.588 1.588M17 20H9.588l-1.588 1.588M9.588 20H7.588m0 0H5.588M5.588 20H3.588M12 10a4 4 0 11-8 0 4 4 0 018 0zM12 10V4"></path></svg>
+            <span class="text-md">Members</span>
+        </Link>
+
         <div v-if="user.role === 'club adviser'" class="relative">
             <a href="#" @click.prevent="isClubManagementGroupOpen = !isClubManagementGroupOpen"
                 :class="{'bg-gray-700': route().current('club-management')}"
                 class="flex items-center justify-between space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                 <div class="flex items-center space-x-3">
-                    <svg class="w-6 h-6 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    <span class="text-lg">My Club</span>
+                    <svg class="w-6 h-6 text-white-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-lg">Attendance</span>
                 </div>
                 <!-- Arrow icon for expand/collapse -->
                 <svg :class="{'rotate-90': isClubManagementGroupOpen}" class="w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </a>
             <!-- Sub-items -->
             <div v-if="isClubManagementGroupOpen" class="pl-8 space-y-2 mt-2">
-                <!-- New "Manage" link for the main Club Management page -->
-                <Link v-if="user.role === 'club adviser'" :href="route('club.members')" :class="{'bg-gray-700': route().current('club.members')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
-                    <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h2a2 2 0 002-2V7a2 2 0 00-2-2h-2v12m0 0l-1.588 1.588M17 20H9.588l-1.588 1.588M9.588 20H7.588m0 0H5.588M5.588 20H3.588M12 10a4 4 0 11-8 0 4 4 0 018 0zM12 10V4"></path></svg>
-                    <span class="text-md">Members</span>
+                <Link :href="route('club.attendance.create', { club_register_id: clubRegisterId })" :class="{'bg-gray-700': route().current('club.attendance.create')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <span class="text-md">Record Attendance</span>
                 </Link>
-                <Link v-if="user.role === 'club adviser'" :href="route('club.attendance', { club_register_id: clubRegisterId })" :class="{'bg-gray-700': route().current('club.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
-                    <svg class="w-6 h-6 text-white-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span class="text-md">Attendance</span>
+            </div>
+            <div v-if="isClubManagementGroupOpen" class="pl-8 space-y-2 mt-2">
+                <Link :href="route('club.attendance', { club_register_id: clubRegisterId })" :class="{'bg-gray-700': route().current('club.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <span class="text-md">Attendance List</span>
                 </Link>
-                <Link v-if="user.role === 'club adviser'" :href="route('club.submissions', { club_register_id: clubRegisterId })" :class="{'bg-gray-700': route().current('club.submissions')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 9h-4V3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V9zm-6 9h-2v-4H8l4-4 4 4h-3v4z"/>
-                    </svg>
-                    <span class="text-md">Submissions</span>
+            </div>
+            <div v-if="isClubManagementGroupOpen" class="pl-8 space-y-2 mt-2">
+                <Link :href="route('club.attendance.monthly', { club_id: clubRegisterId })" :class="{'bg-gray-700': route().current('club.attendance.monthly')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <span class="text-md">Monthly Summary</span>
                 </Link>
-                <Link v-if="user.role === 'admin'" :href="route('club.list')" :class="{'bg-gray-700': route().current('club.list')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
-                    <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2m14 0v-2a4 4 0 00-3-3.87M16 7a4 4 0 11-8 0 4 4 0 018 0zM20 8a2 2 0 11-4 0 2 2 0 014 0zM20 20v-1.5a2.5 2.5 0 00-1.5-2.3" /></svg>
-                    <span class="text-md">Clubs List</span>
-                </Link>
-                <!-- <a href="#" :class="{'bg-gray-700': route().current('attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
-                    <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    <span class="text-md">Attendance</span>
-                </a>
-                <a href="#" :class="{'bg-gray-700': route().current('reports')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
-                    <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 2v-6m2 2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2v-2m-6 0H9"></path></svg>
-                    <span class="text-md">Reports</span>
-                </a> -->
             </div>
         </div>
+        <Link v-if="user.role === 'club adviser'" :href="route('club.submissions', { club_register_id: clubRegisterId })" :class="{'bg-gray-700': route().current('club.submissions')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 9h-4V3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V9zm-6 9h-2v-4H8l4-4 4 4h-3v4z"/>
+            </svg>
+            <span class="text-md">Submissions</span>
+        </Link>
+        <!-- <Link v-if="user.role === 'admin'" :href="route('admin.club.list')" :class="{'bg-gray-700': route().current('admin.club.list')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+            <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2m14 0v-2a4 4 0 00-3-3.87M16 7a4 4 0 11-8 0 4 4 0 018 0zM20 8a2 2 0 11-4 0 2 2 0 014 0zM20 20v-1.5a2.5 2.5 0 00-1.5-2.3" /></svg>
+            <span class="text-md">Clubs List</span>
+        </Link> -->
 
         <Link v-if="user.role === 'admin'" :href="route('users')" :class="{'bg-gray-700': route().current('users')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-200 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -187,13 +189,13 @@ const logout = () => {
     router.post(route('logout'))
 }
 onMounted(() => {
-    if (route().current('club.members')
-        || route().current('club.attendance')
+    if (route().current('club.attendance')
         || route().current('club.reports')
-        || route().current('club.list')
         || route().current('club.submissions')
         || route().current('admin.club.submissions')
         || route().current('admin.attendance')
+        || route().current('club.attendance.create')
+        || route().current('club.attendance.monthly')
         )
     {
         isClubManagementGroupOpen.value = true
