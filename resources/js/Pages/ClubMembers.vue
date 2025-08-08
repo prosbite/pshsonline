@@ -124,7 +124,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="flex justify-end gap-4 w-full py-12">
+                <div class="flex justify-end gap-4 w-full py-12 no-print">
                     <button @click.prevent="downloadCSV" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white hover:text-green-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <!-- File icon with folded corner -->

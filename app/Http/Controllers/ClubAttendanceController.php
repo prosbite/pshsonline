@@ -185,8 +185,9 @@ class ClubAttendanceController extends Controller
 
     public function monthlyAttendance(Request $request)
     {
+        $clubAttendance = ClubAttendance::with('clubAttendanceLearner')->where('club_register_id', $request->club_id)->orderBy('created_at','desc')->get();
         return Inertia::render('MonthlyAttendanceReport', [
-            'attendance' => [],
+            'attendance' => $clubAttendance,
         ]);
     }
 }
