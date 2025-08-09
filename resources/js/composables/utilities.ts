@@ -6,6 +6,9 @@ export function useConstants() {
 }
 
 export function ucWords(str: string) {
+    if (str === '' || !str) {
+        return '';
+    }
     return str.replace(/\b\w/g, (match) => match.toUpperCase());
 }
 
@@ -65,6 +68,9 @@ export function exportToCSV(data: any[], filename: string = 'export.csv') {
 }
 
 export function removeUnderScore(str: string) {
+    if (str === '' || !str) {
+        return '';
+    }
     return str.replace(/_/g, ' ');
 }
 

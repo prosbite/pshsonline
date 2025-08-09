@@ -50,7 +50,7 @@
                         {{  ucWords(removeUnderScore(delinquent?.club_attendance_learner?.status)) }}
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-500 max-w-[150px]">
-                        {{  delinquent?.remarks ? ucWords(delinquent?.remarks) : 'None' }}
+                        {{  delinquent?.club_attendance_learner?.remarks ? ucWords(delinquent?.club_attendance_learner?.remarks) : 'None' }}
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-500 max-w-[150px]">
                         {{  delinquent?.resolved ? ucWords(removeUnderScore(delinquent?.actions_taken)) : 'Unresolved' }}
