@@ -126,19 +126,19 @@
                                 <table class="w-full border border-black border-collapse mb-10 text-sm">
                                     <thead>
                                         <tr class="text-center">
-                                            <th class="border border-black" colspan="2">
+                                            <th class="border border-black px-1 py-1" colspan="2">
                                                 Name
                                             </th>
-                                            <th class="border border-black">
+                                            <th class="border border-black px-1 py-1">
                                                 Grade/Section
                                             </th>
-                                            <th class="border border-black">
+                                            <th class="border border-black px-1 py-1">
                                                 Club
                                             </th>
-                                            <th class="border border-black">
+                                            <th class="border border-black px-1 py-1">
                                                 Status
                                             </th>
-                                            <th class="border border-black">
+                                            <th class="border border-black px-1 py-1">
                                                 HR Adviser's Remarks
                                             </th>
                                         </tr>
@@ -148,20 +148,20 @@
                                             <td class="border border-black p-1 text-center">
                                                 {{ index + 1 }}
                                             </td>
-                                            <td class="border border-black px-2 py-1 text-left">
+                                            <td class="border border-black px-1 py-1 text-left">
                                                 {{ ucWords(learner?.club_attendance_learner?.learner?.last_name) + ', ' + ucWords(learner?.club_attendance_learner?.learner?.first_name) + ' ' + middleInitials(learner?.club_attendance_learner?.learner?.middle_name?? '') }}
                                             </td>
-                                            <td class="border border-black px-2 py-1 text-center uppercase">
+                                            <td class="border border-black px-1 py-1 text-center">
                                                 {{ learner.club_attendance_learner?.learner?.current_enrollment?.section?.grade_level?.grade_level }}-
                                                 {{ learner.club_attendance_learner?.learner?.current_enrollment?.section?.section_name }}
                                             </td>
-                                            <td class="border border-black px-2 py-1 text-center">
+                                            <td class="border border-black px-1 py-1 text-center">
                                                 {{ learner.club_attendance?.club_register?.club?.name }}
                                             </td>
-                                            <td class="border border-black px-2 py-1 text-center uppercase">
-                                                {{ removeUnderScore(learner.club_attendance_learner?.status) }}
+                                            <td class="border border-black px-1 py-1 text-center">
+                                                {{ ucWords(removeUnderScore(learner.club_attendance_learner?.status)) }}
                                             </td>
-                                            <td class="border border-black px-2 py-1 text-center uppercase">
+                                            <td class="border border-black px-1 py-1 text-center">
                                             </td>
                                         </tr>
                                     </tbody>
