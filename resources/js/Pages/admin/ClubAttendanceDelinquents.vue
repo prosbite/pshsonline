@@ -60,8 +60,20 @@
               </tbody>
             </table>
           </div>
-          <div class="flex justify-end items-center p-4">
-            <button @click.prevent="printDelinquents" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
+          <div class="no-print flex justify-end items-center p-4 gap-4">
+                <button @click.prevent="downloadCSV" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white hover:text-green-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- File icon with folded corner -->
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <!-- Download arrow -->
+                        <path d="M12 11v6"/>
+                        <path d="M9 14l3 3 3-3"/>
+                    </svg>
+
+                    Download CSV
+                </button>
+                <button @click.prevent="printDelinquents" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -180,7 +192,7 @@
                                         </div>
 
                                         <div class="flex flex-col">
-                                            <span class="mb-6 text-sm">Approved by:</span>
+                                            <span class="mb-6 text-sm">Noted by:</span>
                                             <span class="font-bold underline text-md uppercase">
                                                 JOHN RIDAN D. DECHUSA
                                             </span>
@@ -201,43 +213,53 @@
 
     </template>
 
-    <script lang="ts" setup>
-    import { ucWords, middleInitials, fullDate, removeUnderScore } from '@/composables/utilities';
-    import { computed, onMounted, ref } from 'vue';
-    import MainLayout from '@/Layouts/MainLayout.vue';
-    import { Link, usePage } from '@inertiajs/vue3';
-    import { router } from '@inertiajs/vue3';
-    const page = usePage();
-    const props = defineProps({
-        delinquents: Array,
-        attendanceDates: Array,
-        date: String
-    })
-    const selectedDate = ref(props.date)
-    const getAttendance = (event: any) => {
-        router.get(route('admin.attendance.delinquents', { date: event.target.value }))
-    }
-    // const combinedDelinquents = computed(() => {
-    //     let delinquents = []
-    //     console.log(props.attendance)
-    //     for (let index = 0; index < props.attendance.length; index++) {
-    //         const attendance = props.attendance[index];
-    //         delinquents.push(...attendance.delinquents)
-    //     }
-    //     return delinquents
-    // })
-    const sortedDelinquents = computed(() => {
-        return props.delinquents.sort((a: any, b: any) => {
-            return a?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name.localeCompare(b?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name)
+<script lang="ts" setup>
+import { ucWords, middleInitials, fullDate, removeUnderScore, exportToCSV } from '@/composables/utilities';
+import { computed, onMounted, ref } from 'vue';
+import MainLayout from '@/Layouts/MainLayout.vue';
+import { Link, usePage } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
+const page = usePage();
+const props = defineProps({
+    delinquents: Array,
+    attendanceDates: Array,
+    date: String
+})
+const selectedDate = ref(props.date)
+const getAttendance = (event: any) => {
+    router.get(route('admin.attendance.delinquents', { date: event.target.value }))
+}
+const csvFormat = computed(() => {
+    let data = []
+    sortedDelinquents.value.map((learner: any) => {
+        data.push({
+            'Last Name': learner.club_attendance_learner?.learner?.last_name,
+            'First Name': learner.club_attendance_learner?.learner?.first_name,
+            'Middle Name': learner.club_attendance_learner?.learner?.middle_name ?? '',
+            'Grade Level': learner.club_attendance_learner?.learner?.current_enrollment?.section?.grade_level?.grade_level,
+            'Section': learner.club_attendance_learner?.learner?.current_enrollment?.section?.section_name,
+            'Club': learner.club_attendance?.club_register?.club?.name,
+            'Status': ucWords(removeUnderScore(learner.club_attendance_learner?.status)),
+            "HR Adviser's Remarks": ''
         })
     })
-    const printDelinquents = () => {
-        window.print();
-    }
-    onMounted(() => {
-        selectedDate.value = props.date
+    return data
+})
+const downloadCSV = () => {
+    exportToCSV(csvFormat.value, `delinquent_students_${selectedDate.value}.csv`)
+}
+const sortedDelinquents = computed(() => {
+    return props.delinquents.sort((a: any, b: any) => {
+        return a?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name.localeCompare(b?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name)
     })
-    </script>
+})
+const printDelinquents = () => {
+    window.print();
+}
+onMounted(() => {
+    selectedDate.value = props.date
+})
+</script>
 
     <style>
     .to-print {
