@@ -172,7 +172,7 @@
                                         <div class="flex flex-col ">
                                             <span class="mb-6 text-sm">Prepared by:</span>
                                             <span class="font-bold underline text-md uppercase">
-                                                {{ page.props.auth.user.name }}
+                                                GRETCHEN MAE B. EMPUESTO, PhD
                                             </span>
                                             <span class="text-md">
                                                 ALP Coordinator
