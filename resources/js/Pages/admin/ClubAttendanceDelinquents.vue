@@ -115,7 +115,7 @@
                         <td>
                             <div id="printContent" class="w-full flex flex-col bg-white">
                                 <div class="flex-col w-full font-bold text-lg mb-6">
-                                    <span class="text-center block uppercase mb-2 text-2xl">
+                                    <span class="text-center block uppercase mb-1 text-2xl">
                                         Attendance Infractions
                                     </span>
                                     <span class="text-center block uppercase mb-4">
@@ -171,7 +171,7 @@
                                     <div class="flex gap-16 justify-start">
                                         <div class="flex flex-col ">
                                             <span class="mb-6 text-sm">Prepared by:</span>
-                                            <span class="font-bold underline text-md uppercase">
+                                            <span class="font-bold underline text-md">
                                                 GRETCHEN MAE B. EMPUESTO, PhD
                                             </span>
                                             <span class="text-md">
