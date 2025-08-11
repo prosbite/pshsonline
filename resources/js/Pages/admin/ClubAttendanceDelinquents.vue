@@ -60,7 +60,7 @@
               </tbody>
             </table>
           </div>
-          <div class="no-print flex justify-end items-center p-4 gap-4">
+          <div class="no-print flex justify-end items-center p-4 py-8 gap-4">
                 <button @click.prevent="downloadCSV" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white hover:text-green-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <!-- File icon with folded corner -->
@@ -74,26 +74,26 @@
                     Download CSV
                 </button>
                 <button @click.prevent="printDelinquents" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="w-5 h-5 text-white dark:text-white"
-                >
-                    <!-- Printer body -->
-                    <path d="M6 9V2h12v7" />
-                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                    <rect x="6" y="14" width="12" height="8" rx="2" ry="2" />
-                    <!-- Paper coming out -->
-                    <line x1="8" y1="18" x2="8" y2="22" />
-                    <line x1="16" y1="18" x2="16" y2="22" />
-                </svg>
-                Print
-            </button>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="w-5 h-5 text-white dark:text-white"
+                    >
+                        <!-- Printer body -->
+                        <path d="M6 9V2h12v7" />
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                        <rect x="6" y="14" width="12" height="8" rx="2" ry="2" />
+                        <!-- Paper coming out -->
+                        <line x1="8" y1="18" x2="8" y2="22" />
+                        <line x1="16" y1="18" x2="16" y2="22" />
+                    </svg>
+                    Print
+                </button>
             </div>
 
             <Teleport to="body">

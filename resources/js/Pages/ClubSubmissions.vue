@@ -66,10 +66,14 @@
                     </div>
                     <div class="mb-4">
                         <label for="name" class="block text-sm font-medium text-gray-700">Name of Submission</label>
-                        <select required id="name" name="name" v-model="form.name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <select required id="name" name="name" v-model="submissionName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             <option value="" disabled selected>Select Type</option>
                             <option v-for="type in submissionType()" :key="type.value" :value="type.value">{{ type.label }}</option>
                         </select>
+                    </div>
+                    <div class="mb-4" v-if="submissionName === 'others'">
+                        <label for="otherSubmissionName" class="block text-sm font-medium text-red-400">Specify Name of Submission</label>
+                        <input type="text" id="otherSubmissionName" name="otherSubmissionName" v-model="otherSubmissionName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                     </div>
                     <div class="mb-4">
                         <label for="url" class="block text-sm font-medium text-gray-700">Link (If applicable)</label>
@@ -128,7 +132,7 @@
     import SleekModal from '@/Components/SleekModal.vue';
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { fullDate, submissionType, removeUnderScore, ucWords } from '@/composables/utilities';
-    import { onMounted, ref } from 'vue';
+    import { onMounted, ref, computed } from 'vue';
     import { useForm } from '@inertiajs/vue3';
     import { toast } from 'vue3-toastify';
     import 'vue3-toastify/dist/index.css';
@@ -144,17 +148,31 @@
         submissions: Array,
         clubRegister: Object,
     });
+    const otherSubmissionName = ref('')
+    const submissionName = ref('')
     const showModal = ref(false);
     const submitForm = () => {
+        if(submissionName.value === 'others' && otherSubmissionName.value.trim().length === 0) {
+            toast.error('Please specify the name for the submission')
+            return
+        }
+        form.name = submissionName.value
+        if(submissionName.value === 'others') {
+            form.name = otherSubmissionName.value
+        }
         form.post(route('club.submissions.store'), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Submission created successfully');
+                toast.success('Submission created successfully', {
+                    autoClose: 2000,
+                });
                 showModal.value = false;
                 form.reset();
             },
             onError: () => {
-                toast.error('Failed to create submission');
+                toast.error('Failed to create submission', {
+                    autoClose: 2000,
+                });
                 showModal.value = true;
             }
         });
@@ -174,6 +192,13 @@
         status: '',
         remarks: '',
     });
+    const validatedRevisionForm = computed(() => {
+        if (revisionForm.name === 'others') {
+            return otherSubmissionName.value.trim().length > 0
+        } else {
+            return true
+        }
+    })
     const submitRevision = () => {
         revisionForm.put(route('club.submissions.update', revisionForm.id), {
             preserveScroll: true,

@@ -139,6 +139,10 @@ export function submissionType() {
             label: 'Substitution Plan',
             value: 'substitution_plan',
         },
+        {
+            label: 'Others',
+            value: 'others',
+        },
     ]
 }
 

@@ -45,14 +45,16 @@
             </tr>
             <tr>
                 <!-- Repeat headers for each meeting -->
-                <th class="border border-black px-2 py-1 w-[56px]" colspan="1">Status</th>
-                <th class="border border-black px-2 py-1" colspan="4">Remarks</th>
+                 <template v-for="att in props.attendance" :key="att.id">
+                     <th class="border border-black px-2 py-1 w-[56px]" colspan="1">Status</th>
+                     <th class="border border-black px-2 py-1" colspan="4">Remarks</th>
+                 </template>
 
-                <th class="border border-black px-2 py-1 w-[56px]" colspan="1">Status</th>
-                <th class="border border-black px-2 py-1" colspan="4">Remarks</th>
+                <!-- <th class="border border-black px-2 py-1 w-[56px]" colspan="1">Status</th>
+                <th class="border border-black px-2 py-1" colspan="4">Remarks</th> -->
 
-                <th class="border border-black px-2 py-1 w-[56px]" colspan="1">Status</th>
-                <th class="border border-black px-2 py-1" colspan="4">Remarks</th>
+                <!-- <th class="border border-black px-2 py-1 w-[56px]" colspan="1">Status</th>
+                <th class="border border-black px-2 py-1" colspan="4">Remarks</th> -->
             </tr>
             </thead>
             <tbody>
@@ -71,13 +73,35 @@
                         <td class="border border-black px-2 py-1 text-gray-500 text-center" colspan="4">
                             {{ attendance[5 + (mIndex * 2)] ?? 'none' }}
                         </td>
-        </template>
+                    </template>
                 </tr>
             </tbody>
         </table>
-
-        <div class="mt-2 text-xs">
-            <strong>Legend:</strong> T - Tardy, CC - Cutting Class, EA - Excused Absence, UA - Unexcused Absence
+        <div class="flex justify-between items-center pt-6">
+            <div class="mt-2 text-xs">
+                <strong>Legend:</strong> T - Tardy, CC - Cutting Class, EA - Excused Absence, UA - Unexcused Absence
+            </div>
+            <button @click.prevent="printMonthlyAttendanceReport" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 text-white dark:text-white"
+                >
+                    <!-- Printer body -->
+                    <path d="M6 9V2h12v7" />
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                    <rect x="6" y="14" width="12" height="8" rx="2" ry="2" />
+                    <!-- Paper coming out -->
+                    <line x1="8" y1="18" x2="8" y2="22" />
+                    <line x1="16" y1="18" x2="16" y2="22" />
+                </svg>
+                Print
+            </button>
         </div>
     </div>
 </template>
@@ -114,6 +138,9 @@ const statusColor = {
     'excused_absence': 'text-green-500',
     'unexcused_absence': 'text-red-500',
     'cutting_classes': 'text-orange-500',
+}
+const printMonthlyAttendanceReport = () => {
+    window.print()
 }
 const consolidatedAttendance = computed(() => {
     const finalData = []
