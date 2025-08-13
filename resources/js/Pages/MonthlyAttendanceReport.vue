@@ -51,7 +51,7 @@
                 <!-- Repeat headers for each meeting -->
                  <template v-for="att in props.attendance" :key="att.id">
                      <th class="border border-black px-2 py-1 w-[56px]" colspan="1">Status</th>
-                     <th class="border border-black px-2 py-1" colspan="4">Remarks</th>
+                     <th class="border border-black px-2 py-1 !max-w-[100px]" colspan="4">Remarks</th>
                  </template>
 
                 <!-- <th class="border border-black px-2 py-1 w-[56px]" colspan="1">Status</th>
@@ -74,8 +74,8 @@
                         <td class="border border-black px-2 py-1 text-center font-bold" :class="statusColor[attendance[4 + (mIndex * 2)] ?? '']" colspan="1">
                             {{ status[attendance[4 + (mIndex * 2)] ?? ''] }}
                         </td>
-                        <td class="border border-black px-2 py-1 text-gray-500 text-center" colspan="4">
-                            {{ attendance[5 + (mIndex * 2)] ?? 'none' }}
+                        <td class="border border-black px-2 py-1 text-gray-500 text-center !max-w-[100px]" colspan="4">
+                            {{ attendance[5 + (mIndex * 2)] ?? '-' }}
                         </td>
                     </template>
                 </tr>
@@ -193,7 +193,7 @@
                                         <!-- Repeat headers for each meeting -->
                                         <template v-for="att in props.attendance" :key="att.id">
                                             <th class="border border-black px-2 py-1 w-[56px]" colspan="1">Status</th>
-                                            <th class="border border-black px-2 py-1" colspan="4">Remarks</th>
+                                            <th class="border border-black px-2 py-1 !max-w-[100px]" colspan="4">Remarks</th>
                                         </template>
 
                                         <!-- <th class="border border-black px-2 py-1 w-[56px]" colspan="1">Status</th>
@@ -216,7 +216,7 @@
                                                 <td class="border border-black px-2 py-1 text-center font-bold" :class="statusColor[attendance[4 + (mIndex * 2)] ?? '']" colspan="1">
                                                     {{ status[attendance[4 + (mIndex * 2)] ?? ''] }}
                                                 </td>
-                                                <td class="border border-black px-2 py-1 text-gray-500 text-center" colspan="4">
+                                                <td class="border border-black px-2 py-1 text-gray-500 text-center max-w-[100px]" colspan="4">
                                                     {{ attendance[5 + (mIndex * 2)] ?? '-' }}
                                                 </td>
                                             </template>
@@ -238,7 +238,7 @@
                                         </div>
 
                                         <div class="flex flex-col flex-1">
-                                            <span class="mb-6 text-sm">Reviewed by:</span>
+                                            <span class="mb-6 text-sm">Monitored by:</span>
                                             <span class="font-bold underline text-md">
                                                 GRETCHEN MAE B. EMPUESTO, PhD
                                             </span>
@@ -320,12 +320,12 @@ const consolidatedAttendance = computed(() => {
                 finalData[index].push(learner.learner.current_enrollment.section.grade_level_id + 6)
                 finalData[index].push(learner.learner.current_enrollment.section.section_name)
                 finalData[index].push(learner.status)
-                finalData[index].push(learner.delinquent?.remarks ?? '-')
+                finalData[index].push(learner.remarks ?? '-')
             } else {
                 finalData.forEach((data: any) => {
                     if(data[0] == learner.learner.id) {
                         data.push(learner.status)
-                        data.push(learner.delinquent?.remarks ?? '-')
+                        data.push(learner.remarks ?? '-')
                     }
                 })
             }
