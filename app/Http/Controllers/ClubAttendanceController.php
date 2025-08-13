@@ -185,9 +185,30 @@ class ClubAttendanceController extends Controller
 
     public function monthlyAttendance(Request $request)
     {
-        $clubAttendance = ClubAttendance::with('clubAttendanceLearner.currentEnrollment.section.gradeLevel')->where('club_register_id', $request->club_id)->orderBy('created_at','desc')->get();
+        $months = ClubAttendance::where('club_register_id', $request->club_id)
+            ->selectRaw('DISTINCT DATE_FORMAT(date, "%Y-%m") as month')
+            ->orderBy('month', 'desc')
+            ->pluck('month');
+        $month = $months ? $months->first() : null;
+        if($request->month) {
+            $month = $request->month;
+        }
+        $clubAttendance = ClubAttendance::with([
+            'clubAttendanceLearners.learner.currentEnrollment.section.gradeLevel',
+            'clubAttendanceLearners.delinquent'
+        ])
+        ->where('club_register_id', $request->club_id)
+        ->when($month, function ($query) use ($month) {
+            [$year, $month] = explode('-', $month);
+            $query->whereYear('created_at', $year)
+                  ->whereMonth('created_at', $month);
+        })
+        ->orderBy('created_at', 'desc')
+        ->get();
         return Inertia::render('MonthlyAttendanceReport', [
             'attendance' => $clubAttendance,
+            'months' => $months,
+            'month' => $month,
         ]);
     }
 }

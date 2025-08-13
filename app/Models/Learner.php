@@ -78,4 +78,8 @@ class Learner extends Model
     {
         return $this->belongsTo(ClubAttendance::class, 'club_attendance_learner', 'learner_id', 'club_attendance_id');
     }
+    public function clubAttendanceLearner()
+    {
+        return $this->hasMany(ClubAttendanceLearner::class);
+    }
 }

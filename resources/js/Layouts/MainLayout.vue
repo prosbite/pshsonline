@@ -1,5 +1,5 @@
 <template>
-    <div class="flex min-h-screen font-sans relative">
+    <div class="no-print flex min-h-screen font-sans relative">
       <Sidebar v-if="user.club_registers?.length > 0 || user.role === 'admin'" class="ml-[-16rem] lg:ml-0" />
       <div v-if="user.club_registers?.length > 0 || user.role === 'admin'" class="flex flex-col flex-1 flex-grow overflow-y-auto bg-gray-100">
         <TopNav class="lg:hidden" />
@@ -58,3 +58,11 @@
     // console.log(user.value)
   })
   </script>
+
+  <style>
+  @media print {
+    .no-print {
+      display: none;
+    }
+  }
+  </style>
