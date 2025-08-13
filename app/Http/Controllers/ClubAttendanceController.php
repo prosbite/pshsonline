@@ -32,7 +32,7 @@ class ClubAttendanceController extends Controller
         //     }
         // }
         // $delinquents = AttendanceDelinquence::today($previousAttendance->id);
-        $attendance = ClubAttendance::with('clubAttendanceLearner')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->get();
+        $attendance = ClubAttendance::with('clubAttendanceLearner')->where('club_register_id', $request->club_register_id)->orderBy('date','desc')->get();
         return Inertia::render('ClubAttendanceList', [
             'attendance' => $attendance,
         ]);
