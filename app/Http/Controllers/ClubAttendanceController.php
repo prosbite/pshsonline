@@ -200,10 +200,10 @@ class ClubAttendanceController extends Controller
         ->where('club_register_id', $request->club_id)
         ->when($month, function ($query) use ($month) {
             [$year, $month] = explode('-', $month);
-            $query->whereYear('created_at', $year)
-                  ->whereMonth('created_at', $month);
+            $query->whereYear('date', $year)
+                  ->whereMonth('date', $month);
         })
-        ->orderBy('created_at', 'desc')
+        ->orderBy('date', 'desc')
         ->get();
         return Inertia::render('MonthlyAttendanceReport', [
             'attendance' => $clubAttendance,
