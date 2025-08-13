@@ -182,10 +182,14 @@ const updateAttendance = () => {
     attendanceForm.delinquents = replicate(sortedDelinquents.value)
     attendanceForm.put(route('club.attendance.update'), {
         onSuccess: () => {
-            toast.success('Attendance updated successfully')
+            toast.success('Attendance updated successfully', {
+                autoClose: 2000,
+            })
         },
         onError: () => {
-            toast.error('Failed to update attendance')
+            toast.error('Failed to update attendance', {
+                autoClose: 2000,
+            })
         }
     })
 }

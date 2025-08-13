@@ -45,7 +45,7 @@ class ClubAttendanceController extends Controller
         if ($club->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access.');
         }
-        $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('created_at','desc')->first();
+        $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('date','desc')->first();
         // dd($previousAttendance);
         $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
         if ($previousAttendance) {
@@ -111,8 +111,8 @@ class ClubAttendanceController extends Controller
     {
         $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner'])->findOrFail($request->attendance_id);
         $previousAttendance = ClubAttendance::where('club_register_id', $attendance->club_register_id)
-            ->where('created_at', '<', $attendance->created_at)
-            ->orderBy('created_at', 'desc')
+            ->where('date', '<', $attendance->date)
+            ->orderBy('date', 'desc')
             ->first();
         if ($previousAttendance) {
             $delinquents = AttendanceDelinquence::today($previousAttendance->id);
@@ -126,8 +126,8 @@ class ClubAttendanceController extends Controller
     {
         $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner', 'delinquents'])->findOrFail($request->attendance_id);
         $previousAttendance = ClubAttendance::where('club_register_id', $attendance->club_register_id)
-            ->where('created_at', '<', $attendance->created_at)
-            ->orderBy('created_at', 'desc')
+            ->where('date', '<', $attendance->date)
+            ->orderBy('date', 'desc')
             ->first();
         if ($previousAttendance) {
             $delinquents = AttendanceDelinquence::today($previousAttendance->id);
