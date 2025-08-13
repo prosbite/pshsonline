@@ -38,6 +38,13 @@ export function fullDateTime(date: string) {
     });
 }
 
+export function formatMonth(ym: string) {
+    const [year, month] = ym.split('-');
+    // Month is 1-based in string, but 0-based in Date
+    const date = new Date(year, month - 1);
+    return date.toLocaleString('en-US', { month: 'long' });
+}
+
 export function exportToCSV(data: any[], filename: string = 'export.csv') {
       if (!data || !data.length) {
         console.warn('No data provided for CSV export.');

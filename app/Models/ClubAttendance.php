@@ -29,6 +29,10 @@ class ClubAttendance extends Model
         return $this->belongsToMany(Learner::class, 'club_attendance_learner', 'club_attendance_id', 'learner_id')
             ->withPivot('id', 'status', 'remarks', 'learner_id','created_at','updated_at');
     }
+    public function clubAttendanceLearners()
+    {
+        return $this->hasMany(ClubAttendanceLearner::class, 'club_attendance_id');
+    }
     public function singleClubAttendanceLearner()
     {
         return $this->belongsTo(Learner::class, 'club_attendance_learner', 'club_attendance_id', 'learner_id');
