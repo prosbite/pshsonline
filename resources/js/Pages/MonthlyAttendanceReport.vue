@@ -217,7 +217,7 @@
                                                     {{ status[attendance[4 + (mIndex * 2)] ?? ''] }}
                                                 </td>
                                                 <td class="border border-black px-2 py-1 text-gray-500 text-center" colspan="4">
-                                                    {{ attendance[5 + (mIndex * 2)] ?? 'none' }}
+                                                    {{ attendance[5 + (mIndex * 2)] ?? '-' }}
                                                 </td>
                                             </template>
                                         </tr>
@@ -320,12 +320,12 @@ const consolidatedAttendance = computed(() => {
                 finalData[index].push(learner.learner.current_enrollment.section.grade_level_id + 6)
                 finalData[index].push(learner.learner.current_enrollment.section.section_name)
                 finalData[index].push(learner.status)
-                finalData[index].push(learner.delinquent?.remarks ?? 'None')
+                finalData[index].push(learner.delinquent?.remarks ?? '-')
             } else {
                 finalData.forEach((data: any) => {
                     if(data[0] == learner.learner.id) {
                         data.push(learner.status)
-                        data.push(learner.delinquent?.remarks ?? 'None')
+                        data.push(learner.delinquent?.remarks ?? '-')
                     }
                 })
             }
