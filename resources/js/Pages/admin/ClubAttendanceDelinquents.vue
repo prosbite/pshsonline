@@ -150,6 +150,9 @@
                                             <th class="border border-black px-1 py-1">
                                                 Status
                                             </th>
+                                            <th class="border border-black px-1 py-1">
+                                                Remarks
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -169,6 +172,9 @@
                                             </td>
                                             <td class="border border-black px-1 py-1 text-center">
                                                 {{ ucWords(removeUnderScore(learner.club_attendance_learner?.status)) }}
+                                            </td>
+                                            <td class="border border-black px-1 py-1 text-center">
+                                                {{  learner?.club_attendance_learner?.remarks ? ucWords(learner?.club_attendance_learner?.remarks) : '-' }}
                                             </td>
                                         </tr>
                                     </tbody>
