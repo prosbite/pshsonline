@@ -79,6 +79,38 @@
                     </svg>
                     <span class="text-md">Delinquents</span>
                 </Link>
+                <Link v-if="user.role === 'admin'" :href="route('admin.advisers.attendance')" :class="{'bg-gray-700': route().current('admin.advisers.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-labelledby="title desc"
+                        role="img"
+                        width="24" height="24"
+                        >
+                        <title id="title">Attendance</title>
+                        <desc id="desc">Calendar with a user and a check mark</desc>
+
+                        <!-- Calendar -->
+                        <rect x="2.5" y="4.5" width="13" height="13" rx="2.5"/>
+                        <path d="M2.5 8.5h13"/>
+                        <path d="M6.5 3.5v3 M11.5 3.5v3"/>
+
+                        <!-- User (head + shoulders) -->
+                        <circle cx="18.5" cy="9.5" r="2"/>
+                        <path d="M15.8 14.2c.7-1.3 2-2.2 3.7-2.2s3 .9 3.7 2.2"/>
+
+                        <!-- Check badge -->
+                        <circle cx="18.5" cy="18.5" r="3.5"/>
+                        <path d="M17.2 18.5l1 1 2-2"/>
+                    </svg>
+
+                    <span class="text-md">Advisers Attendance</span>
+                </Link>
                 <Link v-if="user.role === 'admin'" :href="route('admin.club.submissions')" :class="{'bg-gray-700': route().current('admin.club.submissions')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white-600" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M19 9h-4V3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V9zm-6 9h-2v-4H8l4-4 4 4h-3v4z"/>
@@ -206,7 +238,9 @@ onMounted(() => {
     if (route().current('admin.club.list')) {
         isClubManagementGroupOpen.value = true
     }
-    if (route().current('admin.attendance.delinquents')) {
+    if (route().current('admin.attendance.delinquents') ||
+        route().current('admin.advisers.attendance') ||
+        route().current('admin.advisers.attendance.create')) {
         isClubManagementGroupOpen.value = true
     }
 })

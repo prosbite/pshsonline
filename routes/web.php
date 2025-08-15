@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminAssessmentController;
 use App\Http\Controllers\AdminClubSubmissionController;
 use App\Http\Controllers\ClubSubmissionController;
 use App\Http\Controllers\AdminClubAttendanceController;
+use App\Http\Controllers\AdviserAttendanceController;
 use Illuminate\Support\Facades\Route;
 use App\Models\ClubRegister;
 use Inertia\Inertia;
@@ -55,6 +56,10 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin')->gr
     Route::get('/clubs/submissions', [AdminClubSubmissionController::class, 'index'])->name('admin.club.submissions');
     Route::put('/clubs/submissions/{submission}', [AdminClubSubmissionController::class, 'update'])->name('admin.club.submissions.update');
 
+    Route::get('/advisers/attendance', [AdviserAttendanceController::class, 'index'])->name('admin.advisers.attendance');
+    Route::get('/advisers/attendance/create', [AdviserAttendanceController::class, 'create'])->name('admin.advisers.attendance.create');
+    Route::post('/advisers/attendance', [AdviserAttendanceController::class, 'store'])->name('admin.advisers.attendance.store');
+    Route::get('/advisers/attendance/{id}', [AdviserAttendanceController::class, 'show'])->name('admin.advisers.attendance.show');
     Route::get('/assessment/mixmatch', [AdminAssessmentController::class, 'mixmatch'])->name('admin.assessment.mixmatch');
     Route::post('/assessment/match', [AdminAssessmentController::class, 'matchAssessment'])->name('admin.assessment.match');
 });

@@ -116,6 +116,30 @@ export function attendanceStatus() {
     ]
 }
 
+export function advisersAttendanceStatus() {
+    return [
+        {
+            label: 'Present',
+            value: 'present',
+            color: 'text-indigo-500',
+            abv: 'P'
+        },
+        {
+            label: 'Absent',
+            value: 'absent',
+            color: 'text-red-500',
+            abv: 'A'
+        },
+        {
+            label: 'Tardy',
+            value: 'tardy',
+            color: 'text-yellow-500',
+            abv: 'T'
+        },
+
+    ]
+}
+
 export function submissionType() {
     return [
         {
