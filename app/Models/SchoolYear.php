@@ -18,4 +18,8 @@ class SchoolYear extends Model
     {
         return self::where('status', 'active')->first();
     }
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

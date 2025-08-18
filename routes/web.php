@@ -14,6 +14,7 @@ use App\Http\Controllers\AdminClubSubmissionController;
 use App\Http\Controllers\ClubSubmissionController;
 use App\Http\Controllers\AdminClubAttendanceController;
 use App\Http\Controllers\AdviserAttendanceController;
+use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 use App\Models\ClubRegister;
 use Inertia\Inertia;
@@ -62,6 +63,11 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin')->gr
     Route::get('/advisers/attendance/{id}', [AdviserAttendanceController::class, 'show'])->name('admin.advisers.attendance.show');
     Route::get('/assessment/mixmatch', [AdminAssessmentController::class, 'mixmatch'])->name('admin.assessment.mixmatch');
     Route::post('/assessment/match', [AdminAssessmentController::class, 'matchAssessment'])->name('admin.assessment.match');
+
+    Route::get('/events', [EventController::class, 'index'])->name('admin.events');
+    Route::post('/event/store', [EventController::class, 'store'])->name('admin.event.store');
+    Route::delete('/event/{id}/delete', [EventController::class, 'destroy'])->name('admin.event.delete');
+    Route::put('/event/{id}/update', [EventController::class, 'update'])->name('admin.event.update');
 });
 
 // Club Adviser Routes
