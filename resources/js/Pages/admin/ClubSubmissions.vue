@@ -153,6 +153,7 @@
         })
         if(confirm('Are you sure you want to delete this submission?')) {
             form.delete(route('admin.club.submissions.delete', submission.id), {
+                preserveScroll: true,
                 onSuccess: () => {
                     toast.success('Submission deleted successfully', {
                         autoClose: 1000,
