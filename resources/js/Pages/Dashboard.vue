@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 import EventsCalendar from '@/Components/calendar/EventsCalendar.vue';
+import EventsCalendarView from '@/Components/calendar/EventsCalendarView.vue';
 
 const page = usePage()
 
@@ -41,6 +42,7 @@ const externalink = computed(() => {
                 <h1 class="text-4xl font-extrabold text-gray-900 mb-8">Dashboard</h1>
 
                 <EventsCalendar v-if="page.props.auth.user?.role === 'admin'" :events="events" />
+                <EventsCalendarView v-else :events="events" />
 
                 <!-- External Resources -->
                 <section class="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-6 mt-6 mb-12">

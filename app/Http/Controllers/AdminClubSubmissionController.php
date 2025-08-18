@@ -35,4 +35,10 @@ class AdminClubSubmissionController extends Controller
         ]);
         return redirect()->back();
     }
+
+    public function destroy(Submission $submission)
+    {
+        $submission->delete();
+        return redirect()->back();
+    }
 }

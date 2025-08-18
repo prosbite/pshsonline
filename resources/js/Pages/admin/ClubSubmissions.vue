@@ -43,21 +43,24 @@
                     </td>
                     <td class="px-4 py-3 whitespace-nowrap text-md h-full text-gray-500">
                         <div class="flex flex-col items-start justify-center gap-2">
-                            <button
-                                @click="updateSubmissionStatus(status, submission)"
-                                v-for="status in proceedSubmission(submission?.status)"
-                                :key="status.value"
-                                class="text-indigo-400 flex items-center gap-1 w-fit bg-indigo-50 text-[10px] hover:bg-indigo-600 px-2 py-1 rounded hover:text-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
-                                </svg>
-                                {{ status.label }}
-                            </button>
-                            <span v-if="proceedSubmission(submission?.status).length === 0" class="text-sm text-green-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
+                            <div class="flex gap-2">
+                                <button
+                                    @click="updateSubmissionStatus(status, submission)"
+                                    v-for="status in proceedSubmission(submission?.status)"
+                                    :key="status.value"
+                                    class="text-indigo-400 flex items-center gap-1 w-fit bg-indigo-50 text-[10px] hover:bg-indigo-600 px-2 py-1 rounded hover:text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
+                                    </svg>
+                                    {{ status.label }}
+                                </button>
+                                <span v-if="proceedSubmission(submission?.status).length === 0" class="text-sm text-green-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </span>
+                                <button @click="deleteSubmission(submission)" class="text-red-400 hover:text-red-600">Delete</button>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -144,6 +147,26 @@
         })
     }
 
+    const deleteSubmission = (submission: any) => {
+        const form = useForm({
+            submission_id: submission.id,
+        })
+        if(confirm('Are you sure you want to delete this submission?')) {
+            form.delete(route('admin.club.submissions.delete', submission.id), {
+                onSuccess: () => {
+                    toast.success('Submission deleted successfully', {
+                        autoClose: 1000,
+                    });
+                },
+                onError: () => {
+                    toast.error('Failed to delete submission', {
+                        autoClose: 1000,
+                    });
+                }
+            })
+        }
+    }
+
     const sortedSubmissions = computed(() => {
         let up = -1
         let down = 1
@@ -157,8 +180,4 @@
             return 0;
         });
     });
-
-    onMounted(() => {
-        console.log(props.submissions)
-    })
     </script>

@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div class="bg-white rounded-lg p-6">
       <!-- Calendar -->
+      <h1 class="text-2xl font-semibold mb-4">Calendar of Activities</h1>
       <FullCalendar :options="calendarOptions" />
 
       <!-- Event Modal -->
@@ -146,6 +147,7 @@ const calendarOptions = ref({
   plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
   selectable: true,
+  height: '600px',
   select: (info) => {
     form.reset()
     editMode.value = false
@@ -233,3 +235,14 @@ onMounted(() => {
     loadEvents(props.events)
 })
 </script>
+
+<style>
+.fc-today-button {
+  text-transform: uppercase !important;
+}
+.fc-toolbar-title {
+    font-size: 1.3rem !important;
+    font-weight: bold !important;
+    color: rgb(32, 96, 193) !important;
+}
+</style>
