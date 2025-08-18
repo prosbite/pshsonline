@@ -14,15 +14,15 @@
                 <tr>
                     <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider w-2">#</th>
                     <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider hover:text-blue-500 cursor-pointer" @click="sortBy = 'name'">Name of Submission</th>
-                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider hover:text-blue-500 cursor-pointer" @click="sortBy = 'members'">Date Submitted</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider hover:text-blue-500 cursor-pointer" @click="sortBy = 'created_at'">Date Submitted</th>
                     <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Club</th>
-                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider" @click="sortBy = 'status'">Status</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider hover:text-blue-500 cursor-pointer" @click="sortBy = 'status'">Status</th>
                     <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Link</th>
                     <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="submission, index in props.submissions" :key="index">
+                <tr v-for="submission, index in sortedSubmissions" :key="index">
                     <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">{{ index + 1 }}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">
                         <div class="flex flex-col gap-1">
@@ -77,12 +77,13 @@
     import SleekModal from '@/Components/SleekModal.vue';
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { fullDate, submissionType, removeUnderScore, ucWords, fullDateTime } from '@/composables/utilities';
-    import { onMounted, ref } from 'vue';
+    import { onMounted, ref, computed } from 'vue';
     import { useForm } from '@inertiajs/vue3';
     import { toast } from 'vue3-toastify';
     import 'vue3-toastify/dist/index.css';
     import SubmissionTracker from '@/Components/common/SubmissionTracker.vue';
 
+    const sortBy = ref('created_at')
     const currentStatus = ref({})
     const props = defineProps({
         submissions: Array,
@@ -143,4 +144,21 @@
         })
     }
 
+    const sortedSubmissions = computed(() => {
+        let up = -1
+        let down = 1
+        if(sortBy.value === 'created_at') {
+            up = 1
+            down = -1
+        }
+        return props.submissions.sort((a: any, b: any) => {
+            if (a[sortBy.value] < b[sortBy.value]) return up;
+            if (a[sortBy.value] > b[sortBy.value]) return down;
+            return 0;
+        });
+    });
+
+    onMounted(() => {
+        console.log(props.submissions)
+    })
     </script>
