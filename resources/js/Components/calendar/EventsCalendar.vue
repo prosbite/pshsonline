@@ -74,7 +74,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span class="text-[10px]">{{ shortDate(hoverEvent.startStr) }} - {{ shortDate(hoverEvent.endStr) }}</span>
-                    <span class="text-[10px]">{{ justTime(hoverEvent.startStr) }} - {{ justTime(hoverEvent.endStr) }}</span>
+                    <span class="text-[10px]">{{ justTime(hoverEvent.startStr) }}</span>
                 </div>
                 <div v-if="hoverEvent.extendedProps.location" class="text-[10px] text-blue-600 flex gap-1 items-center mb-2">
                     <svg
