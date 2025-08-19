@@ -16,7 +16,7 @@ class AdviserAttendance extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->withPivot('status', 'remarks')->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot('id','status', 'remarks')->withTimestamps();
     }
     public function schoolYear()
     {

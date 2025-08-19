@@ -12,7 +12,7 @@ class AdviserAttendanceController extends Controller
 {
     public function index()
     {
-        $attendances = AdviserAttendance::with('users.clubRegisters.club')->where('school_year_id', SchoolYear::current()->id)->get();
+        $attendances = AdviserAttendance::with('users.clubRegisters.club')->where('school_year_id', SchoolYear::current()->id)->orderBy('date', 'desc')->get();
         return Inertia::render('admin/AdvisersAttendanceList', compact('attendances'));
     }
     public function create()
@@ -47,5 +47,37 @@ class AdviserAttendanceController extends Controller
     {
         $attendance = AdviserAttendance::with('users.clubRegisters.club')->where('school_year_id', SchoolYear::current()->id)->find($id);
         return Inertia::render('admin/AdvisersAttendanceShow', compact('attendance'));
+    }
+
+    public function edit($id)
+    {
+        $clubAdvisers = ClubRegister::with('user', 'club')->where('school_year_id', SchoolYear::current()->id)->get();
+        $attendance = AdviserAttendance::with('users.clubRegisters.club')->where('school_year_id', SchoolYear::current()->id)->find($id);
+        return Inertia::render('admin/AdvisersAttendanceEdit', compact('attendance', 'clubAdvisers'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'date' => 'required',
+            'activity' => 'required',
+            'members' => 'required|array',
+        ]);
+        $request['school_year_id'] = SchoolYear::current()->id;
+        $adviserAttendance = AdviserAttendance::where('school_year_id', SchoolYear::current()->id)->find($id);
+        $adviserAttendance->update($request->all());
+        $adviserMembers = collect($request->members)->mapWithKeys(function ($member, $index) use ($adviserAttendance) {
+            return [
+                $index => [
+                    'adviser_attendance_id' => $adviserAttendance->id,
+                    'user_id' => $member['pivot']['user_id'],
+                    'status' => $member['pivot']['status'],
+                    'remarks' => $member['pivot']['remarks'],
+                ],
+            ];
+        });
+        $adviserAttendance->users()->detach();
+        $adviserAttendance->users()->attach($adviserMembers);
+        return redirect()->route('admin.advisers.attendance.edit', $adviserAttendance->id)->with('success', 'Adviser attendance updated successfully.');
     }
 }

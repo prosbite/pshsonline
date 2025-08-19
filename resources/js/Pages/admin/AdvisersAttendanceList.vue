@@ -38,7 +38,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">{{ totalMembers(attendance) }}</td>
                         <td class="flex items-center px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                             <Link :href="route('admin.advisers.attendance.show', { id: attendance.id })" class="text-indigo-600 mr-3 hover:text-indigo-900">View</Link>
-                            <!-- <Link :href="route('club.attendance.edit', { attendance_id: attendance.id })" class="text-green-600 hover:text-green-900">Edit</Link> -->
+                            <Link :href="route('admin.advisers.attendance.edit', { id: attendance.id })" class="text-green-600 hover:text-green-900">Edit</Link>
                         </td>
                     </tr>
                 </tbody>
