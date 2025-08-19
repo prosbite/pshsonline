@@ -38,6 +38,25 @@ export function fullDateTime(date: string) {
     });
 }
 
+export function justTime(dateInput: string) {
+    const date = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
+
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 → 12
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+
+    return `${hours}:${minutes} ${ampm}`;
+}
+
+export function shortDate(dateStr: string) {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
 export function formatMonth(ym: string) {
     const [year, month] = ym.split('-');
     // Month is 1-based in string, but 0-based in Date
