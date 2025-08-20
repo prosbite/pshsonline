@@ -40,4 +40,9 @@ class ClubRegister extends Model
     {
         return $this->hasMany(Submission::class);
     }
+
+    public function clubAttendances()
+    {
+        return $this->hasMany(ClubAttendance::class);
+    }
 }

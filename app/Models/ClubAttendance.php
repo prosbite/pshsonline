@@ -16,6 +16,11 @@ class ClubAttendance extends Model
         'date',
         'remarks',
     ];
+    protected $casts = [
+        'date' => 'date',
+        'created_at' => 'datetime', // if you have this field
+        'updated_at' => 'datetime', // if you have this field
+    ];
     public function clubRegister()
     {
         return $this->belongsTo(ClubRegister::class);
@@ -47,5 +52,9 @@ class ClubAttendance extends Model
         return $this->belongsToMany(Learner::class, 'club_attendance_learner', 'club_attendance_id', 'learner_id')
             ->withPivot('id', 'status', 'remarks')
             ->wherePivotIn('status', ['unexcused_absence', 'cutting_classes']);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

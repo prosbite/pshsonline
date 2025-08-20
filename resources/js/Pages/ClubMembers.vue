@@ -435,6 +435,7 @@ const sortedMembers = computed(() => {
   )
 })
 const breakpoint = computed(() => {
+    return false
     return (sortedMembers.value.length > 25 && sortedMembers.value.length < 33)
 })
 const printClubMembers = () => {

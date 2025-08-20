@@ -117,6 +117,35 @@
                     </svg>
                     <span class="text-md">Submissions</span>
                 </Link>
+                <Link v-if="user.role === 'admin'" :href="route('admin.clubs.monitoring')" :class="{'bg-gray-700': route().current('admin.clubs.monitoring')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <!-- save as monitor-monitoring-outline.svg -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true">
+                    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- monitor outline -->
+                        <rect x="6" y="8" width="52" height="34" rx="3" ry="3"/>
+                        <!-- stand -->
+                        <rect x="26" y="44" width="12" height="4" rx="1" ry="1" fill="currentColor"/>
+                        <rect x="22" y="48" width="20" height="2" rx="1" ry="1" fill="currentColor"/>
+                        <!-- internal grid lines (subtle) -->
+                        <g stroke-opacity="0.25">
+                        <line x1="10" y1="18" x2="54" y2="18"/>
+                        <line x1="10" y1="26" x2="54" y2="26"/>
+                        <line x1="10" y1="34" x2="54" y2="34"/>
+                        </g>
+                        <!-- line chart -->
+                        <polyline points="12,34 20,24 28,30 36,20 44,28 52,22" />
+                        <!-- data points -->
+                        <g fill="currentColor" stroke="none">
+                        <circle cx="20" cy="24" r="1.6"/>
+                        <circle cx="28" cy="30" r="1.6"/>
+                        <circle cx="36" cy="20" r="1.6"/>
+                        <circle cx="44" cy="28" r="1.6"/>
+                        </g>
+                    </g>
+                    </svg>
+
+                    <span class="text-md">Monitoring</span>
+                </Link>
                 <!-- <a href="#" :class="{'bg-gray-700': route().current('attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                     <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     <span class="text-md">Attendance</span>
@@ -228,6 +257,7 @@ onMounted(() => {
         || route().current('admin.attendance')
         || route().current('club.attendance.create')
         || route().current('club.attendance.monthly')
+        || route().current('admin.clubs.monitoring')
         )
     {
         isClubManagementGroupOpen.value = true

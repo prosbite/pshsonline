@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\ClubRegister;
 use Inertia\Inertia;
 use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\ClubsMonitoringController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -57,6 +58,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin')->gr
     Route::get('/clubs/submissions', [AdminClubSubmissionController::class, 'index'])->name('admin.club.submissions');
     Route::put('/clubs/submissions/{submission}', [AdminClubSubmissionController::class, 'update'])->name('admin.club.submissions.update');
     Route::delete('/clubs/submissions/{submission}', [AdminClubSubmissionController::class, 'destroy'])->name('admin.club.submissions.delete');
+    Route::get('/clubs/monitoring', [ClubsMonitoringController::class, 'index'])->name('admin.clubs.monitoring');
 
     Route::get('/advisers/attendance', [AdviserAttendanceController::class, 'index'])->name('admin.advisers.attendance');
     Route::get('/advisers/attendance/create', [AdviserAttendanceController::class, 'create'])->name('admin.advisers.attendance.create');
