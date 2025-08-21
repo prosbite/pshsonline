@@ -30,6 +30,23 @@
                 </div>
                 <div class="mb-6">
                     <label
+                        for="session-type"
+                        class="block text-gray-700 text-md font-medium mb-1"
+                        >Type:</label
+                    >
+                    <input
+                        disabled
+                        required
+                        :value="advisersAttendance.type"
+                        type="text"
+                        id="session-type"
+                        placeholder=""
+                        class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                </div>
+
+                <div class="mb-6">
+                    <label
                         for="session-activity"
                         class="block text-gray-700 text-md font-medium mb-1"
                         >Activity:</label
@@ -96,7 +113,10 @@
                                 <td
                                     class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                                 >
-                                    {{ member?.adviser_name }}
+                                    <div class="flex flex-col">
+                                        <span class="text-md font-semibold">{{ member?.name }}</span>
+                                        <span class="text-xs text-gray-500">{{ member?.club_registers?.[0]?.club?.name }}</span>
+                                    </div>
                                 </td>
                                 <td
                                     v-for="status in advisersAttendanceStatus()"
@@ -176,8 +196,10 @@ let advisersAttendance = useForm({
     date: '',
     activity: '',
     status: '',
+    type: '',
     remarks: '',
-    members: []
+    members: [],
+    final_members: [],
 })
 onMounted(() => {
     setAdvisersAttendance()
@@ -187,15 +209,20 @@ const setAdvisersAttendance = () => {
     advisersAttendance.date = props?.attendance?.date
     advisersAttendance.activity = props?.attendance?.activity
     advisersAttendance.status = props?.attendance?.status
+    advisersAttendance.type = props?.attendance?.type
     advisersAttendance.remarks = props?.attendance?.remarks
     advisersAttendance.members = props?.attendance?.users
 }
+const filteredMembers = computed(() => {
+    return advisersAttendance.members.filter((member: any) => member.club_registers?.[0]?.club?.type === advisersAttendance.type)
+})
 const sortedMembers = computed(() => {
-    return [...advisersAttendance.members].sort((a, b) => {
+    return [...filteredMembers.value].sort((a, b) => {
         return a.name.localeCompare(b.name)
     })
 })
 const submitAttendance = () => {
+    advisersAttendance.final_members = sortedMembers.value
     advisersAttendance.put(route('admin.advisers.attendance.update', advisersAttendance.id), {
         onSuccess: () => {
             toast.success('Attendance saved successfully',{

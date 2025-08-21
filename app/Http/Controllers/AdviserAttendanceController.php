@@ -25,11 +25,12 @@ class AdviserAttendanceController extends Controller
         $request->validate([
             'date' => 'required',
             'activity' => 'required',
+            'type' => 'required',
             'members' => 'required|array',
         ]);
         $request['school_year_id'] = SchoolYear::current()->id;
         $adviserAttendance = AdviserAttendance::create($request->all());
-        $adviserMembers = collect($request->members)->mapWithKeys(function ($member, $index) use ($adviserAttendance) {
+        $adviserMembers = collect($request->final_members)->mapWithKeys(function ($member, $index) use ($adviserAttendance) {
             return [
                 $index => [
                     'adviser_attendance_id' => $adviserAttendance->id,
@@ -66,7 +67,7 @@ class AdviserAttendanceController extends Controller
         $request['school_year_id'] = SchoolYear::current()->id;
         $adviserAttendance = AdviserAttendance::where('school_year_id', SchoolYear::current()->id)->find($id);
         $adviserAttendance->update($request->all());
-        $adviserMembers = collect($request->members)->mapWithKeys(function ($member, $index) use ($adviserAttendance) {
+        $adviserMembers = collect($request->final_members)->mapWithKeys(function ($member, $index) use ($adviserAttendance) {
             return [
                 $index => [
                     'adviser_attendance_id' => $adviserAttendance->id,

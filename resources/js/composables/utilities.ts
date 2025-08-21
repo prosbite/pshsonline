@@ -111,6 +111,19 @@ export function removeUnderScore(str: string) {
     return str.replace(/_/g, ' ');
 }
 
+export function clubTypes() {
+    return [
+        {
+            label: 'Club',
+            value: 'club',
+        },
+        {
+            label: 'School Organization',
+            value: 'school_organization',
+        }
+    ]
+}
+
 export function attendanceStatus() {
     return [
         {

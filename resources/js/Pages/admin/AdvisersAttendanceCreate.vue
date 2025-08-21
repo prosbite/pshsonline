@@ -32,6 +32,24 @@
                     <label
                         for="session-activity"
                         class="block text-gray-700 text-md font-medium mb-1"
+                        >Type:</label
+                    >
+                    <select
+                        required
+                        v-model="advisersAttendance.type"
+                        id="session-type"
+                        class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                    >
+                        <option value="" disabled>Select Type</option>
+                        <option v-for="type in clubTypes()" :key="type.value" :value="type.value">
+                            {{ type.label }}
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label
+                        for="session-activity"
+                        class="block text-gray-700 text-md font-medium mb-1"
                         >Activity:</label
                     >
                     <input
@@ -43,7 +61,6 @@
                         class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                     />
                 </div>
-
                 <div class="flex justify-between items-center mt-6">
                     <h3 class="text-xl font-semibold text-gray-800">
                         Member Attendance
@@ -96,7 +113,10 @@
                                 <td
                                     class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                                 >
-                                    {{ member?.adviser_name }}
+                                    <div class="flex flex-col">
+                                        <span class="font-semibold">{{ member?.adviser_name }}</span>
+                                        <span class="text-xs text-gray-500">{{ member?.club }}</span>
+                                    </div>
                                 </td>
                                 <td
                                     v-for="status in advisersAttendanceStatus()"
@@ -147,7 +167,7 @@
 </template>
 
 <script lang="ts" setup>
-import { advisersAttendanceStatus, middleInitials, removeUnderScore, ucWords } from '@/composables/utilities';
+import { advisersAttendanceStatus, clubTypes, middleInitials, removeUnderScore, ucWords } from '@/composables/utilities';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { onMounted, computed, ref } from 'vue';
@@ -169,8 +189,10 @@ const props = defineProps({
 })
 let advisersAttendance = useForm({
     date: '',
+    type: 'club',
     activity: '',
-    members: []
+    members: [],
+    final_members: [],
 })
 const setAdvisersAttendance = () => {
     advisersAttendance.date = null
@@ -182,15 +204,21 @@ const setAdvisersAttendance = () => {
             adviser_name: adviser.user.name,
             status: 'present',
             remarks: '',
+            club: adviser.club?.name,
+            club_type: adviser.club?.type,
         })
     })
 }
+const filteredMembers = computed(() => {
+    return advisersAttendance.members.filter((member: any) => member.club_type === advisersAttendance.type)
+})
 const sortedMembers = computed(() => {
-    return [...advisersAttendance.members].sort((a, b) => {
+    return [...filteredMembers.value].sort((a, b) => {
         return a.adviser_name.localeCompare(b.adviser_name)
     })
 })
 const submitAttendance = () => {
+    advisersAttendance.final_members = filteredMembers.value
     advisersAttendance.post(route('admin.advisers.attendance.store'), {
         onSuccess: () => {
             toast.success('Attendance saved successfully',{

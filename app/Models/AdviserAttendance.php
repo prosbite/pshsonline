@@ -10,6 +10,7 @@ class AdviserAttendance extends Model
         'school_year_id',
         'date',
         'activity',
+        'type',
         'status',
         'remarks',
     ];

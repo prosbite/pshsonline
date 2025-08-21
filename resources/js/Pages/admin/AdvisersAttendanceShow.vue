@@ -90,7 +90,10 @@
                                 <td
                                     class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                                 >
-                                    {{ member?.adviser_name }}
+                                    <div class="flex flex-col">
+                                        <span class="text-md font-semibold">{{ member?.name }}</span>
+                                        <span class="text-xs text-gray-500">{{ member?.club_registers?.[0]?.club?.name }}</span>
+                                    </div>
                                 </td>
                                 <td
                                     v-for="status in advisersAttendanceStatus()"
