@@ -234,6 +234,7 @@ const submitAttendance = () => {
 }
 onMounted(() => {
     setAdvisersAttendance()
+    console.log(props.clubAdvisers)
 })
 </script>
 
