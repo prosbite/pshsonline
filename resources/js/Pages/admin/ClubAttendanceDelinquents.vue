@@ -250,8 +250,13 @@ const downloadCSV = () => {
     exportToCSV(csvFormat.value, `delinquent_students_${selectedDate.value}.csv`)
 }
 const sortedDelinquents = computed(() => {
-    return props.delinquents.sort((a: any, b: any) => {
-        return a?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name.localeCompare(b?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name)
+    return props.delinquents.sort((a:any, b:any) => {
+        // first compare gradeLevel
+        if (a?.club_attendance_learner?.learner?.current_enrollment?.section?.grade_level?.grade_level !== b?.club_attendance_learner?.learner?.current_enrollment?.section?.grade_level?.grade_level) {
+            return a?.club_attendance_learner?.learner?.current_enrollment?.section?.grade_level?.grade_level - b?.club_attendance_learner?.learner?.current_enrollment?.section?.grade_level?.grade_level; // ascending
+        }
+        // if gradeLevel is the same, compare section
+        return a?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name.localeCompare(b?.club_attendance_learner?.learner?.current_enrollment?.section?.section_name);
     })
 })
 const printDelinquents = () => {

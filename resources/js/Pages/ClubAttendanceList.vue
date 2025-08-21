@@ -26,7 +26,7 @@
                             <span class="mr-2">
                                 {{ fullDate(attendance.date) }}
                             </span>
-                            <span v-if="attendance.date === new Date().toISOString().split('T')[0]">
+                            <span v-if="formatDate(attendance.date) === new Date().toISOString().split('T')[0]">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                     Today
                                 </span>
@@ -41,12 +41,11 @@
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">{{ totalMembers(attendance) }}</td>
                         <td class="flex items-center px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                             <Link :href="route('club.attendance.show', { attendance_id: attendance.id })" class="text-indigo-600 mr-3 hover:text-indigo-900">View</Link>
-                            <Link :href="route('club.attendance.edit', { attendance_id: attendance.id })" class="text-green-600 hover:text-green-900">Edit</Link>
-                            <!-- <Link v-if="attendance.date === new Date().toISOString().split('T')[0]" :href="route('club.attendance.edit', { attendance_id: attendance.id })" class="text-green-600 hover:text-green-900">Edit</Link> -->
-                            <!-- <svg v-else class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V7.5a4.5 4.5 0 00-9 0v3M5.25 10.5h13.5a.75.75 0 01.75.75v7.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 18.75v-7.5a.75.75 0 01.75-.75z" />
-                            </svg> -->
                             <!-- <Link :href="route('club.attendance.edit', { attendance_id: attendance.id })" class="text-green-600 hover:text-green-900">Edit</Link> -->
+                            <Link v-if="formatDate(attendance.date) === new Date().toISOString().split('T')[0]" :href="route('club.attendance.edit', { attendance_id: attendance.id })" class="text-green-600 hover:text-green-900">Edit</Link>
+                            <svg v-else class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V7.5a4.5 4.5 0 00-9 0v3M5.25 10.5h13.5a.75.75 0 01.75.75v7.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 18.75v-7.5a.75.75 0 01.75-.75z" />
+                            </svg>
                         </td>
                     </tr>
                 </tbody>
@@ -61,11 +60,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
-import { fullDate, attendanceStatus } from '@/composables/utilities'
+import { fullDate, attendanceStatus, formatDate } from '@/composables/utilities'
 
 defineOptions({
   layout: MainLayout

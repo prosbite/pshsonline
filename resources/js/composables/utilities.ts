@@ -27,6 +27,17 @@ export function fullDate(date: string) {
     });
 }
 
+export function formatDate(isoString: any) {
+    if(!isoString) {
+        return '';
+    }
+    const date = new Date(isoString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // keep 2 digits
+    const day = date.getDate(); // single digit allowed
+    return `${year}-${month}-${day}`;
+}
+
 export function fullDateTime(date: string) {
     return new Date(date).toLocaleString('en-US', {
         year: 'numeric',
