@@ -162,7 +162,7 @@ class ClubAttendanceController extends Controller
             ];
         }
         $clubAttendance->update($request->attendance);
-        // $clubAttendance->clubAttendanceLearner()->sync($clubAttendanceLearners);
+        $clubAttendance->touch();
         $clubAttendance->clubAttendanceLearner()->detach();
         $clubAttendance->clubAttendanceLearner()->attach($clubAttendanceLearners);
         $clubAttendance->delinquents()->delete();
