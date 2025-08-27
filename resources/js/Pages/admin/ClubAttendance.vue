@@ -39,7 +39,10 @@
                         <td class="px-6 py-4 text-sm text-gray-500 text-center">{{ totalCuttingClasses(attendance) }}</td>
                         <td class="px-6 py-4 text-sm text-black text-center">{{ totalMembers(attendance) }}</td>
                         <td class="px-6 py-4 text-sm text-black text-center">
-                            <button @click="deleteAttendance(attendance.id)" class="text-red-600 hover:text-red-900">Delete</button>
+                            <div class="flex gap-2 items-center">
+                                <Link :href="route('club.attendance.edit', { attendance_id: attendance.id })" class="text-green-600 hover:text-green-900">Edit</Link>
+                                <button @click="deleteAttendance(attendance.id)" class="text-red-600 hover:text-red-900">Delete</button>
+                            </div>
                         </td>
 
                     </tr>
@@ -58,7 +61,7 @@
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { attendanceStatus, fullDate, fullDateTime } from '@/composables/utilities';
 import { onMounted, ref, computed } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { router, Link } from '@inertiajs/vue3';
 
 defineOptions({
     layout: MainLayout

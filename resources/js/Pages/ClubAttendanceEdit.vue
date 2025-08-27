@@ -133,6 +133,14 @@
 
                 <div class="flex justify-end gap-4 py-6 mt-10">
                     <Link
+                        v-if="page.props.auth.user?.role === 'admin'"
+                        :href="route('admin.attendance')"
+                        class="px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                    >
+                        Cancel
+                    </Link>
+                    <Link
+                        v-else
                         :href="route('club.attendance', { club_register_id: props.attendance.club_register_id })"
                         class="px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
                     >

@@ -20,6 +20,7 @@ use App\Models\ClubRegister;
 use Inertia\Inertia;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ClubsMonitoringController;
+use App\Http\Controllers\ClubAccomplishmentController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -90,6 +91,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/club/submissions', [ClubSubmissionController::class, 'index'])->name('club.submissions');
     Route::post('/club/submissions', [ClubSubmissionController::class, 'store'])->name('club.submissions.store');
     Route::put('/club/submissions/{submission}', [ClubSubmissionController::class, 'update'])->name('club.submissions.update');
+    Route::get('/club/accomplishment/quarterly', [ClubAccomplishmentController::class, 'index'])->name('club.accomplishment.quarterly');
 });
 
 Route::middleware('auth')->group(function () {

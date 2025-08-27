@@ -147,7 +147,7 @@ class ClubAttendanceController extends Controller
         ]);
         $request['school_year_id'] = SchoolYear::current()->id;
         $club = ClubRegister::findOrFail($request->attendance['club_register_id']);
-        if ($club->user_id !== auth()->id()) {
+        if (auth()->user()->role !== 'admin' && $club->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access.');
         }
         $clubAttendanceLearners = [];
@@ -167,7 +167,7 @@ class ClubAttendanceController extends Controller
         $clubAttendance->clubAttendanceLearner()->attach($clubAttendanceLearners);
         $clubAttendance->delinquents()->delete();
         $clubAttendance->delinquents()->createMany($request->delinquents);
-        return redirect()->route('club.attendance', ['club_register_id' => $club->id]);
+        return redirect()->back();
     }
 
     public function resolve(Request $request)
