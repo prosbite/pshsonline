@@ -15,7 +15,7 @@
             <thead>
             <tr>
                 <th rowspan="2" class="border border-black px-2 py-1 w-10">#</th>
-                <th rowspan="2" class="border border-black px-4 py-1">OFFICERS / MEMBERS<br><span class="text-[10px]">(Alphabetical Order; Last Name, First Name)</span></th>
+                <th rowspan="2" class="border border-black px-4 py-1">CLUBMEMBERS<br><span class="text-[10px]">(Alphabetical Order; Last Name, First Name)</span></th>
                 <th rowspan="2" class="border border-black px-2 py-1 w-16">GRADE<br>LEVEL</th>
                 <th rowspan="2" class="border border-black px-4 py-1">SECTION</th>
 
@@ -156,7 +156,7 @@
                                 <table class="table-auto border-collapse w-full border border-black text-xs">
                                     <thead>
                                     <tr>
-                                        <th rowspan="2" class="border border-black px-2 py-1 w-10">#</th>
+                                        <th rowspan="2" class="border border-black px-2 py-1 w-10">NO.</th>
                                         <th rowspan="2" class="border border-black px-4 py-1">OFFICERS / MEMBERS<br><span class="text-[10px]">(Alphabetical Order; Last Name, First Name)</span></th>
                                         <th rowspan="2" class="border border-black px-2 py-1 w-16">GRADE<br>LEVEL</th>
                                         <th rowspan="2" class="border border-black px-4 py-1">SECTION</th>

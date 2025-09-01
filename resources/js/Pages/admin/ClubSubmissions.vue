@@ -1,5 +1,5 @@
 <template>
-    <MainLayout>
+    <div>
         <div class="w-full bg-white p-8 rounded-xl shadow-md border border-gray-200">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 space-y-4 md:space-y-0">
                 <div >
@@ -23,29 +23,29 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="submission, index in sortedSubmissions" :key="index">
-                    <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">{{ index + 1 }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">
+                    <td class="px-4 py-3 text-md text-gray-500">{{ index + 1 }}</td>
+                    <td class="px-4 py-3 text-md text-gray-500">
                         <div class="flex flex-col gap-1">
                             <span class="font-semibold text-slate-600">{{ ucWords(removeUnderScore(submission.name)) }}</span>
                             <span class="text-sm text-slate-600">{{ ucWords(submission.club_register?.user?.name ?? '') }}</span>
                         </div>
                     </td>
-                    <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">{{ fullDateTime(submission.created_at) }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">{{ ucWords(submission.club_register?.club?.name ?? '') }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-md text-green-600 cursor-pointer">
+                    <td class="px-4 py-3 text-md text-gray-500">{{ fullDateTime(submission.created_at) }}</td>
+                    <td class="px-4 py-3 text-md text-gray-500">{{ ucWords(submission.club_register?.club?.name ?? '') }}</td>
+                    <td class="px-4 py-3 text-md text-green-600 cursor-pointer">
                         <div class="group relative" :style="{'z-index': 999 - index}">
                             <span class="text-sm font-medium text-blue-600">{{ ucWords(removeUnderScore(submission.status)) }}</span>
-                            <SubmissionTracker :data="submission.submission_trackers" />
+                            <SubmissionTracker :data="submission.submission_trackers" class="min-w-64" />
                         </div>
                     </td>
-                    <td class="px-4 py-3 whitespace-nowrap text-md text-gray-500">
+                    <td class="px-4 py-3 text-md text-gray-500">
                         <a :href="submission.url" target="_blank" class="text-indigo-400 hover:text-indigo-600">Visit</a>
                     </td>
-                    <td class="px-4 py-3 whitespace-nowrap text-md h-full text-gray-500">
+                    <td class="px-4 py-3 text-md h-full text-gray-500">
                         <div class="flex flex-col items-start justify-center gap-2">
                             <div class="flex gap-2">
                                 <button
-                                    @click="updateSubmissionStatus(status, submission)"
+                                    @click="preUpdateSubmission(status, submission)"
                                     v-for="status in proceedSubmission(submission?.status)"
                                     :key="status.value"
                                     class="text-indigo-400 flex items-center gap-1 w-fit bg-indigo-50 text-[10px] hover:bg-indigo-600 px-2 py-1 rounded hover:text-white">
@@ -65,7 +65,7 @@
                     </td>
                 </tr>
                 <tr v-if="props.submissions.length === 0" >
-                    <td colspan="6" class="px-6 py-4 whitespace-nowrap text-md text-gray-500">
+                    <td colspan="6" class="px-6 py-4 text-md text-gray-500">
                         No submissions yet.
                     </td>
                 </tr>
@@ -73,21 +73,39 @@
             </table>
           </div>
         </div>
-    </MainLayout>
+        <SleekModal :is-visible="showModal" @close="showModal = false" size="2xl" class="z-[99999]">
+            <template #header>
+                <h3 class="text-lg font-medium text-gray-900">Input Remarks</h3>
+            </template>
+            <template #body>
+                <textarea v-model="currentRemarks" class="w-full border border-gray-300 rounded h-48 resize-none" placeholder="What's on your mind?"></textarea>
+            </template>
+            <template #footer>
+                <button @click="showModal = false" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+                <button @click="updateSubmissionStatus(currentStatus, currentSubmission)" class="bg-indigo-500 text-white px-4 py-2 rounded">Update</button>
+            </template>
+        </SleekModal>
+    </div>
     </template>
 
     <script lang="ts" setup>
     import SleekModal from '@/Components/SleekModal.vue';
     import MainLayout from '@/Layouts/MainLayout.vue';
-    import { fullDate, submissionType, removeUnderScore, ucWords, fullDateTime } from '@/composables/utilities';
-    import { onMounted, ref, computed } from 'vue';
+    import { submissionType, removeUnderScore, ucWords, fullDateTime } from '@/composables/utilities';
+    import { ref, computed } from 'vue';
     import { useForm } from '@inertiajs/vue3';
     import { toast } from 'vue3-toastify';
     import 'vue3-toastify/dist/index.css';
     import SubmissionTracker from '@/Components/common/SubmissionTracker.vue';
 
+    defineOptions({
+        layout: MainLayout,
+    });
     const sortBy = ref('created_at')
     const currentStatus = ref({})
+    const currentSubmission = ref({})
+    const currentRemarks = ref('')
+    const showModal = ref(false)
     const props = defineProps({
         submissions: Array,
     });
@@ -95,7 +113,6 @@
         return submissionType().filter((type: any) => type.value === submission)?.[0]?.label ?? ''
     }
     const proceedSubmission = (status: string) => {
-        currentStatus.value = status
         if(status.toLocaleLowerCase() === 'pending' || status.toLocaleLowerCase() === 'revised') {
             return [{
                 label: 'Ongoing Review',
@@ -128,13 +145,27 @@
         }
         return []
     }
+    const preUpdateSubmission = (status: any, submission: any) => {
+        if(status.value === 'completed') {
+            currentStatus.value = status
+            currentSubmission.value = submission
+            showModal.value = true
+        } else {
+            updateSubmissionStatus(status, submission)
+        }
+    }
     const updateSubmissionStatus = (status: any, submission: any) => {
         const form = useForm({
             status: status.value,
             submission_id: submission.id,
+            remarks: currentRemarks.value,
         })
         form.put(route('admin.club.submissions.update', submission.id), {
             onSuccess: () => {
+                showModal.value = false
+                currentRemarks.value = ''
+                currentStatus.value = {}
+                currentSubmission.value = {}
                 toast.success('Submission status updated successfully', {
                     autoClose: 1000,
                 });

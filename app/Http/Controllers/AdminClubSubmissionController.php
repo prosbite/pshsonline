@@ -31,6 +31,7 @@ class AdminClubSubmissionController extends Controller
         SubmissionTracker::create([
             'submission_id' => $submission->id,
             'status' => request('status'),
+            'remarks' => request('remarks'),
             'updated_by' => Auth::user()->id,
         ]);
         return redirect()->back();

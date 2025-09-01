@@ -36,11 +36,11 @@
           </div>
 
           <!-- Optional Footer Slot (you can uncomment and use this if needed) -->
-          <!--
+
           <div v-if="$slots.footer" class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-end items-center">
             <slot name="footer"></slot>
           </div>
-          -->
+
         </div>
       </div>
     </transition>

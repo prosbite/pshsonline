@@ -187,7 +187,7 @@ class ClubAttendanceController extends Controller
     {
         $months = ClubAttendance::where('club_register_id', $request->club_id)
             ->selectRaw('DISTINCT DATE_FORMAT(date, "%Y-%m") as month')
-            ->orderBy('month', 'desc')
+            ->orderBy('month', 'asc')
             ->pluck('month');
         $month = $months ? $months->first() : null;
         if($request->month) {
@@ -203,7 +203,7 @@ class ClubAttendanceController extends Controller
             $query->whereYear('date', $year)
                   ->whereMonth('date', $month);
         })
-        ->orderBy('date', 'desc')
+        ->orderBy('date', 'asc')
         ->get();
         return Inertia::render('MonthlyAttendanceReport', [
             'attendance' => $clubAttendance,

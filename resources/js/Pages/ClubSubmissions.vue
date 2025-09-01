@@ -22,16 +22,16 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="submission, index in props.submissions" :key="index">
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ index + 1 }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ ucWords(removeUnderScore(submission.name ?? '')) }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ fullDate(submission.created_at) }}</td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                    <td class="px-4 py-3 text-sm text-gray-500">{{ index + 1 }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500">{{ ucWords(removeUnderScore(submission.name ?? '')) }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500">{{ fullDate(submission.created_at) }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500">
                         <div class="group relative" :style="{'z-index': 999 - index}">
                             <span class="text-sm font-medium text-blue-600">{{ ucWords(removeUnderScore(submission.status)) }}</span>
-                            <SubmissionTracker :data="submission.submission_trackers" />
+                            <SubmissionTracker :data="submission.submission_trackers" class="min-w-64" />
                         </div>
                     </td>
-                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                    <td class="px-4 py-3 text-sm text-gray-500">
                         <a :href="submission.url" target="_blank" class="text-indigo-600 hover:text-indigo-900">Visit</a>
                     </td>
                     <td v-if="submission.status === 'for_revision'">
@@ -46,7 +46,7 @@
                     </td>
                 </tr>
                 <tr v-if="props.submissions.length === 0" >
-                    <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td colspan="6" class="px-6 py-4 text-sm text-gray-500">
                         No submissions yet.
                     </td>
                 </tr>

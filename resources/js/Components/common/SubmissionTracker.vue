@@ -7,6 +7,7 @@
             <div class="absolute w-2 h-2 bg-green-500 rounded-full -left-1"></div>
             <p class="text-sm text-gray-800 font-semibold">{{ ucWords(removeUnderScore(item.status)) }}</p>
             <p class="text-xs text-gray-500">{{ fullDateTime(item.updated_at) }} - by {{ item.updated_by.name }}</p>
+            <p v-if="item.remarks" class="text-[10px] text-indigo-600 bg-indigo-100 px-1 rounded py-0.5">{{(item.remarks ?? '') }}</p>
         </li>
         <!-- <li class="mb-2 last:mb-0">
             <div class="absolute w-2 h-2 bg-yellow-400 rounded-full -left-1"></div>
