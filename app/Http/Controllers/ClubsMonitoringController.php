@@ -11,9 +11,13 @@ use App\Models\User;
 
 class ClubsMonitoringController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $allAdvisers = ClubAttendance::with('clubRegister.user')
+        $clubType = $request->club_type ?? 'club';
+        $allAdvisers = ClubAttendance::with('clubRegister.user', 'clubRegister.club')
+        ->whereHas('clubRegister.club', function ($q) use ($clubType) {
+            $q->where('type', $clubType);
+        })
         ->get()
         ->pluck('clubRegister.user')
         ->unique('name')
@@ -21,6 +25,9 @@ class ClubsMonitoringController extends Controller
         ->pluck('name');
 
         $attendances = ClubAttendance::with(['clubRegister.club', 'clubRegister.user'])
+        ->whereHas('clubRegister.club', function ($q) use ($clubType) {
+            $q->where('type', $clubType);
+        })
         ->orderBy('date', 'asc')
         ->get()
         ->groupBy('date')

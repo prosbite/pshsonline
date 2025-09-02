@@ -6,6 +6,11 @@
                 <h3 class="text-2xl font-semibold text-gray-800">Clubs Monitoring</h3>
                 <p class="text-gray-600 text-sm">Monitoring of each club</p>
             </div>
+            <select @change="selectClubType" v-model="clubType" required class="border w-1/5 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="" disabled selected>Select ALP Type</option>
+                <option value="club">Club</option>
+                <option value="school_organization">School Organization</option>
+            </select>
         </div>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200">
@@ -58,6 +63,12 @@
                                 <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.e }}</td>
                                 <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.t }}</td>
                             </template>
+                            <td class="px-2 py-2 text-center text-sm border-r"></td>
+                            <td class="px-2 py-2 text-center text-sm border-r"></td>
+                            <td class="px-2 py-2 text-center text-sm border-r"></td>
+                            <td class="px-2 py-2 text-center text-sm border-r"> {{ adviser.totalQ / attendanceCount }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r"> {{ adviser.totalE / attendanceCount }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r"> {{ adviser.totalT / attendanceCount }}</td>
                         </tr>
                     </tbody>
                     </table>
@@ -76,7 +87,8 @@
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { fullDate } from '@/composables/utilities';
-import { computed, onMounted } from 'vue';
+import { router } from '@inertiajs/vue3';
+import { computed, onMounted, ref } from 'vue';
 defineOptions({
     layout: MainLayout
 })
@@ -84,7 +96,10 @@ const props = defineProps({
     attendances: Object,
     advisers: Array,
 })
-
+const clubType = ref('club')
+const selectClubType = () => {
+    router.visit(route('admin.clubs.monitoring', { club_type: clubType.value }), { preserveState: true, preserveScroll: true })
+}
 const sortedData = computed(() => {
     let advisers = props.advisers;
     const attendances = props.attendances;
@@ -92,13 +107,19 @@ const sortedData = computed(() => {
     advisers.forEach((adviser: any, index: number) => {
         let adviserData = {
             adviser: adviser,
-            attendances: {}
+            attendances: {},
+            totalQ: 0,
+            totalE: 0,
+            totalT: 0,
         }
         for (let i in attendances) {
             let count = 0
             attendances[i].forEach((a: any, j: number) => {
                 if (a.adviser === adviser) {
                     adviserData.attendances[i] = a
+                    adviserData.totalQ += a.q
+                    adviserData.totalE += a.e
+                    adviserData.totalT += a.t
                     count++
                 }
             });
@@ -110,12 +131,22 @@ const sortedData = computed(() => {
                     e: 0,
                     t: 0,
                 }
+                adviserData.totalQ += 0
+                adviserData.totalE += 0
+                adviserData.totalT += 0
             }
         }
         finalData.push(adviserData)
     });
     return finalData
 });
+const attendanceCount = computed(() => {
+    let count = 0
+    for (let i in props.attendances) {
+        count++
+    }
+    return count
+})
 </script>
 
 <style>
