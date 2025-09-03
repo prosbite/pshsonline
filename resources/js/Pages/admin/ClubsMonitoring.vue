@@ -66,9 +66,9 @@
                             <td class="px-2 py-2 text-center text-sm border-r"></td>
                             <td class="px-2 py-2 text-center text-sm border-r"></td>
                             <td class="px-2 py-2 text-center text-sm border-r"></td>
-                            <td class="px-2 py-2 text-center text-sm border-r"> {{ adviser.totalQ / attendanceCount }}</td>
-                            <td class="px-2 py-2 text-center text-sm border-r"> {{ adviser.totalE / attendanceCount }}</td>
-                            <td class="px-2 py-2 text-center text-sm border-r"> {{ adviser.totalT / attendanceCount }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalQ / attendanceCount).toFixed(1) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalE / attendanceCount).toFixed(1) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalT / attendanceCount).toFixed(1) }}</td>
                         </tr>
                     </tbody>
                     </table>

@@ -92,6 +92,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/club/submissions', [ClubSubmissionController::class, 'store'])->name('club.submissions.store');
     Route::put('/club/submissions/{submission}', [ClubSubmissionController::class, 'update'])->name('club.submissions.update');
     Route::get('/club/accomplishment/quarterly', [ClubAccomplishmentController::class, 'index'])->name('club.accomplishment.quarterly');
+    Route::get('/club/{id}/monitoring', [ClubsMonitoringController::class, 'show'])->name('club.monitoring.show');
 });
 
 Route::middleware('auth')->group(function () {
