@@ -29,6 +29,7 @@ class ClubsMonitoringController extends Controller
             $q->where('type', $clubType);
         })
         ->orderBy('date', 'asc')
+        ->where('date', '>=', '2025-08-08')
         ->get()
         ->groupBy('date')
         ->map(function ($group) use ($allAdvisers) {
@@ -80,6 +81,7 @@ class ClubsMonitoringController extends Controller
             $q->where('type', $clubType);
         })
         ->orderBy('date', 'asc')
+        ->where('date', '>=', '2025-08-08')
         ->get()
         ->groupBy('date')
         ->map(function ($group) use ($adviser) {
