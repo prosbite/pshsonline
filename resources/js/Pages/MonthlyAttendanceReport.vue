@@ -15,7 +15,7 @@
             <thead>
             <tr>
                 <th rowspan="2" class="border border-black px-2 py-1 w-10">#</th>
-                <th rowspan="2" class="border border-black px-4 py-1">CLUBMEMBERS<br><span class="text-[10px]">(Alphabetical Order; Last Name, First Name)</span></th>
+                <th rowspan="2" class="border border-black px-4 py-1">CLUBMEMBERS<br><span class="text-[10px]"></span></th>
                 <th rowspan="2" class="border border-black px-2 py-1 w-16">GRADE<br>LEVEL</th>
                 <th rowspan="2" class="border border-black px-4 py-1">SECTION</th>
 
@@ -157,7 +157,7 @@
                                     <thead>
                                     <tr>
                                         <th rowspan="2" class="border border-black px-2 py-1 w-10">NO.</th>
-                                        <th rowspan="2" class="border border-black px-4 py-1">OFFICERS / MEMBERS<br><span class="text-[10px]">(Alphabetical Order; Last Name, First Name)</span></th>
+                                        <th rowspan="2" class="border border-black px-4 py-1">OFFICERS / MEMBERS<br><span class="text-[10px]"></span></th>
                                         <th rowspan="2" class="border border-black px-2 py-1 w-16">GRADE<br>LEVEL</th>
                                         <th rowspan="2" class="border border-black px-4 py-1">SECTION</th>
 
@@ -226,15 +226,28 @@
 
                                 <div class="flex flex-col gap-6 mt-6" :class="{ 'page-break-before': breakpoint }">
                                     <div class="flex justify-start">
-                                        <div class="flex flex-col flex-1">
-                                            <span class="mb-6 text-sm">Checked By:</span>
-                                            <span class="font-bold underline text-md uppercase">
-                                                {{ page.props.auth.user.name }}
-                                            </span>
-                                            <span class="text-md">
-                                                {{ page.props?.auth.user?.club_registers?.[0]?.club?.name }} Adviser
-                                            </span>
-                                            <span class="text-sm">Date Printed: <span id="printed-date">{{ new Date().toLocaleString() }}</span></span>
+                                        <div class="flex flex-col gap-4 flex-1">
+                                            <div class="flex flex-col flex-1">
+                                                <span class="mb-6 text-sm">Checked by:</span>
+                                                <span class="font-bold underline text-md uppercase">
+                                                    {{ page.props.auth.user.name }}
+                                                </span>
+                                                <span class="text-md">
+                                                    {{ page.props?.auth.user?.club_registers?.[0]?.club?.name }} Adviser
+                                                </span>
+                                                <span class="text-sm">Date Printed: <span id="printed-date">{{ new Date().toLocaleString() }}</span></span>
+                                            </div>
+
+                                            <div class="flex flex-col flex-1">
+                                                <span class="mb-6 text-sm">Noted by:</span>
+                                                <span class="font-bold underline text-md uppercase">
+                                                    John Ridan D. Dechusa
+                                                </span>
+                                                <span class="text-md">
+                                                    Asst. CID Chief for Student Affairs
+                                                </span>
+                                            </div>
+
                                         </div>
 
                                         <div class="flex flex-col flex-1">
