@@ -165,7 +165,6 @@
                             <!-- List of Activities -->
                             <div class="mb-6">
                                 <p class="font-semibold">List of activities conducted:
-                                <span class="text-red-600">(Generate from Weekly Activity)</span>
                                 </p>
                                 <ol class="list-decimal list-outside pl-5">
                                 <li v-for="activity in props.activities" :key="activity.id">{{ activity.activity }}</li>
@@ -175,7 +174,6 @@
                             <!-- Other Activities -->
                             <div class="mb-6">
                                 <p class="font-semibold">Other Activities:
-                                <span class="text-red-600">(Manual Input)</span>
                                 </p>
                                 <ol class="list-decimal list-outside pl-5">
                                     <li v-for="(acc,index) in removeEmpty(report?.report?.other_accomplishments)" :key="index">
