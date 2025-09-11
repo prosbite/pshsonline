@@ -4,7 +4,7 @@
             <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-8 my-8">
                 <!-- Left: Title -->
                 <div>
-                    <h3 class="text-2xl font-semibold text-gray-800">Delinquent Students</h3>
+                    <h3 class="text-2xl font-semibold text-gray-800">Attendance Infractions</h3>
                     <p class="text-gray-600 text-sm">List of students who are delinquent in their club attendance</p>
                 </div>
                 <select @change="getAttendance($event)" id="attendanceDate" v-model="selectedDate" required class="border w-1/5 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">

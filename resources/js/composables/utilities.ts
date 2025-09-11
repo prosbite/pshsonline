@@ -186,12 +186,12 @@ export function advisersAttendanceStatus() {
 export function submissionType() {
     return [
         {
-            label: 'Accreditation Documents',
-            value: 'accreditation_documents',
+            label: 'Accomplishment Report (Quarterly)',
+            value: 'accomplishment_report',
         },
         {
-            label: 'Reaccreditation Documents',
-            value: 'reaccreditation_documents',
+            label: 'Accreditation Documents',
+            value: 'accreditation_documents',
         },
         {
             label: 'Activity Proposal',
@@ -202,12 +202,16 @@ export function submissionType() {
             value: 'activity_report',
         },
         {
-            label: 'Attendance Report',
-            value: 'attendance_report',
+            label: 'Attendance Summary Report (Semestral)',
+            value: 'attendance_summary_report',
         },
         {
-            label: 'Summary of Attendance',
-            value: 'summary_of_attendance',
+            label: 'Monthly Attendance Report (Quarterly)',
+            value: 'monthly_attendance_report',
+        },
+        {
+            label: 'Reaccreditation Documents',
+            value: 'reaccreditation_documents',
         },
         {
             label: 'Substitution Plan',
