@@ -8,6 +8,7 @@ use App\Models\ClubAttendance;
 use App\Models\ClubRegister;
 use App\Models\AttendanceDelinquence;
 use App\Models\SchoolYear;
+use App\Models\Learner;
 
 class ClubAttendanceController extends Controller
 {
@@ -209,6 +210,24 @@ class ClubAttendanceController extends Controller
             'attendance' => $clubAttendance,
             'months' => $months,
             'month' => $month,
+        ]);
+    }
+    public function summary(Request $request)
+    {
+        $club = ClubRegister::findOrFail($request->club_register_id);
+        // if ($club->user_id !== auth()->id()) {
+        //     abort(403, 'Unauthorized access.');
+        // }
+        $summary = Learner::with(['clubAttendance'])
+        ->whereHas('clubAttendance', function ($query) use ($request) {
+            $query->where('club_register_id', $request->club_register_id);
+        })
+        ->orderBy('last_name', 'asc')
+        ->get();
+
+        return Inertia::render('ClubAttendanceSummary', [
+            'club' => $club,
+            'attendance' => $summary,
         ]);
     }
 }

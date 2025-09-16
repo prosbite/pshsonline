@@ -16,7 +16,7 @@ class ClubAccomplishmentController extends Controller
         $quarter = Quarter::current();
         $schoolYear = SchoolYear::current();
         $clubRegisterId = auth()->user()->clubRegisters[0]?->id;
-        $activities = ClubAttendance::where('club_register_id', $clubRegisterId)->where('school_year_id', $schoolYear->id)->get();
+        $activities = ClubAttendance::where('date', '>=', '2025-08-01')->where('club_register_id', $clubRegisterId)->where('school_year_id', $schoolYear->id)->get();
         $report = AccomplishmentReport::where('club_register_id', $clubRegisterId)->where('quarter_id', $quarter->id)->where('school_year_id', $schoolYear->id)->first();
         return Inertia::render('ClubAccomplishment', [
             'activities' => $activities,

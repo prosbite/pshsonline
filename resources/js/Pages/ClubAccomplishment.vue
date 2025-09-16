@@ -21,7 +21,7 @@
 
             <!-- Activities -->
             <div class="mb-8">
-            <h2 class="font-semibold text-gray-800 mb-2">List of activities conducted:</h2>
+            <h2 class="font-semibold text-gray-800 mb-2">List of activities conducted: <span class="text-sm italic text-red-500">(Generated from weekly activities)</span></h2>
             <ol class="list-decimal pl-6 space-y-2 text-gray-700">
                 <li v-for="activity in props.activities" :key="activity.id">
                     <input :value="activity.activity" type="text" class="w-full border rounded-lg px-3 py-2" disabled>
@@ -31,7 +31,7 @@
 
             <!-- Other Accomplishments -->
             <div class="mb-8">
-            <h2 class="font-semibold text-gray-800 mb-2">Other Accomplishments:</h2>
+            <h2 class="font-semibold text-gray-800 mb-2">Other Accomplishments: <span class="text-sm italic text-red-500">(Input participation in competitions, winnings, major and community-based activities conducted, activities not conducted during ALP time.)</span></h2>
             <ol class="list-decimal pl-6 space-y-2 text-gray-700">
                 <li v-for="(acc,index) in report?.report?.other_accomplishments" :key="index">
                     <input v-model="report.report.other_accomplishments[index]" type="text" class="w-full border rounded-lg px-3 py-2">
@@ -48,7 +48,8 @@
                     <input v-model="report.report.strengths[index]" type="text" class="w-full border rounded px-3 py-2">
                 </li>
                 </ul>
-                <div class="flex justify-end mt-2">
+                <div class="flex justify-between mt-2">
+                <span v-if="!hasStrengths" class="text-sm italic text-red-500">Provide atleast 1 strength.</span>
                 <button @click="report.report.strengths.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
                 </div>
             </div>
@@ -59,7 +60,8 @@
                     <input v-model="report.report.weaknesses[index]" type="text" class="w-full border rounded px-3 py-2">
                 </li>
                 </ul>
-                <div class="flex justify-end mt-2">
+                <div class="flex justify-between mt-2">
+                <span v-if="!hasWeaknesses" class="text-sm italic text-red-500">Provide atleast 1 weakness.</span>
                 <button @click="report.report.weaknesses.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
                 </div>
             </div>
@@ -70,7 +72,8 @@
                     <input v-model="report.report.gaps[index]" type="text" class="w-full border rounded px-3 py-2">
                 </li>
                 </ul>
-                <div class="flex justify-end mt-2">
+                <div class="flex justify-between mt-2">
+                <span v-if="!hasGaps" class="text-sm italic text-red-500">Provide atleast 1 gap.</span>
                 <button @click="report.report.gaps.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
                 </div>
             </div>
@@ -81,7 +84,8 @@
                     <input v-model="report.report.recommendations[index]" type="text" class="w-full border rounded px-3 py-2">
                 </li>
                 </ul>
-                <div class="flex justify-end mt-2">
+                <div class="flex justify-between mt-2">
+                <span v-if="!hasRecommendations" class="text-sm italic text-red-500">Provide atleast 1 recommendation.</span>
                 <button @click="report.report.recommendations.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
                 </div>
             </div>
@@ -306,6 +310,27 @@ const print = () => {
 const removeEmpty = (arr: string[]) => {
     return arr?.filter((item) => item !== '' && item !== null && item !== undefined)
 }
+const checkRequiredFields = (field:string) => {
+    let isValid = false
+    report?.value?.report[field]?.forEach((item:string) => {
+        if (item !== '') {
+            isValid = true
+        }
+    })
+    return isValid
+}
+const hasStrengths = computed(() => {
+    return checkRequiredFields('strengths')
+})
+const hasWeaknesses = computed(() => {
+    return checkRequiredFields('weaknesses')
+})
+const hasGaps = computed(() => {
+    return checkRequiredFields('gaps')
+})
+const hasRecommendations = computed(() => {
+    return checkRequiredFields('recommendations')
+})
 onMounted(() => {
     report.value = props.report ?? {
         id: null,
