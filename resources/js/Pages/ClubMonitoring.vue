@@ -140,7 +140,7 @@
                             {{ fullDate(index) }}
                         </th>
                         <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                            Printed Copies
+                            Printed (1st Quarter)
                         </th>
                         <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold">
                             Average
@@ -172,9 +172,9 @@
                                 <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.e }}</td>
                                 <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.t }}</td>
                             </template>
-                            <td class="px-2 py-2 text-center text-sm border-r"></td>
-                            <td class="px-2 py-2 text-center text-sm border-r"></td>
-                            <td class="px-2 py-2 text-center text-sm border-r"></td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ props.submission ? 5 : '-' }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ props.submission ? 5 : '-' }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ props.submission ? 5 : '-' }}</td>
                             <td class="px-2 py-2 text-center text-sm border-r font-bold"> {{ (adviser.totalQ / attendanceCount).toFixed(1) }}</td>
                             <td class="px-2 py-2 text-center text-sm border-r font-bold"> {{ (adviser.totalE / attendanceCount).toFixed(1) }}</td>
                             <td class="px-2 py-2 text-center text-sm border-r font-bold"> {{ (adviser.totalT / attendanceCount).toFixed(1) }}</td>

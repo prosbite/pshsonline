@@ -148,11 +148,13 @@
                                     <span class="text-center block uppercase">
                                         Monthly Attendance Report
                                     </span>
-                                    <span class="text-center block text-sm uppercase mb-4">
+                                    <span class="text-center block text-sm uppercase mb-2">
                                         For the month of {{ formatMonth(selectedMonth) }}
                                     </span>
                                 </div>
-
+                                <div class="mt-2 text-xs mb-4">
+                                    <strong>Legend:</strong> T - Tardy, CC - Cutting Class, EA - Excused Absence, UA - Unexcused Absence
+                                </div>
                                 <table class="table-auto border-collapse w-full border border-black text-xs">
                                     <thead>
                                     <tr>

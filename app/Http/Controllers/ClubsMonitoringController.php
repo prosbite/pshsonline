@@ -8,6 +8,7 @@ use App\Models\ClubAttendance;
 use App\Models\ClubRegister;
 use App\Models\Club;
 use App\Models\User;
+use App\Models\Submission;
 
 class ClubsMonitoringController extends Controller
 {
@@ -110,10 +111,12 @@ class ClubsMonitoringController extends Controller
             }
             return $mergedData;
         });
+        $submission = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report', 'status' => 'completed'])->first();
         return Inertia::render('ClubMonitoring', [
             'club' => $club,
             'advisers' => $adviser,
             'attendances' => $attendances,
+            'submission' => $submission,
         ]);
     }
 }
