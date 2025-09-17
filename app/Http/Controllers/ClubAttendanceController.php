@@ -188,6 +188,7 @@ class ClubAttendanceController extends Controller
     {
         $months = ClubAttendance::where('club_register_id', $request->club_id)
             ->selectRaw('DISTINCT DATE_FORMAT(date, "%Y-%m") as month')
+            ->where('date', '>=','2025-08-01')
             ->orderBy('month', 'asc')
             ->pluck('month');
         $month = $months ? $months->first() : null;
