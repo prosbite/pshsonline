@@ -127,12 +127,13 @@
                         <td>
                             <div id="printContent" class="w-full flex flex-col bg-white">
                                 <div class="flex-col w-full font-bold text-lg mb-6">
-                                    <span class="text-center block uppercase mb-1 text-2xl">
+                                    <span class="text-center block uppercase leading-tight text-2xl">
                                         Attendance Infractions
                                     </span>
-                                    <span class="text-center block uppercase mb-4">
+                                    <span class="text-center block uppercase leading-tight">
                                         {{ fullDate(selectedDate) }}
                                     </span>
+                                    <span class="text-center block w-full text-sm leading-tight">S.Y. {{ page.props.sy.year_start }} - {{ page.props.sy.year_end }}</span>
                                 </div>
 
                                 <table class="w-full border border-black border-collapse mb-10 text-sm">

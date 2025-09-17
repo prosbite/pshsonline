@@ -138,19 +138,20 @@
                     <tr>
                         <td>
                             <div id="printContent" class="w-full flex flex-col bg-white">
-                                <div class="flex-col w-full font-bold text-lg mb-6">
+                                <div class="flex-col w-full font-bold text-lg mb-6 leading-tight">
                                     <span class="text-center block uppercase">
                                         {{ club?.club?.name }}
                                     </span>
                                     <span class="text-center block uppercase mb-4">
 
                                     </span>
-                                    <span class="text-center block uppercase">
-                                        Monthly Attendance Report
+                                    <span class="text-center block uppercase leading-tight">
+                                        Attendance Report
                                     </span>
-                                    <span class="text-center block text-sm uppercase mb-2">
+                                    <span class="text-center block text-sm leading-tight">
                                         For the month of {{ formatMonth(selectedMonth) }}
                                     </span>
+                                    <span class="text-center block w-full text-sm leading-tight">S.Y. {{ page.props.sy.year_start }} - {{ page.props.sy.year_end }}</span>
                                 </div>
                                 <span class="font-bold mb-2">
                                     Club: {{ page.props.auth.user.club_registers?.[0]?.club?.name }}
