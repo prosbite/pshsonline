@@ -15,7 +15,7 @@
             <thead>
             <tr>
                 <th rowspan="2" class="border border-black px-2 py-1 w-10">#</th>
-                <th rowspan="2" class="border border-black px-4 py-1">CLUBMEMBERS<br><span class="text-[10px]"></span></th>
+                <th rowspan="2" class="border border-black px-4 py-1">CLUB MEMBERS<br><span class="text-[10px]"></span></th>
                 <th rowspan="2" class="border border-black px-2 py-1 w-16">GRADE<br>LEVEL</th>
                 <th rowspan="2" class="border border-black px-4 py-1">SECTION</th>
 
@@ -130,7 +130,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
+                            <img src="/img/socotec_logo.png" class="h-[70px]" alt="Pisay Logo">
                         </th>
                     </tr>
                 </thead>
@@ -152,9 +152,9 @@
                                         For the month of {{ formatMonth(selectedMonth) }}
                                     </span>
                                 </div>
-                                <div class="mt-2 text-xs mb-4">
-                                    <strong>Legend:</strong> T - Tardy, CC - Cutting Class, EA - Excused Absence, UA - Unexcused Absence
-                                </div>
+                                <span class="font-bold mb-2">
+                                    Club: {{ page.props.auth.user.club_registers?.[0]?.club?.name }}
+                                </span>
                                 <table class="table-auto border-collapse w-full border border-black text-xs">
                                     <thead>
                                     <tr>
@@ -225,7 +225,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
-
+                                <div class="mt-2 text-xs mb-4">
+                                    <strong>Legend:</strong> T - Tardy, CC - Cutting Class, EA - Excused Absence, UA - Unexcused Absence
+                                </div>
                                 <div class="flex flex-col gap-6 mt-6" :class="{ 'page-break-before': breakpoint }">
                                     <div class="flex justify-start">
                                         <div class="flex flex-col gap-4 flex-1">

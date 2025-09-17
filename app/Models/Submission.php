@@ -31,7 +31,7 @@ class Submission extends Model
 
     public static function getSubmissionsForClubRegister($clubRegisterId)
     {
-        return self::where('club_register_id', $clubRegisterId)->with('submissionTrackers.updatedBy')->get();
+        return self::where('club_register_id', $clubRegisterId)->with('submissionTrackers.updatedBy')->orderBy('created_at', 'desc')->get();
     }
 
     public function submissionTrackers()
