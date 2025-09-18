@@ -130,7 +130,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <img src="/img/socotec_logo.png" class="h-[70px]" alt="Pisay Logo">
+                            <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
                         </th>
                     </tr>
                 </thead>
