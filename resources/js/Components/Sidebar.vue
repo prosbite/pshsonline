@@ -8,6 +8,73 @@
             <span class="text-lg">Dashboard</span>
         </Link>
 
+
+
+        <div v-if="user.role === 'supervisor'">
+            <Link :href="route('enrollment')" :class="{'bg-gray-700': route().current('enrollment')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                <svg class="w-6 h-6 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                </svg>
+                <span class="text-md">Enrollment</span>
+            </Link>
+            <div class="relative">
+                <a href="#" @click.prevent="isSupervisorAttendanceGroupOpen = !isSupervisorAttendanceGroupOpen"
+                    :class="{'bg-gray-700': route().current('club-management')}"
+                    class="flex items-center justify-between space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-6 h-6 text-white-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="text-lg">Attendance</span>
+                    </div>
+                    <!-- Arrow icon for expand/collapse -->
+                    <svg :class="{'rotate-90': isSupervisorAttendanceGroupOpen}" class="w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </a>
+                <!-- Sub-items -->
+                <div v-if="isSupervisorAttendanceGroupOpen" class="pl-8 space-y-2 mt-2">
+                    <!-- New "Manage" link for the main Club Management page -->
+                    <Link :href="route('admin.attendance')" :class="{'bg-gray-700': route().current('admin.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                        <span class="text-md">ClubAttendance</span>
+                    </Link>
+                    <Link :href="route('admin.advisers.attendance')" :class="{'bg-gray-700': route().current('admin.advisers.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                        <span class="text-md">Advisers Attendance</span>
+                    </Link>
+                </div>
+            </div>
+            <Link :href="route('admin.clubs.monitoring')" :class="{'bg-gray-700': route().current('admin.clubs.monitoring')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                <!-- save as monitor-monitoring-outline.svg -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 64 64" aria-hidden="true">
+                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <!-- monitor outline -->
+                    <rect x="6" y="8" width="52" height="34" rx="3" ry="3"/>
+                    <!-- stand -->
+                    <rect x="26" y="44" width="12" height="4" rx="1" ry="1" fill="currentColor"/>
+                    <rect x="22" y="48" width="20" height="2" rx="1" ry="1" fill="currentColor"/>
+                    <!-- internal grid lines (subtle) -->
+                    <g stroke-opacity="0.25">
+                    <line x1="10" y1="18" x2="54" y2="18"/>
+                    <line x1="10" y1="26" x2="54" y2="26"/>
+                    <line x1="10" y1="34" x2="54" y2="34"/>
+                    </g>
+                    <!-- line chart -->
+                    <polyline points="12,34 20,24 28,30 36,20 44,28 52,22" />
+                    <!-- data points -->
+                    <g fill="currentColor" stroke="none">
+                    <circle cx="20" cy="24" r="1.6"/>
+                    <circle cx="28" cy="30" r="1.6"/>
+                    <circle cx="36" cy="20" r="1.6"/>
+                    <circle cx="44" cy="28" r="1.6"/>
+                    </g>
+                </g>
+                </svg>
+
+                <span class="text-md">IPCR Rating</span>
+            </Link>
+        </div>
+
+
+
+
         <!-- Club Management Group Header (now a toggle) -->
         <div v-if="user.role === 'admin'" class="relative">
             <a href="#" @click.prevent="isEnrollmentGroupOpen = !isEnrollmentGroupOpen"
@@ -144,7 +211,7 @@
                     </g>
                     </svg>
 
-                    <span class="text-md">Monitoring</span>
+                    <span class="text-md">IPCR Rating</span>
                 </Link>
                 <!-- <a href="#" :class="{'bg-gray-700': route().current('attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                     <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -310,6 +377,7 @@ const page = usePage()
 const isClubManagementGroupOpen = ref(false)
 const isClubReportsGroupOpen = ref(false)
 const isEnrollmentGroupOpen = ref(false)
+const isSupervisorAttendanceGroupOpen = ref(false)
 const activePage = ref('dashboard');
 const user = computed(() => page.props.auth.user)
 const navTitle = computed(() => {
@@ -349,6 +417,10 @@ onMounted(() => {
     if (route().current('club.attendance.monthly') ||
         route().current('club.accomplishment.quarterly')) {
         isClubReportsGroupOpen.value = true
+    }
+    if (route().current('admin.attendance') ||
+        route().current('admin.advisers.attendance')) {
+        isSupervisorAttendanceGroupOpen.value = true
     }
 })
 </script>

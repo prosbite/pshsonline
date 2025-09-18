@@ -4,7 +4,7 @@
             <div class="flex flex-col gap-2">
                 <h3 class="text-2xl font-semibold text-gray-800">Advisers Attendance Records</h3>
             </div>
-            <button @click="makeAttendance" class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
+            <button v-if="page?.props?.auth?.user?.role === 'admin'" @click="makeAttendance" class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
                 Record New Attendance
             </button>
         </div>
@@ -40,7 +40,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">{{ totalMembers(attendance) }}</td>
                         <td class="flex items-center px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                             <Link :href="route('admin.advisers.attendance.show', { id: attendance.id })" class="text-indigo-600 mr-3 hover:text-indigo-900">View</Link>
-                            <Link :href="route('admin.advisers.attendance.edit', { id: attendance.id })" class="text-green-600 hover:text-green-900">Edit</Link>
+                            <Link v-if="page?.props?.auth?.user?.role === 'admin'" :href="route('admin.advisers.attendance.edit', { id: attendance.id })" class="text-green-600 hover:text-green-900">Edit</Link>
                         </td>
                     </tr>
                 </tbody>

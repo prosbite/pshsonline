@@ -51,7 +51,7 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {{ ucWords(learner?.learner?.gender) }}
             </td>
-            <td>
+            <td v-if="page?.props?.auth?.user?.role === 'admin'">
                 <button @click="editLearner(learner)" class="px-3 py-1 bg-green-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                     <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="6" y="6" width="30" height="36" rx="2" ry="2" stroke="black" stroke-width="2" fill="white"/>
@@ -150,6 +150,9 @@ import SleekModal from '../SleekModal.vue';
 import { router } from '@inertiajs/vue3';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import { usePage } from '@inertiajs/vue3';
+
+const page = usePage()
 const selectedSection = ref(1)
 const selectedLearner = ref({
     last_name: '',

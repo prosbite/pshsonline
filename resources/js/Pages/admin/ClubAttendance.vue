@@ -21,7 +21,7 @@
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
                         <th v-for="status in attendanceStatus()" :key="status.value" scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ status.abv }}</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th v-if="page?.props?.auth?.user?.role === 'admin'" scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white">
@@ -38,7 +38,7 @@
                         <td class="px-6 py-4 text-sm text-yellow-500 text-center">{{ totalTardy(attendance) }}</td>
                         <td class="px-6 py-4 text-sm text-gray-500 text-center">{{ totalCuttingClasses(attendance) }}</td>
                         <td class="px-6 py-4 text-sm text-black text-center">{{ totalMembers(attendance) }}</td>
-                        <td class="px-6 py-4 text-sm text-black text-center">
+                        <td v-if="page?.props?.auth?.user?.role === 'admin'" class="px-6 py-4 text-sm text-black text-center">
                             <div class="flex gap-2 items-center">
                                 <Link :href="route('club.attendance.edit', { attendance_id: attendance.id })" class="text-green-600 hover:text-green-900">Edit</Link>
                                 <button @click="deleteAttendance(attendance.id)" class="text-red-600 hover:text-red-900">Delete</button>
@@ -62,6 +62,7 @@ import MainLayout from '@/Layouts/MainLayout.vue';
 import { attendanceStatus, fullDate, fullDateTime } from '@/composables/utilities';
 import { onMounted, ref, computed } from 'vue';
 import { router, Link } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 
 defineOptions({
     layout: MainLayout
@@ -80,6 +81,7 @@ const props = defineProps({
         required: true
     }
 })
+const page = usePage()
 const selectedDate = ref("")
 const totalPresent = (attendance: any) => {
     return attendance.club_attendance_learner.filter((learner: any) => learner.pivot.status === 'present').length

@@ -248,7 +248,7 @@ const externalink = computed(() => {
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <!-- Card: Clubs You Manage -->
-                    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                    <!-- <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
                         <h2 class="text-xl font-semibold text-gray-800 mb-4">Clubs You Manage</h2>
                         <ul class="list-disc list-inside text-gray-600 space-y-2">
                             <li v-for="club in clubs" :key="club.id">
@@ -256,10 +256,10 @@ const externalink = computed(() => {
                             </li>
                         </ul>
                         <a href="#" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium transition-colors duration-200">View All Clubs &rarr;</a>
-                    </div>
+                    </div> -->
 
                     <!-- Card: Today's Events/Meetings -->
-                    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                    <!-- <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
                         <h2 class="text-xl font-semibold text-gray-800 mb-4">Today's Events/Meetings</h2>
                         <ul class="text-gray-600 space-y-2">
                             <li v-for="(event, index) in todayEvents" :key="index" class="flex items-center space-x-2">
@@ -268,10 +268,10 @@ const externalink = computed(() => {
                             </li>
                         </ul>
                         <a href="#" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium transition-colors duration-200">View Calendar &rarr;</a>
-                    </div>
+                    </div> -->
 
                     <!-- Card: Recent Attendance Submissions -->
-                    <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                    <!-- <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
                         <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Attendance Submissions</h2>
                         <ul class="text-gray-600 space-y-2">
                             <li v-for="(submission, index) in recentAttendance" :key="index">
@@ -279,7 +279,7 @@ const externalink = computed(() => {
                             </li>
                         </ul>
                         <a href="#" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium transition-colors duration-200">View All Submissions &rarr;</a>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Quick Links Section -->
