@@ -108,7 +108,7 @@
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 <div class="flex flex-col justify-start items-start gap-2">
                                     10. 100% of the Quarterly Accomplishment Report prepared according to the standards set and submitted to ALP coordinator as scheduled
-                                    <button @click="detailsModal = true" class="bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700 hover:bg-opacity-90 transition-colors duration-300 text-xs self-start">View Details</button>
+                                    <button @click="showRatingModal = true" class="bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700 hover:bg-opacity-90 transition-colors duration-300 text-xs self-start">View Details</button>
                                 </div>
                             </td>
                             <td class="px-2 py-2 text-center text-sm border-r">-</td>
@@ -128,6 +128,7 @@
                 </div>
             </div>
         </div>
+        <SubmissionRatingModal :show="showRatingModal" @close="showRatingModal = false" :accomplishment="props.accomplishment" />
         <AttendanceMonitoringModal :show="showMonitoringModal" @close="showMonitoringModal = false" :sortedData="sortedData" :attendances="attendances" :advisers="advisers" :club="club" :submission="submission" :attendanceCount="attendanceCount" />
     </div>
 </template>
@@ -139,6 +140,7 @@ import { fullDate } from '@/composables/utilities';
 import { router } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
 import AttendanceMonitoringModal from '@/Components/modals/AttendanceMonitoringModal.vue';
+import SubmissionRatingModal from '@/Components/modals/SubmissionRatingModal.vue';
 defineOptions({
     layout: MainLayout
 })
@@ -147,9 +149,11 @@ const props = defineProps({
     advisers: Array,
     club: Object,
     submission: Object,
+    accomplishment: Object,
 })
 const clubType = ref('club')
 const showMonitoringModal = ref(false)
+const showRatingModal = ref(false)
 const selectClubType = () => {
     router.visit(route('admin.clubs.monitoring', { club_type: clubType.value }), { preserveState: true, preserveScroll: true })
 }

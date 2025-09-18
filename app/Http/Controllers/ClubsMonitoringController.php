@@ -115,11 +115,13 @@ class ClubsMonitoringController extends Controller
             return $mergedData;
         });
         $submission = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report', 'status' => 'completed'])->first();
+        $accomplishment = Submission::where(['club_register_id' => $id, 'name' => 'accomplishment_report', 'status' => 'completed'])->first();
         return Inertia::render('ClubMonitoring', [
             'club' => $club,
             'advisers' => $adviser,
             'attendances' => $attendances,
             'submission' => $submission,
+            'accomplishment' => $accomplishment,
         ]);
     }
 }

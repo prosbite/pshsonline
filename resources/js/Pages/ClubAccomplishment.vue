@@ -1,120 +1,130 @@
 <template>
     <div class="w-fullmx-auto bg-white p-10 rounded-2xl shadow-lg border">
+        <form action="" @submit.prevent="saveReport">
             <div>
-                <!-- Header -->
-            <div class="text-center border-b pb-4 mb-6">
-            <h1 class="text-xl font-bold text-gray-800">Accomplishment Report</h1>
-            <p class="text-gray-600">{{ props.quarter?.quarter }}<sup>{{ quarterAbv[props.quarter?.quarter - 1] }}</sup> Quarter S.Y. {{ props.schoolYear?.year_start }}-{{ props.schoolYear?.year_end }}</p>
-            </div>
+                    <!-- Header -->
+                <div class="text-center border-b pb-4 mb-6">
+                <h1 class="text-xl font-bold text-gray-800">Accomplishment Report</h1>
+                <p class="text-gray-600">{{ props.quarter?.quarter }}<sup>{{ quarterAbv[props.quarter?.quarter - 1] }}</sup> Quarter S.Y. {{ props.schoolYear?.year_start }}-{{ props.schoolYear?.year_end }}</p>
+                </div>
 
-            <!-- Info -->
-            <div class="grid grid-cols-2 gap-6 mb-6">
-            <div>
-                <label class="block font-semibold text-gray-700">ALP:</label>
-                <input :value="page.props?.auth?.user?.club_registers?.[0]?.club?.name" type="text" disabled class="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div>
-                <label class="block font-semibold text-gray-700">Adviser:</label>
-                <input :value="page.props?.auth?.user?.name" type="text" disabled class="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            </div>
+                <!-- Info -->
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block font-semibold text-gray-700">ALP:</label>
+                    <input :value="page.props?.auth?.user?.club_registers?.[0]?.club?.name" type="text" disabled class="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-gray-700">Adviser:</label>
+                    <input :value="page.props?.auth?.user?.name" type="text" disabled class="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                </div>
 
-            <!-- Activities -->
-            <div class="mb-8">
-            <h2 class="font-semibold text-gray-800 mb-2">List of activities conducted: <span class="text-sm italic text-red-500">(Generated from weekly activities)</span></h2>
-            <ol class="list-decimal pl-6 space-y-2 text-gray-700">
-                <li v-for="activity in props.activities" :key="activity.id">
-                    <input :value="activity.activity" type="text" class="w-full border rounded-lg px-3 py-2" disabled>
-                </li>
-            </ol>
-            </div>
+                <!-- Activities -->
+                <div class="mb-8">
+                <h2 class="font-semibold text-gray-800 mb-2">List of activities conducted: <span class="text-sm italic text-red-500">(Generated from weekly activities)</span></h2>
+                <ol class="list-decimal pl-6 space-y-2 text-gray-700">
+                    <li v-for="activity in props.activities" :key="activity.id">
+                        <input :value="activity.activity" type="text" class="w-full border rounded-lg px-3 py-2" disabled>
+                    </li>
+                </ol>
+                </div>
 
-            <!-- Other Accomplishments -->
-            <div class="mb-8">
-            <h2 class="font-semibold text-gray-800 mb-2">Other Accomplishments: <span class="text-sm italic text-red-500">(Input participation in competitions, winnings, major and community-based activities conducted, activities not conducted during ALP time.)</span></h2>
-            <ol class="list-decimal pl-6 space-y-2 text-gray-700">
-                <li v-for="(acc,index) in report?.report?.other_accomplishments" :key="index">
-                    <input v-model="report.report.other_accomplishments[index]" type="text" class="w-full border rounded-lg px-3 py-2">
-                </li>
-            </ol>
-            </div>
+                <!-- Other Accomplishments -->
+                <div class="mb-8">
+                <h2 class="font-semibold text-gray-800 mb-2">Other Accomplishments: <span class="text-sm italic text-red-500">(Input participation in competitions, winnings, major and community-based activities conducted, activities not conducted during ALP time.)</span></h2>
+                <ol class="list-decimal pl-6 space-y-2 text-gray-700">
+                    <li v-for="(acc,index) in report?.report?.other_accomplishments" :key="index">
+                        <input v-model="report.report.other_accomplishments[index]" type="text" class="w-full border rounded-lg px-3 py-2">
+                    </li>
+                </ol>
+                </div>
 
-            <!-- Separate Sections Instead of Table -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-gray-50 border rounded-lg p-4">
-                <h3 class="font-semibold text-gray-800 mb-2">Strengths</h3>
-                <ul class="space-y-2">
-                <li v-for="(strength, index) in report?.report?.strengths" :key="index">
-                    <input v-model="report.report.strengths[index]" type="text" class="w-full border rounded px-3 py-2">
-                </li>
-                </ul>
-                <div class="flex justify-between mt-2">
-                <span v-if="!hasStrengths" class="text-sm italic text-red-500">Provide atleast 1 strength.</span>
-                <button @click="report.report.strengths.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
+                <!-- Separate Sections Instead of Table -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 border rounded-lg p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Strengths</h3>
+                    <ul class="space-y-2">
+                    <li v-for="(strength, index) in report?.report?.strengths" :key="index">
+                        <input :required="!hasStrengths" v-model="report.report.strengths[index]" type="text" class="w-full border rounded px-3 py-2">
+                    </li>
+                    </ul>
+                    <div class="flex justify-between mt-2">
+                        <div>
+                            <span v-if="!hasStrengths" class="text-sm italic text-red-500">Provide at least 1 strength.</span>
+                        </div>
+                        <button @click="report.report.strengths.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
+                    </div>
+                </div>
+                <div class="bg-gray-50 border rounded-lg p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Weaknesses</h3>
+                    <ul class="space-y-2">
+                    <li v-for="(weakness, index) in report?.report?.weaknesses" :key="index">
+                        <input :required="!hasWeaknesses" v-model="report.report.weaknesses[index]" type="text" class="w-full border rounded px-3 py-2">
+                    </li>
+                    </ul>
+                    <div class="flex justify-between mt-2">
+                        <div>
+                            <span v-if="!hasWeaknesses" class="text-sm italic text-red-500">Provide at least 1 weakness.</span>
+                        </div>
+                        <button @click="report.report.weaknesses.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
+                    </div>
+                </div>
+                <div class="bg-gray-50 border rounded-lg p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Gaps</h3>
+                    <ul class="space-y-2">
+                    <li v-for="(gap, index) in report?.report?.gaps" :key="index">
+                        <input :required="!hasGaps" v-model="report.report.gaps[index]" type="text" class="w-full border rounded px-3 py-2">
+                    </li>
+                    </ul>
+                    <div class="flex justify-between mt-2">
+                        <div>
+                            <span v-if="!hasGaps" class="text-sm italic text-red-500">Provide at least 1 gap.</span>
+                        </div>
+                        <button @click="report.report.gaps.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
+                    </div>
+                </div>
+                <div class="bg-gray-50 border rounded-lg p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Recommendations</h3>
+                    <ul class="space-y-2">
+                    <li v-for="(recommendation, index) in report?.report?.recommendations" :key="index">
+                        <input :required="!hasRecommendations" v-model="report.report.recommendations[index]" type="text" class="w-full border rounded px-3 py-2">
+                    </li>
+                    </ul>
+                    <div class="flex justify-between mt-2">
+                        <div>
+                            <span v-if="!hasRecommendations" class="text-sm italic text-red-500">Provide at least 1 recommendation.</span>
+                        </div>
+                        <button @click="report.report.recommendations.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
+                    </div>
                 </div>
             </div>
-            <div class="bg-gray-50 border rounded-lg p-4">
-                <h3 class="font-semibold text-gray-800 mb-2">Weaknesses</h3>
-                <ul class="space-y-2">
-                <li v-for="(weakness, index) in report?.report?.weaknesses" :key="index">
-                    <input v-model="report.report.weaknesses[index]" type="text" class="w-full border rounded px-3 py-2">
-                </li>
-                </ul>
-                <div class="flex justify-between mt-2">
-                <span v-if="!hasWeaknesses" class="text-sm italic text-red-500">Provide atleast 1 weakness.</span>
-                <button @click="report.report.weaknesses.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
-                </div>
+            <div class="flex justify-end mt-12 gap-4">
+                <button v-if="props?.report?.id" @click.prevent="print" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="w-5 h-5 text-white dark:text-white"
+                    >
+                        <!-- Printer body -->
+                        <path d="M6 9V2h12v7" />
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                        <rect x="6" y="14" width="12" height="8" rx="2" ry="2" />
+                        <!-- Paper coming out -->
+                        <line x1="8" y1="18" x2="8" y2="22" />
+                        <line x1="16" y1="18" x2="16" y2="22" />
+                    </svg>
+                    Print
+                </button>
+                <button type="submit" class="px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Save Report</button>
             </div>
-            <div class="bg-gray-50 border rounded-lg p-4">
-                <h3 class="font-semibold text-gray-800 mb-2">Gaps</h3>
-                <ul class="space-y-2">
-                <li v-for="(gap, index) in report?.report?.gaps" :key="index">
-                    <input v-model="report.report.gaps[index]" type="text" class="w-full border rounded px-3 py-2">
-                </li>
-                </ul>
-                <div class="flex justify-between mt-2">
-                <span v-if="!hasGaps" class="text-sm italic text-red-500">Provide atleast 1 gap.</span>
-                <button @click="report.report.gaps.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
-                </div>
             </div>
-            <div class="bg-gray-50 border rounded-lg p-4">
-                <h3 class="font-semibold text-gray-800 mb-2">Recommendations</h3>
-                <ul class="space-y-2">
-                <li v-for="(recommendation, index) in report?.report?.recommendations" :key="index">
-                    <input v-model="report.report.recommendations[index]" type="text" class="w-full border rounded px-3 py-2">
-                </li>
-                </ul>
-                <div class="flex justify-between mt-2">
-                <span v-if="!hasRecommendations" class="text-sm italic text-red-500">Provide atleast 1 recommendation.</span>
-                <button @click="report.report.recommendations.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
-                </div>
-            </div>
-        </div>
-        <div class="flex justify-end mt-12 gap-4">
-            <button @click.prevent="print" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="w-5 h-5 text-white dark:text-white"
-                >
-                    <!-- Printer body -->
-                    <path d="M6 9V2h12v7" />
-                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                    <rect x="6" y="14" width="12" height="8" rx="2" ry="2" />
-                    <!-- Paper coming out -->
-                    <line x1="8" y1="18" x2="8" y2="22" />
-                    <line x1="16" y1="18" x2="16" y2="22" />
-                </svg>
-                Print
-            </button>
-            <button @click="saveReport" class="px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">Save Report</button>
-        </div>
-    </div>
+        </form>
     <!-- Footer -->
     <!-- <div class="mt-10">
       <p class="font-semibold">Prepared by:</p>
@@ -177,8 +187,9 @@
 
                             <!-- Other Activities -->
                             <div class="mb-6">
-                                <p class="font-semibold">Other Activities:
+                                <p class="font-semibold">Other Accomplishments:
                                 </p>
+                                <span class="text-gray-600 italic" v-if="removeEmpty(report?.report?.other_accomplishments)?.length === 0">No other accomplishments</span>
                                 <ol class="list-decimal list-outside pl-5">
                                     <li v-for="(acc,index) in removeEmpty(report?.report?.other_accomplishments)" :key="index">
                                         <span v-if="acc">{{ acc }}</span>
@@ -341,10 +352,10 @@ onMounted(() => {
         remarks: null,
         report: {
             other_accomplishments: ['', '', ''],
-            strengths: ['', ''],
-            weaknesses: ['', ''],
-            gaps: ['', ''],
-            recommendations: ['', ''],
+            strengths: [''],
+            weaknesses: [''],
+            gaps: [''],
+            recommendations: [''],
         },
     }
     if (props.report) {
