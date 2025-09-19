@@ -252,3 +252,15 @@ export function submissionProgression() {
 export function replicate(object: any) {
     return JSON.parse(JSON.stringify(object));
 }
+
+export function formatDateUTC(isoString: any) {
+    return new Date(isoString).toISOString().split("T")[0];
+}
+
+export function formatDateLocal(isoString: any) {
+    const date = new Date(isoString);
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+}

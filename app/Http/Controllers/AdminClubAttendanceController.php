@@ -13,6 +13,7 @@ class AdminClubAttendanceController extends Controller
     public function index(Request $request)
     {
         $date = $request->date ?? Carbon::now()->format('Y-m-d');
+        // dd($date);
         $attendanceDates = ClubAttendance::select('date')->distinct()->orderBy('date', 'desc')->get()->pluck('date');
         if($attendanceDates->count() > 0 && !$request->date){
             $date = $attendanceDates->first();

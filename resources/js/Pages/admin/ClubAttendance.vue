@@ -8,7 +8,7 @@
             </div>
             <select @change="getAttendance($event)" id="attendanceDate" v-model="selectedDate" required class="border w-1/5 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 <option value="" disabled selected>Select Date</option>
-                <option v-for="(date,index) in props.attendanceDates" :key="index" :value="date">{{ fullDate(date) }}</option>
+                <option v-for="(date,index) in props.attendanceDates" :key="index" :value="formatDateLocal(date)">{{ fullDate(date) }}</option>
             </select>
         </div>
 
@@ -59,7 +59,7 @@
 
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { attendanceStatus, fullDate, fullDateTime } from '@/composables/utilities';
+import { attendanceStatus, fullDate, fullDateTime, formatDateLocal } from '@/composables/utilities';
 import { onMounted, ref, computed } from 'vue';
 import { router, Link } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
@@ -115,7 +115,7 @@ const sortedAttendanceByClub = computed(() => {
     })
 })
 onMounted(() => {
-    selectedDate.value = props.date
+    selectedDate.value = formatDateLocal(props.date)
 })
 </script>
 
