@@ -44,7 +44,7 @@ class ClubsMonitoringController extends Controller
                         'adviser' => $adviser,
                         'club' => $adviserData->clubRegister->club->name,
                         'q' => 5,
-                        'e' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 4,
+                        'e' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 2,
                         't' => $adviserData->date->isSameDay($adviserData->created_at) ? 5 : 1,
                     ]);
                 } else {
@@ -99,7 +99,7 @@ class ClubsMonitoringController extends Controller
                         'adviser' => $adviser,
                         'club' => $adviserData->clubRegister->club->name,
                         'q' => 5,
-                        'e' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 4,
+                        'e' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 2,
                         't' => $adviserData->date->isSameDay($adviserData->created_at) ? 5 : 1,
                     ]);
                 } else {

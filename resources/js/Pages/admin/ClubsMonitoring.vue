@@ -55,6 +55,11 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
+                        <tr v-if="sortedData.length === 0">
+                            <td colspan="12" class="text-center py-4">
+                                No Data
+                            </td>
+                        </tr>
                         <tr v-for="adviser,index in sortedData" class="hover:bg-gray-50">
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200">
                                 {{ adviser.adviser }}
