@@ -122,6 +122,12 @@
                         </h2>
                         <div class="flex flex-col pl-4">
                             <p>
+                                <b>Scheduled date: </b> Within the day (via Portal)
+                            </p>
+                            <p>
+                                <b>Printed copies: </b> 3rd WD of the following quarter
+                            </p>
+                            <p>
                                 <b>5-</b> on schedule
                             </p>
                             <p>

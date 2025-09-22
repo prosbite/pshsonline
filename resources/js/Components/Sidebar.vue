@@ -34,7 +34,7 @@
                 <div v-if="isSupervisorAttendanceGroupOpen" class="pl-8 space-y-2 mt-2">
                     <!-- New "Manage" link for the main Club Management page -->
                     <Link :href="route('admin.attendance')" :class="{'bg-gray-700': route().current('admin.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
-                        <span class="text-md">ClubAttendance</span>
+                        <span class="text-md">Club Attendance</span>
                     </Link>
                     <Link :href="route('admin.advisers.attendance')" :class="{'bg-gray-700': route().current('admin.advisers.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                         <span class="text-md">Advisers Attendance</span>
