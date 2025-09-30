@@ -9,6 +9,7 @@ use App\Models\ClubRegister;
 use App\Models\Club;
 use App\Models\User;
 use App\Models\Submission;
+use Carbon\Carbon;
 
 class ClubsMonitoringController extends Controller
 {
@@ -42,6 +43,8 @@ class ClubsMonitoringController extends Controller
                 if ($adviserData) {
                     $mergedData->push([
                         'adviser' => $adviser,
+                        'submitted_on' => Carbon::parse($adviserData->created_at)->format('Y-m-d'),
+                        'edited_on' => Carbon::parse($adviserData->updated_at)->format('Y-m-d'),
                         'club' => $adviserData->clubRegister->club->name,
                         'q' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 4,
                         'e' => 5,
@@ -50,6 +53,8 @@ class ClubsMonitoringController extends Controller
                 } else {
                     $mergedData->push([
                         'adviser' => $adviser,
+                        'submitted_on' => null,
+                        'edited_on' => null,
                         'club' => null,
                         'q' => 1,
                         'e' => 2,
@@ -98,6 +103,8 @@ class ClubsMonitoringController extends Controller
                     $mergedData->push([
                         'adviser' => $adviser,
                         'club' => $adviserData->clubRegister->club->name,
+                        'submitted_on' => Carbon::parse($adviserData->created_at)->format('Y-m-d'),
+                        'edited_on' => Carbon::parse($adviserData->updated_at)->format('Y-m-d'),
                         'q' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 4,
                         'e' => 5,
                         't' => $adviserData->date->isSameDay($adviserData->created_at) ? 5 : 1,
@@ -105,6 +112,8 @@ class ClubsMonitoringController extends Controller
                 } else {
                     $mergedData->push([
                         'adviser' => $adviser,
+                        'submitted_on' => null,
+                        'edited_on' => null,
                         'club' => null,
                         'q' => 1,
                         'e' => 2,
