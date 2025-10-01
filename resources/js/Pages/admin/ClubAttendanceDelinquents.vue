@@ -9,7 +9,7 @@
                 </div>
                 <select @change="getAttendance($event)" id="attendanceDate" v-model="selectedDate" required class="border w-1/5 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                     <option value="" disabled selected>Select Date</option>
-                    <option v-for="(date,index) in props.attendanceDates" :key="index" :value="date">{{ fullDate(date) }}</option>
+                    <option v-for="(date,index) in props.attendanceDates" :key="index" :value="formatDateLocal(date)">{{ fullDate(date) }}</option>
                 </select>
             </div>
 
@@ -216,7 +216,7 @@
     </template>
 
 <script lang="ts" setup>
-import { ucWords, middleInitials, fullDate, removeUnderScore, exportToCSV } from '@/composables/utilities';
+import { ucWords, middleInitials, fullDate, removeUnderScore, exportToCSV, formatDateLocal } from '@/composables/utilities';
 import { computed, onMounted, ref } from 'vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { Link, usePage } from '@inertiajs/vue3';
@@ -264,7 +264,7 @@ const printDelinquents = () => {
     window.print();
 }
 onMounted(() => {
-    selectedDate.value = props.date
+    selectedDate.value = formatDateLocal(props.date)
 })
 </script>
 
