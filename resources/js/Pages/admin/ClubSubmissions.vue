@@ -18,7 +18,7 @@
                     <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Club</th>
                     <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider hover:text-blue-500 cursor-pointer" @click="sortBy = 'status'">Status</th>
                     <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Link</th>
-                    <th scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    <th v-if="page?.props?.auth?.user?.role === 'admin'" scope="col" class="px-4 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
@@ -41,7 +41,7 @@
                     <td class="px-4 py-3 text-md text-gray-500">
                         <a :href="submission.url" target="_blank" class="text-indigo-400 hover:text-indigo-600">Visit</a>
                     </td>
-                    <td class="px-4 py-3 text-md h-full text-gray-500">
+                    <td v-if="page?.props?.auth?.user?.role === 'admin'" class="px-4 py-3 text-md h-full text-gray-500">
                         <div class="flex flex-col items-start justify-center gap-2">
                             <div class="flex gap-2">
                                 <button
@@ -93,7 +93,7 @@
     import MainLayout from '@/Layouts/MainLayout.vue';
     import { submissionType, removeUnderScore, ucWords, fullDateTime } from '@/composables/utilities';
     import { ref, computed } from 'vue';
-    import { useForm } from '@inertiajs/vue3';
+    import { useForm, usePage } from '@inertiajs/vue3';
     import { toast } from 'vue3-toastify';
     import 'vue3-toastify/dist/index.css';
     import SubmissionTracker from '@/Components/common/SubmissionTracker.vue';
@@ -101,6 +101,7 @@
     defineOptions({
         layout: MainLayout,
     });
+    const page = usePage()
     const sortBy = ref('created_at')
     const currentStatus = ref({})
     const currentSubmission = ref({})

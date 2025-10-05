@@ -1,13 +1,14 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, usePage } from '@inertiajs/vue3';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 const props = defineProps({
     users: Array
 })
+const page = usePage()
 const edit = ref(false);
 const user = ref({
     id: '',
@@ -127,7 +128,7 @@ onMounted(() => {
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th v-if="page?.props?.auth?.user?.role === 'admin'" scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -150,7 +151,7 @@ onMounted(() => {
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ user.email }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+                            <td v-if="page?.props?.auth?.user?.role === 'admin'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
                                 <button @click="editUser(user)" class="px-3 py-1 bg-green-500 mr-3 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                                     <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect x="6" y="6" width="30" height="36" rx="2" ry="2" stroke="black" stroke-width="2" fill="white"/>

@@ -111,9 +111,9 @@
                                     <button @click="showRatingModal = true" class="bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700 hover:bg-opacity-90 transition-colors duration-300 text-xs self-start">View Details</button>
                                 </div>
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm">-</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">

@@ -34,7 +34,7 @@
                 <div v-if="isSupervisorAttendanceGroupOpen" class="pl-8 space-y-2 mt-2">
                     <!-- New "Manage" link for the main Club Management page -->
                     <Link :href="route('admin.attendance')" :class="{'bg-gray-700': route().current('admin.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
-                        <span class="text-md">ClubAttendance</span>
+                        <span class="text-md">Club Attendance</span>
                     </Link>
                     <Link :href="route('admin.advisers.attendance')" :class="{'bg-gray-700': route().current('admin.advisers.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                         <span class="text-md">Advisers Attendance</span>
@@ -69,6 +69,56 @@
                 </svg>
 
                 <span class="text-md">IPCR Rating</span>
+            </Link>
+
+            <div class="relative">
+                <a href="#" @click.prevent="isClubReportsGroupOpen = !isClubReportsGroupOpen"
+                    :class="{'bg-gray-700': route().current('club-management')}"
+                    class="flex items-center justify-between space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <div class="flex items-center space-x-3">
+                        <!-- Reports icon: document with bar chart -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-labelledby="reportsTitle reportsDesc" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
+                            <title id="reportsTitle">Reports</title>
+                            <desc id="reportsDesc">Document with a bar chart representing reports</desc>
+
+                            <!-- document with folded corner -->
+                            <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" />
+                            <path d="M14 3v5a1 1 0 0 0 1 1h5" />
+
+                            <!-- bar chart pushed down -->
+                            <rect x="7.2" y="14" width="1.6" height="3.5" rx="0.3" />
+                            <rect x="10.2" y="12.5" width="1.6" height="5.5" rx="0.3" />
+                            <rect x="13.2" y="11" width="1.6" height="6.9" rx="0.3" />
+                        </svg>
+
+                        <span class="text-lg">Reports</span>
+                    </div>
+                    <!-- Arrow icon for expand/collapse -->
+                    <svg :class="{'rotate-90': isClubReportsGroupOpen}" class="w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </a>
+                <!-- Sub-items -->
+                <div v-if="isClubReportsGroupOpen" class="pl-8 space-y-2 mt-2">
+                    <Link :href="route('admin.attendance.delinquents')" :class="{'bg-gray-700': route().current('admin.attendance.delinquents')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3m0 4h.01M10.29 3.86L1.82 18a1.5 1.5 0 001.29 2.25h18.78a1.5 1.5 0 001.29-2.25L13.71 3.86a1.5 1.5 0 00-2.42 0z"/>
+                        </svg>
+                        <span class="text-md">Attendance Infractions</span>
+                    </Link>
+                </div>
+            </div>
+
+            <Link :href="route('admin.club.submissions')" :class="{'bg-gray-700': route().current('admin.club.submissions')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 9h-4V3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V9zm-6 9h-2v-4H8l4-4 4 4h-3v4z"/>
+                </svg>
+                <span class="text-md">Submissions</span>
+            </Link>
+            <Link :href="route('users')" :class="{'bg-gray-700': route().current('users')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-200 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6 5.87v-2a4 4 0 00-3-3.87m6 5.87v-2a4 4 0 013-3.87M15 11a3 3 0 100-6 3 3 0 000 6zM9 11a3 3 0 100-6 3 3 0 000 6z" />
+                </svg>
+                <span class="text-lg">Users</span>
             </Link>
         </div>
 
@@ -415,7 +465,8 @@ onMounted(() => {
         isClubManagementGroupOpen.value = true
     }
     if (route().current('club.attendance.monthly') ||
-        route().current('club.accomplishment.quarterly')) {
+        route().current('club.accomplishment.quarterly') ||
+        route().current('admin.attendance.delinquents')) {
         isClubReportsGroupOpen.value = true
     }
     if (route().current('admin.attendance') ||

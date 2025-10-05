@@ -10,6 +10,7 @@
                 <option value="" disabled selected>Select ALP Type</option>
                 <option value="club">Club</option>
                 <option value="school_organization">School Organization</option>
+                <option value="student_organization">Student Organization</option>
             </select>
         </div>
 
@@ -54,6 +55,11 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
+                        <tr v-if="sortedData.length === 0">
+                            <td colspan="12" class="text-center py-4">
+                                No Data
+                            </td>
+                        </tr>
                         <tr v-for="adviser,index in sortedData" class="hover:bg-gray-50">
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200">
                                 {{ adviser.adviser }}
@@ -75,9 +81,60 @@
                 </div>
 
                 <div class="mt-4 text-sm text-gray-600 space-y-1">
-                    <p><span class="font-medium">Q:</span> 5 by default</p>
-                    <p><span class="font-medium">E:</span> 5 by default</p>
-                    <p><span class="font-medium">T:</span> 5 on the day; beyond: 1</p>
+                    <div>
+                        <h2 class="font-bold">
+                            Quality:
+                        </h2>
+                        <div class="flex flex-col pl-4">
+                            <p>
+                                <b>5-</b> Well organized; no lapse in grammar or error in content
+                            </p>
+                            <p>
+                                <b>4-</b> one or two minor errors
+                            </p>
+                            <p>
+                                <b>3-</b> More than two minor errors
+                            </p>
+                            <p>
+                                <b>2-</b> one or two major errors; major revision needed
+                            </p>
+                            <p>
+                                <b>1-</b> Needs total revision
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="font-bold">
+                            Efficiency:
+                        </h2>
+                        <div class="flex flex-col pl-4">
+                            <p>
+                                <b>5-</b> Met targets for accomplishments requiring 100% of the targets
+                            </p>
+                            <p>
+                                <b>2-</b> Fell short of the targets for accomplishments requiring 100% of the targets
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="font-bold">
+                            Timeliness:
+                        </h2>
+                        <div class="flex flex-col pl-4">
+                            <p>
+                                <b>Scheduled date: </b> Within the day (via Portal)
+                            </p>
+                            <p>
+                                <b>Printed copies: </b> 3rd WD of the following quarter
+                            </p>
+                            <p>
+                                <b>5-</b> on schedule
+                            </p>
+                            <p>
+                                <b>1-</b> beyond schedule
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

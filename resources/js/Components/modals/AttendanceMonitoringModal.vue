@@ -10,8 +10,12 @@
                     <th rowspan="2" class="px-4 py-3 text-left text-sm font-semibold border-r border-indigo-400">
                         Target
                     </th>
-                    <th v-for="attendance,index in attendances" colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                        {{ fullDate(index) }}
+                    <th v-for="attendance,index in attendances" colspan="3" class="px-4 py-2 text-left text-sm font-semibold border-r border-indigo-400">
+                        <div class="flex flex-col">
+                            <span class="leading-snug text-center">{{ fullDate(index) }}</span>
+                            <span class="leading-snug text-[10px] font-normal text-indigo-300">Submitted: {{ fullDate(attendance?.[0]?.submitted_on) }}</span>
+                            <span class="leading-snug text-[10px] font-normal text-indigo-300">Edited: {{ fullDate(attendance?.[0]?.edited_on) }}</span>
+                        </div>
                     </th>
                     <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
                         Printed (1st Quarter)

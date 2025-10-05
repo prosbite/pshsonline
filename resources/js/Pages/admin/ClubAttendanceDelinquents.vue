@@ -9,7 +9,7 @@
                 </div>
                 <select @change="getAttendance($event)" id="attendanceDate" v-model="selectedDate" required class="border w-1/5 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                     <option value="" disabled selected>Select Date</option>
-                    <option v-for="(date,index) in props.attendanceDates" :key="index" :value="date">{{ fullDate(date) }}</option>
+                    <option v-for="(date,index) in props.attendanceDates" :key="index" :value="formatDateLocal(date)">{{ fullDate(date) }}</option>
                 </select>
             </div>
 
@@ -61,7 +61,7 @@
             </table>
           </div>
           <div class="no-print flex justify-end items-center p-4 py-8 gap-4">
-                <button @click.prevent="downloadCSV" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
+                <button v-if="page?.props?.auth?.user?.role === 'admin'" @click.prevent="downloadCSV" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white hover:text-green-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <!-- File icon with folded corner -->
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -73,7 +73,7 @@
 
                     Download CSV
                 </button>
-                <button @click.prevent="printDelinquents" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
+                <button v-if="page?.props?.auth?.user?.role === 'admin'" @click.prevent="printDelinquents" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -216,7 +216,7 @@
     </template>
 
 <script lang="ts" setup>
-import { ucWords, middleInitials, fullDate, removeUnderScore, exportToCSV } from '@/composables/utilities';
+import { ucWords, middleInitials, fullDate, removeUnderScore, exportToCSV, formatDateLocal } from '@/composables/utilities';
 import { computed, onMounted, ref } from 'vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { Link, usePage } from '@inertiajs/vue3';
@@ -264,7 +264,7 @@ const printDelinquents = () => {
     window.print();
 }
 onMounted(() => {
-    selectedDate.value = props.date
+    selectedDate.value = formatDateLocal(props.date)
 })
 </script>
 

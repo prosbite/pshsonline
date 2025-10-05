@@ -9,6 +9,7 @@ use App\Models\ClubRegister;
 use App\Models\Club;
 use App\Models\User;
 use App\Models\Submission;
+use Carbon\Carbon;
 
 class ClubsMonitoringController extends Controller
 {
@@ -30,7 +31,7 @@ class ClubsMonitoringController extends Controller
             $q->where('type', $clubType);
         })
         ->orderBy('date', 'asc')
-        ->where('date', '>=', '2025-08-08')
+        ->where('date', '>=', '2025-08-01')
         ->get()
         ->groupBy('date')
         ->map(function ($group) use ($allAdvisers) {
@@ -42,18 +43,22 @@ class ClubsMonitoringController extends Controller
                 if ($adviserData) {
                     $mergedData->push([
                         'adviser' => $adviser,
+                        'submitted_on' => Carbon::parse($adviserData->created_at)->format('Y-m-d'),
+                        'edited_on' => Carbon::parse($adviserData->updated_at)->format('Y-m-d'),
                         'club' => $adviserData->clubRegister->club->name,
-                        'q' => 5,
-                        'e' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 4,
+                        'q' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 4,
+                        'e' => 5,
                         't' => $adviserData->date->isSameDay($adviserData->created_at) ? 5 : 1,
                     ]);
                 } else {
                     $mergedData->push([
                         'adviser' => $adviser,
+                        'submitted_on' => null,
+                        'edited_on' => null,
                         'club' => null,
-                        'q' => 0,
-                        'e' => 0,
-                        't' => 0,
+                        'q' => 1,
+                        'e' => 2,
+                        't' => 1,
                     ]);
                 }
             }
@@ -85,7 +90,7 @@ class ClubsMonitoringController extends Controller
             $q->where('type', $clubType);
         })
         ->orderBy('date', 'asc')
-        ->where('date', '>=', '2025-08-08')
+        ->where('date', '>=', '2025-08-01')
         ->get()
         ->groupBy('date')
         ->map(function ($group) use ($adviser) {
@@ -98,17 +103,21 @@ class ClubsMonitoringController extends Controller
                     $mergedData->push([
                         'adviser' => $adviser,
                         'club' => $adviserData->clubRegister->club->name,
-                        'q' => 5,
-                        'e' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 4,
+                        'submitted_on' => Carbon::parse($adviserData->created_at)->format('Y-m-d'),
+                        'edited_on' => Carbon::parse($adviserData->updated_at)->format('Y-m-d'),
+                        'q' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 4,
+                        'e' => 5,
                         't' => $adviserData->date->isSameDay($adviserData->created_at) ? 5 : 1,
                     ]);
                 } else {
                     $mergedData->push([
                         'adviser' => $adviser,
+                        'submitted_on' => null,
+                        'edited_on' => null,
                         'club' => null,
-                        'q' => 0,
-                        'e' => 0,
-                        't' => 0,
+                        'q' => 1,
+                        'e' => 2,
+                        't' => 1,
                     ]);
                 }
             }
