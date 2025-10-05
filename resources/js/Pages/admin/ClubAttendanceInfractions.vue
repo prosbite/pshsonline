@@ -22,7 +22,7 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr
-                  v-for="(infraction, index) in props.infractions" :key="infraction.id"
+                  v-for="(infraction, index) in sortedInfractions" :key="infraction.id"
                   class="hover:bg-gray-100 cursor-pointer"
                 >
                     <td class="px-4 py-4 text-sm font-medium text-gray-900">
@@ -66,4 +66,9 @@ const page = usePage();
 const props = defineProps({
     infractions: Array,
 })
+const sortedInfractions = computed(() => {
+    return props.infractions.sort((a, b) => {
+        return b.club_attendance.length - a.club_attendance.length;
+    });
+});
 </script>
