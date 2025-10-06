@@ -22,7 +22,7 @@
         </div>
 
         <div class="overflow-x-auto rounded-lg">
-            <ClubsMonitoringTarget5 v-if="targetType === 5" :attendances="props.attendances" :advisers="props.advisers" />
+            <ClubsMonitoringTarget5 v-if="targetType === 5" :attendances="props.attendances" :advisers="props.advisers" :monthly_attendance_reports="props.monthly_attendance_reports"/>
             <ClubsMonitoringTarget10 v-if="targetType === 10" :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/>
         </div>
     </div>
@@ -41,6 +41,7 @@ const props = defineProps({
     attendances: Object,
     advisers: Array,
     accomplishment_reports: Array,
+    monthly_attendance_reports: Array,
 })
 const clubType = ref('club')
 const targetType = ref(5)

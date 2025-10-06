@@ -53,9 +53,9 @@
                         <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.e }}</td>
                         <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.t }}</td>
                     </template>
-                    <td class="px-2 py-2 text-center text-sm border-r"></td>
-                    <td class="px-2 py-2 text-center text-sm border-r"></td>
-                    <td class="px-2 py-2 text-center text-sm border-r"></td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '1' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '1' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '1' }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalQ / attendanceCount).toFixed(1) }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalE / attendanceCount).toFixed(1) }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalT / attendanceCount).toFixed(1) }}</td>
@@ -130,6 +130,7 @@ import { fullDate } from '@/composables/utilities';
 const props = defineProps({
     attendances: Object,
     advisers: Array,
+    monthly_attendance_reports: Array,
 })
 const attendanceCount = computed(() => {
     let count = 0
@@ -138,6 +139,9 @@ const attendanceCount = computed(() => {
     }
     return count
 })
+const hasMonthlyAttendanceReport = (adviser: string) => {
+    return props.monthly_attendance_reports.some((report: any) => report.user.name === adviser)
+}
 const sortedData = computed(() => {
     let advisers = props.advisers;
     const attendances = props.attendances;
