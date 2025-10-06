@@ -58,27 +58,33 @@ class AdminClubAttendanceController extends Controller
         return redirect()->back();
     }
 
-    public function infractions() {
-        // $infractions = AttendanceDelinquence::with(['clubAttendance.clubRegister.club', 'clubAttendanceLearner.learner.currentEnrollment.section.gradeLevel'])->get();
-        $infractions = Learner::whereHas('clubAttendance', function ($query) {
-            // This closure constrains the join (or WHERE EXISTS) on the pivot table.
+    public function infractions()
+{
+    $infractions = Learner::whereHas('clubAttendance', function ($query) {
+        $query->whereIn('status', [
+            'excused_absence',
+            'unexcused_absence',
+            'cutting_classes'
+        ])
+        ->whereDate('date', '>', '2025-08-14'); // ✅ Add your date condition here
+    })
+    ->with([
+        'clubAttendance' => function ($query) {
             $query->whereIn('status', [
                 'excused_absence',
                 'unexcused_absence',
                 'cutting_classes'
-            ]);
-        })->with(['clubAttendance' => function ($query) {
-            // OPTIONAL: This part ensures only the filtered attendance records are eager-loaded.
-            // If you omit this, ALL attendance records for the matching learners will be loaded,
-            // which is probably not what you want.
-            $query->whereIn('status', [
-                'excused_absence',
-                'unexcused_absence',
-                'cutting_classes'
-            ]);
-        },'clubAttendance.clubRegister.club'])->orderBy('last_name', 'asc')->get();
-        return Inertia::render('admin/ClubAttendanceInfractions', [
-            'infractions' => $infractions,
-        ]);
-    }
+            ])
+            ->whereDate('date', '>', '2025-08-14'); // ✅ Also apply it here to filter loaded data
+        },
+        'clubAttendance.clubRegister.club'
+    ])
+    ->orderBy('last_name', 'asc')
+    ->get();
+
+    return Inertia::render('admin/ClubAttendanceInfractions', [
+        'infractions' => $infractions,
+    ]);
+}
+
 }

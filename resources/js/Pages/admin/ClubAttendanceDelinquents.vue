@@ -128,7 +128,7 @@
                             <div id="printContent" class="w-full flex flex-col bg-white">
                                 <div class="flex-col w-full font-bold text-lg mb-6">
                                     <span class="text-center block uppercase leading-tight text-2xl">
-                                        Attendance Infractions
+                                        ALP Attendance Infractions
                                     </span>
                                     <span class="text-center block uppercase leading-tight">
                                         {{ fullDate(selectedDate) }}

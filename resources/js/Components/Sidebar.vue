@@ -105,6 +105,13 @@
                         </svg>
                         <span class="text-md">Attendance Infractions</span>
                     </Link>
+                    <Link :href="route('admin.attendance.infractions')" :class="{'bg-gray-700': route().current('admin.attendance.infractions')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3m0 4h.01M10.29 3.86L1.82 18a1.5 1.5 0 001.29 2.25h18.78a1.5 1.5 0 001.29-2.25L13.71 3.86a1.5 1.5 0 00-2.42 0z"/>
+                        </svg>
+                        <span class="text-md">Attendance Infractions Summary</span>
+                    </Link>
                 </div>
             </div>
 
