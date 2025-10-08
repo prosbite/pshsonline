@@ -69,7 +69,7 @@ const externalink = computed(() => {
                         </li>
 
                         <!-- <li>
-                            <a href="/pdf/student_org_venues.pdf"
+                            <a href="/pdf/ipcr_summary_rating_2025-2026.pdf"
                                 target="_blank"
                                 class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
                                 <div class="flex items-start space-x-3">
@@ -77,7 +77,7 @@ const externalink = computed(() => {
                                         <rect width="64" height="64" rx="8" fill="#E53E3E"/>
                                         <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="white" font-weight="bold">PDF</text>
                                     </svg>
-                                <span class="text-gray-700 dark:text-gray-200 font-medium">Student Organization Meeting Venue</span>
+                                <span class="text-gray-700 dark:text-gray-200 font-medium">IPCR Summary Rating</span>
                                 </div>
                                 <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -241,6 +241,34 @@ const externalink = computed(() => {
                                     d="M9 5l7 7-7 7"></path>
                             </svg>
                         </a>
+                        </li>
+
+                        <li>
+                            <a href="https://drive.google.com/drive/folders/1fBBBkkTwf7JUIk6CQG2x3SGlqAzTMKlt?usp=sharing"
+                                target="_blank"
+                                class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
+                                <div class="flex items-start space-x-3">
+                                    <!-- File icon - filled style -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-500" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="File">
+                                <title>File</title>
+                                <path d="M3 2.998h10l6 6v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-16a0 0 0 0 1 0 0z" fill="currentColor"/>
+                                <path d="M13 3v5h5" fill="rgba(255,255,255,0.12)"/>
+                                <!-- document lines (white-ish on colored fill) -->
+                                <g fill="#fff" opacity="0.9">
+                                    <rect x="7" y="11" width="6" height="1.2" rx="0.6"/>
+                                    <rect x="7" y="14" width="6" height="1.2" rx="0.6"/>
+                                    <rect x="7" y="17" width="4" height="1.2" rx="0.6"/>
+                                </g>
+                                </svg>
+
+                                <span class="text-gray-700 dark:text-gray-200 font-medium">ALP FILES SY 2025-2026</span>
+                                </div>
+                                <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
                         </li>
 
                     </ul>
