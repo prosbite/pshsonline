@@ -29,14 +29,20 @@
                         {{ index + 1 }}
                     </td>
                     <td class="px-4 py-4 text-sm whitespace-nowrap font-medium text-gray-900">
-                        {{ ucWords(infraction?.last_name ?? '') }}, {{ ucWords(infraction?.first_name ?? '') }} {{ middleInitials(infraction?.middle_name ?? '') }}
+                        <div class="flex flex-col gap-1">
+                            <span>{{ ucWords(infraction?.last_name ?? '') }}, {{ ucWords(infraction?.first_name ?? '') }} {{ middleInitials(infraction?.middle_name ?? '') }}</span>
+                            <span class="text-xs text-gray-500">{{ infraction?.current_enrollment?.section?.grade_level?.grade_level + ' - ' + infraction?.current_enrollment?.section?.section_name }}</span>
+                        </div>
                     </td>
                     <td class="px-4 py-4 text-sm whitespace-nowrap font-medium text-gray-900">
                         {{ ucWords(infraction?.club_attendance?.[0]?.club_register?.club?.name ?? '') }}
                     </td>
                     <td class="px-4 py-4 text-sm whitespace-nowrap font-medium text-gray-900">
                         <div class="flex flex-col gap-1">
-                            <span v-for="(attendance, index) in infraction?.club_attendance" :key="index">{{fullDate(attendance.date) + ' - ' + ucWords(removeUnderScore(attendance?.pivot?.status)) }}</span>
+                            <div v-for="(attendance, index) in infraction?.club_attendance" :key="index" class="flex gap-1 items-center">
+                                <span>{{fullDate(attendance.date) + ' - ' + ucWords(removeUnderScore(attendance?.pivot?.status))}}</span>
+                                <span class="text-xs text-blue-500">{{ ' (' + attendance?.club_register?.club?.name + ')' }}</span>
+                            </div>
                         </div>
                     </td>
                     <td class="px-4 py-4 text-sm whitespace-nowrap font-medium text-gray-900">

@@ -81,7 +81,8 @@ class AdminClubAttendanceController extends Controller
             ])
             ->whereDate('date', '>', '2025-08-14'); // ✅ Also apply it here to filter loaded data
         },
-        'clubAttendance.clubRegister.club'
+        'clubAttendance.clubRegister.club',
+        'currentEnrollment.section.gradeLevel'
     ])
     ->orderBy('last_name', 'asc')
     ->get();
