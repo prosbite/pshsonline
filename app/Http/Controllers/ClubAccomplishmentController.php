@@ -11,18 +11,24 @@ use App\Models\ClubAttendance;
 
 class ClubAccomplishmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $quarter = Quarter::current();
+        $quarterId = $request->quarter;
+        if(!$quarterId) {
+            $quarter = Quarter::current();
+        } else {
+            $quarter = Quarter::find($quarterId);
+        }
         $schoolYear = SchoolYear::current();
         $clubRegisterId = auth()->user()->clubRegisters[0]?->id;
-        $activities = ClubAttendance::where('date', '>=', '2025-08-01')->where('club_register_id', $clubRegisterId)->where('school_year_id', $schoolYear->id)->get();
+        $activities = ClubAttendance::where('date', '>=', $quarter->start_date)->where('date', '<=', $quarter->end_date)->where('club_register_id', $clubRegisterId)->where('school_year_id', $schoolYear->id)->get();
         $report = AccomplishmentReport::where('club_register_id', $clubRegisterId)->where('quarter_id', $quarter->id)->where('school_year_id', $schoolYear->id)->first();
         return Inertia::render('ClubAccomplishment', [
             'activities' => $activities,
             'quarter' => $quarter,
             'schoolYear' => $schoolYear,
             'report' => $report,
+            'quarters' => Quarter::where('school_year_id', $schoolYear->id)->get(),
         ]);
     }
     public function store(Request $request)
