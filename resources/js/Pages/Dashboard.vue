@@ -225,6 +225,24 @@ const externalink = computed(() => {
                         </li>
 
                         <li>
+                        <a href="https://docs.google.com/spreadsheets/d/1i5UphOrwdHU7TMloPOoUS3fpi5oLAglFrfeTqf4rmDo/edit?usp=sharing"
+                            target="_blank"
+                            class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
+                            <div class="flex items-start space-x-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h4l2-4 4 8 2-4h6" />
+                                </svg>
+                            <span class="text-gray-700 dark:text-gray-200 font-medium">Student Representation, Parent Consent, & Waiver Forms Monitoring.</span>
+                            </div>
+                            <svg class="w-5 h-5 text-indigo-400 dark:text-indigo-300" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                        </li>
+
+                        <li>
                         <a href="https://docs.google.com/spreadsheets/d/1sXITfyDINfowCp5hRO9WMh3rF12NHbua/edit?usp=sharing&ouid=103896997284313246840&rtpof=true&sd=true"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition">
