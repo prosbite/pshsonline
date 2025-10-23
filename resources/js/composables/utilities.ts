@@ -39,7 +39,7 @@ export function formatDate(isoString: any) {
 }
 
 export function fullDateTime(date: string) {
-    return new Date(date).toLocaleString('en-US', {
+    return new Date(date).toLocaleString('en-locale', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',

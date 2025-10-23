@@ -79,6 +79,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,super
 
 // Club Adviser Routes
 Route::middleware('auth')->group(function () {
+    Route::get('/club/{club_id}/attendance/infractions', [ClubAttendanceController::class, 'clubAttendanceInfractions'])->name('club.attendance.infractions');
     Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');
     Route::get('/club/{club_register_id}/attendance', [ClubAttendanceController::class, 'index'])->name('club.attendance');
     Route::get('/club/{club_register_id}/attendance/create', [ClubAttendanceController::class, 'create'])->name('club.attendance.create');

@@ -29,7 +29,7 @@
                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ parseInt(index) + 1 }}</td>
                         <td class="flex flex-col gap-0 px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             <span class="font-semibold text-black text-lg">{{ attendance.club_register?.club?.name }}</span>
-                            <span class="text-blue-600 text-sm">{{ fullDateTime(attendance.created_at) }}</span>
+                            <span class="text-blue-600 text-sm">Submitted on {{ fullDateTime(attendance.created_at) }}</span>
                         </td>
                         <td class="px-6 py-4 max-w-[200px] text-sm text-center text-gray-500">{{ attendance.activity }}</td>
                         <td class="px-6 py-4 text-sm text-indigo-500 text-center">{{ totalPresent(attendance) }}</td>
