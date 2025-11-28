@@ -407,6 +407,11 @@
                     <span class="text-md">Accomplishment Report</span>
                 </Link>
             </div>
+            <div v-if="isClubReportsGroupOpen" class="pl-8 space-y-2 mt-2">
+                <Link :href="route('club.attendance.summary', { club_register_id: clubRegisterId })" :class="{'bg-gray-700': route().current('club.attendance.summary')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <span class="text-md">Attendance Summary</span>
+                </Link>
+            </div>
         </div>
 
         <Link v-if="user.role === 'admin'" :href="route('users')" :class="{'bg-gray-700': route().current('users')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
