@@ -54,6 +54,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,super
     Route::post('/club/unregister', [AdminClubController::class, 'unregisterMember'])->name('admin.club.unregister');
     Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
     Route::get('/attendances', [AdminClubAttendanceController::class, 'index'])->name('admin.attendance');
+    Route::get('/attendances/infractions', [AdminClubAttendanceController::class, 'infractions'])->name('admin.attendance.infractions');
     Route::get('/club/attendance/delinquents', [AdminClubAttendanceController::class, 'delinquents'])->name('admin.attendance.delinquents');
     Route::delete('/club/attendance/{id}', [AdminClubAttendanceController::class, 'deleteAttendance'])->name('admin.attendance.delete');
     Route::get('/clubs/submissions', [AdminClubSubmissionController::class, 'index'])->name('admin.club.submissions');
@@ -78,6 +79,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,super
 
 // Club Adviser Routes
 Route::middleware('auth')->group(function () {
+    Route::get('/club/{club_id}/attendance/infractions', [ClubAttendanceController::class, 'clubAttendanceInfractions'])->name('club.attendance.infractions');
     Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');
     Route::get('/club/{club_register_id}/attendance', [ClubAttendanceController::class, 'index'])->name('club.attendance');
     Route::get('/club/{club_register_id}/attendance/create', [ClubAttendanceController::class, 'create'])->name('club.attendance.create');

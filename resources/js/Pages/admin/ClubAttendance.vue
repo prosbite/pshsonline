@@ -29,7 +29,7 @@
                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ parseInt(index) + 1 }}</td>
                         <td class="flex flex-col gap-0 px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             <span class="font-semibold text-black text-lg">{{ attendance.club_register?.club?.name }}</span>
-                            <span class="text-blue-600 text-sm">{{ fullDateTime(attendance.created_at) }}</span>
+                            <span class="text-blue-600 text-sm">Submitted on {{ fullDateTime(attendance.created_at) }}</span>
                         </td>
                         <td class="px-6 py-4 max-w-[200px] text-sm text-center text-gray-500">{{ attendance.activity }}</td>
                         <td class="px-6 py-4 text-sm text-indigo-500 text-center">{{ totalPresent(attendance) }}</td>
@@ -45,6 +45,17 @@
                             </div>
                         </td>
 
+                    </tr>
+                    <tr v-if="noSubmission.length > 0">
+                        <td colspan="8" class="px-6 py-4 whitespace-nowrap text-lg font-bold text-red-500 pt-10">
+                            No attendance yet.
+                        </td>
+                    </tr>
+                    <tr v-for="club,i in noSubmission" :key="club.id" class="hover:bg-gray-100 cursor-pointer">
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ parseInt(i) + 1 }}</td>
+                        <td class="flex flex-col gap-0 px-6 py-4 whitespace-nowrap text-sm text-gray-500" colspan="7">
+                            <span class="font-semibold text-black text-lg">{{ club.club?.name }}</span>
+                        </td>
                     </tr>
                 <tr v-if="props.attendance.length === 0">
                     <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -79,6 +90,10 @@ const props = defineProps({
     date: {
         type: String,
         required: true
+    },
+    clubs: {
+        type: Array,
+        required: true
     }
 })
 const page = usePage()
@@ -112,6 +127,15 @@ const deleteAttendance = (id: number) => {
 const sortedAttendanceByClub = computed(() => {
     return props.attendance.sort((a: any, b: any) => {
         return a.club_register.club.name.localeCompare(b.club_register.club.name)
+    })
+})
+const noSubmission = computed(() => {
+    const clubType = props.attendance?.[0].club_register?.club?.type
+    const result =  props.clubs.filter((club) => {
+        return !props.attendance.some((attendance) => attendance.club_register.id === club.id)
+    })
+    return result.filter((res) => {
+        return res.club.type === clubType
     })
 })
 onMounted(() => {

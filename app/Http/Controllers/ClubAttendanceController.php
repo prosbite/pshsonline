@@ -231,4 +231,16 @@ class ClubAttendanceController extends Controller
             'attendance' => $summary,
         ]);
     }
+    public function clubAttendanceInfractions(Request $request)
+    {
+        $club = ClubRegister::with('club','clubAttendances', 'clubAttendances.clubAttendanceLearner')->findOrFail($request->club_id);
+        // dd($club);
+        // if ($club->user_id !== auth()->id()) {
+        //     abort(403, 'Unauthorized access.');
+        // }
+
+        return Inertia::render('ClubAttendanceInfractions', [
+            'club' => $club,
+        ]);
+    }
 }

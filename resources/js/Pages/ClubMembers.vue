@@ -166,23 +166,24 @@
                 <thead>
                     <tr>
                         <th id="header" class="flex items-center justify-between mb-6">
-                            <div class="flex gap-2 items-center">
+                            <!-- <div class="flex gap-2 items-center">
                                 <img src="/img/pisaylogo.png" class="h-[70px]" alt="Pisay Logo">
                                 <div class="flex flex-col gap-0">
-                                    <span class="text-left">
+                                    <span class="text-left text-xs">
                                         Republic of the Philippines
                                     </span>
-                                    <span class="text-left text-xs leading-normal">
+                                    <b class="text-left text-sm font-bold leading-snug">
+                                        PHILIPPINE SCIENCE HIGH SCHOOL
+                                    </b>
+                                    <span class="text-left text-xs leading-snug">
+                                        CARAGA REGION CAMPUS IN BUTUAN CITY
+                                    </span>
+                                    <b class="text-left text-xs font-bold leading-snug">
                                         DEPARTMENT OF SCIENCE AND TECHNOLOGY
-                                    </span>
-                                    <span class="text-left font-bold text-xs leading-normal">
-                                        PHILIPPINE SCIENCE HIGH SCHOOL CARAGA-REGION CAMPUS
-                                    </span>
-                                    <span class="text-left text-xs leading-normal">
-                                        CURRICULUM AND INSTRUCTION DIVISION
-                                    </span>
+                                    </b>
                                 </div>
-                            </div>
+                            </div> -->
+                            <img src="/img/pisay_header_left.png" class="h-[70px]" alt="Pisay Logo">
                             <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
                         </th>
                     </tr>

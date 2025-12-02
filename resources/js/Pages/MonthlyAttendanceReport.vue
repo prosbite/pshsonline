@@ -113,7 +113,7 @@
                 <thead>
                     <tr>
                         <th id="header" class="flex items-center justify-between mb-6">
-                            <div class="flex gap-2 items-center">
+                            <!-- <div class="flex gap-2 items-center">
                                 <img src="/img/pisaylogo.png" class="h-[70px]" alt="Pisay Logo">
                                 <div class="flex flex-col gap-0">
                                     <span class="text-left">
@@ -129,7 +129,8 @@
                                         CURRICULUM AND INSTRUCTION DIVISION
                                     </span>
                                 </div>
-                            </div>
+                            </div> -->
+                            <img src="/img/pisay_header_left.png" class="h-[70px]" alt="Pisay Logo">
                             <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
                         </th>
                     </tr>

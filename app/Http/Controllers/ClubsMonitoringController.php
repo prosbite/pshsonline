@@ -31,7 +31,7 @@ class ClubsMonitoringController extends Controller
             $q->where('type', $clubType);
         })
         ->orderBy('date', 'asc')
-        ->where('date', '>=', '2025-08-01')
+        ->where('date', '>=', '2025-08-14')
         ->get()
         ->groupBy('date')
         ->map(function ($group) use ($allAdvisers) {
@@ -64,12 +64,17 @@ class ClubsMonitoringController extends Controller
             }
             return $mergedData;
         });
-        $submission = [];
+        $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
+        $accomplishment_reports = [];
+        if($request->target_type && $request->target_type === '10') {
+            $accomplishment_reports = Submission::with(['user'])->where(['name' => 'accomplishment_report', 'status' => 'completed'])->get();
+        }
         // $submission = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report', 'status' => 'completed'])->first();
         return Inertia::render('admin/ClubsMonitoring', [
             'advisers' => $allAdvisers,
             'attendances' => $attendances,
-            'submission' => $submission,
+            'accomplishment_reports' => $accomplishment_reports,
+            'monthly_attendance_reports' => $monthly_attendance_reports,
         ]);
     }
     public function show($id)
@@ -90,7 +95,7 @@ class ClubsMonitoringController extends Controller
             $q->where('type', $clubType);
         })
         ->orderBy('date', 'asc')
-        ->where('date', '>=', '2025-08-01')
+        ->where('date', '>=', '2025-08-14')
         ->get()
         ->groupBy('date')
         ->map(function ($group) use ($adviser) {

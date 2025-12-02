@@ -6,6 +6,9 @@ use App\Models\AttendanceDelinquence;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\ClubAttendance;
+use App\Models\ClubRegister;
+use App\Models\Learner;
+use App\Models\SchoolYear;
 use Carbon\Carbon;
 
 class AdminClubAttendanceController extends Controller
@@ -14,6 +17,7 @@ class AdminClubAttendanceController extends Controller
     {
         $date = $request->date ?? Carbon::now()->format('Y-m-d');
         // dd($date);
+        $clubRegisters = ClubRegister::with('club')->where('school_year_id', SchoolYear::current()->id)->get();
         $attendanceDates = ClubAttendance::select('date')->distinct()->orderBy('date', 'desc')->get()->pluck('date');
         if($attendanceDates->count() > 0 && !$request->date){
             $date = $attendanceDates->first();
@@ -22,7 +26,8 @@ class AdminClubAttendanceController extends Controller
         return Inertia::render('admin/ClubAttendance', [
             'attendance' => $attendance->toArray(),
             'attendanceDates' => $attendanceDates,
-            'date' => $date
+            'date' => $date,
+            'clubs' => $clubRegisters
         ]);
     }
 
@@ -56,4 +61,35 @@ class AdminClubAttendanceController extends Controller
         $attendance->delete();
         return redirect()->back();
     }
+
+    public function infractions()
+{
+    $infractions = Learner::whereHas('clubAttendance', function ($query) {
+        $query->whereIn('status', [
+            'excused_absence',
+            'unexcused_absence',
+            'cutting_classes'
+        ])
+        ->whereDate('date', '>', '2025-08-14'); // ✅ Add your date condition here
+    })
+    ->with([
+        'clubAttendance' => function ($query) {
+            $query->whereIn('status', [
+                'excused_absence',
+                'unexcused_absence',
+                'cutting_classes'
+            ])
+            ->whereDate('date', '>', '2025-08-14'); // ✅ Also apply it here to filter loaded data
+        },
+        'clubAttendance.clubRegister.club',
+        'currentEnrollment.section.gradeLevel'
+    ])
+    ->orderBy('last_name', 'asc')
+    ->get();
+
+    return Inertia::render('admin/ClubAttendanceInfractions', [
+        'infractions' => $infractions,
+    ]);
+}
+
 }

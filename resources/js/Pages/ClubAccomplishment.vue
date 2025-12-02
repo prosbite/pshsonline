@@ -1,5 +1,11 @@
 <template>
     <div class="w-fullmx-auto bg-white p-10 rounded-2xl shadow-lg border">
+        <div class="flex justify-end items-center">
+            <select @change="getQuarterActivities" v-model="selectedQuarter" id="attendanceDate" required class="border w-1/5 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="" disabled selected>Select Quarter</option>
+            <option v-for="(quarter,index) in props.quarters" :key="index" :value="quarter.id">{{ quarter.quarter }}{{ quarterAbv[quarter.quarter - 1] }} Quarter</option>
+            </select>
+        </div>
         <form action="" @submit.prevent="saveReport">
             <div>
                     <!-- Header -->
@@ -32,12 +38,15 @@
 
                 <!-- Other Accomplishments -->
                 <div class="mb-8">
-                <h2 class="font-semibold text-gray-800 mb-2">Other Accomplishments: <span class="text-sm italic text-red-500">(Input participation in competitions, winnings, major and community-based activities conducted, activities not conducted during ALP time.)</span></h2>
-                <ol class="list-decimal pl-6 space-y-2 text-gray-700">
-                    <li v-for="(acc,index) in report?.report?.other_accomplishments" :key="index">
-                        <input v-model="report.report.other_accomplishments[index]" type="text" class="w-full border rounded-lg px-3 py-2">
-                    </li>
-                </ol>
+                    <h2 class="font-semibold text-gray-800 mb-2">Other Accomplishments: <span class="text-sm italic text-red-500">(Input participation in competitions, winnings, major and community-based activities conducted, activities not conducted during ALP time.)</span></h2>
+                    <ol class="list-decimal pl-6 space-y-2 text-gray-700 mb-2">
+                        <li v-for="(acc,index) in report?.report?.other_accomplishments" :key="index">
+                            <input v-model="report.report.other_accomplishments[index]" type="text" class="w-full border rounded-lg px-3 py-2">
+                        </li>
+                    </ol>
+                    <div class="flex justify-end items-center">
+                        <button @click="report.report.other_accomplishments.push('')" class="px-3 py-1 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">+Add</button>
+                    </div>
                 </div>
 
                 <!-- Separate Sections Instead of Table -->
@@ -139,7 +148,7 @@
             <thead>
                 <tr>
                     <th id="header" class="flex items-center justify-between mb-6">
-                        <div class="flex gap-2 items-center">
+                        <!-- <div class="flex gap-2 items-center">
                             <img src="/img/pisaylogo.png" class="h-[70px]" alt="Pisay Logo">
                             <div class="flex flex-col gap-0">
                                 <span class="text-left">
@@ -155,7 +164,8 @@
                                     CURRICULUM AND INSTRUCTION DIVISION
                                 </span>
                             </div>
-                        </div>
+                        </div> -->
+                        <img src="/img/pisay_header_left.png" class="h-[70px]" alt="Pisay Logo">
                         <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
                     </th>
                 </tr>
@@ -289,7 +299,7 @@
 
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { usePage } from '@inertiajs/vue3';
+import { usePage, router } from '@inertiajs/vue3';
 import { onMounted, ref, computed } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import { toast } from 'vue3-toastify'
@@ -299,14 +309,19 @@ defineOptions({
     layout: MainLayout
 })
 const quarterAbv = ref(['st', 'nd', 'rd', 'th'])
+const selectedQuarter = ref('')
 const page = usePage()
 const props = defineProps<{
     report: any,
     quarter: any,
     schoolYear: any,
-    activities: any[]
+    activities: any[],
+    quarters: any[],
 }>()
 const report = ref(null)
+const getQuarterActivities = () => {
+    router.get(route('club.accomplishment.quarterly', {club_id: page.props?.auth.user?.club_registers?.[0]?.id, quarter: selectedQuarter.value}))
+}
 const saveReport = () => {
     const form = useForm(report.value)
     form.post(route('club.accomplishment.quarterly.store'), {
@@ -343,6 +358,7 @@ const hasRecommendations = computed(() => {
     return checkRequiredFields('recommendations')
 })
 onMounted(() => {
+    selectedQuarter.value = props.quarter.id
     report.value = props.report ?? {
         id: null,
         quarter_id: props.quarter.id,

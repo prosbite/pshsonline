@@ -159,7 +159,7 @@
 </template>
 
 <script lang="ts" setup>
-import { fullDate, middleInitials, attendanceStatus, removeUnderScore, ucWords, replicate } from '@/composables/utilities';
+import { fullDate, middleInitials, attendanceStatus, removeUnderScore, ucWords, replicate, formatDate } from '@/composables/utilities';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { usePage, Link, useForm, router } from '@inertiajs/vue3';
 import { onMounted, computed } from 'vue';
@@ -187,6 +187,7 @@ const props = defineProps({
 })
 
 const updateAttendance = () => {
+    attendanceForm.attendance.date = formatDate(attendanceForm.attendance.date)
     attendanceForm.delinquents = replicate(sortedDelinquents.value)
     attendanceForm.put(route('club.attendance.update'), {
         onSuccess: () => {
