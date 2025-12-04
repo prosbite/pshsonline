@@ -186,8 +186,20 @@ export function advisersAttendanceStatus() {
 export function submissionType() {
     return [
         {
-            label: 'Accomplishment Report (Quarterly)',
-            value: 'accomplishment_report',
+            label: 'Accomplishment Report (1st Quarter)',
+            value: 'accomplishment_report_1st_quarter',
+        },
+        {
+            label: 'Accomplishment Report (2nd Quarter)',
+            value: 'accomplishment_report_2nd_quarter',
+        },
+         {
+            label: 'Monthly Attendance Report (1st Quarter)',
+            value: 'monthly_attendance_report_1st_quarter',
+        },
+        {
+            label: 'Monthly Attendance Report (2nd Quarter)',
+            value: 'monthly_attendance_report_2nd_quarter',
         },
         {
             label: 'Accreditation Documents',
@@ -202,12 +214,12 @@ export function submissionType() {
             value: 'activity_report',
         },
         {
-            label: 'Attendance Summary Report (Semestral)',
-            value: 'attendance_summary_report',
+            label: 'Attendance Summary Report (1st Semester)',
+            value: 'attendance_summary_report_1st_semester',
         },
         {
-            label: 'Monthly Attendance Report (Quarterly)',
-            value: 'monthly_attendance_report',
+            label: 'Attendance Summary Report (2nd Semester)',
+            value: 'attendance_summary_report_2nd_semester',
         },
         {
             label: 'Reaccreditation Documents',

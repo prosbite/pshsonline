@@ -14,9 +14,10 @@
                     <option value="student_organization">Student Organization</option>
                 </select>
                 <select @change="selectTargetType" v-model="targetType" required class="border flex-1 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="" disabled selected>Select ALP Type</option>
+                    <option value="" disabled selected>Select Target</option>
                     <option value="5">Target 5</option>
                     <option value="10">Target 10</option>
+                    <option value="11">Target 11</option>
                 </select>
             </div>
         </div>
@@ -24,6 +25,7 @@
         <div class="overflow-x-auto rounded-lg">
             <ClubsMonitoringTarget5 v-if="targetType === 5" :attendances="props.attendances" :advisers="props.advisers" :monthly_attendance_reports="props.monthly_attendance_reports"/>
             <ClubsMonitoringTarget10 v-if="targetType === 10" :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/>
+            <ClubsMonitoringTarget11 v-if="targetType === 11" :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/>
         </div>
     </div>
 </template>
@@ -32,6 +34,7 @@
 import MainLayout from '@/Layouts/MainLayout.vue'
 import ClubsMonitoringTarget5 from '@/Pages/admin/ClubsMonitoringTarget5.vue'
 import ClubsMonitoringTarget10 from '@/Pages/admin/ClubsMonitoringTarget10.vue';
+import ClubsMonitoringTarget11 from '@/Pages/admin/ClubsMonitoringTarget11.vue';
 import { router } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
 defineOptions({
