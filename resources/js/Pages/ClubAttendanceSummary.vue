@@ -13,7 +13,8 @@
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Student Name</th>
                         <th v-for="status in attendanceStatus()" :key="status.value" scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">{{ status.abv }}</th>
-                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">UA and CC</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total UA and CC</th>
+                        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Remarks</th>
                     </tr>
                 </thead>
                 <tbody v-if="props.attendance.length > 0" class="bg-white divide-y divide-gray-200">
@@ -26,6 +27,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-yellow-500">{{ totalTardy(attendance) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">{{ totalCuttingClasses(attendance) }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-red-600">{{ total(attendance) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-black">{{ total(attendance) > 4 ? 'For Community Service' : 'Good Standing' }}</td>
                     </tr>
 
                 </tbody>
@@ -100,6 +102,7 @@
                                         <th class="border border-black px-4 py-1">Tardy</th>
                                         <th class="border border-black px-2 py-1 w-16">CC</th>
                                         <th class="border border-black px-4 py-1">Total UA and CC</th>
+                                        <th class="border border-black px-4 py-1">Remarks</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -112,6 +115,7 @@
                                             <td class="border border-black px-2 py-1 whitespace-nowrap text-center text-sm text-yellow-500">{{ totalTardy(attendance) }}</td>
                                             <td class="border border-black px-2 py-1 text-center">{{ totalCuttingClasses(attendance) }}</td>
                                             <td class="border border-black px-2 py-1 text-center">{{ total(attendance) }}</td>
+                                            <td class="border border-black px-2 py-1 text-center text-xs">{{ total(attendance) > 4 ? 'For Community Service' : 'Good Standing' }}</td>
                                         </tr>
 
                                     <!-- Example row -->
