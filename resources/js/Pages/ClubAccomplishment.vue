@@ -177,7 +177,7 @@
                             <!-- Title -->
                             <div class="text-center mb-8">
                                 <h1 class="font-bold">Accomplishment Report</h1>
-                                <p class="text-gray-600">{{ props.quarter?.quarter }}<sup>{{ quarterAbv[props.quarter?.quarter - 1] }}</sup> Quarter S.Y. {{ props.schoolYear?.year_start }}-{{ props.schoolYear?.year_end }}</p>
+                                <p class="text-gray-600">{{ props.quarter?.quarter }}<sup>{{ quarterAbv[props.quarter?.quarter - 1] }}</sup> Quarter, S.Y. {{ props.schoolYear?.year_start }}-{{ props.schoolYear?.year_end }}</p>
                             </div>
 
                             <!-- ALP & Adviser -->

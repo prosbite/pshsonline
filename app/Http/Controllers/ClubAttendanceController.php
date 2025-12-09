@@ -222,6 +222,7 @@ class ClubAttendanceController extends Controller
         $summary = Learner::with(['clubAttendance'])
         ->whereHas('clubAttendance', function ($query) use ($request) {
             $query->where('club_register_id', $request->club_register_id);
+            $query->where('date', '>=','2025-08-01');
         })
         ->orderBy('last_name', 'asc')
         ->get();
