@@ -219,14 +219,26 @@ class ClubAttendanceController extends Controller
         // if ($club->user_id !== auth()->id()) {
         //     abort(403, 'Unauthorized access.');
         // }
-        $summary = Learner::with(['clubAttendance'])
-        ->whereHas('clubAttendance', function ($query) use ($request) {
-            $query->where('club_register_id', $request->club_register_id);
-            $query->where('date', '>=','2025-08-01');
-            $query->where('date', '<=', '2025-11-30');
-        })
-        ->orderBy('last_name', 'asc')
-        ->get();
+        // $summary = Learner::with(['clubAttendance'])
+        // ->whereHas('clubAttendance', function ($query) use ($request) {
+        //     $query->where('club_register_id', $request->club_register_id);
+        //     $query->where('date', '>=','2025-08-01');
+        //     $query->where('date', '<=', '2025-11-30');
+        // })
+        // ->orderBy('last_name', 'asc')
+        // ->get();
+
+        $summary = Learner::with(['clubAttendance' => function ($query) use ($request) {
+        $query->where('club_register_id', $request->club_register_id)
+              ->whereBetween('date', ['2025-08-01', '2025-11-30']);
+    }])
+    ->whereHas('clubAttendance', function ($query) use ($request) {
+        $query->where('club_register_id', $request->club_register_id)
+              ->whereBetween('date', ['2025-08-01', '2025-11-30']);
+    })
+    ->orderBy('last_name', 'asc')
+    ->get();
+
 
         return Inertia::render('ClubAttendanceSummary', [
             'club' => $club,
