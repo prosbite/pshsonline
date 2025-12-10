@@ -223,6 +223,7 @@ class ClubAttendanceController extends Controller
         ->whereHas('clubAttendance', function ($query) use ($request) {
             $query->where('club_register_id', $request->club_register_id);
             $query->where('date', '>=','2025-08-01');
+            $query->where('date', '<=', '2025-11-30');
         })
         ->orderBy('last_name', 'asc')
         ->get();
