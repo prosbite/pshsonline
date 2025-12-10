@@ -42,17 +42,17 @@
                     <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200">
                         {{ adviser }}
                     </td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '-' }}</td>
 
-                    <td class="px-2 py-2 text-center text-sm border-r"></td>
-                    <td class="px-2 py-2 text-center text-sm border-r"></td>
-                    <td class="px-2 py-2 text-center text-sm border-r"></td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport2(adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport2(adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport2(adviser) ? '5' : '-' }}</td>
 
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '-' }}</td>
                 </tr>
                  <!-- <tr v-if="sortedData.length === 0">
                      <td colspan="12" class="text-center py-4">
@@ -129,9 +129,13 @@
  const props = defineProps({
      advisers: Array,
      accomplishment_reports: Array,
+     accomplishment_reports2: Array,
  })
  const hasAccomplishementReport = (name:string) => {
     return props.accomplishment_reports.some((report) => report.user.name === name)
+ }
+ const hasAccomplishementReport2 = (name:string) => {
+    return props.accomplishment_reports2.some((report) => report.user.name === name)
  }
  </script>
 

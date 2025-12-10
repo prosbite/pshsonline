@@ -30,7 +30,7 @@
                 :monthly_attendance_reports="props.monthly_attendance_reports"
                 :monthly_attendance_reports2="props.monthly_attendance_reports2"
             />
-            <ClubsMonitoringTarget10 v-if="targetType === 10" :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/>
+            <ClubsMonitoringTarget10 v-if="targetType === 10" :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports" :accomplishment_reports2="props.accomplishment_reports2"/>
             <ClubsMonitoringTarget11 v-if="targetType === 11" :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/>
         </div>
     </div>
@@ -50,6 +50,7 @@ const props = defineProps({
     attendances: Object,
     advisers: Array,
     accomplishment_reports: Array,
+    accomplishment_reports2: Array,
     monthly_attendance_reports: Array,
     monthly_attendance_reports2: Array,
 })

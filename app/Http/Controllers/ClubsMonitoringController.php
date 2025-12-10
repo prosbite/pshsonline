@@ -65,6 +65,7 @@ class ClubsMonitoringController extends Controller
             return $mergedData;
         });
         $accomplishment_reports = [];
+        $accomplishment_reports2 = [];
         $monthly_attendance_reports = [];
          $monthly_attendance_reports2 = [];
 
@@ -74,6 +75,7 @@ class ClubsMonitoringController extends Controller
         }
         if($request->target_type && $request->target_type === '10') {
             $accomplishment_reports = Submission::with(['user'])->where(['name' => 'accomplishment_report', 'status' => 'completed'])->get();
+            $accomplishment_reports2 = Submission::with(['user'])->where(['name' => 'accomplishment_report_2nd_quarter', 'status' => 'completed'])->get();
         }
         if($request->target_type && $request->target_type === '11') {
             $accomplishment_reports = Submission::with(['user'])->where(['name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->get();
@@ -83,6 +85,7 @@ class ClubsMonitoringController extends Controller
             'advisers' => $allAdvisers,
             'attendances' => $attendances,
             'accomplishment_reports' => $accomplishment_reports,
+            'accomplishment_reports2' => $accomplishment_reports2,
             'monthly_attendance_reports' => $monthly_attendance_reports,
             'monthly_attendance_reports2' => $monthly_attendance_reports2,
         ]);
