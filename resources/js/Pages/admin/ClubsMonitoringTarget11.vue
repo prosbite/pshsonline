@@ -1,8 +1,8 @@
 <template>
     <div class="min-h-screen">
          <h2 class="text-lg font-semibold text-gray-800 mb-2">
-             Target 11: 100% of the Quarterly Accomplishment Report prepared according to the standards set and submitted to ALP coordinator as scheduled
-             <span class="italic text-gray-600">(Printed copies submitted at the end of the quarter)</span>
+             Target 11: One (1) (f) attendance summary report submitted as scheduled
+             <span class="italic text-gray-600">(Printed copies submitted at the end of the semester)</span>
          </h2>
 
          <div class="overflow-x-auto rounded-lg shadow">
@@ -13,10 +13,10 @@
                      Adviser’s Name
                  </th>
                  <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     1st Semister
+                     1st Semester
                  </th>
                  <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     2nd Semister
+                     2nd Semester
                  </th>
                  <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold">
                      Average
@@ -42,17 +42,17 @@
                     <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200">
                         {{ adviser }}
                     </td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? (isTimely(adviser) ? '5' : '2') : '-' }}</td>
 
                     <td class="px-2 py-2 text-center text-sm border-r"></td>
                     <td class="px-2 py-2 text-center text-sm border-r"></td>
                     <td class="px-2 py-2 text-center text-sm border-r"></td>
 
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '0' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasAccomplishementReport(adviser) ? (isTimely(adviser) ? '5' : '2') : '-' }}</td>
                 </tr>
                  <!-- <tr v-if="sortedData.length === 0">
                      <td colspan="12" class="text-center py-4">
@@ -124,7 +124,7 @@
 
  <script lang="ts" setup>
  import { computed } from 'vue'
- import { fullDate } from '@/composables/utilities';
+ import { fullDate, formatDateLocal } from '@/composables/utilities';
 
  const props = defineProps({
      advisers: Array,
@@ -132,6 +132,10 @@
  })
  const hasAccomplishementReport = (name:string) => {
     return props.accomplishment_reports.some((report) => report.user.name === name)
+ }
+ const isTimely = (name:string) => {
+    const report = props.accomplishment_reports.find((report) => report.user.name === name)
+    return new Date(formatDateLocal(report?.created_at)) <= new Date("2025-12-11")
  }
  </script>
 

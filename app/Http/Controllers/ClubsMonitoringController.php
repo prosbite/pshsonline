@@ -69,6 +69,9 @@ class ClubsMonitoringController extends Controller
         if($request->target_type && $request->target_type === '10') {
             $accomplishment_reports = Submission::with(['user'])->where(['name' => 'accomplishment_report', 'status' => 'completed'])->get();
         }
+        if($request->target_type && $request->target_type === '11') {
+            $accomplishment_reports = Submission::with(['user'])->where(['name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->get();
+        }
         // $submission = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report', 'status' => 'completed'])->first();
         return Inertia::render('admin/ClubsMonitoring', [
             'advisers' => $allAdvisers,
