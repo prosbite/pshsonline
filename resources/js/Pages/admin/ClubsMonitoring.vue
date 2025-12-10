@@ -23,7 +23,13 @@
         </div>
 
         <div class="overflow-x-auto rounded-lg">
-            <ClubsMonitoringTarget5 v-if="targetType === 5" :attendances="props.attendances" :advisers="props.advisers" :monthly_attendance_reports="props.monthly_attendance_reports"/>
+            <ClubsMonitoringTarget5
+                v-if="targetType === 5"
+                :attendances="props.attendances"
+                :advisers="props.advisers"
+                :monthly_attendance_reports="props.monthly_attendance_reports"
+                :monthly_attendance_reports2="props.monthly_attendance_reports2"
+            />
             <ClubsMonitoringTarget10 v-if="targetType === 10" :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/>
             <ClubsMonitoringTarget11 v-if="targetType === 11" :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/>
         </div>
@@ -45,6 +51,7 @@ const props = defineProps({
     advisers: Array,
     accomplishment_reports: Array,
     monthly_attendance_reports: Array,
+    monthly_attendance_reports2: Array,
 })
 const clubType = ref('club')
 const targetType = ref(5)

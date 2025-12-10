@@ -64,8 +64,14 @@ class ClubsMonitoringController extends Controller
             }
             return $mergedData;
         });
-        $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
         $accomplishment_reports = [];
+        $monthly_attendance_reports = [];
+         $monthly_attendance_reports2 = [];
+
+        if($request->target_type && $request->target_type === '5') {
+             $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
+             $monthly_attendance_reports2 = Submission::with(['user'])->where(['name' => 'monthly_attendance_report_2nd_quarter', 'status' => 'completed'])->get();
+        }
         if($request->target_type && $request->target_type === '10') {
             $accomplishment_reports = Submission::with(['user'])->where(['name' => 'accomplishment_report', 'status' => 'completed'])->get();
         }
@@ -78,6 +84,7 @@ class ClubsMonitoringController extends Controller
             'attendances' => $attendances,
             'accomplishment_reports' => $accomplishment_reports,
             'monthly_attendance_reports' => $monthly_attendance_reports,
+            'monthly_attendance_reports2' => $monthly_attendance_reports2,
         ]);
     }
     public function show($id)
