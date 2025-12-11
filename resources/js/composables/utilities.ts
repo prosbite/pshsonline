@@ -202,16 +202,20 @@ export function submissionType() {
             value: 'monthly_attendance_report_2nd_quarter',
         },
         {
-            label: 'Accreditation Documents',
-            value: 'accreditation_documents',
+            label: 'Activity Proposal (Major Activity)',
+            value: 'activity_proposal_major_activity',
+        },
+         {
+            label: 'Activity Proposal (Community-Based)',
+            value: 'activity_proposal_community_based',
         },
         {
-            label: 'Activity Proposal',
-            value: 'activity_proposal',
+            label: 'Activity Report (Major Activity)',
+            value: 'activity_report_major_activity',
         },
         {
-            label: 'Activity Report',
-            value: 'activity_report',
+            label: 'Activity Report (Community-Based)',
+            value: 'activity_report_community_based',
         },
         {
             label: 'Attendance Summary Report (1st Semester)',
@@ -228,6 +232,10 @@ export function submissionType() {
         {
             label: 'Substitution Plan',
             value: 'substitution_plan',
+        },
+         {
+            label: 'Accreditation Documents',
+            value: 'accreditation_documents',
         },
         {
             label: 'Others',
