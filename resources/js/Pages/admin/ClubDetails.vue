@@ -8,7 +8,7 @@
                         <h3 class="text-2xl font-semibold text-gray-800">{{ club.club.name }}</h3>
                         <p class="text-gray-600 text-sm">Adviser: {{ club.user.name }}</p>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div v-if="page.props.auth.user?.role === 'admin'" class="flex items-center gap-2">
                         <div>
                             <label for="sectionFilter" class="sr-only">Filter by section</label>
                             <select
@@ -65,7 +65,7 @@
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
                     <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Elistment Date</th>
-                    <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th v-if="page.props.auth.user?.role === 'admin'" scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
@@ -93,7 +93,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ fullDateTime(learner.pivot.created_at) }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
+                    <td v-if="page.props.auth.user?.role === 'admin'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
                         <button @click="unlist(learner)" class="bg-red-100 hover:bg-red-200 text-red-100 hover:text-red-600 px-4 py-2 rounded-lg transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500 hover:text-red-600 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-3-3v3m-7 0h14" />
