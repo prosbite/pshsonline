@@ -65,7 +65,7 @@
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '-' }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendance2Report(adviser.adviser) ? '5' : '-' }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendance2Report(adviser.adviser) ? '5' : '-' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendance2Report(adviser.adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendance2Report(adviser.adviser) ? (isTimely(adviser.adviser) ? '5' : '1') : '-' }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalQ / attendanceCount).toFixed(1) }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalE / attendanceCount).toFixed(1) }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalT / attendanceCount).toFixed(1) }}</td>
@@ -135,7 +135,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { fullDate } from '@/composables/utilities';
+import { fullDate, formatDateLocal } from '@/composables/utilities';
 
 const props = defineProps({
     attendances: Object,
@@ -155,6 +155,15 @@ const hasMonthlyAttendanceReport = (adviser: string) => {
 }
 const hasMonthlyAttendance2Report = (adviser: string) => {
     return props.monthly_attendance_reports2.some((report: any) => report.user.name === adviser)
+}
+const isTimely = (adviser: string) => {
+    const report = props.monthly_attendance_reports2?.find((report: any) => report.user.name === adviser)
+    if(report){
+        if (new Date(formatDateLocal(report?.created_at)) <= new Date("2025-12-11")) {
+            return true
+        }
+    }
+    return false
 }
 const sortedData = computed(() => {
     let advisers = props.advisers;
