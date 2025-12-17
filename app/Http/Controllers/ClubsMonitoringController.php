@@ -7,8 +7,10 @@ use Inertia\Inertia;
 use App\Models\ClubAttendance;
 use App\Models\ClubRegister;
 use App\Models\Club;
+use App\Models\SchoolYear;
 use App\Models\User;
 use App\Models\Submission;
+use App\Models\Ipcr;
 use Carbon\Carbon;
 
 class ClubsMonitoringController extends Controller
@@ -67,8 +69,10 @@ class ClubsMonitoringController extends Controller
         $accomplishment_reports = [];
         $accomplishment_reports2 = [];
         $monthly_attendance_reports = [];
-         $monthly_attendance_reports2 = [];
-
+        $monthly_attendance_reports2 = [];
+        $ipcr = Ipcr::where('school_year_id',SchoolYear::current()->id)
+                ->where('semester', 1)
+                ->first();
         if($request->target_type && $request->target_type === '5') {
              $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
              $monthly_attendance_reports2 = Submission::with(['user'])->where(['name' => 'monthly_attendance_report_2nd_quarter', 'status' => 'completed'])->get();
@@ -88,6 +92,7 @@ class ClubsMonitoringController extends Controller
             'accomplishment_reports2' => $accomplishment_reports2,
             'monthly_attendance_reports' => $monthly_attendance_reports,
             'monthly_attendance_reports2' => $monthly_attendance_reports2,
+            'ipcr' => $ipcr
         ]);
     }
     public function show($id)
