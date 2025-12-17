@@ -25,6 +25,7 @@ class ClubSubmissionController extends Controller
             'club_register_id' => 'required',
             'url' => 'nullable',
             'user_id' => 'required',
+            'activity_date' => 'nullable|date',
         ]);
         $submission = Submission::create($request->all());
         SubmissionTracker::create([

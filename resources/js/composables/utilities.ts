@@ -186,28 +186,44 @@ export function advisersAttendanceStatus() {
 export function submissionType() {
     return [
         {
-            label: 'Accomplishment Report (Quarterly)',
-            value: 'accomplishment_report',
+            label: 'Accomplishment Report (1st Quarter)',
+            value: 'accomplishment_report_1st_quarter',
         },
         {
-            label: 'Accreditation Documents',
-            value: 'accreditation_documents',
+            label: 'Accomplishment Report (2nd Quarter)',
+            value: 'accomplishment_report_2nd_quarter',
+        },
+         {
+            label: 'Monthly Attendance Report (1st Quarter)',
+            value: 'monthly_attendance_report_1st_quarter',
         },
         {
-            label: 'Activity Proposal',
-            value: 'activity_proposal',
+            label: 'Monthly Attendance Report (2nd Quarter)',
+            value: 'monthly_attendance_report_2nd_quarter',
         },
         {
-            label: 'Activity Report',
-            value: 'activity_report',
+            label: 'Activity Proposal (Major Activity)',
+            value: 'activity_proposal_major_activity',
+        },
+         {
+            label: 'Activity Proposal (Community-Based)',
+            value: 'activity_proposal_community_based',
         },
         {
-            label: 'Attendance Summary Report (Semestral)',
-            value: 'attendance_summary_report',
+            label: 'Activity Report (Major Activity)',
+            value: 'activity_report_major_activity',
         },
         {
-            label: 'Monthly Attendance Report (Quarterly)',
-            value: 'monthly_attendance_report',
+            label: 'Activity Report (Community-Based)',
+            value: 'activity_report_community_based',
+        },
+        {
+            label: 'Attendance Summary Report (1st Semester)',
+            value: 'attendance_summary_report_1st_semester',
+        },
+        {
+            label: 'Attendance Summary Report (2nd Semester)',
+            value: 'attendance_summary_report_2nd_semester',
         },
         {
             label: 'Reaccreditation Documents',
@@ -216,6 +232,10 @@ export function submissionType() {
         {
             label: 'Substitution Plan',
             value: 'substitution_plan',
+        },
+         {
+            label: 'Accreditation Documents',
+            value: 'accreditation_documents',
         },
         {
             label: 'Others',

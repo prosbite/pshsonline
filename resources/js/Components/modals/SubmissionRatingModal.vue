@@ -34,9 +34,9 @@
                         <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
                         <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
                         <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                        <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                        <td class="px-2 py-2 text-center text-sm border-r">-</td>
+                        <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment2 ? parseFloat("5").toFixed(1) : '-' }}</td>
+                        <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment2 ? parseFloat("5").toFixed(1) : '-' }}</td>
+                        <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment2 ? parseFloat("5").toFixed(1) : '-' }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -52,6 +52,7 @@ import { ref } from 'vue';
 const props = defineProps({
     club: Object,
     accomplishment: Object,
+    accomplishment2: Object,
     show: Boolean,
 })
 </script>

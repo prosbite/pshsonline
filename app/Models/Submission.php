@@ -17,6 +17,7 @@ class Submission extends Model
         'user_id',
         'url',
         'status',
+        'activity_date',
     ];
 
     public function clubRegister()

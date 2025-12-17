@@ -64,17 +64,30 @@ class ClubsMonitoringController extends Controller
             }
             return $mergedData;
         });
-        $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
         $accomplishment_reports = [];
+        $accomplishment_reports2 = [];
+        $monthly_attendance_reports = [];
+         $monthly_attendance_reports2 = [];
+
+        if($request->target_type && $request->target_type === '5') {
+             $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
+             $monthly_attendance_reports2 = Submission::with(['user'])->where(['name' => 'monthly_attendance_report_2nd_quarter', 'status' => 'completed'])->get();
+        }
         if($request->target_type && $request->target_type === '10') {
             $accomplishment_reports = Submission::with(['user'])->where(['name' => 'accomplishment_report', 'status' => 'completed'])->get();
+            $accomplishment_reports2 = Submission::with(['user'])->where(['name' => 'accomplishment_report_2nd_quarter', 'status' => 'completed'])->get();
+        }
+        if($request->target_type && $request->target_type === '11') {
+            $accomplishment_reports = Submission::with(['user'])->where(['name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->get();
         }
         // $submission = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report', 'status' => 'completed'])->first();
         return Inertia::render('admin/ClubsMonitoring', [
             'advisers' => $allAdvisers,
             'attendances' => $attendances,
             'accomplishment_reports' => $accomplishment_reports,
+            'accomplishment_reports2' => $accomplishment_reports2,
             'monthly_attendance_reports' => $monthly_attendance_reports,
+            'monthly_attendance_reports2' => $monthly_attendance_reports2,
         ]);
     }
     public function show($id)
@@ -130,12 +143,18 @@ class ClubsMonitoringController extends Controller
         });
         $submission = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report', 'status' => 'completed'])->first();
         $accomplishment = Submission::where(['club_register_id' => $id, 'name' => 'accomplishment_report', 'status' => 'completed'])->first();
+        $submission2 = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report_2nd_quarter', 'status' => 'completed'])->first();
+        $accomplishment2 = Submission::where(['club_register_id' => $id, 'name' => 'accomplishment_report_2nd_quarter', 'status' => 'completed'])->first();
+        $target11 = Submission::where(['club_register_id' => $id, 'name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->first();
         return Inertia::render('ClubMonitoring', [
             'club' => $club,
             'advisers' => $adviser,
             'attendances' => $attendances,
             'submission' => $submission,
             'accomplishment' => $accomplishment,
+            'submission2' => $submission2,
+            'accomplishment2' => $accomplishment2,
+            'target11' => $target11,
         ]);
     }
 }

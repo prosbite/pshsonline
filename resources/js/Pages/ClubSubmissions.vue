@@ -23,7 +23,17 @@
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="submission, index in props.submissions" :key="index">
                     <td class="px-4 py-3 text-sm text-gray-500">{{ index + 1 }}</td>
-                    <td class="px-4 py-3 text-sm text-gray-500">{{ ucWords(removeUnderScore(submission.name ?? '')) }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500">
+                        <div class="flex flex-col gap-1">
+                            <span class="font-medium text-gray-800">
+                                {{ ucWords(removeUnderScore(submission.name ?? '')) }}
+                            </span>
+                            <span v-if="submission.activity_date" class="text-blue-500 text-xs">
+                                <span class="text-gray-400">Date of Activity: </span>{{ fullDate(submission.activity_date) }}
+                            </span>
+                        </div>
+
+                    </td>
                     <td class="px-4 py-3 text-sm text-gray-500">{{ fullDate(submission.created_at) }}</td>
                     <td class="px-4 py-3 text-sm text-gray-500">
                         <div class="group relative" :style="{'z-index': 999 - index}">
@@ -32,7 +42,8 @@
                         </div>
                     </td>
                     <td class="px-4 py-3 text-sm text-gray-500">
-                        <a :href="submission.url" target="_blank" class="text-indigo-600 hover:text-indigo-900">Visit</a>
+                        <a v-if="submission.url" :href="submission.url" target="_blank" class="text-indigo-600 hover:text-indigo-900">Visit</a>
+                        <i v-else class="text-gray-300">None</i>
                     </td>
                     <td v-if="submission.status === 'for_revision'">
                         <button
@@ -70,6 +81,10 @@
                             <option value="" disabled selected>Select Type</option>
                             <option v-for="type in submissionType()" :key="type.value" :value="type.value">{{ type.label }}</option>
                         </select>
+                    </div>
+                    <div v-if="['activity_proposal_major_activity', 'activity_proposal_community_based','activity_report_major_activity','activity_report_community_based'].includes(submissionName)" class="mb-4">
+                        <label for="url" class="block text-sm font-medium text-gray-700">Activity Date</label>
+                        <input required type="date" id="url" name="url" v-model="form.activity_date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                     </div>
                     <div class="mb-4" v-if="submissionName === 'others'">
                         <label for="otherSubmissionName" class="block text-sm font-medium text-red-400">Specify Name of Submission</label>
@@ -143,6 +158,7 @@
         url: '',
         remarks: '',
         user_id: '',
+        activity_date: '',
     });
     const props = defineProps({
         submissions: Array,
@@ -183,6 +199,7 @@
         revisionForm.name = submission.name;
         revisionForm.status = "revised";
         revisionForm.url = submission.url;
+        revisionForm.activity_date = submission.activity_date;
     }
     const revisionModal = ref(false);
     const revisionForm = useForm({
@@ -191,6 +208,7 @@
         url: '',
         status: '',
         remarks: '',
+        activity_date: '',
     });
     const validatedRevisionForm = computed(() => {
         if (revisionForm.name === 'others') {

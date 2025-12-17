@@ -16,7 +16,10 @@
                     {{ fullDate(index) }}
                 </th>
                 <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                    Printed Copies
+                    Printed Copies (1st Quarter)
+                </th>
+                <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
+                    Printed Copies (2nd Quarter)
                 </th>
                 <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold">
                     Average
@@ -28,6 +31,10 @@
                     <th class="px-2 py-2 text-sm font-medium border-r border-gray-300">E</th>
                     <th class="px-2 py-2 text-sm font-medium border-r border-gray-300">T</th>
                 </template>
+
+                <th class="px-2 py-2 text-sm font-medium border-r border-gray-300">Q</th>
+                <th class="px-2 py-2 text-sm font-medium border-r border-gray-300">E</th>
+                <th class="px-2 py-2 text-sm font-medium border-r border-gray-300">T</th>
 
                 <th class="px-2 py-2 text-sm font-medium border-r border-gray-300">Q</th>
                 <th class="px-2 py-2 text-sm font-medium border-r border-gray-300">E</th>
@@ -53,9 +60,12 @@
                         <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.e }}</td>
                         <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.t }}</td>
                     </template>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '1' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '1' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '1' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendance2Report(adviser.adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendance2Report(adviser.adviser) ? '5' : '-' }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendance2Report(adviser.adviser) ? (isTimely(adviser.adviser) ? '5' : '1') : '-' }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalQ / attendanceCount).toFixed(1) }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalE / attendanceCount).toFixed(1) }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalT / attendanceCount).toFixed(1) }}</td>
@@ -125,12 +135,13 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { fullDate } from '@/composables/utilities';
+import { fullDate, formatDateLocal } from '@/composables/utilities';
 
 const props = defineProps({
     attendances: Object,
     advisers: Array,
     monthly_attendance_reports: Array,
+    monthly_attendance_reports2: Array,
 })
 const attendanceCount = computed(() => {
     let count = 0
@@ -141,6 +152,18 @@ const attendanceCount = computed(() => {
 })
 const hasMonthlyAttendanceReport = (adviser: string) => {
     return props.monthly_attendance_reports.some((report: any) => report.user.name === adviser)
+}
+const hasMonthlyAttendance2Report = (adviser: string) => {
+    return props.monthly_attendance_reports2.some((report: any) => report.user.name === adviser)
+}
+const isTimely = (adviser: string) => {
+    const report = props.monthly_attendance_reports2?.find((report: any) => report.user.name === adviser)
+    if(report){
+        if (new Date(formatDateLocal(report?.created_at)) <= new Date("2025-12-11")) {
+            return true
+        }
+    }
+    return false
 }
 const sortedData = computed(() => {
     let advisers = props.advisers;

@@ -119,17 +119,17 @@
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 11. One (1) (f) attendance summary report submitted as scheduled
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm">-</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ props.target11 ? parseFloat("5").toFixed(1) : '-' }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ props.target11 ? parseFloat("5").toFixed(1) : '-' }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ props.target11 ? parseFloat("5").toFixed(1) : '-' }}</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <SubmissionRatingModal :show="showRatingModal" @close="showRatingModal = false" :accomplishment="props.accomplishment" />
-        <AttendanceMonitoringModal :show="showMonitoringModal" @close="showMonitoringModal = false" :sortedData="sortedData" :attendances="attendances" :advisers="advisers" :club="club" :submission="submission" :attendanceCount="attendanceCount" />
+        <SubmissionRatingModal :show="showRatingModal" @close="showRatingModal = false" :accomplishment="props.accomplishment" :accomplishment2="props.accomplishment2" />
+        <AttendanceMonitoringModal :show="showMonitoringModal" @close="showMonitoringModal = false" :sortedData="sortedData" :attendances="attendances" :advisers="advisers" :club="club" :submission="submission" :submission2="submission2" :attendanceCount="attendanceCount" />
     </div>
 </template>
 
@@ -150,6 +150,9 @@ const props = defineProps({
     club: Object,
     submission: Object,
     accomplishment: Object,
+    submission2: Object,
+    accomplishment2: Object,
+    target11: Object,
 })
 const clubType = ref('club')
 const showMonitoringModal = ref(false)
