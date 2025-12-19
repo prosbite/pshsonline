@@ -72,6 +72,7 @@ class ClubsMonitoringController extends Controller
         $monthly_attendance_reports2 = [];
         $ipcr = Ipcr::where('school_year_id',SchoolYear::current()->id)
                 ->where('semester', 1)
+                ->where('club_type', $clubType)
                 ->first();
         if($request->target_type && $request->target_type === '5') {
              $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
@@ -101,11 +102,13 @@ class ClubsMonitoringController extends Controller
             'semester' => 'required',
             'school_year_id' => 'required',
             'monitoring' => 'required',
+            'club_type' => 'required'
         ]);
         Ipcr::create([
             'semester' => $request->semester,
             'school_year_id' => $request->school_year_id,
             'monitoring' => $request->monitoring,
+            'club_type' => $request->club_type
         ]);
         return redirect()->route('admin.clubs.monitoring');
     }
@@ -116,11 +119,13 @@ class ClubsMonitoringController extends Controller
             'semester' => 'required',
             'school_year_id' => 'required',
             'monitoring' => 'required',
+            'club_type' => 'required'
         ]);
         Ipcr::where('id', $request->id)->update([
             'semester' => $request->semester,
             'school_year_id' => $request->school_year_id,
             'monitoring' => $request->monitoring,
+            'club_type' => $request->club_type
         ]);
         return redirect()->route('admin.clubs.monitoring');
     }

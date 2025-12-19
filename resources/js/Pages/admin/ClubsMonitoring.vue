@@ -470,6 +470,7 @@ import ClubsMonitoringTarget10 from '@/Pages/admin/ClubsMonitoringTarget10.vue';
 import ClubsMonitoringTarget11 from '@/Pages/admin/ClubsMonitoringTarget11.vue';
 import { router } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
+import { fullDate, formatDateLocal } from '@/composables/utilities';
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 defineOptions({
@@ -589,6 +590,7 @@ const saveMonitoring = () => {
     const form = new FormData()
     form.append('semester', 1)
     form.append('school_year_id', 1)
+    form.append('club_type', clubType.value)
     form.append('monitoring', JSON.stringify(semMonitoring.value))
     router.post(route('admin.clubs.monitoring.store'), form, {
         onSuccess: () => {
@@ -614,6 +616,7 @@ const updateMonitoring = () => {
     form.append('id', props.ipcr.id)
     form.append('semester', props.ipcr.semester)
     form.append('school_year_id', props.ipcr.school_year_id)
+    form.append('club_type', props.ipcr.club_type)
     form.append('monitoring', JSON.stringify(semMonitoring.value))
     router.post(route('admin.clubs.monitoring.update'), form, {
         onSuccess: () => {
@@ -632,6 +635,24 @@ const updateMonitoring = () => {
             console.log('Request finished');
         },
     });
+}
+
+// For Target 5
+
+const hasMonthlyAttendanceReport = (adviser: string) => {
+    return props.monthly_attendance_reports.some((report: any) => report.user.name === adviser)
+}
+const hasMonthlyAttendance2Report = (adviser: string) => {
+    return props.monthly_attendance_reports2.some((report: any) => report.user.name === adviser)
+}
+const isTimelyTarget5 = (adviser: string) => {
+    const report = props.monthly_attendance_reports2?.find((report: any) => report.user.name === adviser)
+    if(report){
+        if (new Date(formatDateLocal(report?.created_at)) <= new Date("2025-12-11")) {
+            return true
+        }
+    }
+    return false
 }
 onMounted(() => {
     const urlParams = new URLSearchParams(window.location.search)

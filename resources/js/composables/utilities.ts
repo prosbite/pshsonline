@@ -159,6 +159,10 @@ export function attendanceStatus() {
     ]
 }
 
+export function getAverage(numbers:Array<number>) {
+    return numbers.reduce((a, b) => a + b, 0) / numbers.length
+}
+
 export function advisersAttendanceStatus() {
     return [
         {

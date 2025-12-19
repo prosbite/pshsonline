@@ -9,7 +9,8 @@ class Ipcr extends Model
     protected $fillable = [
         'school_year_id',
         'monitoring',
-        'semester'
+        'semester',
+        'club_type'
     ];
     protected $table = 'ipcr';
 }
