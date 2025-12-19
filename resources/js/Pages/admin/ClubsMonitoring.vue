@@ -7,7 +7,7 @@
                 <p class="text-gray-600 text-sm">Monitoring of each club</p>
             </div>
             <div class="flex gap-4 bg-gray-50">
-                <button v-if="!editMode" @click.prevent="editMode = true" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
+                <button v-if="!editMode && page.props.auth.user?.role === 'admin'" @click.prevent="editMode = true" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -26,7 +26,7 @@
 
                     Edit On
                 </button>
-                <button v-else @click.prevent="editMode = false" class="flex items-center gap-2 px-5 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition-colors duration-200">
+                <button v-if="editMode && page.props.auth.user?.role === 'admin'" @click.prevent="editMode = false" class="flex items-center gap-2 px-5 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition-colors duration-200">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -404,7 +404,7 @@
              </tbody>
              </table>
 
-             <div class="flex justify-end mt-4">
+             <div v-if="page.props.auth.user?.role === 'admin'" class="flex justify-end mt-4">
                 <button v-if="!props.ipcr" @click.prevent="saveMonitoring" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -472,10 +472,12 @@ import { router } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
 import { fullDate, formatDateLocal } from '@/composables/utilities';
 import { toast } from 'vue3-toastify'
+import { usePage } from '@inertiajs/vue3'
 import 'vue3-toastify/dist/index.css'
 defineOptions({
     layout: MainLayout
 })
+const page = usePage()
 const props = defineProps({
     attendances: Object,
     advisers: Array,
