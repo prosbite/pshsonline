@@ -581,11 +581,11 @@ const initMonitoring = () => {
 }
 const ratingValue = (value) => {
     if(!value || value === '') return '-'
-    return parseFloat(value).toFixed(1)
+    return parseFloat(value).toFixed(2)
 }
 const avgValue = (q:any,e:any,t:any) => {
     if(!q || !e || !t || q === '' || e === '' || t === '') return '-'
-    return parseFloat((parseFloat(q) + parseFloat(e) + parseFloat(t)) / 3).toFixed(1)
+    return parseFloat((parseFloat(q) + parseFloat(e) + parseFloat(t)) / 3).toFixed(2)
 }
 const saveMonitoring = () => {
     const form = new FormData()
