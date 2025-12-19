@@ -73,37 +73,37 @@
                      Adviser’s Name
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 1
+                     Target 1 (Performance Evaluation)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 2
+                     Target 2 (Accreditation or Reaccreditation Documents)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 3
+                     Target 3 (Major Activity)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 4
+                     Target 4 (Community-Based Activity)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 5
+                     Target 5 (ALP Attendance)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 6
+                     Target 6 (Certificate of Completion/Accomplishment)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 7
+                     Target 7 (Anecdotal Report)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 8
+                     Target 8 (Community Work)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 9
+                     Target 9 (Remaining Balance of IGP)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 10
+                     Target 10 (Quarterly Accomplishment Report)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 11
+                     Target 11 (Attendance Summary Report)
                  </th>
                  </tr>
                  <tr class="bg-indigo-100 text-indigo-900">
