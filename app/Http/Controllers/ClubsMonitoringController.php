@@ -149,6 +149,7 @@ class ClubsMonitoringController extends Controller
         })
         ->orderBy('date', 'asc')
         ->where('date', '>=', '2025-08-14')
+        ->where('date', '<=', '2025-12-05')
         ->get()
         ->groupBy('date')
         ->map(function ($group) use ($adviser) {
