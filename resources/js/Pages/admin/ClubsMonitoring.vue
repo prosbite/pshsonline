@@ -450,15 +450,14 @@
                     Update IPCR
                 </button>
              </div>
-            <!-- <ClubsMonitoringTarget5
-                v-if="targetType === 5"
+            <ClubsMonitoringTarget5
                 :attendances="props.attendances"
                 :advisers="props.advisers"
                 :monthly_attendance_reports="props.monthly_attendance_reports"
                 :monthly_attendance_reports2="props.monthly_attendance_reports2"
             />
-            <ClubsMonitoringTarget10 v-if="targetType === 10" :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports" :accomplishment_reports2="props.accomplishment_reports2"/>
-            <ClubsMonitoringTarget11 v-if="targetType === 11" :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/> -->
+            <ClubsMonitoringTarget10 :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports" :accomplishment_reports2="props.accomplishment_reports2"/>
+            <ClubsMonitoringTarget11 :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/>
         </div>
     </div>
 </template>
