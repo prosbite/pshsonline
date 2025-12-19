@@ -61,6 +61,8 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,super
     Route::put('/clubs/submissions/{submission}', [AdminClubSubmissionController::class, 'update'])->name('admin.club.submissions.update');
     Route::delete('/clubs/submissions/{submission}', [AdminClubSubmissionController::class, 'destroy'])->name('admin.club.submissions.delete');
     Route::get('/clubs/monitoring', [ClubsMonitoringController::class, 'index'])->name('admin.clubs.monitoring');
+    Route::post('/clubs/monitoring', [ClubsMonitoringController::class, 'store'])->name('admin.clubs.monitoring.store');
+    Route::post('/clubs/monitoring/update', [ClubsMonitoringController::class, 'update'])->name('admin.clubs.monitoring.update');
 
     Route::get('/advisers/attendance', [AdviserAttendanceController::class, 'index'])->name('admin.advisers.attendance');
     Route::get('/advisers/attendance/create', [AdviserAttendanceController::class, 'create'])->name('admin.advisers.attendance.create');

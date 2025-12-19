@@ -95,6 +95,35 @@ class ClubsMonitoringController extends Controller
             'ipcr' => $ipcr
         ]);
     }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'semester' => 'required',
+            'school_year_id' => 'required',
+            'monitoring' => 'required',
+        ]);
+        Ipcr::create([
+            'semester' => $request->semester,
+            'school_year_id' => $request->school_year_id,
+            'monitoring' => $request->monitoring,
+        ]);
+        return redirect()->route('admin.clubs.monitoring');
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'semester' => 'required',
+            'school_year_id' => 'required',
+            'monitoring' => 'required',
+        ]);
+        Ipcr::where('id', $request->id)->update([
+            'semester' => $request->semester,
+            'school_year_id' => $request->school_year_id,
+            'monitoring' => $request->monitoring,
+        ]);
+        return redirect()->route('admin.clubs.monitoring');
+    }
     public function show($id)
     {
         $club = ClubRegister::with('club', 'user')->findOrFail($id);
