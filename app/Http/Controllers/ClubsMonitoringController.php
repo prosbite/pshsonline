@@ -75,17 +75,13 @@ class ClubsMonitoringController extends Controller
                 ->where('semester', 1)
                 ->where('club_type', $clubType)
                 ->first();
-        if($request->target_type && $request->target_type === '5') {
-             $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
-             $monthly_attendance_reports2 = Submission::with(['user'])->where(['name' => 'monthly_attendance_report_2nd_quarter', 'status' => 'completed'])->get();
-        }
-        if($request->target_type && $request->target_type === '10') {
-            $accomplishment_reports = Submission::with(['user'])->where(['name' => 'accomplishment_report', 'status' => 'completed'])->get();
-            $accomplishment_reports2 = Submission::with(['user'])->where(['name' => 'accomplishment_report_2nd_quarter', 'status' => 'completed'])->get();
-        }
-        if($request->target_type && $request->target_type === '11') {
-            $accomplishment_reports = Submission::with(['user'])->where(['name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->get();
-        }
+
+        $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
+        $monthly_attendance_reports2 = Submission::with(['user'])->where(['name' => 'monthly_attendance_report_2nd_quarter', 'status' => 'completed'])->get();
+        $accomplishment_reports = Submission::with(['user'])->where(['name' => 'accomplishment_report', 'status' => 'completed'])->get();
+        $accomplishment_reports2 = Submission::with(['user'])->where(['name' => 'accomplishment_report_2nd_quarter', 'status' => 'completed'])->get();
+        $attendance_summary_report_1st_semester = Submission::with(['user'])->where(['name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->get();
+        // dd($monthly_attendance_reports);
         // $submission = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report', 'status' => 'completed'])->first();
         return Inertia::render('admin/ClubsMonitoring', [
             'advisers' => $allAdvisers,

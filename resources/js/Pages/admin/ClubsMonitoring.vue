@@ -427,7 +427,7 @@
 
                     Save IPCR
                 </button>
-                <button v-else @click.prevent="updateMonitoring" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
+                <button v-else @click.prevent="updateMonitoring" class="flex items-center gap-2 px-5 py-2 mr-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -449,16 +449,445 @@
 
                     Update IPCR
                 </button>
+                <button @click.prevent="printMonitoring" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="w-5 h-5 text-white dark:text-white"
+                        >
+                            <!-- Printer body -->
+                            <path d="M6 9V2h12v7" />
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                            <rect x="6" y="14" width="12" height="8" rx="2" ry="2" />
+                            <!-- Paper coming out -->
+                            <line x1="8" y1="18" x2="8" y2="22" />
+                            <line x1="16" y1="18" x2="16" y2="22" />
+                        </svg>
+                        Print
+                </button>
              </div>
-            <ClubsMonitoringTarget5
+            <!-- <ClubsMonitoringTarget5
                 :attendances="props.attendances"
                 :advisers="props.advisers"
                 :monthly_attendance_reports="props.monthly_attendance_reports"
                 :monthly_attendance_reports2="props.monthly_attendance_reports2"
             />
             <ClubsMonitoringTarget10 :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports" :accomplishment_reports2="props.accomplishment_reports2"/>
-            <ClubsMonitoringTarget11 :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/>
+            <ClubsMonitoringTarget11 :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/> -->
         </div>
+
+
+        <Teleport to="body">
+        <table class="to-print w-full">
+            <thead>
+                <tr>
+                    <th id="header" class="flex items-center justify-between mb-6">
+                        <!-- <div class="flex gap-2 items-center">
+                            <img src="/img/pisaylogo.png" class="h-[70px]" alt="Pisay Logo">
+                            <div class="flex flex-col gap-0">
+                                <span class="text-left">
+                                    Republic of the Philippines
+                                </span>
+                                <span class="text-left text-xs leading-normal">
+                                    DEPARTMENT OF SCIENCE AND TECHNOLOGY
+                                </span>
+                                <span class="text-left font-bold text-xs leading-normal">
+                                    PHILIPPINE SCIENCE HIGH SCHOOL CARAGA-REGION CAMPUS
+                                </span>
+                                <span class="text-left text-xs leading-normal">
+                                    CURRICULUM AND INSTRUCTION DIVISION
+                                </span>
+                            </div>
+                        </div> -->
+                        <img src="/img/pisay_header_left.png" class="h-[70px]" alt="Pisay Logo">
+                        <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-black !important">
+                        <div class="overflow-x-auto rounded-lg">
+                            <div class="text-center mb-8">
+                                <h1 class="font-bold text-lg">Alternative Learning Program Accomplishment Monitoring</h1>
+                                <p class="text-black"><sup>1st</sup> Semester, S.Y. 2025-2026</p>
+                            </div>
+                            <table class="min-w-full border border-black bg-white">
+                            <thead class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-black !important">
+                                <tr>
+                                <th rowspan="2" class="px-1 py-1 text-left text-smxsont-semibold border-r border-indigo-400 min-w-[250px]">
+                                    Adviser’s Name
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 1 <br> (Performance Evaluation)
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 2 <br> (Accreditation or Reaccreditation Documents)
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 3 <br> (Major Activity)
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 4 <br> (Community-Based Activity)
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 5 <br> (ALP Attendance)
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 6 <br> (Certificate of Completion/Accomplishment)
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 7 <br> (Anecdotal Report)
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 8 <br> (Community Work)
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 9 <br> (Remaining Balance of IGP)
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 10 <br> (Quarterly Accomplishment Report)
+                                </th>
+                                <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
+                                    Target 11 <br> (Attendance Summary Report)
+                                </th>
+                                </tr>
+                                <tr class="bg-indigo-100 text-indigo-900">
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">Q</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">E</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">T</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">AVG</th>
+                                    <th class="px-1 py-1 text-xs font-bold border border-gray-800">REMARKS</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr v-for="sem,index in semMonitoring" :key="sem.id" class="odd:bg-gray-100">
+                                    <td class="px-2 py-1 text-xs text-gray-700 font-medium border-r border-gray-400">
+                                        {{ sem.adviser }}
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_1.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_1.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_1.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_1.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_1.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_1.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_1.q,sem.monitoring.target_1.e,sem.monitoring.target_1.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_1.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_1.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_2.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_2.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_2.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_2.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_2.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_2.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_2.q,sem.monitoring.target_2.e,sem.monitoring.target_2.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_2.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_2.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_3.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_3.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_3.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_3.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_3.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_3.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_3.q,sem.monitoring.target_3.e,sem.monitoring.target_3.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_3.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_3.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_4.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_4.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_4.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_4.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_4.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_4.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_4.q,sem.monitoring.target_4.e,sem.monitoring.target_4.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_4.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_4.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_5.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_5.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_5.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_5.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_5.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_5.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_5.q,sem.monitoring.target_5.e,sem.monitoring.target_5.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_5.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_5.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_6.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_6.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_6.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_6.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_6.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_6.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_6.q,sem.monitoring.target_6.e,sem.monitoring.target_6.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_6.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_6.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_7.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_7.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_7.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_7.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_7.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_7.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_7.q,sem.monitoring.target_7.e,sem.monitoring.target_7.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_7.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_7.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_8.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_8.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_8.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_8.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_8.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_8.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_8.q,sem.monitoring.target_8.e,sem.monitoring.target_8.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_8.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_8.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_9.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_9.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_9.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_9.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_9.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_9.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_9.q,sem.monitoring.target_9.e,sem.monitoring.target_9.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_9.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_9.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_10.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_10.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_10.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_10.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_10.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_10.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_10.q,sem.monitoring.target_10.e,sem.monitoring.target_10.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_10.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_10.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_11.q) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_11.q" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_11.e) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_11.e" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ ratingValue(sem.monitoring.target_11.t) }}</span>
+                                        <input v-else type="number" v-model="sem.monitoring.target_11.t" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
+                                        <span v-if="!editMode">{{ avgValue(sem.monitoring.target_11.q,sem.monitoring.target_11.e,sem.monitoring.target_11.t) }}</span>
+                                    </td>
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                        <span v-if="!editMode">{{ sem.monitoring.target_11.remarks }}</span>
+                                        <input v-else type="text" v-model="sem.monitoring.target_11.remarks" class="border border-gray-200 w-[40px] p-0">
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                            </table>
+                        </div>
+
+                        <div class="flex flex-col gap-6 mt-12">
+                                    <div class="flex justify-start">
+                                        <div class="flex flex-col flex-1">
+                                            <span class="mb-6 text-sm">Prepared by:</span>
+                                            <span class="font-bold underline text-md uppercase">
+                                                GRETCHEN MAE B. EMPUESTO, PhD
+                                            </span>
+                                            <span class="text-md">
+                                                ALP Coordinatoer
+                                            </span>
+                                            <span class="text-sm">Date Printed: <span id="printed-date">{{ new Date().toLocaleString() }}</span></span>
+                                        </div>
+
+                                        <div class="flex flex-col flex-1">
+                                            <span class="mb-6 text-sm">Reviewed by:</span>
+                                            <span class="font-bold underline text-md">
+                                                JOHN RIDAN D. DECHUSA
+                                            </span>
+                                            <span class="text-md">
+                                                ALP Coordinator
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </Teleport>
+
+
     </div>
 </template>
 
@@ -579,6 +1008,9 @@ const initMonitoring = () => {
         semMonitoring.value.push(adviserMonitoring)
     })
 }
+const printMonitoring = () => {
+    window.print()
+}
 const ratingValue = (value) => {
     if(!value || value === '') return '-'
     return parseFloat(value).toFixed(2)
@@ -680,5 +1112,13 @@ input[type=number] {
   -moz-appearance: textfield;
   appearance: textfield;
   text-align: center!important;
+}
+.to-print {
+    display: none;
+}
+@media print {
+    .to-print {
+        display: block;
+    }
 }
 </style>
