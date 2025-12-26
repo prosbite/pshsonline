@@ -517,6 +517,7 @@
                                 <h1 class="font-bold text-lg">Alternative Learning Program Accomplishment Monitoring</h1>
                                 <p class="text-black"><sup>1st</sup> Semester, S.Y. 2025-2026</p>
                             </div>
+                            <p class="font-bold text-black mb-1">{{ clubType.replace('_', ' ').toUpperCase() }}</p>
                             <table class="min-w-full border border-black bg-white">
                             <thead class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-black !important">
                                 <tr>
@@ -846,7 +847,7 @@
                                     <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
                                         <span v-if="!editMode">{{ avgValue(sem.monitoring.target_11.q,sem.monitoring.target_11.e,sem.monitoring.target_11.t) }}</span>
                                     </td>
-                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500 border-gray-400">
+                                    <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-400">
                                         <span v-if="!editMode">{{ sem.monitoring.target_11.remarks }}</span>
                                         <input v-else type="text" v-model="sem.monitoring.target_11.remarks" class="border border-gray-200 w-[40px] p-0">
                                     </td>
@@ -855,6 +856,7 @@
                                 </tr>
                             </tbody>
                             </table>
+                            <p class="text-xs text-black font-italic mt-2">Legend: <b>TBA</b> - To be accomplished on second semester</p>
                         </div>
 
                         <div class="flex flex-col gap-6 mt-12">
