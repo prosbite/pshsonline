@@ -904,7 +904,7 @@ import ClubsMonitoringTarget10 from '@/Pages/admin/ClubsMonitoringTarget10.vue';
 import ClubsMonitoringTarget11 from '@/Pages/admin/ClubsMonitoringTarget11.vue';
 import { router } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
-import { fullDate, formatDateLocal } from '@/composables/utilities';
+import { fullDate, formatDateLocal, getAverage } from '@/composables/utilities';
 import { sortAttendanceData } from '@/composables/attendance';
 import { toast } from 'vue3-toastify'
 import { usePage } from '@inertiajs/vue3'
@@ -1025,8 +1025,20 @@ const ratingValue = (value) => {
     return parseFloat(value).toFixed(2)
 }
 const avgValue = (q:any,e:any,t:any) => {
-    if(!q || !e || !t || q === '' || e === '' || t === '') return '-'
-    return parseFloat((parseFloat(q) + parseFloat(e) + parseFloat(t)) / 3).toFixed(2)
+    let arr = []
+    if(q > 0) {
+        arr.push(q)
+    }
+    if(e > 0){
+        arr.push(e)
+    }
+    if(t > 0){
+        arr.push(t)
+    }
+    if(arr.length === 0) {
+        return '-'
+    }
+    return getAverage(arr).toFixed(2)
 }
 const saveMonitoring = () => {
     const form = new FormData()
