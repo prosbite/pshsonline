@@ -69,7 +69,7 @@
             <table class="min-w-full border border-gray-200 bg-white">
              <thead class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white">
                  <tr>
-                 <th rowspan="2" class="px-4 py-3 text-left text-sm font-semibold border-r border-indigo-400 min-w-[250px]">
+                 <th rowspan="2" class="px-4 py-3 text-left text-sm font-semibold border-r border-indigo-400 min-w-[180px]">
                      Adviser’s Name
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
@@ -177,7 +177,10 @@
              <tbody class="divide-y divide-gray-200">
                 <tr v-for="sem,index in semMonitoring" :key="sem.id" class="odd:bg-gray-100">
                     <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-400">
-                        {{ sem.adviser }}
+                        <div class="flex flex-col">
+                            <span>{{ sem.adviser }}</span>
+                            <span class="text-xs text-gray-400">{{ adviserClub(sem.adviser) }}</span>
+                        </div>
                     </td>
 
                     <td class="px-2 py-2 text-center text-gray-500 text-sm border-r">
@@ -404,7 +407,16 @@
              </tbody>
              </table>
 
-             <div v-if="page.props.auth.user?.role === 'admin'" class="flex justify-end mt-4">
+            <!-- <ClubsMonitoringTarget5
+                :attendances="sortedAttendanceData"
+                :advisers="props.advisers"
+                :monthly_attendance_reports="props.monthly_attendance_reports"
+                :monthly_attendance_reports2="props.monthly_attendance_reports2"
+            />
+            <ClubsMonitoringTarget10 :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports" :accomplishment_reports2="props.accomplishment_reports2"/>
+            <ClubsMonitoringTarget11 :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/> -->
+        </div>
+        <div v-if="page.props.auth.user?.role === 'admin'" class="flex justify-end mt-4">
                 <button v-if="!props.ipcr" @click.prevent="saveMonitoring" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -471,16 +483,6 @@
                         Print
                 </button>
              </div>
-            <!-- <ClubsMonitoringTarget5
-                :attendances="props.attendances"
-                :advisers="props.advisers"
-                :monthly_attendance_reports="props.monthly_attendance_reports"
-                :monthly_attendance_reports2="props.monthly_attendance_reports2"
-            />
-            <ClubsMonitoringTarget10 :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports" :accomplishment_reports2="props.accomplishment_reports2"/>
-            <ClubsMonitoringTarget11 :advisers="props.advisers" :accomplishment_reports="props.accomplishment_reports"/> -->
-        </div>
-
 
         <Teleport to="body">
         <table class="to-print w-full">
@@ -515,13 +517,13 @@
                         <div class="overflow-x-auto rounded-lg">
                             <div class="text-center mb-8">
                                 <h1 class="font-bold text-lg">Alternative Learning Program Accomplishment Monitoring</h1>
-                                <p class="text-black"><sup>1st</sup> Semester, S.Y. 2025-2026</p>
+                                <p class="text-black">First Semester, S.Y. 2025-2026</p>
                             </div>
                             <p class="font-bold text-black mb-1">{{ clubType.replace('_', ' ').toUpperCase() }}</p>
                             <table class="min-w-full border border-black bg-white">
                             <thead class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-black !important">
                                 <tr>
-                                <th rowspan="2" class="px-1 py-1 text-left text-smxsont-semibold border-r border-indigo-400 min-w-[250px]">
+                                <th rowspan="2" class="px-1 py-1 text-left text-smxsont-semibold border-r border-indigo-400 min-w-[180px]">
                                     Adviser’s Name
                                 </th>
                                 <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
@@ -629,7 +631,10 @@
                             <tbody class="divide-y divide-gray-200">
                                 <tr v-for="sem,index in semMonitoring" :key="sem.id" class="odd:bg-gray-100">
                                     <td class="px-2 py-1 text-xs text-gray-700 font-medium border-r border-gray-400">
-                                        {{ sem.adviser }}
+                                        <div class="flex flex-col">
+                                            <span>{{ sem.adviser }}</span>
+                                            <span class="text-xs text-gray-600">{{ adviserClub(sem.adviser) }}</span>
+                                        </div>
                                     </td>
 
                                     <td class="px-1 py-1 text-center text-gray-800 text-xs border border-gray-500">
@@ -856,7 +861,6 @@
                                 </tr>
                             </tbody>
                             </table>
-                            <p class="text-xs text-black font-italic mt-2">Legend: <b>TBA</b> - To be accomplished on second semester</p>
                         </div>
 
                         <div class="flex flex-col gap-6 mt-12">
@@ -878,7 +882,7 @@
                                                 JOHN RIDAN D. DECHUSA
                                             </span>
                                             <span class="text-md">
-                                                ALP Coordinator
+                                                Assistant CID Chief for Student Affairs
                                             </span>
                                         </div>
                                     </div>
@@ -901,6 +905,7 @@ import ClubsMonitoringTarget11 from '@/Pages/admin/ClubsMonitoringTarget11.vue';
 import { router } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
 import { fullDate, formatDateLocal } from '@/composables/utilities';
+import { sortAttendanceData } from '@/composables/attendance';
 import { toast } from 'vue3-toastify'
 import { usePage } from '@inertiajs/vue3'
 import 'vue3-toastify/dist/index.css'
@@ -916,12 +921,14 @@ const props = defineProps({
     monthly_attendance_reports: Array,
     monthly_attendance_reports2: Array,
     ipcr: Array,
+    clubs: Array,
 })
 const editMode = ref(false)
 const clubType = ref('club')
 const semesterType = ref(1)
 const targetType = ref(5)
 const semMonitoring = ref([])
+const sortedAttendanceData = ref([])
 const selectClubType = () => {
     router.visit(route('admin.clubs.monitoring', { club_type: clubType.value, semester: semesterType.value }))
 }
@@ -1089,6 +1096,9 @@ const isTimelyTarget5 = (adviser: string) => {
     }
     return false
 }
+const adviserClub = (adviser: string) => {
+    return props.clubs?.find((club: any) => club.user.name === adviser)?.club?.name || 'none';
+}
 onMounted(() => {
     const urlParams = new URLSearchParams(window.location.search)
     targetType.value = parseInt(urlParams.get('target_type')) ?? 5
@@ -1098,6 +1108,9 @@ onMounted(() => {
     }else {
         semMonitoring.value = JSON.parse(props.ipcr.monitoring)
     }
+
+    sortedAttendanceData.value = sortAttendanceData(props.advisers, props.attendances);
+    console.log('Sorted attendance data:', sortedAttendanceData.value);
 })
 </script>
 

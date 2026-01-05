@@ -26,6 +26,9 @@
                                 <th class="px-4 py-2 text-center text-sm font-semibold">
                                     Timeliness (T)
                                 </th>
+                                <th class="px-4 py-2 text-center text-sm font-semibold">
+                                    Remarks
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
@@ -33,33 +36,37 @@
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 1. ALP/Student Organization Adviser performance demonstrated satisfactorily as indicated in the Performance Evaluation by Students for the semester
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm">-</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_1.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_1.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_1.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_1.remarks ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 2. 100% of the required documents for accreditation of newly created clubs or reaccreditation of existing clubs for SY 2026-2027 are reviewed and submitted to the ALP Coordinator as scheduled
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm">-</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_2.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_2.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_2.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_2.remarks ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 3. One (1) (f) major activity conducted as indicated in the calendar of activities with activity proposal and activity report in compliance with post-activity requirements
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm">-</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_3.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_3.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_3.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_3.remarks ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 4. One (1) (f) community-based activity sponsored/conducted as indicated in the calendar of activities with activity proposal and activity report in compliance with post-activity requirements
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm">-</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_4.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_4.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_4.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_4.remarks ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
@@ -68,41 +75,49 @@
                                     <button @click="showMonitoringModal = true" class="bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700 hover:bg-opacity-90 transition-colors duration-300 text-xs self-start">View Details</button>
                                 </div>
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">{{ (sortedData?.[0]?.totalQ / attendanceCount).toFixed(1) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_5.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_5.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_5.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_5.remarks ?? '-' }}</td>
+                            <!-- <td class="px-2 py-2 text-center text-sm border-r">{{ (sortedData?.[0]?.totalQ / attendanceCount).toFixed(1) }}</td>
                             <td class="px-2 py-2 text-center text-sm border-r">{{ (sortedData?.[0]?.totalE / attendanceCount).toFixed(1) }}</td>
-                            <td class="px-2 py-2 text-center text-sm">{{ (sortedData?.[0]?.totalT / attendanceCount).toFixed(1) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ (sortedData?.[0]?.totalT / attendanceCount).toFixed(1) }}</td> -->
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 6. 100% of the completers in the ALP classes issued with certificate of completion/accomplishment at the end of the school year during the End Blast
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm">-</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_6.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_6.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_6.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_6.remarks ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 7. 100% of the students who incurred five (5) counts/period of cutting classes or unexcused absences filed with an anecdotal report as scheduled
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm">-</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_7.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_7.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_7.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_7.remarks ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 8. 100% of the students with two (2) counts of anecdotal reports in one (1) semester required to render an alternative or community work as scheduled
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm">-</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_8.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_8.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_8.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_8.remarks ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 9. 100% of the remaining balance of ALP student-led income generating project turned over and sealed to the ALP Coordinator as scheduled
                             </td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">-</td>
-                            <td class="px-2 py-2 text-center text-sm">-</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_9.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_9.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_9.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_9.remarks ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
@@ -111,17 +126,25 @@
                                     <button @click="showRatingModal = true" class="bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700 hover:bg-opacity-90 transition-colors duration-300 text-xs self-start">View Details</button>
                                 </div>
                             </td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_10.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_10.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_10.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_10.remarks ?? '-' }}</td>
+                            <!-- <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
                             <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
-                            <td class="px-2 py-2 text-center text-sm">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td> -->
                         </tr>
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 11. One (1) (f) attendance summary report submitted as scheduled
                             </td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_11.q) }}</td>
+                            <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_11.e) }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ rating(ipcr?.monitoring?.target_11.t) }}</td>
+                            <td class="px-2 py-2 text-left text-sm">{{ ipcr?.monitoring?.target_11.remarks ?? '-' }}</td>
+                            <!-- <td class="px-2 py-2 text-center text-sm border-r">{{ props.target11 ? parseFloat("5").toFixed(1) : '-' }}</td>
                             <td class="px-2 py-2 text-center text-sm border-r">{{ props.target11 ? parseFloat("5").toFixed(1) : '-' }}</td>
-                            <td class="px-2 py-2 text-center text-sm border-r">{{ props.target11 ? parseFloat("5").toFixed(1) : '-' }}</td>
-                            <td class="px-2 py-2 text-center text-sm">{{ props.target11 ? parseFloat("5").toFixed(1) : '-' }}</td>
+                            <td class="px-2 py-2 text-center text-sm">{{ props.target11 ? parseFloat("5").toFixed(1) : '-' }}</td> -->
                         </tr>
                         </tbody>
                     </table>
@@ -136,7 +159,7 @@
 <script lang="ts" setup>
 import SleekModal from '@/Components/SleekModal.vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { fullDate } from '@/composables/utilities';
+import { rating } from '@/composables/utilities';
 import { router } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
 import AttendanceMonitoringModal from '@/Components/modals/AttendanceMonitoringModal.vue';
@@ -153,6 +176,7 @@ const props = defineProps({
     submission2: Object,
     accomplishment2: Object,
     target11: Object,
+    ipcr: Object,
 })
 const clubType = ref('club')
 const showMonitoringModal = ref(false)
@@ -200,6 +224,10 @@ const sortedData = computed(() => {
     });
     return finalData
 });
+const ipcr = computed(() => {
+    let ipcr = JSON.parse(props.ipcr.monitoring)
+    return ipcr.find((i: any) => i.adviser === props.club.user.name)
+})
 const attendanceCount = computed(() => {
     let count = 0
     for (let i in props.attendances) {

@@ -288,3 +288,9 @@ export function formatDateLocal(isoString: any) {
     const d = String(date.getDate()).padStart(2, "0");
     return `${y}-${m}-${d}`;
 }
+export function rating(value: any) {
+    if(value === null || value === undefined || value === 0 || value === '') {
+        return '-';
+    }
+    return value.toFixed(2);
+}
