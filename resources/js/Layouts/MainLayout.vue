@@ -1,9 +1,26 @@
 <template>
     <div class="no-print flex min-h-screen font-sans relative">
-      <Sidebar v-if="user.club_registers?.length > 0 || user.role === 'admin' || user.role === 'supervisor'" class="ml-[-16rem] lg:ml-0" />
+      <Sidebar v-if="user.club_registers?.length > 0 || user.role === 'admin' || user.role === 'supervisor'" class="ml-[-16rem] lg:ml-0" :class="{ 'ml-[-16rem]': collapse, 'ml-0': !collapse }" />
       <div v-if="user.club_registers?.length > 0 || user.role === 'admin' || user.role === 'supervisor'" class="flex flex-col flex-1 flex-grow overflow-y-auto bg-gray-100">
-        <TopNav class="lg:hidden" />
+        <!-- <TopNav class="lg:hidden" /> -->
         <div class="flex flex-col md:p-8 w-full">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="m-4 lg:hidden"
+                @click="collapse = !collapse"
+                >
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
             <slot />
         </div>
       </div>
@@ -18,10 +35,11 @@
   import { toast } from 'vue3-toastify'
   import 'vue3-toastify/dist/index.css'
   import { usePage } from '@inertiajs/vue3'
-  import { onMounted, computed } from 'vue'
+  import { onMounted, computed, ref } from 'vue'
   import TopNav from '@/Components/TopNav.vue'
 
   const page = usePage()
+  const collapse = ref(true)
   const props = defineProps({
     success: {
         type: String,
