@@ -1,7 +1,7 @@
 <template>
     <div class="no-print flex min-h-screen font-sans relative">
       <Sidebar v-if="user.club_registers?.length > 0 || user.role === 'admin' || user.role === 'supervisor'" class="hidden lg:block" />
-        <Sidebar v-if="user.club_registers?.length > 0 || user.role === 'admin' || user.role === 'supervisor'" class="ml-[-16rem] lg:hidden" :class="{ 'ml-[-16rem]': collapse, 'ml-0': !collapse }" />
+        <Sidebar v-if="user.club_registers?.length > 0 || user.role === 'admin' || user.role === 'supervisor'" class="lg:hidden" :class="{ 'hidden': collapse, 'block': !collapse }" />
       <div v-if="user.club_registers?.length > 0 || user.role === 'admin' || user.role === 'supervisor'" class="flex flex-col flex-1 flex-grow overflow-y-auto bg-gray-100">
         <!-- <TopNav class="lg:hidden" /> -->
         <div class="flex flex-col md:p-8 w-full">
