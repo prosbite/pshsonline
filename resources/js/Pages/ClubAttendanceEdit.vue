@@ -51,6 +51,12 @@
                         {{ attendanceForm.attendance.remarks }}
                     </span>
                 </div>
+                <div v-if="props.attendance.image" class="flex flex-col mt-6 gap-4 bg-gray-100 p-6">
+                    <h3 class="text-xl font-semibold text-gray-800">
+                        Uploaded Image
+                    </h3>
+                    <img :src="`/storage/${props?.attendance?.image}`" alt="Uploaded Image" class="w-full h-auto rounded-lg">
+                </div>
 
 
                 <PreviousDelinquents :delinquents="props.delinquents" />

@@ -67,6 +67,19 @@ class ClubAttendanceController extends Controller
             'activity' => 'required',
             'members' => 'required|array',
         ]);
+
+        // Store uploaded images
+        $imagePaths = [];
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('club_attendances', 'public');
+                $imagePaths[] = $path;
+            }
+        }
+        if(!empty($imagePaths)){
+            $request['image'] = $imagePaths[0];
+        }
         $request['school_year_id'] = SchoolYear::current()->id;
         $club = ClubRegister::findOrFail($request->club_register_id);
         if ($club->user_id !== auth()->id()) {

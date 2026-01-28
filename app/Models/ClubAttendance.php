@@ -14,6 +14,7 @@ class ClubAttendance extends Model
         'school_year_id',
         'activity',
         'date',
+        'image',
         'remarks',
     ];
     protected $casts = [

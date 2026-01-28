@@ -67,6 +67,12 @@
 
                 <PreviousDelinquents :delinquents="props.delinquents" />
 
+                <div class="flex flex-col mt-6 gap-4 bg-gray-100 p-6">
+                    <h3 class="text-xl font-semibold text-gray-800">
+                        Upload Image
+                    </h3>
+                    <ImageUpload @update:files="updateImageFiles" />
+                </div>
 
                 <div class="flex justify-between items-center mt-6">
                     <h3 class="text-xl font-semibold text-gray-800">
@@ -215,6 +221,7 @@ import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { router, Link } from '@inertiajs/vue3'
 import PreviousDelinquents from '@/Components/delinquents/PreviousDelinquents.vue'
+import ImageUpload from '@/Components/ImageUpload.vue';
 
 defineOptions({
     layout: MainLayout
@@ -235,6 +242,7 @@ let clubAttendance = useForm({
     club_register_id: null,
     date: '',
     activity: '',
+    images: [],
     members: []
 })
 const setClubAttendance = () => {
@@ -283,6 +291,11 @@ const resolveAttendance = (id: number) => {
           })
         },
     })
+}
+
+const updateImageFiles = (files: any) => {
+    clubAttendance.images = files
+    console.log(clubAttendance)
 }
 
 onMounted(() => {
