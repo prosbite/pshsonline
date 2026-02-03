@@ -5,7 +5,6 @@
       ref="fileInput"
       type="file"
       accept="image/*"
-      required
       @change="onFileChange"
     />
 
