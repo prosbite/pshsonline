@@ -21,6 +21,7 @@ use Inertia\Inertia;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ClubsMonitoringController;
 use App\Http\Controllers\ClubAccomplishmentController;
+use App\Http\Controllers\LogRecordController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -36,6 +37,9 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin Routes
+Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin')->group(function () {
+    Route::get('/log-records', [LogRecordController::class, 'index'])->name('log-records');
+});
 Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,supervisor')->group(function () {
     Route::get('/users', [ProfileController::class, 'index'])->name('users');
     Route::post('/users/update', [UserController::class, 'update'])->name('users.update');

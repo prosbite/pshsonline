@@ -12,6 +12,7 @@ use Inertia\Inertia;
 use App\Models\SchoolYear;
 use Inertia\Response;
 use App\Models\ClubRegister;
+use App\Models\LogRecord;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -35,6 +36,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         // Store current school year in session
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'log_type' => 'login',
+        ]);
         $schoolYear = SchoolYear::current();
         Auth::user()->clubs = ClubRegister::where('school_year_id', $schoolYear->id)->where('user_id', auth()->user()->id)->with(['club', 'user', 'schoolYear', 'club.learners.currentEnrollment.section'])->get();
         $request->session()->put('sy', $schoolYear);
@@ -47,6 +52,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'log_type' => 'logout',
+        ]);
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
