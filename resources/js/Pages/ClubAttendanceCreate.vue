@@ -71,7 +71,7 @@
                     <h3 class="text-xl font-semibold text-gray-800">
                         Upload Image
                     </h3>
-                    <ImageUpload @update:files="updateImageFiles" />
+                    <ImageUpload @update:files="updateImageFiles" @update:portrait="imgNotPortrait = false" :portrait="imgNotPortrait" />
                 </div>
 
                 <div class="flex justify-between items-center mt-6">
@@ -226,6 +226,7 @@ import ImageUpload from '@/Components/ImageUpload.vue';
 defineOptions({
     layout: MainLayout
 })
+const imgNotPortrait = ref(false)
 const loading = ref(false)
 const page = usePage()
 const props = defineProps({
@@ -293,9 +294,44 @@ const resolveAttendance = (id: number) => {
     })
 }
 
-const updateImageFiles = (files: any) => {
-    clubAttendance.images = files
-    console.log(clubAttendance)
+const updateImageFiles = async (files: any) => {
+    if (files.length > 0) {
+        // Check if any file is not in portrait mode (width >= height)
+        const notPortrait = await isNotPortrait(files[0])
+        if (!notPortrait) {
+            imgNotPortrait.value = true
+            toast.error('Please upload image in landscape mode.', {
+                autoClose: 3000,
+            });
+            return;
+        } else {
+            clubAttendance.images = files
+        }
+    }
+}
+
+async function isNotPortrait(file) {
+    return new Promise((resolve) => {
+        // Only process image files
+        if (!file.type.startsWith('image/')) {
+            resolve(false);
+            return;
+        }
+
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+
+        img.onload = function() {
+            URL.revokeObjectURL(objectUrl); // Free up memory immediately
+
+            // Logic: Is Width >= Height?
+            const isValid = img.width >= img.height;
+            resolve(isValid);
+        };
+
+        img.onerror = () => resolve(false);
+        img.src = objectUrl;
+    });
 }
 
 onMounted(() => {

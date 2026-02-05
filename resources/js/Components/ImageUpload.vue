@@ -5,6 +5,7 @@
       ref="fileInput"
       type="file"
       accept="image/*"
+      required
       @change="onFileChange"
     />
 
@@ -40,10 +41,16 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, onBeforeUnmount, watch } from 'vue'
 
+const props = defineProps({
+    portrait: {
+        type: Boolean,
+        default: false,
+    },
+})
 /* emit */
-const emit = defineEmits(['update:files'])
+const emit = defineEmits(['update:files', 'update:portrait'])
 
 const fileInput = ref(null)
 const files = ref([])
@@ -86,6 +93,20 @@ function syncInput() {
 function emitFiles() {
   emit('update:files', files.value)
 }
+
+watch(() => props.portrait, (value) => {
+    if (value) {
+        // Check if images are portrait (height > width)
+        files.value.forEach((file, i) => {
+            const img = new Image();
+            img.onload = function() {
+                removeImage(i);
+            };
+            img.src = URL.createObjectURL(file);
+        });
+        emit('update:portrait', false);
+    }
+})
 
 onBeforeUnmount(() => {
   previews.value.forEach(url => URL.revokeObjectURL(url))

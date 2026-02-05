@@ -289,6 +289,16 @@
                                     </div>
                                 </div>
                         </div>
+                        <div class="page-break">
+                            <p class="font-semibold">Documentation</p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex flex-col" v-for="activity in props.activities">
+                                    <img v-if="activity?.image" :src="`/storage/${activity?.image}`" alt="Uploaded Image" class="w-full h-auto rounded-lg mb-2">
+                                    <span v-if="activity?.image" class="leading-tight">{{ activity?.activity }}</span>
+                                    <span v-if="activity?.image" class="leading-tight text-sm text-gray-700">{{ fullDate(activity?.date) }}</span>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -304,6 +314,7 @@ import { onMounted, ref, computed } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import { fullDate } from '@/composables/utilities';
 
 defineOptions({
     layout: MainLayout
@@ -385,6 +396,9 @@ onMounted(() => {
     display: none;
 }
 @media print {
+    .page-break {
+        page-break-before: always;
+    }
     .no-print {
         display: none;
     }
