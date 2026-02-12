@@ -95,6 +95,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/club/unregister', [ClubController::class, 'unregisterMember'])->name('club.unregister');
     Route::put('/club/attendance/update', [ClubAttendanceController::class, 'update'])->name('club.attendance.update');
     Route::post('/club/attendance', [ClubAttendanceController::class, 'store'])->name('club.attendance.store');
+    Route::post('/club/attendance/{attendance_id}/update-image', [ClubAttendanceController::class, 'updateImage'])->name('club.attendance.update-image');
+
     Route::get('/club/{club_id}/attendance/monthly', [ClubAttendanceController::class, 'monthlyAttendance'])->name('club.attendance.monthly');
     Route::get('/club/{club_id}/attendance-infractions', [ClubAttendanceController::class, 'infractionsList'])->name('club.attendance.infractions');
     Route::put('/club/attendance/resolve', [ClubAttendanceController::class, 'resolve'])->name('club.attendance.resolve');

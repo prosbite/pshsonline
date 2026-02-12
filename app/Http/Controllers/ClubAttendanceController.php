@@ -123,6 +123,33 @@ class ClubAttendanceController extends Controller
         $clubAttendance->delinquents()->createMany($delinquentsMembers);
         return redirect()->route('club.attendance', ['club_register_id' => $club->id]);
     }
+
+    public function updateImage(Request $request, $attendance_id)
+    {
+        $request->validate([
+            'images' => 'required|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        // Store uploaded images
+        $imagePaths = [];
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('club_attendances', 'public');
+                $imagePaths[] = $path;
+            }
+        }
+        if(!empty($imagePaths)){
+            $request['image'] = $imagePaths[0];
+        }
+
+        $attendance = ClubAttendance::findOrFail($attendance_id);
+        $attendance->image = $request['image'];
+        $attendance->save();
+        return redirect()->route('club.attendance.show', ['attendance_id' => $attendance->id]);
+    }
+
+
     public function show(Request $request)
     {
         $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner'])->findOrFail($request->attendance_id);
