@@ -9,6 +9,8 @@ use App\Models\ClubRegister;
 use App\Models\AttendanceDelinquence;
 use App\Models\SchoolYear;
 use App\Models\Learner;
+use App\Models\Quarter;
+
 
 class ClubAttendanceController extends Controller
 {
@@ -258,9 +260,30 @@ class ClubAttendanceController extends Controller
             'attendance' => $summary,
         ]);
     }
+    public function infractionsList(Request $request)
+    {
+        $club = ClubRegister::with([
+            'club',
+            'clubAttendances' => function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'clubAttendances.delinquents',
+            'clubAttendances.delinquents.clubAttendanceLearner',
+            'clubAttendances.delinquents.clubAttendanceLearner.learner'
+        ])->findOrFail($request->club_id);
+
+        $quarters = Quarter::all();
+        $currentQuarter = $request->quarter_id ? Quarter::where('id', $request->quarter_id)->first() : Quarter::where('status', 'active')->first();
+        return Inertia::render('ClubInfractionsList', [
+            'club' => $club,
+            'quarters' => $quarters,
+            'currentQuarter' => $currentQuarter,
+        ]);
+    }
     public function clubAttendanceInfractions(Request $request)
     {
-        $club = ClubRegister::with('club','clubAttendances', 'clubAttendances.clubAttendanceLearner')->findOrFail($request->club_id);
+        $club = ClubRegister::with('club','clubAttendances', 'clubAttendances.delinquents', 'clubAttendances.delinquents.clubAttendanceLearner')->findOrFail($request->club_id);
+
         // dd($club);
         // if ($club->user_id !== auth()->id()) {
         //     abort(403, 'Unauthorized access.');

@@ -123,14 +123,12 @@
                                             <td class="border border-black px-2 py-1 text-center text-xs">{{ total(attendance) > 9 ? 'For Community Service' : 'Good Standing' }}</td>
                                         </tr>
 
-                                    <!-- Example row -->
-                                        <tr v-for="(attendance, index) in consolidatedAttendance" :key="index">
+                                        <!-- <tr v-for="(attendance, index) in consolidatedAttendance" :key="index">
                                             <td class="border border-black px-2 py-1 text-center">{{ index + 1 }}</td>
                                             <td class="border border-black px-2 py-1">{{ attendance[1]?? '' }}</td>
                                             <td class="border border-black px-2 py-1 text-center">{{ attendance[2]?? '' }}</td>
                                             <td class="border border-black px-2 py-1 text-center">{{ attendance[3]?? '' }}</td>
 
-                                            <!-- Meeting cells -->
                                             <template v-for="(meeting, mIndex) in (attendance.length - 4) / 2" :key="mIndex">
                                                 <td class="border border-black px-2 py-1 text-center font-bold" :class="statusColor[attendance[4 + (mIndex * 2)] ?? '']" colspan="1">
                                                     {{ status[attendance[4 + (mIndex * 2)] ?? ''] }}
@@ -139,7 +137,7 @@
                                                     {{ attendance[5 + (mIndex * 2)] ?? '-' }}
                                                 </td>
                                             </template>
-                                        </tr>
+                                        </tr> -->
                                     </tbody>
                                 </table>
                                 <div class="mt-2 text-xs mb-4">
