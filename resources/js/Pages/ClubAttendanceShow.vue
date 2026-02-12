@@ -181,6 +181,9 @@ const sortedMembers = computed(() => {
         return a.last_name.localeCompare(b.last_name)
     })
 })
+onMounted(() => {
+    console.log(props.attendance)
+})
 </script>
 
 <style></style>
