@@ -197,13 +197,29 @@ export function submissionType() {
             label: 'Accomplishment Report (2nd Quarter)',
             value: 'accomplishment_report_2nd_quarter',
         },
-         {
+        {
+            label: 'Accomplishment Report (3rd Quarter)',
+            value: 'accomplishment_report_3rd_quarter',
+        },
+        {
+            label: 'Accomplishment Report (4th Quarter)',
+            value: 'accomplishment_report_4th_quarter',
+        },
+        {
             label: 'Monthly Attendance Report (1st Quarter)',
             value: 'monthly_attendance_report_1st_quarter',
         },
         {
             label: 'Monthly Attendance Report (2nd Quarter)',
             value: 'monthly_attendance_report_2nd_quarter',
+        },
+        {
+            label: 'Monthly Attendance Report (3rd Quarter)',
+            value: 'monthly_attendance_report_3rd_quarter',
+        },
+        {
+            label: 'Monthly Attendance Report (4th Quarter)',
+            value: 'monthly_attendance_report_4th_quarter',
         },
         {
             label: 'Activity Proposal (Major Activity)',
