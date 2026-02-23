@@ -159,6 +159,10 @@ export function attendanceStatus() {
     ]
 }
 
+export function getAverage(numbers:Array<number>) {
+    return numbers.reduce((a, b) => a + b, 0) / numbers.length
+}
+
 export function advisersAttendanceStatus() {
     return [
         {
@@ -193,13 +197,29 @@ export function submissionType() {
             label: 'Accomplishment Report (2nd Quarter)',
             value: 'accomplishment_report_2nd_quarter',
         },
-         {
+        {
+            label: 'Accomplishment Report (3rd Quarter)',
+            value: 'accomplishment_report_3rd_quarter',
+        },
+        {
+            label: 'Accomplishment Report (4th Quarter)',
+            value: 'accomplishment_report_4th_quarter',
+        },
+        {
             label: 'Monthly Attendance Report (1st Quarter)',
             value: 'monthly_attendance_report_1st_quarter',
         },
         {
             label: 'Monthly Attendance Report (2nd Quarter)',
             value: 'monthly_attendance_report_2nd_quarter',
+        },
+        {
+            label: 'Monthly Attendance Report (3rd Quarter)',
+            value: 'monthly_attendance_report_3rd_quarter',
+        },
+        {
+            label: 'Monthly Attendance Report (4th Quarter)',
+            value: 'monthly_attendance_report_4th_quarter',
         },
         {
             label: 'Activity Proposal (Major Activity)',
@@ -283,4 +303,10 @@ export function formatDateLocal(isoString: any) {
     const m = String(date.getMonth() + 1).padStart(2, "0");
     const d = String(date.getDate()).padStart(2, "0");
     return `${y}-${m}-${d}`;
+}
+export function rating(value: any) {
+    if(value === null || value === undefined || value === 0 || value === '') {
+        return '-';
+    }
+    return value.toFixed(2);
 }

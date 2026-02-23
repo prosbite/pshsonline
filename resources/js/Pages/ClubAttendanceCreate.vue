@@ -67,6 +67,12 @@
 
                 <PreviousDelinquents :delinquents="props.delinquents" />
 
+                <div class="flex flex-col mt-6 gap-4 bg-gray-100 p-6">
+                    <h3 class="text-xl font-semibold text-gray-800">
+                        Upload Image
+                    </h3>
+                    <ImageUpload @update:files="updateImageFiles" @update:portrait="imgNotPortrait = false" :portrait="imgNotPortrait" />
+                </div>
 
                 <div class="flex justify-between items-center mt-6">
                     <h3 class="text-xl font-semibold text-gray-800">
@@ -215,10 +221,12 @@ import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { router, Link } from '@inertiajs/vue3'
 import PreviousDelinquents from '@/Components/delinquents/PreviousDelinquents.vue'
+import ImageUpload from '@/Components/ImageUpload.vue';
 
 defineOptions({
     layout: MainLayout
 })
+const imgNotPortrait = ref(false)
 const loading = ref(false)
 const page = usePage()
 const props = defineProps({
@@ -235,6 +243,7 @@ let clubAttendance = useForm({
     club_register_id: null,
     date: '',
     activity: '',
+    images: [],
     members: []
 })
 const setClubAttendance = () => {
@@ -283,6 +292,46 @@ const resolveAttendance = (id: number) => {
           })
         },
     })
+}
+
+const updateImageFiles = async (files: any) => {
+    if (files.length > 0) {
+        // Check if any file is not in portrait mode (width >= height)
+        const notPortrait = await isNotPortrait(files[0])
+        if (!notPortrait) {
+            imgNotPortrait.value = true
+            toast.error('Please upload image in landscape mode.', {
+                autoClose: 3000,
+            });
+            return;
+        } else {
+            clubAttendance.images = files
+        }
+    }
+}
+
+async function isNotPortrait(file) {
+    return new Promise((resolve) => {
+        // Only process image files
+        if (!file.type.startsWith('image/')) {
+            resolve(false);
+            return;
+        }
+
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(file);
+
+        img.onload = function() {
+            URL.revokeObjectURL(objectUrl); // Free up memory immediately
+
+            // Logic: Is Width >= Height?
+            const isValid = img.width >= img.height;
+            resolve(isValid);
+        };
+
+        img.onerror = () => resolve(false);
+        img.src = objectUrl;
+    });
 }
 
 onMounted(() => {

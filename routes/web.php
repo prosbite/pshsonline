@@ -21,6 +21,7 @@ use Inertia\Inertia;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ClubsMonitoringController;
 use App\Http\Controllers\ClubAccomplishmentController;
+use App\Http\Controllers\LogRecordController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -36,6 +37,9 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin Routes
+Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin')->group(function () {
+    Route::get('/log-records', [LogRecordController::class, 'index'])->name('log-records');
+});
 Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,supervisor')->group(function () {
     Route::get('/users', [ProfileController::class, 'index'])->name('users');
     Route::post('/users/update', [UserController::class, 'update'])->name('users.update');
@@ -61,6 +65,8 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,super
     Route::put('/clubs/submissions/{submission}', [AdminClubSubmissionController::class, 'update'])->name('admin.club.submissions.update');
     Route::delete('/clubs/submissions/{submission}', [AdminClubSubmissionController::class, 'destroy'])->name('admin.club.submissions.delete');
     Route::get('/clubs/monitoring', [ClubsMonitoringController::class, 'index'])->name('admin.clubs.monitoring');
+    Route::post('/clubs/monitoring', [ClubsMonitoringController::class, 'store'])->name('admin.clubs.monitoring.store');
+    Route::post('/clubs/monitoring/update', [ClubsMonitoringController::class, 'update'])->name('admin.clubs.monitoring.update');
 
     Route::get('/advisers/attendance', [AdviserAttendanceController::class, 'index'])->name('admin.advisers.attendance');
     Route::get('/advisers/attendance/create', [AdviserAttendanceController::class, 'create'])->name('admin.advisers.attendance.create');
@@ -89,7 +95,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/club/unregister', [ClubController::class, 'unregisterMember'])->name('club.unregister');
     Route::put('/club/attendance/update', [ClubAttendanceController::class, 'update'])->name('club.attendance.update');
     Route::post('/club/attendance', [ClubAttendanceController::class, 'store'])->name('club.attendance.store');
+    Route::post('/club/attendance/{attendance_id}/update-image', [ClubAttendanceController::class, 'updateImage'])->name('club.attendance.update-image');
+
     Route::get('/club/{club_id}/attendance/monthly', [ClubAttendanceController::class, 'monthlyAttendance'])->name('club.attendance.monthly');
+    Route::get('/club/{club_id}/attendance-infractions', [ClubAttendanceController::class, 'infractionsList'])->name('club.attendance.infractions');
     Route::put('/club/attendance/resolve', [ClubAttendanceController::class, 'resolve'])->name('club.attendance.resolve');
     Route::get('/club/submissions', [ClubSubmissionController::class, 'index'])->name('club.submissions');
     Route::post('/club/submissions', [ClubSubmissionController::class, 'store'])->name('club.submissions.store');

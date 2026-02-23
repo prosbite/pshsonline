@@ -70,7 +70,7 @@ class AdminClubAttendanceController extends Controller
             'unexcused_absence',
             'cutting_classes'
         ])
-        ->whereDate('date', '>', '2025-08-14'); // ✅ Add your date condition here
+        ->whereDate('date', '>', '2025-12-07'); // ✅ Add your date condition here
     })
     ->with([
         'clubAttendance' => function ($query) {
@@ -79,7 +79,7 @@ class AdminClubAttendanceController extends Controller
                 'unexcused_absence',
                 'cutting_classes'
             ])
-            ->whereDate('date', '>', '2025-08-14'); // ✅ Also apply it here to filter loaded data
+            ->whereDate('date', '>', '2025-12-07'); // ✅ Also apply it here to filter loaded data
         },
         'clubAttendance.clubRegister.club',
         'currentEnrollment.section.gradeLevel'

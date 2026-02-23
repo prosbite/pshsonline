@@ -9,6 +9,8 @@ use App\Models\ClubRegister;
 use App\Models\AttendanceDelinquence;
 use App\Models\SchoolYear;
 use App\Models\Learner;
+use App\Models\Quarter;
+
 
 class ClubAttendanceController extends Controller
 {
@@ -67,6 +69,19 @@ class ClubAttendanceController extends Controller
             'activity' => 'required',
             'members' => 'required|array',
         ]);
+
+        // Store uploaded images
+        $imagePaths = [];
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('club_attendances', 'public');
+                $imagePaths[] = $path;
+            }
+        }
+        if(!empty($imagePaths)){
+            $request['image'] = $imagePaths[0];
+        }
         $request['school_year_id'] = SchoolYear::current()->id;
         $club = ClubRegister::findOrFail($request->club_register_id);
         if ($club->user_id !== auth()->id()) {
@@ -108,6 +123,33 @@ class ClubAttendanceController extends Controller
         $clubAttendance->delinquents()->createMany($delinquentsMembers);
         return redirect()->route('club.attendance', ['club_register_id' => $club->id]);
     }
+
+    public function updateImage(Request $request, $attendance_id)
+    {
+        $request->validate([
+            'images' => 'required|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        // Store uploaded images
+        $imagePaths = [];
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('club_attendances', 'public');
+                $imagePaths[] = $path;
+            }
+        }
+        if(!empty($imagePaths)){
+            $request['image'] = $imagePaths[0];
+        }
+
+        $attendance = ClubAttendance::findOrFail($attendance_id);
+        $attendance->image = $request['image'];
+        $attendance->save();
+        return redirect()->route('club.attendance.show', ['attendance_id' => $attendance->id]);
+    }
+
+
     public function show(Request $request)
     {
         $attendance = ClubAttendance::with(['clubRegister.club', 'clubAttendanceLearner'])->findOrFail($request->attendance_id);
@@ -245,9 +287,30 @@ class ClubAttendanceController extends Controller
             'attendance' => $summary,
         ]);
     }
+    public function infractionsList(Request $request)
+    {
+        $club = ClubRegister::with([
+            'club',
+            'clubAttendances' => function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'clubAttendances.delinquents',
+            'clubAttendances.delinquents.clubAttendanceLearner',
+            'clubAttendances.delinquents.clubAttendanceLearner.learner'
+        ])->findOrFail($request->club_id);
+
+        $quarters = Quarter::all();
+        $currentQuarter = $request->quarter_id ? Quarter::where('id', $request->quarter_id)->first() : Quarter::where('status', 'active')->first();
+        return Inertia::render('ClubInfractionsList', [
+            'club' => $club,
+            'quarters' => $quarters,
+            'currentQuarter' => $currentQuarter,
+        ]);
+    }
     public function clubAttendanceInfractions(Request $request)
     {
-        $club = ClubRegister::with('club','clubAttendances', 'clubAttendances.clubAttendanceLearner')->findOrFail($request->club_id);
+        $club = ClubRegister::with('club','clubAttendances', 'clubAttendances.delinquents', 'clubAttendances.delinquents.clubAttendanceLearner')->findOrFail($request->club_id);
+
         // dd($club);
         // if ($club->user_id !== auth()->id()) {
         //     abort(403, 'Unauthorized access.');

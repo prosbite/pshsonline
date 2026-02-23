@@ -5,6 +5,11 @@
                 <h3 class="text-2xl font-semibold text-gray-800">Attendance Summary</h3>
                 <p class="text-gray-600">{{ props.club?.name }}</p>
             </div>
+            <div class="flex justify-end items-center">
+                <select id="attendanceDate" required class="border w-1/5 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="" disabled selected>Select Quarter</option>
+                </select>
+            </div>
         </div>
         <div class="overflow-x-auto rounded-lg border border-gray-200 mb-6">
             <table class="min-w-full divide-y divide-gray-200">
@@ -115,17 +120,15 @@
                                             <td class="border border-black px-2 py-1 whitespace-nowrap text-center text-sm text-yellow-500">{{ totalTardy(attendance) }}</td>
                                             <td class="border border-black px-2 py-1 text-center">{{ totalCuttingClasses(attendance) }}</td>
                                             <td class="border border-black px-2 py-1 text-center">{{ total(attendance) }}</td>
-                                            <td class="border border-black px-2 py-1 text-center text-xs">{{ total(attendance) > 4 ? 'For Community Service' : 'Good Standing' }}</td>
+                                            <td class="border border-black px-2 py-1 text-center text-xs">{{ total(attendance) > 9 ? 'For Community Service' : 'Good Standing' }}</td>
                                         </tr>
 
-                                    <!-- Example row -->
-                                        <tr v-for="(attendance, index) in consolidatedAttendance" :key="index">
+                                        <!-- <tr v-for="(attendance, index) in consolidatedAttendance" :key="index">
                                             <td class="border border-black px-2 py-1 text-center">{{ index + 1 }}</td>
                                             <td class="border border-black px-2 py-1">{{ attendance[1]?? '' }}</td>
                                             <td class="border border-black px-2 py-1 text-center">{{ attendance[2]?? '' }}</td>
                                             <td class="border border-black px-2 py-1 text-center">{{ attendance[3]?? '' }}</td>
 
-                                            <!-- Meeting cells -->
                                             <template v-for="(meeting, mIndex) in (attendance.length - 4) / 2" :key="mIndex">
                                                 <td class="border border-black px-2 py-1 text-center font-bold" :class="statusColor[attendance[4 + (mIndex * 2)] ?? '']" colspan="1">
                                                     {{ status[attendance[4 + (mIndex * 2)] ?? ''] }}
@@ -134,7 +137,7 @@
                                                     {{ attendance[5 + (mIndex * 2)] ?? '-' }}
                                                 </td>
                                             </template>
-                                        </tr>
+                                        </tr> -->
                                     </tbody>
                                 </table>
                                 <div class="mt-2 text-xs mb-4">

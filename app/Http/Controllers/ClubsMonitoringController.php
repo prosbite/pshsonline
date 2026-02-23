@@ -7,8 +7,10 @@ use Inertia\Inertia;
 use App\Models\ClubAttendance;
 use App\Models\ClubRegister;
 use App\Models\Club;
+use App\Models\SchoolYear;
 use App\Models\User;
 use App\Models\Submission;
+use App\Models\Ipcr;
 use Carbon\Carbon;
 
 class ClubsMonitoringController extends Controller
@@ -16,10 +18,8 @@ class ClubsMonitoringController extends Controller
     public function index(Request $request)
     {
         $clubType = $request->club_type ?? 'club';
+        $clubs = ClubRegister::with('club', 'user')->get();
         $allAdvisers = ClubAttendance::with('clubRegister.user', 'clubRegister.club')
-        ->whereHas('clubRegister.club', function ($q) use ($clubType) {
-            $q->where('type', $clubType);
-        })
         ->get()
         ->pluck('clubRegister.user')
         ->unique('name')
@@ -32,6 +32,7 @@ class ClubsMonitoringController extends Controller
         })
         ->orderBy('date', 'asc')
         ->where('date', '>=', '2025-08-14')
+        ->where('date', '<=', '2025-12-05')
         ->get()
         ->groupBy('date')
         ->map(function ($group) use ($allAdvisers) {
@@ -67,20 +68,20 @@ class ClubsMonitoringController extends Controller
         $accomplishment_reports = [];
         $accomplishment_reports2 = [];
         $monthly_attendance_reports = [];
-         $monthly_attendance_reports2 = [];
+        $monthly_attendance_reports2 = [];
+        $ipcr = Ipcr::where('school_year_id',SchoolYear::current()->id)
+                ->where('semester', 1)
+                ->where('club_type', $clubType)
+                ->first();
 
-        if($request->target_type && $request->target_type === '5') {
-             $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
-             $monthly_attendance_reports2 = Submission::with(['user'])->where(['name' => 'monthly_attendance_report_2nd_quarter', 'status' => 'completed'])->get();
-        }
-        if($request->target_type && $request->target_type === '10') {
-            $accomplishment_reports = Submission::with(['user'])->where(['name' => 'accomplishment_report', 'status' => 'completed'])->get();
-            $accomplishment_reports2 = Submission::with(['user'])->where(['name' => 'accomplishment_report_2nd_quarter', 'status' => 'completed'])->get();
-        }
-        if($request->target_type && $request->target_type === '11') {
-            $accomplishment_reports = Submission::with(['user'])->where(['name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->get();
-        }
+        $monthly_attendance_reports = Submission::with(['user'])->where(['name' => 'monthly_attendance_report', 'status' => 'completed'])->get();
+        $monthly_attendance_reports2 = Submission::with(['user'])->where(['name' => 'monthly_attendance_report_2nd_quarter', 'status' => 'completed'])->get();
+        $accomplishment_reports = Submission::with(['user'])->where(['name' => 'accomplishment_report', 'status' => 'completed'])->get();
+        $accomplishment_reports2 = Submission::with(['user'])->where(['name' => 'accomplishment_report_2nd_quarter', 'status' => 'completed'])->get();
+        $attendance_summary_report_1st_semester = Submission::with(['user'])->where(['name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->get();
+        // dd($monthly_attendance_reports);
         // $submission = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report', 'status' => 'completed'])->first();
+        // dd($attendances);
         return Inertia::render('admin/ClubsMonitoring', [
             'advisers' => $allAdvisers,
             'attendances' => $attendances,
@@ -88,7 +89,42 @@ class ClubsMonitoringController extends Controller
             'accomplishment_reports2' => $accomplishment_reports2,
             'monthly_attendance_reports' => $monthly_attendance_reports,
             'monthly_attendance_reports2' => $monthly_attendance_reports2,
+            'ipcr' => $ipcr,
+            'clubs' => $clubs,
         ]);
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'semester' => 'required',
+            'school_year_id' => 'required',
+            'monitoring' => 'required',
+            'club_type' => 'required'
+        ]);
+        Ipcr::create([
+            'semester' => $request->semester,
+            'school_year_id' => $request->school_year_id,
+            'monitoring' => $request->monitoring,
+            'club_type' => $request->club_type
+        ]);
+        return redirect()->route('admin.clubs.monitoring');
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'semester' => 'required',
+            'school_year_id' => 'required',
+            'monitoring' => 'required',
+            'club_type' => 'required'
+        ]);
+        Ipcr::where('id', $request->id)->update([
+            'semester' => $request->semester,
+            'school_year_id' => $request->school_year_id,
+            'monitoring' => $request->monitoring,
+            'club_type' => $request->club_type
+        ]);
+        return redirect()->route('admin.clubs.monitoring');
     }
     public function show($id)
     {
@@ -109,6 +145,7 @@ class ClubsMonitoringController extends Controller
         })
         ->orderBy('date', 'asc')
         ->where('date', '>=', '2025-08-14')
+        ->where('date', '<=', '2025-12-05')
         ->get()
         ->groupBy('date')
         ->map(function ($group) use ($adviser) {
@@ -146,6 +183,10 @@ class ClubsMonitoringController extends Controller
         $submission2 = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report_2nd_quarter', 'status' => 'completed'])->first();
         $accomplishment2 = Submission::where(['club_register_id' => $id, 'name' => 'accomplishment_report_2nd_quarter', 'status' => 'completed'])->first();
         $target11 = Submission::where(['club_register_id' => $id, 'name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->first();
+        $ipcr = Ipcr::where('school_year_id',SchoolYear::current()->id)
+                ->where('semester', 1)
+                ->where('club_type', $clubType)
+                ->first();
         return Inertia::render('ClubMonitoring', [
             'club' => $club,
             'advisers' => $adviser,
@@ -155,6 +196,7 @@ class ClubsMonitoringController extends Controller
             'submission2' => $submission2,
             'accomplishment2' => $accomplishment2,
             'target11' => $target11,
+            'ipcr' => $ipcr
         ]);
     }
 }
