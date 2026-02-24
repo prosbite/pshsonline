@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Models\AttendanceDelinquence;
 use App\Models\ClubAttendance;
 use App\Models\ClubRegister;
-use App\Models\AttendanceDelinquence;
-use App\Models\SchoolYear;
 use App\Models\Learner;
 use App\Models\Quarter;
+use App\Models\SchoolYear;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 
 class ClubAttendanceController extends Controller
@@ -147,6 +148,21 @@ class ClubAttendanceController extends Controller
         $attendance->image = $request['image'];
         $attendance->save();
         return redirect()->route('club.attendance.show', ['attendance_id' => $attendance->id]);
+    }
+
+    public function deleteImage(Request $request)
+    {
+        $attendance = ClubAttendance::findOrFail($request->id);
+        if ($attendance->image) {
+            Storage::disk('public')->delete($attendance->image);
+        }
+
+        $attendance->update([
+            'image' => null
+        ]);
+
+        return redirect()->route('club.attendance.show', ['attendance_id' => $attendance->id])
+                        ->with('success', 'Image deleted successfully.');
     }
 
 

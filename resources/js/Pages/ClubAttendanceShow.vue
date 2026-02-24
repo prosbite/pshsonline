@@ -58,6 +58,13 @@
                         Uploaded Image
                     </h3>
                     <img :src="`/storage/${props?.attendance?.image}`" alt="Uploaded Image" class="w-full h-auto rounded-lg">
+                    <button
+                        type="button"
+                        @click.prevent="deleteImage"
+                        class="inline-flex items-center px-4 py-2 w-[150px] justify-center bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                    >
+                        Delete Image
+                    </button>
                 </div>
                 <div v-else class="flex flex-col mt-6 gap-4 bg-gray-100 p-6">
                     <h3 class="text-xl font-semibold text-gray-800">
@@ -244,6 +251,22 @@ async function isNotPortrait(file) {
 }
 const saveImage = () => {
     clubAttendance.post(route('club.attendance.update-image', props.attendance.id))
+}
+const deleteImage = () => {
+    clubAttendance.post(route('club.attendance.delete-image', props.attendance.id), {
+    onBefore: () => confirm('Are you sure you want to delete this image?'),
+    onSuccess: () => {
+         toast.success('Image deleted successfully', {
+                autoClose: 1000,
+        })
+    },
+    onError: (errors) => {
+         toast.error('Something went wrong.', {
+                autoClose: 1000,
+        })
+    },
+    preserveScroll: true, // Optional: keeps the user at the same scroll position
+});
 }
 onMounted(() => {
     // console.log(props.attendance)
