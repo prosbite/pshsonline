@@ -339,12 +339,24 @@ const consolidatedAttendance = computed(() => {
                 finalData[index].push(learner.learner.current_enrollment.section.grade_level_id + 6)
                 finalData[index].push(learner.learner.current_enrollment.section.section_name)
                 finalData[index].push(learner.status)
-                finalData[index].push(learner.remarks ?? '-')
+                if(learner.remarks) {
+                    finalData[index].push(learner.remarks)
+                } else if(learner.status == "present") {
+                    finalData[index].push('Present')
+                } else {
+                    finalData[index].push('-')
+                }
             } else {
                 finalData.forEach((data: any) => {
                     if(data[0] == learner.learner.id) {
                         data.push(learner.status)
-                        data.push(learner.remarks ?? '-')
+                        if(learner.remarks) {
+                    finalData[index].push(learner.remarks)
+                } else if(learner.status == "present") {
+                    finalData[index].push('Present')
+                } else {
+                    finalData[index].push('-')
+                }
                     }
                 })
             }
