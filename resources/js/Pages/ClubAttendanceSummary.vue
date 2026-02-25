@@ -93,7 +93,7 @@
                                     <span class="text-center block uppercase leading-tight">
                                         Attendance Summary
                                     </span>
-                                    <span class="text-center block w-full text-sm leading-tight">1st Semester, S.Y. {{ page.props.sy.year_start }} - {{ page.props.sy.year_end }}</span>
+                                    <span class="text-center block w-full text-sm leading-tight">{{ currentSemester === 's1' ? '1st' : '2nd' }} Semester, S.Y. {{ page.props.sy.year_start }} - {{ page.props.sy.year_end }}</span>
                                 </div>
                                 <span class="font-bold mb-2">
                                     Club: {{ page.props.auth.user.club_registers?.[0]?.club?.name }}
