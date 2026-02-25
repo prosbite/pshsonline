@@ -6,8 +6,10 @@
                 <p class="text-gray-600">{{ props.club?.name }}</p>
             </div>
             <div class="flex justify-end items-center">
-                <select id="attendanceDate" required class="border w-1/5 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="" disabled selected>Select Quarter</option>
+                <select @change="handleSemesterChange" v-model="currentSemester" id="attendanceDate" required class="border w-60 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="" disabled selected>Select Semester</option>
+                    <option value="s1">1st Semester</option>
+                    <option value="s2">2nd Semester</option>
                 </select>
             </div>
         </div>
@@ -194,7 +196,7 @@ import { onMounted, ref } from 'vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
-import { fullDate, attendanceStatus, formatDate, middleInitials, formatMonth } from '@/composables/utilities'
+import { fullDate, attendanceStatus, formatDate, middleInitials, formatMonth, getOrdinal } from '@/composables/utilities'
 
 defineOptions({
   layout: MainLayout
@@ -203,7 +205,9 @@ const page = usePage()
 const props = defineProps({
     club: Object,
     attendance: Array,
+    semester: String,
 })
+const currentSemester = ref(props.semester)
 const totalPresent = (attendance: any) => {
     return attendance.club_attendance.filter((learner: any) => (learner.pivot.status === 'present' || learner.pivot.status === 'tardy') && learner.club_register_id === props.club.id).length
 }
@@ -225,6 +229,9 @@ const total = (attendance: any) => {
 }
 const printSummary = () => {
     window.print()
+}
+const handleSemesterChange = () => {
+    router.get(route('club.attendance.summary', { club_register_id: props.club.id, semester: currentSemester.value }))
 }
 </script>
 

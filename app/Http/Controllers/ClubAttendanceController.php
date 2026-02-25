@@ -285,22 +285,25 @@ class ClubAttendanceController extends Controller
         // })
         // ->orderBy('last_name', 'asc')
         // ->get();
-
-        $summary = Learner::with(['clubAttendance' => function ($query) use ($request) {
+        $semester = $request->semester ?? 's1';
+        $startDate = $semester === 's1' ? '2025-08-01' : '2025-12-01';
+        $endDate = $semester === 's1' ? '2025-11-30' : '2026-04-31';
+        $summary = Learner::with(['clubAttendance' => function ($query) use ($request, $startDate, $endDate) {
         $query->where('club_register_id', $request->club_register_id)
-              ->whereBetween('date', ['2025-08-01', '2025-11-30']);
-    }])
-    ->whereHas('clubAttendance', function ($query) use ($request) {
-        $query->where('club_register_id', $request->club_register_id)
-              ->whereBetween('date', ['2025-08-01', '2025-11-30']);
-    })
-    ->orderBy('last_name', 'asc')
-    ->get();
+                ->whereBetween('date', [$startDate, $endDate]);
+        }])
+        ->whereHas('clubAttendance', function ($query) use ($request, $startDate, $endDate) {
+            $query->where('club_register_id', $request->club_register_id)
+                ->whereBetween('date', [$startDate, $endDate]);
+        })
+        ->orderBy('last_name', 'asc')
+        ->get();
 
 
         return Inertia::render('ClubAttendanceSummary', [
             'club' => $club,
             'attendance' => $summary,
+            'semester' => $semester,
         ]);
     }
     public function infractionsList(Request $request)

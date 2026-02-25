@@ -310,3 +310,12 @@ export function rating(value: any) {
     }
     return value.toFixed(2);
 }
+
+export function getOrdinal(n: number) {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+
+  // Logic: Use (n-20)%10 or n%10, but fallback to "th" (index 0)
+  // for anything that doesn't end in 1, 2, or 3, or is 11-13.
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
