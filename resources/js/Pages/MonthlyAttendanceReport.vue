@@ -351,12 +351,12 @@ const consolidatedAttendance = computed(() => {
                     if(data[0] == learner.learner.id) {
                         data.push(learner.status)
                         if(learner.remarks) {
-                    finalData[index].push(learner.remarks)
-                } else if(learner.status == "present") {
-                    finalData[index].push('Present')
-                } else {
-                    finalData[index].push('-')
-                }
+                            data.push(learner.remarks)
+                        } else if(learner.status == "present") {
+                            data.push('Present')
+                        } else {
+                            data.push('-')
+                        }
                     }
                 })
             }
