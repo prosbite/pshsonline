@@ -90,7 +90,7 @@
           case '7xl':
             return 'max-w-7xl w-full h-auto max-h-[90vh]';
           default:
-            return 'max-w-md w-full h-auto max-h-[90vh]';
+            return 'max-w-md w-full h-auto max-h-[95vh]';
         }
       }
     },

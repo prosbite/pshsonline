@@ -1,7 +1,7 @@
 <template>
     <SleekModal :is-visible="props.show" @close="$emit('close')" size="7xl" style="z-index: 99999">
         <template #header>
-            <h3 class="text-lg font-medium text-gray-900">Target 10 Details</h3>
+            <h3 class="text-lg font-medium text-gray-900">Target 3 Details</h3>
         </template>
         <template #body>
             <table class="min-w-full border border-gray-200 bg-white">
@@ -11,10 +11,10 @@
                         Target
                     </th>
                     <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                        {{ props.semester === 's1' ? '1st' : '3rd' }} Quarter
+                        Activity Proposal
                     </th>
                     <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                        {{ props.semester === 's1' ? '2nd' : '4th' }} Quarter
+                        Activity Report
                     </th>
                     </tr>
                     <tr class="bg-indigo-100 text-indigo-900">
@@ -29,14 +29,14 @@
                 <tbody class="divide-y divide-gray-200">
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
-                            10. 100% of the Quarterly Accomplishment Report prepared according to the standards set and submitted to ALP coordinator as scheduled.
+                            3. One (1) (f) major activity conducted as indicated in the calendar of activities with activity proposal and activity report in compliance with post-activity requirements
                         </td>
-                        <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment ? parseFloat("5").toFixed(1) : '-' }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment2 ? parseFloat("5").toFixed(1) : '-' }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment2 ? parseFloat("5").toFixed(1) : '-' }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r">{{ props.accomplishment2 ? parseFloat("5").toFixed(1) : '-' }}</td>
+                        <td class="px-2 py-2 text-center text-sm border-r">-</td>
+                        <td class="px-2 py-2 text-center text-sm border-r">-</td>
+                        <td class="px-2 py-2 text-center text-sm border-r">-</td>
+                        <td class="px-2 py-2 text-center text-sm border-r">-</td>
+                        <td class="px-2 py-2 text-center text-sm border-r">-</td>
+                        <td class="px-2 py-2 text-center text-sm border-r">-</td>
                     </tr>
                 </tbody>
             </table>

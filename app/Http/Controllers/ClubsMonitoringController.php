@@ -126,10 +126,12 @@ class ClubsMonitoringController extends Controller
         ]);
         return redirect()->route('admin.clubs.monitoring');
     }
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $club = ClubRegister::with('club', 'user')->findOrFail($id);
         $clubType = $club->club->type;
+        $startDate = $request->semester === 's1' ? '2025-08-14' : '2026-01-14';
+        $endDate = $request->semester === 's1' ? '2025-12-31' : '2026-04-24';
         $adviser = ClubAttendance::with('clubRegister.user', 'clubRegister.club')
         ->where('club_register_id', $id)
         ->whereHas('clubRegister.club', function ($q) use ($clubType) {
@@ -144,8 +146,8 @@ class ClubsMonitoringController extends Controller
             $q->where('type', $clubType);
         })
         ->orderBy('date', 'asc')
-        ->where('date', '>=', '2025-08-14')
-        ->where('date', '<=', '2025-12-05')
+        ->where('date', '>=', $startDate)
+        ->where('date', '<=', $endDate)
         ->get()
         ->groupBy('date')
         ->map(function ($group) use ($adviser) {
@@ -178,13 +180,19 @@ class ClubsMonitoringController extends Controller
             }
             return $mergedData;
         });
-        $submission = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report', 'status' => 'completed'])->first();
-        $accomplishment = Submission::where(['club_register_id' => $id, 'name' => 'accomplishment_report', 'status' => 'completed'])->first();
-        $submission2 = Submission::where(['club_register_id' => $id, 'name' => 'monthly_attendance_report_2nd_quarter', 'status' => 'completed'])->first();
-        $accomplishment2 = Submission::where(['club_register_id' => $id, 'name' => 'accomplishment_report_2nd_quarter', 'status' => 'completed'])->first();
+        $monthly_attendance_report1 = $request->semester === 's1' ? 'monthly_attendance_report' : 'monthly_attendance_report_3rd_quarter';
+        $monthly_attendance_report2 = $request->semester === 's1' ? 'monthly_attendance_report_2nd_quarter' : 'monthly_attendance_report_4th_quarter';
+        $accomplishment_report1 = $request->semester === 's1' ? 'accomplishment_report' : 'accomplishment_report_3rd_quarter';
+        $accomplishment_report2 = $request->semester === 's1' ? 'accomplishment_report_2nd_quarter' : 'accomplishment_report_4th_quarter';
+        $submission = Submission::where(['club_register_id' => $id, 'name' => $monthly_attendance_report1, 'status' => 'completed'])->first();
+        $accomplishment = Submission::where(['club_register_id' => $id, 'name' => $accomplishment_report1, 'status' => 'completed'])->first();
+        $submission2 = Submission::where(['club_register_id' => $id, 'name' => $monthly_attendance_report2, 'status' => 'completed'])->first();
+        $accomplishment2 = Submission::where(['club_register_id' => $id, 'name' => $accomplishment_report2, 'status' => 'completed'])->first();
+        $major_activity_proposal = Submission::where(['club_register_id' => $id, 'name' => 'activity_proposal_major_activity', 'status' => 'completed'])->first();
+        $major_activity_report = Submission::where(['club_register_id' => $id, 'name' => 'activity_report_major_activity', 'status' => 'completed'])->first();
         $target11 = Submission::where(['club_register_id' => $id, 'name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->first();
         $ipcr = Ipcr::where('school_year_id',SchoolYear::current()->id)
-                ->where('semester', 1)
+                ->where('semester', $request->semester === 's1' ? 1 : 2)
                 ->where('club_type', $clubType)
                 ->first();
         return Inertia::render('ClubMonitoring', [
@@ -196,7 +204,10 @@ class ClubsMonitoringController extends Controller
             'submission2' => $submission2,
             'accomplishment2' => $accomplishment2,
             'target11' => $target11,
-            'ipcr' => $ipcr
+            'ipcr' => $ipcr,
+            'semester' => $request->semester,
+            'major_activity_proposal' => $major_activity_proposal,
+            'major_activity_report' => $major_activity_report
         ]);
     }
 }

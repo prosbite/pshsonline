@@ -18,10 +18,10 @@
                         </div>
                     </th>
                     <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                        Printed (1st Quarter)
+                        Printed ({{ props.semester === 's1' ? '1st' : '3rd' }} Quarter)
                     </th>
                     <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                        Printed (2nd Quarter)
+                        Printed ({{ props.semester === 's1' ? '2nd' : '4th' }} Quarter)
                     </th>
                     <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold">
                         Average
@@ -86,6 +86,7 @@ const props = defineProps({
     submission2: Object,
     show: Boolean,
     attendanceCount: Number,
+    semester: String,
 })
 </script>
 

@@ -100,6 +100,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/club/{club_id}/attendance/monthly', [ClubAttendanceController::class, 'monthlyAttendance'])->name('club.attendance.monthly');
     Route::get('/club/{club_id}/attendance-infractions', [ClubAttendanceController::class, 'infractionsList'])->name('club.attendance.infractions');
+    Route::get('/club/{club_id}/certificates', [ClubAttendanceController::class, 'certificates'])->name('club.certificates');
     Route::put('/club/attendance/resolve', [ClubAttendanceController::class, 'resolve'])->name('club.attendance.resolve');
     Route::get('/club/submissions', [ClubSubmissionController::class, 'index'])->name('club.submissions');
     Route::post('/club/submissions', [ClubSubmissionController::class, 'store'])->name('club.submissions.store');

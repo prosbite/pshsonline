@@ -129,7 +129,7 @@ class ClubAttendanceController extends Controller
     {
         $request->validate([
             'images' => 'required|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,heic,svg|max:2048',
         ]);
         // Store uploaded images
         $imagePaths = [];
@@ -336,6 +336,22 @@ class ClubAttendanceController extends Controller
         // }
 
         return Inertia::render('ClubAttendanceInfractions', [
+            'club' => $club,
+        ]);
+    }
+
+    public function certificates(Request $request){
+        $club = ClubRegister::with('club', 'club.learners', 'club.learners.currentEnrollment', 'club.learners.currentEnrollment.section', 'club.learners.currentEnrollment.gradeLevel')->findOrFail($request->club_id);
+        // Sort the learners collection within the club object
+        $club->club->setRelation(
+            'learners',
+            $club->club->learners->sortBy('last_name')->values()
+        );
+        if ($club->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized access.');
+        }
+
+        return Inertia::render('ClubCertificates', [
             'club' => $club,
         ]);
     }

@@ -13,7 +13,7 @@
                         <!-- <option disabled value="">Select Club</option> -->
                         <option v-for="club in clubs" :key="club.id" :value="club.id">{{ club.club.name }}</option>
                     </select>
-                   <!--  <select class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <!-- <select class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                         <option value="">Filter by Role</option>
                         <option value="leader">Leader</option>
                         <option value="member">Member</option>
@@ -24,7 +24,7 @@
                         <option value="inactive">Inactive</option>
                     </select> -->
                 </div>
-                <!-- <span v-if="maximumMembers" class="text-red-500">Maximum number of members reached.</span> -->
+                <span v-if="maximumMembers" class="text-red-500">Maximum number of members reached.</span>
                 <!-- <div v-if="searchResults.length > 0" class="flex flex-col gap-2 py-4">
                     <table class="w-full">
                         <tbody>

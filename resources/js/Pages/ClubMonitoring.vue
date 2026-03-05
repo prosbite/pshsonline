@@ -6,6 +6,11 @@
                 <h3 class="text-2xl font-semibold text-gray-800">Club Monitoring</h3>
                 <p class="text-gray-600 text-sm">{{ props.club.club.name }}</p>
             </div>
+            <select @change="handleSemesterChange" v-model="currentSemester" id="attendanceDate" required class="border w-60 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="" disabled selected>Select Semester</option>
+                <option value="s1">1st Semester</option>
+                <option value="s2">2nd Semester</option>
+            </select>
         </div>
 
         <div class="overflow-x-auto rounded-lg">
@@ -58,6 +63,8 @@
                         <tr>
                             <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200 max-w-72">
                                 3. One (1) (f) major activity conducted as indicated in the calendar of activities with activity proposal and activity report in compliance with post-activity requirements
+
+                                <button @click="showActivityRatingModal = true" class="bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700 hover:bg-opacity-90 transition-colors duration-300 text-xs self-start block mt-2">View Details</button>
                             </td>
                             <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_3.q) }}</td>
                             <td class="px-2 py-2 text-center text-sm border-r">{{ rating(ipcr?.monitoring?.target_3.e) }}</td>
@@ -165,8 +172,9 @@
                 </div>
             </div>
         </div>
-        <SubmissionRatingModal :show="showRatingModal" @close="showRatingModal = false" :accomplishment="props.accomplishment" :accomplishment2="props.accomplishment2" />
-        <AttendanceMonitoringModal :show="showMonitoringModal" @close="showMonitoringModal = false" :sortedData="sortedData" :attendances="attendances" :advisers="advisers" :club="club" :submission="submission" :submission2="submission2" :attendanceCount="attendanceCount" />
+        <SubmissionRatingModal :show="showRatingModal" @close="showRatingModal = false" :accomplishment="props.accomplishment" :accomplishment2="props.accomplishment2" :semester="props.semester" />
+        <AttendanceMonitoringModal :show="showMonitoringModal" @close="showMonitoringModal = false" :sortedData="sortedData" :attendances="attendances" :advisers="advisers" :club="club" :submission="submission" :submission2="submission2" :attendanceCount="attendanceCount" :semester="props.semester" />
+        <MajorActivityRatingModal :show="showActivityRatingModal" @close="showActivityRatingModal = false" :accomplishment="props.accomplishment" :accomplishment2="props.accomplishment2" :semester="props.semester" />
     </div>
 </template>
 
@@ -178,6 +186,7 @@ import { router } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
 import AttendanceMonitoringModal from '@/Components/modals/AttendanceMonitoringModal.vue';
 import SubmissionRatingModal from '@/Components/modals/SubmissionRatingModal.vue';
+import MajorActivityRatingModal from '@/Components/modals/MajorActivityRatingModal.vue';
 defineOptions({
     layout: MainLayout
 })
@@ -191,10 +200,15 @@ const props = defineProps({
     accomplishment2: Object,
     target11: Object,
     ipcr: Object,
+    semester: String,
+    major_activity_proposal: Object,
+    major_activity_report: Object
 })
+const currentSemester = ref(props.semester || 's1')
 const clubType = ref('club')
 const showMonitoringModal = ref(false)
 const showRatingModal = ref(false)
+const showActivityRatingModal = ref(false)
 const selectClubType = () => {
     router.visit(route('admin.clubs.monitoring', { club_type: clubType.value }), { preserveState: true, preserveScroll: true })
 }
@@ -239,7 +253,7 @@ const sortedData = computed(() => {
     return finalData
 });
 const ipcr = computed(() => {
-    let ipcr = JSON.parse(props.ipcr.monitoring)
+    let ipcr = props.ipcr ? JSON.parse(props.ipcr.monitoring) : []
     return ipcr.find((i: any) => i.adviser === props.club.user.name)
 })
 const attendanceCount = computed(() => {
@@ -264,6 +278,9 @@ const setAvg = (x: number, y: number, z: number) => {
         return '-'
     }
     return getAverage(arr).toFixed(2)
+}
+const handleSemesterChange = () => {
+    router.get(route('club.monitoring.show', { id: props.club.id, semester: currentSemester.value }))
 }
 </script>
 

@@ -418,6 +418,35 @@
             </div>
         </div>
 
+        <Link v-if="user.role === 'club adviser'" :href="route('club.certificates', { club_id: clubRegisterId })" :class="{'bg-gray-700': route().current('club.certificates', { club_id: clubRegisterId })}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+            <svg width="25" height="25" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- Background Circle -->
+            <circle cx="100" cy="100" r="95" fill="#F4F6FA" stroke="#2E3A59" stroke-width="4"/>
+
+            <!-- Certificate Body -->
+            <rect x="50" y="45" width="100" height="85" rx="8" fill="white" stroke="#2E3A59" stroke-width="3"/>
+
+            <!-- Certificate Lines -->
+            <line x1="65" y1="65" x2="135" y2="65" stroke="#C5CAD6" stroke-width="4"/>
+            <line x1="65" y1="80" x2="135" y2="80" stroke="#C5CAD6" stroke-width="4"/>
+            <line x1="65" y1="95" x2="115" y2="95" stroke="#C5CAD6" stroke-width="4"/>
+
+            <!-- Ribbon Circle -->
+            <circle cx="100" cy="120" r="18" fill="#D4AF37" stroke="#B8912E" stroke-width="3"/>
+
+            <!-- Ribbon Tails -->
+            <polygon points="85,135 95,165 105,145" fill="#B8912E"/>
+            <polygon points="115,135 105,165 95,145" fill="#B8912E"/>
+
+            <!-- Star inside Seal -->
+            <polygon points="100,108 103,116 112,116 105,121 108,129 100,124 92,129 95,121 88,116 97,116"
+                fill="white"/>
+
+            </svg>
+            <span class="text-lg">Certificates</span>
+        </Link>
+
         <Link v-if="user.role === 'admin'" :href="route('users')" :class="{'bg-gray-700': route().current('users')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-200 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6 5.87v-2a4 4 0 00-3-3.87m6 5.87v-2a4 4 0 013-3.87M15 11a3 3 0 100-6 3 3 0 000 6zM9 11a3 3 0 100-6 3 3 0 000 6z" />
