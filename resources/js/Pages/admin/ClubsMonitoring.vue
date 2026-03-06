@@ -922,10 +922,11 @@ const props = defineProps({
     monthly_attendance_reports2: Array,
     ipcr: Array,
     clubs: Array,
+    semester: Number,
 })
 const editMode = ref(false)
 const clubType = ref('club')
-const semesterType = ref(1)
+const semesterType = ref(props.semester ?? 1)
 const targetType = ref(5)
 const semMonitoring = ref([])
 const sortedAttendanceData = ref([])
@@ -1042,8 +1043,8 @@ const avgValue = (q:any,e:any,t:any) => {
 }
 const saveMonitoring = () => {
     const form = new FormData()
-    form.append('semester', 1)
-    form.append('school_year_id', 1)
+    form.append('semester', semesterType.value.toString())
+    form.append('school_year_id', '1')
     form.append('club_type', clubType.value)
     form.append('monitoring', JSON.stringify(semMonitoring.value))
     router.post(route('admin.clubs.monitoring.store'), form, {
