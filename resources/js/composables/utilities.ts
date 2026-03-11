@@ -319,3 +319,24 @@ export function getOrdinal(n: number) {
   // for anything that doesn't end in 1, 2, or 3, or is 11-13.
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
+
+export function reaccreditationLinks() {
+    return [
+        {"id": 7, "club": "Badminton Club", "link": "https://drive.google.com/drive/folders/1JevyLEHPFIi782wJOSAuhA-UALrK3rEF?usp=drive_link"},
+        {"id": 5, "club": "Basketball Club", "link": "https://drive.google.com/drive/folders/15YP7qFlGqNfFhzQhuSwAMQb5cCrDECT-?usp=drive_link"},
+        {"id": 3, "club": "Caraga Iskolar", "link": "https://drive.google.com/drive/folders/1ANjosisFdXSFG-OEYiQNgK31Zfmxv_8M?usp=drive_link"},
+        {"id": 9, "club": "Debate Circle", "link": "https://drive.google.com/drive/folders/1hXz2XqgmtafcdKo3GEnvlRPXQBTPSrmU?usp=drive_link"},
+        {"id": 17, "club": "Denominators Club", "link": "https://drive.google.com/drive/folders/1LWql50x-sPje8x38jGnCLRcz9MNOiBD0?usp=drive_link"},
+        {"id": 12, "club": "Dibuho Club", "link": "https://drive.google.com/drive/folders/1vS7O6QykK18sZOu0_3VBv8kXJlzgLUPO?usp=drive_link"},
+        {"id": 19, "club": "Frisbee Club", "link": "https://drive.google.com/drive/folders/1TjHfmFrS7Q99wwZJ01jUQW3DFexVbEBK?usp=drive_link"},
+        {"id": 11, "club": "Homemakers Club", "link": "https://drive.google.com/drive/folders/17XllVpm534RATcQipzcqKu3PZkXzhJML?usp=drive_link"},
+        {"id": 4, "club": "Model United Nations", "link": "https://drive.google.com/drive/folders/1LdfAgYDKzhC_4S9lQj0pGd--8ilADMK7?usp=drive_link"},
+        {"id": 10, "club": "Multimedia Club", "link": "https://drive.google.com/drive/folders/1fLx2mQnjMb9Nup5xOAa6FFcyJLKiXJSV?usp=drive_link"},
+        {"id": 15, "club": "Music Club", "link": "https://drive.google.com/drive/folders/1F1rcA2qO3uu9UcH7UAbK55uBe3agVp6C?usp=drive_link"},
+        {"id": 16, "club": "Red Cross Youth Club", "link": "https://drive.google.com/drive/folders/1TsXRvJNWFQUBXm1plMUMNs_rGRaS9KV-?usp=drive_link"},
+        {"id": 13, "club": "Robotics Enthusiasts", "link": "https://drive.google.com/drive/folders/1RHve-nuBfVXboORqLwHm0PlbEY8fJ7xs?usp=drive_link"},
+        {"id": 14, "club": "Sigalab Dancetroupe", "link": "https://drive.google.com/drive/folders/1eLt0W-_VwUYzeS-l0HVtmhWFukR_2vUj?usp=drive_link"},
+        {"id": 2, "club": "The Thirteenth Scholars", "link": "https://drive.google.com/drive/folders/1gJPv17fMHJnDHSi0Wi9rQoyaTd6I8JbP?usp=drive_link"},
+        {"id": 6, "club": "Volleyball Club", "link": "https://drive.google.com/drive/folders/1gpwErH-ZsIImXJE1lwpNCPwT4Xq-JWqp?usp=drive_link"}
+    ]
+}

@@ -1,11 +1,12 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import { Head } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import EventsCalendar from "@/Components/calendar/EventsCalendar.vue";
 import EventsCalendarView from "@/Components/calendar/EventsCalendarView.vue";
+import { reaccreditationLinks } from "@/composables/utilities";
 
 const page = usePage();
 
@@ -26,6 +27,15 @@ const externalink = computed(() => {
         return "https://drive.google.com/drive/folders/17CZsXYIKWQSbLXYRRSypnpM954GfnyMB?usp=drive_link";
     }
     return "#";
+});
+const getClubLinkById = (id, data) => {
+    // We use .find() for efficiency as it stops looping once the match is found
+    const match = data.find((item) => item.id === id);
+
+    return match ? match.link : null;
+};
+onMounted(() => {
+    console.log(reaccreditationLinks());
 });
 </script>
 
@@ -279,7 +289,13 @@ const externalink = computed(() => {
 
                     <li>
                         <a
-                            href="https://drive.google.com/drive/folders/1CLUaYQAXiPaL0qXg3VFn-GnflLQ-4iSz?usp=drive_link"
+                            :href="
+                                getClubLinkById(
+                                    page.props?.auth?.user.club_registers?.[0]
+                                        ?.club?.id,
+                                    reaccreditationLinks(),
+                                )
+                            "
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition"
                         >
