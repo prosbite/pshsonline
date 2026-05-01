@@ -1,11 +1,10 @@
 <script setup>
 import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 
 defineProps({
     canResetPassword: {
@@ -32,71 +31,118 @@ const submit = () => {
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Log in" />
+    <Head title="Log in" />
 
-        <div class="min-h-screen w-full max-w-lg flex items-center justify-center bg-gray-100 px-4">
-            <div class="w-full bg-white rounded-2xl shadow-md p-8 space-y-6">
-                <h1 class="text-center text-3xl font-bold text-indigo-600">ALP PORTAL</h1>
+    <div
+        class="login-shell relative min-h-screen w-full overflow-hidden bg-slate-950 px-4 py-10 text-white sm:px-6 lg:px-8"
+    >
+        <div class="absolute inset-0 bg-slate-950/45"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-950/55 via-slate-900/25 to-cyan-900/20"></div>
+        <div class="absolute inset-0 bg-[url('/img/pisaybg.png')] bg-cover bg-center bg-no-repeat login-zoom"></div>
+        <div class="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-cyan-400/20 blur-3xl"></div>
+        <div class="absolute -bottom-24 right-0 h-80 w-80 rounded-full bg-sky-500/15 blur-3xl"></div>
 
-                <div v-if="status" class="text-center text-sm text-green-600">
-                    {{ status }}
-                </div>
+        <div class="relative z-10 flex min-h-[calc(100vh-5rem)] items-center justify-center">
+            <div class="w-full max-w-md">
+                <div class="overflow-hidden rounded-[2rem] border border-white/20 bg-white/90 shadow-[0_30px_80px_rgba(2,6,23,0.45)] backdrop-blur-xl">
+                    <div class="h-1.5 bg-gradient-to-r from-sky-500 via-cyan-400 to-emerald-400"></div>
 
-                <form @submit.prevent="submit" class="space-y-5">
-                    <div>
-                        <InputLabel for="email" value="Email" />
-                        <TextInput
-                            id="email"
-                            type="email"
-                            class="mt-1 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            v-model="form.email"
-                            required
-                            autofocus
-                            autocomplete="username"
-                        />
-                        <InputError class="mt-2" :message="form.errors.email" />
-                    </div>
+                    <div class="space-y-6 px-6 py-8 sm:px-10 sm:py-10">
+                        <div class="space-y-2 text-center">
+                            <h1 class="text-xl font-black uppercase tracking-[0.18em] text-slate-900 sm:text-2xl">
+                                PSHS-CRC ALP MANAGEMENT PORTAL
+                            </h1>
+                        </div>
 
-                    <div>
-                        <InputLabel for="password" value="Password" />
-                        <TextInput
-                            id="password"
-                            type="password"
-                            class="mt-1 block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            v-model="form.password"
-                            required
-                            autocomplete="current-password"
-                        />
-                        <InputError class="mt-2" :message="form.errors.password" />
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <label class="flex items-center">
-                            <Checkbox name="remember" v-model:checked="form.remember" />
-                            <span class="ms-2 text-sm text-gray-600">Remember me</span>
-                        </label>
-
-                        <!-- <Link
-                            v-if="canResetPassword"
-                            :href="route('password.request')"
-                            class="text-sm text-indigo-600 hover:underline"
+                        <div
+                            v-if="status"
+                            class="rounded-2xl border border-emerald-200 bg-emerald-50/90 px-4 py-3 text-center text-sm font-medium text-emerald-700"
                         >
-                            Forgot password?
-                        </Link> -->
-                    </div>
+                            {{ status }}
+                        </div>
 
-                    <PrimaryButton
-                        class="w-full justify-center"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                    >
-                        Log in
-                    </PrimaryButton>
-                </form>
+                        <form @submit.prevent="submit" class="space-y-5">
+                            <div class="space-y-2">
+                                <InputLabel
+                                    for="email"
+                                    value="Email"
+                                    class="!text-xs !font-semibold !uppercase !tracking-[0.16em] !text-slate-600"
+                                />
+                                <TextInput
+                                    id="email"
+                                    type="email"
+                                    class="mt-1 block w-full rounded-xl border border-slate-200 bg-white/95 px-4 py-3 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15"
+                                    v-model="form.email"
+                                    required
+                                    autofocus
+                                    autocomplete="username"
+                                />
+                                <InputError class="mt-2" :message="form.errors.email" />
+                            </div>
+
+                            <div class="space-y-2">
+                                <InputLabel
+                                    for="password"
+                                    value="Password"
+                                    class="!text-xs !font-semibold !uppercase !tracking-[0.16em] !text-slate-600"
+                                />
+                                <TextInput
+                                    id="password"
+                                    type="password"
+                                    class="mt-1 block w-full rounded-xl border border-slate-200 bg-white/95 px-4 py-3 text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/15"
+                                    v-model="form.password"
+                                    required
+                                    autocomplete="current-password"
+                                />
+                                <InputError class="mt-2" :message="form.errors.password" />
+                            </div>
+
+                            <div class="flex items-center justify-between gap-4">
+                                <label class="flex items-center">
+                                    <Checkbox
+                                        name="remember"
+                                        v-model:checked="form.remember"
+                                        class="h-4 w-4 rounded border-slate-300 text-cyan-600 shadow-sm focus:ring-cyan-500"
+                                    />
+                                    <span class="ms-2 text-sm font-medium text-slate-600">Remember me</span>
+                                </label>
+
+                                <!-- <Link
+                                    v-if="canResetPassword"
+                                    :href="route('password.request')"
+                                    class="text-sm text-indigo-600 hover:underline"
+                                >
+                                    Forgot password?
+                                </Link> -->
+                            </div>
+
+                            <PrimaryButton
+                                class="w-full justify-center !rounded-xl !border-0 !bg-gradient-to-r from-sky-600 via-cyan-600 to-emerald-600 !px-4 !py-3 !text-sm !font-semibold !uppercase !tracking-[0.18em] !text-white shadow-lg shadow-cyan-900/20 transition hover:shadow-xl hover:shadow-cyan-900/30"
+                                :class="{ 'opacity-25': form.processing }"
+                                :disabled="form.processing"
+                            >
+                                Log in
+                            </PrimaryButton>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </GuestLayout>
+    </div>
 </template>
 
+<style scoped>
+.login-zoom {
+    animation: loginZoom 24s ease-in-out infinite alternate;
+    transform-origin: center;
+}
 
+@keyframes loginZoom {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.12);
+    }
+}
+</style>

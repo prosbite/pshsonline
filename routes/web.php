@@ -28,6 +28,9 @@ Route::get('/', function () {
 });
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard/update-schedule', [DashboardController::class, 'updateSchedule'])
+        ->middleware(RoleMiddleware::class . ':admin')
+        ->name('dashboard.update-schedule');
     Route::get('/club-management', function () {
         return Inertia::render('Club');
     });
