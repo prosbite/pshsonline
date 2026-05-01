@@ -26,6 +26,11 @@ use App\Http\Controllers\LogRecordController;
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
+
+Route::get('/workflow', function () {
+    return Inertia::render('Workflow');
+})->name('workflow');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/dashboard/update-schedule', [DashboardController::class, 'updateSchedule'])
