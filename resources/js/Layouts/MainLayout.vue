@@ -36,46 +36,33 @@
   import { toast } from 'vue3-toastify'
   import 'vue3-toastify/dist/index.css'
   import { usePage } from '@inertiajs/vue3'
-  import { onMounted, computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import TopNav from '@/Components/TopNav.vue'
 
   const page = usePage()
   const collapse = ref(true)
-  const props = defineProps({
-    success: {
-        type: String,
-        default: null,
-    },
-    error: {
-        type: String,
-        default: null,
-    },
-    watch: {
-        success: {
-            handler(value) {
-                if (value) {
-                    toast.success(value, {
-                        autoClose: 2000,
-                        position: toast.POSITION.TOP_RIGHT,
-                    })
-                }
-            },
-            immediate: true,
-        },
-        error: {
-            handler(value) {
-                if (value) {
-                    toast.error(value);
-                }
-            },
-            immediate: true,
-        },
-    },
-  })
   const user = computed(() => page.props.auth.user)
-  onMounted(() => {
-    // console.log(user.value)
-  })
+  watch(
+    () => page.props.flash?.success,
+    (value) => {
+        if (value) {
+            toast.success(value, {
+                autoClose: 2000,
+                position: toast.POSITION.TOP_RIGHT,
+            })
+        }
+    },
+    { immediate: true },
+  )
+  watch(
+    () => page.props.flash?.error,
+    (value) => {
+        if (value) {
+            toast.error(value)
+        }
+    },
+    { immediate: true },
+  )
   </script>
 
   <style>

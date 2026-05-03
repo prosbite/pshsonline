@@ -1,7 +1,7 @@
 <template>
   <!-- Sidebar Navigation -->
   <aside class="w-64 bg-gray-800 text-white p-6 flex flex-col shadow-lg rounded-r-xl">
-    <div class="text-2xl font-bold mb-8 text-indigo-300">ALP Online</div>
+    <div class="text-2xl font-bold mb-8 text-indigo-300">ALP PORTAL</div>
     <nav class="space-y-4 flex-grow">
         <Link :href="route('dashboard')" :class="{'bg-gray-700': route().current('dashboard')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
             <svg class="w-6 h-6 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001 1h3v-3m-3 3h3v-3m-3 0V9a1 1 0 011-1h2a1 1 0 011 1v10m-6 0h6"></path></svg>
@@ -18,9 +18,9 @@
                 <span class="text-md">Enrollment</span>
             </Link>
             <Link v-if="user.role === 'supervisor'" :href="route('admin.club.list')" :class="{'bg-gray-700': route().current('admin.club.list')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
-                <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2m14 0v-2a4 4 0 00-3-3.87M16 7a4 4 0 11-8 0 4 4 0 018 0zM20 8a2 2 0 11-4 0 2 2 0 014 0zM20 20v-1.5a2.5 2.5 0 00-1.5-2.3" /></svg>
+                `<svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2m14 0v-2a4 4 0 00-3-3.87M16 7a4 4 0 11-8 0 4 4 0 018 0zM20 8a2 2 0 11-4 0 2 2 0 014 0zM20 20v-1.5a2.5 2.5 0 00-1.5-2.3" /></svg>
                 <span class="text-md">Clubs List</span>
-            </Link>
+            </Link>`
             <div class="relative">
                 <a href="#" @click.prevent="isSupervisorAttendanceGroupOpen = !isSupervisorAttendanceGroupOpen"
                     :class="{'bg-gray-700': route().current('club-management')}"

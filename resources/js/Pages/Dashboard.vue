@@ -1,14 +1,14 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
-import { Head } from "@inertiajs/vue3";
-import { computed, onMounted } from "vue";
-import { usePage } from "@inertiajs/vue3";
-import { Link } from "@inertiajs/vue3";
+import Dropdown from "@/Components/Dropdown.vue";
+import { Head, useForm, usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
 import EventsCalendar from "@/Components/calendar/EventsCalendar.vue";
 import EventsCalendarView from "@/Components/calendar/EventsCalendarView.vue";
 import { reaccreditationLinks } from "@/composables/utilities";
 
 const page = usePage();
+const scheduleForm = useForm({});
 
 const props = defineProps({
     events: Array,
@@ -28,15 +28,18 @@ const externalink = computed(() => {
     }
     return "#";
 });
+const isAdmin = computed(() => page.props.auth.user?.role === "admin");
 const getClubLinkById = (id, data) => {
     // We use .find() for efficiency as it stops looping once the match is found
     const match = data.find((item) => item.id === id);
 
     return match ? match.link : null;
 };
-onMounted(() => {
-    console.log(reaccreditationLinks());
-});
+const updateSchedule = () => {
+    scheduleForm.post(route("dashboard.update-schedule"), {
+        preserveScroll: true,
+    });
+};
 </script>
 
 <template>
@@ -50,7 +53,92 @@ onMounted(() => {
         </template>
 
         <div class="page">
-            <h1 class="text-4xl font-extrabold text-gray-900 mb-8">
+            <div
+                v-if="isAdmin"
+                class="mb-8 rounded-3xl bg-gradient-to-r from-slate-950 via-indigo-950 to-violet-900 p-6 text-white shadow-2xl ring-1 ring-white/10"
+            >
+                <div
+                    class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between"
+                >
+                    <div class="max-w-2xl">
+                        <p
+                            class="text-xs font-semibold uppercase tracking-[0.35em] text-indigo-200"
+                        >
+                            Admin Actions
+                        </p>
+                        <h1 class="mt-3 text-4xl font-extrabold">
+                            Dashboard
+                        </h1>
+                        <p class="mt-3 text-sm leading-6 text-indigo-100/90">
+                            Use the action button to trigger the schedule sync
+                            for all teachers.
+                        </p>
+                    </div>
+
+                    <Dropdown align="right" width="48">
+                        <template #trigger>
+                            <button
+                                type="button"
+                                class="inline-flex items-center gap-4 rounded-2xl bg-white px-5 py-4 text-left font-semibold text-slate-900 shadow-lg shadow-black/20 ring-4 ring-white/20 transition hover:-translate-y-0.5 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-white/40"
+                            >
+                                <span
+                                    class="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-white"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-6 w-6"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="M12 5v14" />
+                                        <path d="M5 12h14" />
+                                    </svg>
+                                </span>
+                                <span class="flex flex-col">
+                                    <span class="text-sm uppercase tracking-wide text-slate-500">
+                                        Action
+                                    </span>
+                                    <span class="text-base">
+                                        Update Schedule
+                                    </span>
+                                </span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-5 w-5 text-slate-400"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z"
+                                        clip-rule="evenodd"
+                                    />
+                                </svg>
+                            </button>
+                        </template>
+
+                        <template #content>
+                            <button
+                                type="button"
+                                :disabled="scheduleForm.processing"
+                                @click="updateSchedule"
+                                class="block w-full px-4 py-3 text-left text-sm font-semibold text-slate-700 transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                                <span v-if="scheduleForm.processing"
+                                    >Updating...</span
+                                >
+                                <span v-else>Update Schedule</span>
+                            </button>
+                        </template>
+                    </Dropdown>
+                </div>
+            </div>
+
+            <h1 v-else class="text-4xl font-extrabold text-gray-900 mb-8">
                 Dashboard
             </h1>
 

@@ -1,0 +1,110 @@
+PSHS-CRC ALP Management Portal Workflow
+======================================
+
+Prompt-ready workflow summary for image generation or documentation.
+
+System Flow
+-----------
+1. User opens the login page.
+2. User enters email and password.
+3. The system authenticates the account.
+4. If login succeeds, the system checks the user role.
+5. The user is redirected to the dashboard.
+6. The sidebar and available pages change based on role.
+7. The user can manage records, submit forms, review reports, and log out.
+
+Shared Account Flow
+-------------------
+- Login
+- View dashboard
+- Update profile
+- Change password
+- Logout
+
+Role-Based Flow
+---------------
+
+Admin or Supervisor Flow
+- Dashboard with school-wide overview and calendar
+- Update schedule
+- Manage users
+- Manage enrollment
+- Search and update learners
+- View club list
+- Register or unregister members
+- Manage club attendance
+- Review attendance infractions and delinquency records
+- Review club submissions
+- Manage club monitoring
+- Manage advisers' attendance
+- Manage events
+- Review log records
+
+Club Adviser Flow
+- Dashboard with club-focused overview
+- View club members
+- Create club attendance records
+- Edit or review attendance logs
+- Upload or manage attendance images
+- Resolve attendance infractions
+- View monthly attendance reports
+- View attendance summary
+- Create or update club submissions
+- Submit accomplishment reports
+- View club monitoring page
+- View certificates
+- Logout
+
+Key Workflow Details
+--------------------
+- The system is role-driven after authentication.
+- Admin and supervisor accounts see management tools for the whole portal.
+- Club advisers see only their assigned club workflows and reports.
+- Attendance is a major workflow branch with session creation, learner marking, infractions, and summaries.
+- Submissions and accomplishment reports are tracked separately but are tied to club activity.
+- Monitoring and reporting pages support school-year and quarter-based records.
+
+Image Generation Prompt
+-----------------------
+Create a clean, modern workflow diagram for the "PSHS-CRC ALP Management Portal".
+
+Show the flow starting from:
+Login Screen -> Authentication -> Role Check -> Dashboard
+
+Then branch into:
+
+Admin/Supervisor:
+- Users
+- Enrollment
+- Clubs List
+- Club Attendance
+- Attendance Infractions
+- Club Submissions
+- Monitoring
+- Advisers Attendance
+- Events
+- Log Records
+
+Club Adviser:
+- Members
+- Attendance Creation
+- Attendance List
+- Attendance Summary
+- Attendance Infractions
+- Submissions
+- Accomplishment Reports
+- Monitoring
+- Certificates
+
+Design direction:
+- Professional school portal
+- Clean layout
+- Clear arrows and boxes
+- Modern UI style
+- Blue, white, and dark slate color palette
+- Balanced spacing
+- Easy to read labels
+- Dashboard-centered structure
+
+Optional short version for prompt use:
+"A modern workflow diagram of the PSHS-CRC ALP Management Portal showing login, authentication, role-based dashboard access, then branching into admin/supervisor tools and club adviser tools, with attendance, submissions, monitoring, reports, events, enrollment, users, and logout."

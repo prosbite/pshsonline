@@ -1,0 +1,301 @@
+Migration Reference
+===================
+
+This file gives a readable overview of the table structure created by the migrations in this folder.
+
+Legend
+------
+- `FK` = foreign key
+- `default` = default value
+- `nullable` = column can be empty
+
+Support Tables
+--------------
+
+users
+- `id`
+- `name`
+- `email` - unique
+- `email_verified_at` - nullable
+- `password`
+- `role` - default `user`
+- `status` - default `active`
+- `remember_token`
+- `timestamps`
+
+password_reset_tokens
+- `email` - primary key
+- `token`
+- `created_at` - nullable
+
+sessions
+- `id` - primary key
+- `user_id` - indexed, nullable, no FK constraint
+- `ip_address` - nullable
+- `user_agent` - nullable
+- `payload`
+- `last_activity` - indexed
+
+cache
+- `key` - primary key
+- `value`
+- `expiration`
+
+cache_locks
+- `key` - primary key
+- `owner`
+- `expiration`
+
+jobs
+- `id`
+- `queue` - indexed
+- `payload`
+- `attempts`
+- `reserved_at` - nullable
+- `available_at`
+- `created_at`
+
+job_batches
+- `id` - primary key
+- `name`
+- `total_jobs`
+- `pending_jobs`
+- `failed_jobs`
+- `failed_job_ids`
+- `options` - nullable
+- `cancelled_at` - nullable
+- `created_at`
+- `finished_at` - nullable
+
+failed_jobs
+- `id`
+- `uuid` - unique
+- `connection`
+- `queue`
+- `payload`
+- `exception`
+- `failed_at`
+
+Academic Tables
+---------------
+
+learners
+- `id`
+- `last_name`
+- `first_name`
+- `middle_name` - nullable
+- `suffix` - nullable
+- `gender`
+- `email` - nullable
+- `phone` - nullable
+- `address` - nullable
+- `city` - nullable
+- `state` - nullable
+- `zip` - nullable
+- `country` - nullable
+- `photo` - nullable
+- `status` - default `active`
+- `user_id` - FK to `users.id`, nullable, cascade delete
+- `timestamps`
+
+teachers
+- `id`
+- `last_name`
+- `first_name`
+- `middle_name`
+- `suffix` - nullable
+- `gender`
+- `email` - nullable
+- `phone` - nullable
+- `address` - nullable
+- `city` - nullable
+- `state` - nullable
+- `zip` - nullable
+- `country` - nullable
+- `photo` - nullable
+- `status` - default `active`
+- `user_id` - FK to `users.id`, cascade delete
+- `timestamps`
+
+school_years
+- `id`
+- `year_start`
+- `year_end`
+- `status` - default `active`
+- `timestamps`
+
+grade_levels
+- `id`
+- `grade_level`
+- `status` - default `active`
+- `timestamps`
+
+sections
+- `id`
+- `section_name`
+- `status` - default `active`
+- `grade_level_id` - FK to `grade_levels.id`, cascade delete
+- `timestamps`
+
+enrollments
+- `id`
+- `learner_id` - FK to `learners.id`, cascade delete
+- `school_year_id` - FK to `school_years.id`, cascade delete
+- `section_id` - FK to `sections.id`, cascade delete
+- `status` - default `active`
+- `timestamps`
+
+Club Tables
+-----------
+
+clubs
+- `id`
+- `name`
+- `nature` - nullable
+- `description` - nullable
+- `image` - nullable
+- `status` - default `active`
+- `type` - default `club`
+- `timestamps`
+
+club_registers
+- `id`
+- `club_id` - FK to `clubs.id`, cascade delete
+- `user_id` - FK to `users.id`, cascade delete
+- `school_year_id` - FK to `school_years.id`, cascade delete
+- `status` - default `active`
+- `timestamps`
+
+club_learner
+- `id`
+- `club_id` - FK to `clubs.id`, cascade delete
+- `learner_id` - FK to `learners.id`, cascade delete
+- `school_year_id` - FK to `school_years.id`, cascade delete
+- `status` - default `active`
+- `timestamps`
+
+club_attendances
+- `id`
+- `club_register_id` - FK to `club_registers.id`, cascade delete
+- `school_year_id` - FK to `school_years.id`, cascade delete
+- `date`
+- `activity`
+- `remarks` - nullable
+- `image` - nullable
+- `timestamps`
+
+club_attendance_learner
+- `id`
+- `club_attendance_id` - FK to `club_attendances.id`, cascade delete
+- `learner_id` - FK to `learners.id`, cascade delete
+- `status` - enum: `present`, `absent`, `excused`, `late`; default `absent`
+- `remarks` - nullable
+- `timestamps`
+
+externalinks
+- `id`
+- `link`
+- `name` - nullable
+- `club_register_id` - FK to `club_registers.id`, cascade delete
+- `timestamps`
+
+submissions
+- `id`
+- `name`
+- `remarks` - nullable
+- `url`
+- `club_register_id` - FK to `club_registers.id`, cascade delete
+- `user_id` - FK to `users.id`, cascade delete
+- `status` - default `pending`
+- `activity_date` - nullable
+- `timestamps`
+
+submission_trackers
+- `id`
+- `submission_id` - FK to `submissions.id`, cascade delete
+- `updated_by` - FK to `users.id`, cascade delete
+- `status`
+- `remarks` - nullable
+- `timestamps`
+
+attendance_delinquences
+- `id`
+- `resolved` - default `false`
+- `link` - nullable
+- `resolved_by` - FK to `users.id`, cascade delete
+- `club_attendance_id` - FK to `club_attendances.id`, cascade delete
+- `club_attendance_learner_id` - FK to `club_attendance_learner.id`, cascade delete
+- `remarks`
+- `actions_taken` - nullable
+- `timestamps`
+
+adviser_attendances
+- `id`
+- `school_year_id` - FK to `school_years.id`, cascade delete
+- `date`
+- `activity`
+- `remarks` - nullable
+- `type` - default `club`
+- `timestamps`
+
+adviser_attendance_user
+- `id`
+- `adviser_attendance_id` - FK to `adviser_attendances.id`, cascade delete
+- `user_id` - FK to `users.id`, cascade delete
+- `status`
+- `remarks` - nullable
+- `timestamps`
+
+events
+- `id`
+- `school_year_id` - FK to `school_years.id`, cascade delete
+- `title`
+- `description` - nullable
+- `start` - datetime
+- `end` - nullable datetime
+- `all_day` - default `false`
+- `location` - nullable
+- `color` - nullable, 20 chars
+- `created_by` - FK to `users.id`, nullable, null on delete
+- `updated_by` - FK to `users.id`, nullable, null on delete
+- `timestamps`
+
+quarters
+- `id`
+- `start_date`
+- `end_date`
+- `quarter` - tiny integer
+- `school_year_id` - FK to `school_years.id`, cascade delete
+- `status` - default `inactive`
+- `timestamps`
+
+accomplishment_reports
+- `id`
+- `club_register_id` - FK to `club_registers.id`, cascade delete
+- `quarter_id` - FK to `quarters.id`, cascade delete
+- `school_year_id` - FK to `school_years.id`, cascade delete
+- `report` - JSON
+- `status` - default `pending`
+- `remarks` - nullable
+- `timestamps`
+
+ipcr
+- `id`
+- `semester` - tiny integer
+- `school_year_id` - FK to `school_years.id`, cascade delete
+- `club_type`
+- `monitoring` - JSON, nullable
+- `timestamps`
+
+log_records
+- `id`
+- `user_id` - FK to `users.id`, cascade delete
+- `log_type` - enum: `login`, `logout`
+- `timestamps`
+
+Notes
+-----
+- Most tables use cascade deletes, so related records are removed automatically.
+- `2025_07_10_021623_add_role_to_users_table.php` is a no-op migration.
+- A few `down()` methods are incomplete or empty, so rollbacks are not fully symmetric.
+- `assessments` exists as a placeholder table with only `id` and timestamps.
