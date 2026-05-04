@@ -117,7 +117,7 @@
                             has successfully completed the {{ studentClub }} under the Alternative Learning Program (ALP) during the Academic Year 2025-2026. This recognition is given in appreciation of the student’s valuable contribution, dedication, and active participation in the club’s activities.
 
                             <br />
-                            <br />Given this 6th day of May, 2026, at the Philippine Science High School - Caraga Region Campus in Butuan City.
+                            <br />Given this 11th day of May, 2026, at the Philippine Science High School - Caraga Region Campus in Butuan City.
                         </p>
                         <img :src="'/storage/certificates/' + studentClubId + '.jpg'" class="w-full h-full" alt="">
                     </div>
