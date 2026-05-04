@@ -77,11 +77,18 @@
                         <span id="cert-name" class="absolute font-yesteryear text-center text-blue-900 font-bold">
                             {{ decapitalizeText(studentName) }}
                         </span>
-                        <p id="cert-message" class="absolute px-32 leading-7">
+                        <p v-if="parseInt(studentClubId) === 1" id="cert-message" class="absolute px-32 leading-7">
+                            for their dedicated service as a member of the Sangguniang Iskolar  for the Academic Year 2025–2026.
+                            Their efforts have significantly contributed to the success of student-led initiatives and the strengthening of student representation within the institution.
+                            <br />
+                            <br />
+                            Given this 11th day of May, 2026, at PSHS-CRC in Butuan City.
+                        </p>
+                        <p v-else id="cert-message" class="absolute px-32 leading-7">
                             has successfully completed the {{ studentClub }} under the Alternative Learning Program (ALP) during the Academic Year 2025-2026. This recognition is given in appreciation of the student’s valuable contribution, dedication, and active participation in the club’s activities.
 
                             <br />
-                            <br />Given this 6th day of May, 2026, at the Philippine Science High School - Caraga Region Campus in Butuan City.
+                            <br />Given this 11th day of May, 2026, at the Philippine Science High School - Caraga Region Campus in Butuan City.
                         </p>
                         <img :src="'/storage/certificates/' + studentClubId + '.jpg'" class="w-full h-full" alt="">
                     </div>
@@ -99,6 +106,13 @@
                         <span id="cert-name-print" class="absolute font-yesteryear text-center text-blue-900 font-bold">
                             {{ decapitalizeText(studentName) }}
                         </span>
+                        <p v-if="parseInt(studentClubId) === 1" id="cert-message-print" class="absolute px-32 leading-7">
+                            for their dedicated service as a member of the Sangguniang Iskolar  for the Academic Year 2025–2026.
+                            Their efforts have significantly contributed to the success of student-led initiatives and the strengthening of student representation within the institution.
+                            <br />
+                            <br />
+                            Given this 11th day of May, 2026, at PSHS-CRC in Butuan City.
+                        </p>
                         <p id="cert-message-print" class="absolute px-32 leading-7">
                             has successfully completed the {{ studentClub }} under the Alternative Learning Program (ALP) during the Academic Year 2025-2026. This recognition is given in appreciation of the student’s valuable contribution, dedication, and active participation in the club’s activities.
 
