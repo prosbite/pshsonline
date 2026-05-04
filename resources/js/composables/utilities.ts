@@ -340,3 +340,13 @@ export function reaccreditationLinks() {
         {"id": 6, "club": "Volleyball Club", "link": "https://drive.google.com/drive/folders/1gpwErH-ZsIImXJE1lwpNCPwT4Xq-JWqp?usp=drive_link"}
     ]
 }
+
+export function decapitalizeText(name: string) {
+  if (!name) return "";
+
+  return name
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
