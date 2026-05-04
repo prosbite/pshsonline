@@ -48,13 +48,14 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,super
     Route::get('/enrollment', [EnrollmentController::class, 'index'])->name('enrollment');
     Route::post('/enrollment', [EnrollmentController::class, 'store'])->name('enrollment.store');
     Route::post('/enrollment/bulk', [EnrollmentController::class, 'storeBulk'])->name('enrollment.bulk');
-    Route::get('/student/search', [StudentController::class, 'search'])->name('student.search');
     Route::post('/learner/update', [StudentController::class, 'update'])->name('admin.learner.update');
 
     Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');
     Route::get('/clubs', [AdminClubController::class, 'index'])->name('admin.club.list');
     Route::get('/club/{club}', [AdminClubController::class, 'show'])->name('admin.club.show');
+    Route::post('/club/{club}/manager', [AdminClubController::class, 'storeManager'])->name('admin.club.manager.store');
     Route::post('/club/register', [ClubController::class, 'registerMember'])->name('club.register');
+    Route::post('/club/manager/register', [ClubController::class, 'registerManagerMember'])->name('club.manager.register');
     Route::post('/club/unregister', [AdminClubController::class, 'unregisterMember'])->name('admin.club.unregister');
     Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
     Route::get('/attendances', [AdminClubAttendanceController::class, 'index'])->name('admin.attendance');
@@ -85,6 +86,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,super
 
 // Club Adviser Routes
 Route::middleware('auth')->group(function () {
+    Route::get('/student/search', [StudentController::class, 'search'])->name('student.search');
     Route::get('/club/{club_id}/attendance/infractions', [ClubAttendanceController::class, 'clubAttendanceInfractions'])->name('club.attendance.infractions');
     Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');
     Route::get('/club/{club_register_id}/attendance', [ClubAttendanceController::class, 'index'])->name('club.attendance');

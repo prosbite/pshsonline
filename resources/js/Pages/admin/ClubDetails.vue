@@ -28,6 +28,18 @@
                                 class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                             + Add New Member
                         </button>
+                        <button
+                                v-if="!props.has_manager"
+                                type="button"
+                                @click="showManagerModal = true"
+                                class="px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                            + Add Manager
+                        </button>
+                        <!-- <div
+                                v-else-if="props.current_manager"
+                                class="px-4 py-3 bg-emerald-50 text-emerald-800 font-semibold rounded-lg border border-emerald-200">
+                            Manager: {{ props.current_manager?.user?.name }}
+                        </div> -->
                         <button @click.prevent="downloadCSV"
                                 class="px-3 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white hover:text-green-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -160,6 +172,85 @@
             </template>
 
         </SleekModal>
+        <SleekModal :is-visible="showManagerModal" @close="showManagerModal = false" size="2xl">
+            <template #header>
+                <div class="flex justify-between w-full flex-1 pr-8 gap-4">
+                    <div class="flex-1">
+                        <h3 class="text-2xl font-semibold text-gray-800">Add Club Manager</h3>
+                        <p class="text-gray-600 text-sm">Create a user and assign them to this club for the current school year.</p>
+                    </div>
+                </div>
+            </template>
+            <template #body>
+                <form id="manager-form" @submit.prevent="submitManager" class="space-y-4">
+                    <div v-if="managerForm.errors.manager" class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {{ managerForm.errors.manager }}
+                    </div>
+                    <div>
+                        <label for="manager-name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input
+                            id="manager-name"
+                            v-model="managerForm.name"
+                            type="text"
+                            class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+                            placeholder="Full name"
+                        >
+                        <p v-if="managerForm.errors.name" class="mt-1 text-sm text-red-600">{{ managerForm.errors.name }}</p>
+                    </div>
+                    <div>
+                        <label for="manager-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input
+                            id="manager-email"
+                            v-model="managerForm.email"
+                            type="email"
+                            class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+                            placeholder="name@example.com"
+                        >
+                        <p v-if="managerForm.errors.email" class="mt-1 text-sm text-red-600">{{ managerForm.errors.email }}</p>
+                    </div>
+                    <div>
+                        <label for="manager-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input
+                            id="manager-password"
+                            v-model="managerForm.password"
+                            type="password"
+                            class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+                            placeholder="Password"
+                        >
+                        <p v-if="managerForm.errors.password" class="mt-1 text-sm text-red-600">{{ managerForm.errors.password }}</p>
+                    </div>
+                    <div>
+                        <label for="manager-password-confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                        <input
+                            id="manager-password-confirmation"
+                            v-model="managerForm.password_confirmation"
+                            type="password"
+                            class="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500"
+                            placeholder="Confirm password"
+                        >
+                    </div>
+                </form>
+            </template>
+            <template #footer>
+                <div class="flex items-center justify-end gap-3">
+                    <button
+                        type="button"
+                        @click="showManagerModal = false"
+                        class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-colors duration-200"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        form="manager-form"
+                        :disabled="managerForm.processing"
+                        class="px-5 py-2 bg-emerald-600 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200"
+                    >
+                        {{ managerForm.processing ? 'Saving...' : 'Save Manager' }}
+                    </button>
+                </div>
+            </template>
+        </SleekModal>
     </MainLayout>
 
     </template>
@@ -168,7 +259,7 @@
     import { exportToCSV, ucWords } from '@/composables/utilities'
     import { computed, onMounted, ref, watch } from 'vue'
     import MainLayout from '@/Layouts/MainLayout.vue'
-    import { usePage, router } from '@inertiajs/vue3'
+    import { useForm, usePage, router } from '@inertiajs/vue3'
     import SleekModal from '@/Components/SleekModal.vue'
     import { toast } from 'vue3-toastify'
     import 'vue3-toastify/dist/index.css'
@@ -183,14 +274,22 @@
         registered_clubs: Array,
         user: Object,
         current_club: Number,
+        current_manager: Object,
+        has_manager: Boolean,
     })
     const searchInput = ref('')
     const showModal = ref(false)
+    const showManagerModal = ref(false)
     const sortBy = ref('name')
+    const managerForm = useForm({
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+    })
     const clubMembers = computed(() => {
         return props.club.club.learners
     })
-
     const hasClub = (learner: any) => {
         if(learner.learner.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length > 0
         && props.club.club.nature.slice(0, 3).toLowerCase() === 'alp') {
@@ -316,6 +415,26 @@
 
     const downloadCSV = () => {
         exportToCSV(csvFormat.value, `${props.club?.club?.name} members.csv`)
+    }
+
+    const submitManager = () => {
+        managerForm.post(route('admin.club.manager.store', { club: props.current_club }), {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Club manager added successfully.', {
+                    autoClose: 2000,
+                    position: toast.POSITION.TOP_RIGHT,
+                })
+                managerForm.reset()
+                showManagerModal.value = false
+            },
+            onError: () => {
+                toast.error('Failed to add club manager.', {
+                    autoClose: 2000,
+                    position: toast.POSITION.TOP_RIGHT,
+                })
+            },
+        })
     }
 
     // const sortedClubs = computed(() => {
