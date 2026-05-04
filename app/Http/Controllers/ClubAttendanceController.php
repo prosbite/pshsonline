@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AttendanceDelinquence;
 use App\Models\ClubAttendance;
 use App\Models\ClubRegister;
+use App\Models\Feedback;
 use App\Models\Learner;
 use App\Models\Quarter;
 use App\Models\SchoolYear;
@@ -341,14 +342,26 @@ class ClubAttendanceController extends Controller
     }
 
     public function certificates(Request $request){
-        $club = ClubRegister::with('club', 'club.learners', 'club.learners.currentEnrollment', 'club.learners.currentEnrollment.section', 'club.learners.currentEnrollment.gradeLevel')->findOrFail($request->club_id);
+        $schoolYear = SchoolYear::current();
+        abort_unless($schoolYear, 404);
+
+        $club = ClubRegister::with('club', 'club.learners', 'club.learners.currentEnrollment', 'club.learners.currentEnrollment.section', 'club.learners.currentEnrollment.gradeLevel')
+            ->where('school_year_id', $schoolYear->id)
+            ->where('user_id', auth()->id())
+            ->findOrFail($request->club_id);
         // Sort the learners collection within the club object
         $club->club->setRelation(
             'learners',
             $club->club->learners->sortBy('last_name')->values()
         );
-        if ($club->user_id !== auth()->id()) {
-            abort(403, 'Unauthorized access.');
+
+        $feedbackExists = Feedback::where('club_register_id', $club->id)
+            ->where('user_id', auth()->id())
+            ->where('school_year_id', $schoolYear->id)
+            ->exists();
+
+        if (! $feedbackExists) {
+            return redirect()->route('club.feedback', ['club_id' => $club->id]);
         }
 
         return Inertia::render('ClubCertificates', [
