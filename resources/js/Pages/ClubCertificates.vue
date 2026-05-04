@@ -74,7 +74,7 @@
             <template #body>
                <div class="flex justify-center">
                     <div class="relative w-full h-full">
-                        <span id="cert-name" class="absolute font-yesteryear text-center text-blue-900 font-bold">
+                        <span id="cert-name" class="absolute font-kaushan text-center text-black font-bold">
                             {{ decapitalizeText(studentName) }}
                         </span>
                         <p v-if="parseInt(studentClubId) === 1" id="cert-message" class="absolute px-32 leading-7">
@@ -103,7 +103,7 @@
                     <td>
                        <div class="flex justify-center">
                     <div class="relative w-full h-full">
-                        <span id="cert-name-print" class="absolute font-yesteryear text-center text-blue-900 font-bold">
+                        <span id="cert-name-print" class="absolute font-kaushan text-center text-black font-bold">
                             {{ decapitalizeText(studentName) }}
                         </span>
                         <p v-if="parseInt(studentClubId) === 1" id="cert-message-print" class="absolute px-32 leading-7">
@@ -152,7 +152,8 @@
     const showModal = ref(false);
 
     const generateCertificate = (lastName: any, firstName: any, middleName: any) => {
-        studentName.value = lastName + ', ' + firstName + ' ' + middleName
+        const middleInitial = middleInitials(middleName)
+        studentName.value = firstName + ' ' + middleInitial + ' ' + lastName + ' '
         studentClub.value = props.club?.club.name
         studentClubId.value = props.club?.club.id
         showModal.value = true
@@ -168,7 +169,7 @@
     left: 310px;
     width: 100%;
     text-align: left;
-    font-size: 54px;
+    font-size: 48px;
     font-weight: bold;
 }
 #cert-message {
@@ -185,7 +186,7 @@
     left: 265px;
     width: 100%;
     text-align: left;
-    font-size: 54px;
+    font-size: 48px;
     font-weight: bold;
 }
 #cert-message-print {
