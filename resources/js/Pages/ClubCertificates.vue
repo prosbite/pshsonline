@@ -74,13 +74,16 @@
             <template #body>
                <div class="flex justify-center">
                     <div class="relative w-full h-full">
-                        <span id="cert-name" class="absolute text-center text-red-800 font-bold">
-                            {{ studentName }}
+                        <span id="cert-name" class="absolute font-yesteryear text-center text-blue-900 font-bold">
+                            {{ decapitalizeText(studentName) }}
                         </span>
-                        <p id="cert-message" class="absolute px-32 leading-9">
-                            for completing the Alternative Learning Program (ALP), specifically the {{ studentClub }} under the ‘Pisay Club’ initiative, during the Academic Year {{ page.props.sy?.year_start + " - " + page.props.sy?.year_end }}. This recognition is given in appreciation of the student’s valuable contribution, dedication, and active participation in the club’s activities, reflecting the spirit of holistic development and diverse learning outside the regular academic curriculum.
+                        <p id="cert-message" class="absolute px-32 leading-7">
+                            has successfully completed the {{ studentClub }} under the Alternative Learning Program (ALP) during the Academic Year 2025-2026. This recognition is given in appreciation of the student’s valuable contribution, dedication, and active participation in the club’s activities.
+
+                            <br />
+                            <br />Given this 6th day of May, 2026, at the Philippine Science High School - Caraga Region Campus in Butuan City.
                         </p>
-                        <img src="/storage/certificate_template2.png" class="w-full h-full" alt="">
+                        <img :src="'/storage/certificates/' + studentClubId + '.jpg'" class="w-full h-full" alt="">
                     </div>
                </div>
             </template>
@@ -92,16 +95,19 @@
                 <tr>
                     <td>
                        <div class="flex justify-center">
-                            <div class="relative w-full h-full">
-                                <span id="cert-name-print" class="absolute text-center text-red-800 font-bold">
-                                    {{ studentName }}
-                                </span>
-                                <p id="cert-message-print" class="absolute px-32 leading-9">
-                                    for completing the Alternative Learning Program (ALP), specifically the {{ studentClub }} under the ‘Pisay Club’ initiative, during the Academic Year {{ page.props.sy?.year_start + " - " + page.props.sy?.year_end }}. This recognition is given in appreciation of the student’s valuable contribution, dedication, and active participation in the club’s activities, reflecting the spirit of holistic development and diverse learning outside the regular academic curriculum.
-                                </p>
-                                <img src="/storage/certificate_template2.png" class="w-[99%] h-auto" alt="">
-                            </div>
-                        </div>
+                    <div class="relative w-full h-full">
+                        <span id="cert-name-print" class="absolute font-yesteryear text-center text-blue-900 font-bold">
+                            {{ decapitalizeText(studentName) }}
+                        </span>
+                        <p id="cert-message-print" class="absolute px-32 leading-7">
+                            has successfully completed the {{ studentClub }} under the Alternative Learning Program (ALP) during the Academic Year 2025-2026. This recognition is given in appreciation of the student’s valuable contribution, dedication, and active participation in the club’s activities.
+
+                            <br />
+                            <br />Given this 6th day of May, 2026, at the Philippine Science High School - Caraga Region Campus in Butuan City.
+                        </p>
+                        <img :src="'/storage/certificates/' + studentClubId + '.jpg'" class="w-full h-full" alt="">
+                    </div>
+               </div>
                     </td>
                 </tr>
             </tbody>
@@ -113,7 +119,7 @@
     <script lang="ts" setup>
     import SleekModal from '@/Components/SleekModal.vue';
     import MainLayout from '@/Layouts/MainLayout.vue';
-    import { fullDate, submissionType, removeUnderScore, ucWords, middleInitials } from '@/composables/utilities';
+    import { fullDate, submissionType, removeUnderScore, ucWords, middleInitials, decapitalizeText } from '@/composables/utilities';
     import { onMounted, ref, computed } from 'vue';
     import 'vue3-toastify/dist/index.css';
     import SubmissionTracker from '@/Components/common/SubmissionTracker.vue';
@@ -128,11 +134,13 @@
     })
     const studentName = ref('')
     const studentClub = ref('')
+    const studentClubId = ref('')
     const showModal = ref(false);
 
     const generateCertificate = (lastName: any, firstName: any, middleName: any) => {
         studentName.value = lastName + ', ' + firstName + ' ' + middleName
         studentClub.value = props.club?.club.name
+        studentClubId.value = props.club?.club.id
         showModal.value = true
     }
     onMounted(() => {
@@ -142,36 +150,36 @@
 
 <style lang="css" scoped>
 #cert-name {
-    top: 385px;
-    left: 0px;
+    top: 270px;
+    left: 310px;
     width: 100%;
-    text-align: center;
-    font-size: 38px;
+    text-align: left;
+    font-size: 54px;
     font-weight: bold;
 }
 #cert-message {
-    top: 490px;
-    left: 0px;
-    width: 100%;
-    text-align: center;
-    font-size: 24px;
+    top: 360px;
+    left: 180px;
+    width: 80%;
+    text-align: left;
+    font-size: 16px;
     font-weight: normal;
 }
 
 #cert-name-print {
-    top: 335px;
-    left: 0px;
+    top: 230px;
+    left: 265px;
     width: 100%;
-    text-align: center;
-    font-size: 28px;
+    text-align: left;
+    font-size: 54px;
     font-weight: bold;
 }
 #cert-message-print {
-    top: 420px;
-    left: 0px;
-    width: 100%;
-    text-align: center;
-    font-size: 18px;
+    top: 310px;
+    left: 140px;
+    width: 80%;
+    text-align: left;
+    font-size: 14px;
     font-weight: normal;
 }
 .to-print {
