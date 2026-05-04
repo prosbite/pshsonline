@@ -377,6 +377,49 @@ const updateSchedule = () => {
 
                     <li>
                         <a
+                            v-if="page.props.auth.user?.role === 'admin'"
+                            href="https://drive.google.com/drive/folders/1CLUaYQAXiPaL0qXg3VFn-GnflLQ-4iSz?usp=drive_link"
+                            target="_blank"
+                            class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition"
+                        >
+                            <div class="flex items-start space-x-3">
+                                <svg
+                                    class="w-5 h-5 text-indigo-500"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v9a1 1 0 01-1 1h-6l2 5H9l2-5H4a1 1 0 01-1-1V4z"
+                                    />
+                                </svg>
+                                <span
+                                    class="text-gray-700 dark:text-gray-200 font-medium"
+                                    >Accreditation & Reaccreditation
+                                    (2026-2027)</span
+                                >
+                            </div>
+                            <svg
+                                class="w-5 h-5 text-indigo-400 dark:text-indigo-300"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5l7 7-7 7"
+                                ></path>
+                            </svg>
+                        </a>
+                        <a
+                            v-else
                             :href="
                                 getClubLinkById(
                                     page.props?.auth?.user.club_registers?.[0]
