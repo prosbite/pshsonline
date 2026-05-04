@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClubManager;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\ClubRegister;
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Enrollment;
 use App\Models\Club;
 use App\Models\Learner;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 class AdminClubController extends Controller
 {
     public function index()
@@ -49,11 +53,62 @@ class AdminClubController extends Controller
     {
         $club = $club;
         $registered_clubs = ClubRegister::with(['club'])->where('school_year_id', SchoolYear::current()->id)->get();
+        $currentManager = ClubManager::with('user')
+            ->where('club_register_id', $club->id)
+            ->where('school_year_id', SchoolYear::current()->id)
+            ->first();
         return Inertia::render('admin/ClubDetails', [
-            'club' => $club->load(['club.learners.currentEnrollment.section.gradeLevel', 'user', 'schoolYear', 'externalinks']),
+            'club' => $club->load([
+                'club.learners.currentEnrollment.section.gradeLevel',
+                'user',
+                'schoolYear',
+                'externalinks',
+            ]),
             'registered_clubs' => $registered_clubs,
-            'current_club' => $club->id
+            'current_club' => $club->id,
+            'current_manager' => $currentManager,
+            'has_manager' => (bool) $currentManager,
         ]);
+    }
+
+    public function storeManager(Request $request, ClubRegister $club)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $schoolYear = SchoolYear::current();
+
+        if (
+            ClubManager::where('club_register_id', $club->id)
+                ->where('school_year_id', $schoolYear->id)
+                ->exists()
+        ) {
+            throw ValidationException::withMessages([
+                'manager' => 'This club already has a manager for the current school year.',
+            ]);
+        }
+
+        DB::transaction(function () use ($request, $club, $schoolYear) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'club manager',
+                'status' => 'active',
+            ]);
+
+            ClubManager::create([
+                'user_id' => $user->id,
+                'club_register_id' => $club->id,
+                'school_year_id' => $schoolYear->id,
+                'status' => 'active',
+            ]);
+        });
+
+        return redirect()->route('admin.club.show', $club->id)->with('success', 'Club manager added successfully.');
     }
 
     public function unregisterMember(Request $request)

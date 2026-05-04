@@ -22,4 +22,8 @@ class SchoolYear extends Model
     {
         return $this->hasMany(Event::class);
     }
+    public function clubManagers()
+    {
+        return $this->hasMany(ClubManager::class);
+    }
 }

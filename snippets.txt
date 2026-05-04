@@ -1,0 +1,413 @@
+CODE SNIPPETS FROM PSHS ONLINE PROJECT
+
+===========================================
+1. REGISTRATION AND PROFILING MODULE
+===========================================
+
+User Registration Model (app/Models/User.php):
+--------------------------------------------
+<?php
+class User extends Authenticatable
+{
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role',
+        'status',
+    ];
+
+    public function clubRegisters()
+    {
+        return $this->hasMany(ClubRegister::class)->where('school_year_id', SchoolYear::current()->id);
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
+    }
+}
+
+Club Registration Model (app/Models/ClubRegister.php):
+----------------------------------------------------
+<?php
+class ClubRegister extends Model
+{
+    protected $fillable = [
+        'club_id',
+        'user_id',
+        'school_year_id',
+    ];
+
+    public function club()
+    {
+        return $this->belongsTo(Club::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function schoolYear()
+    {
+        return $this->belongsTo(SchoolYear::class);
+    }
+}
+
+Profile Management Controller (app/Http/Controllers/ProfileController.php):
+-----------------------------------------------------------------------
+<?php
+public function update(ProfileUpdateRequest $request): RedirectResponse
+{
+    $request->user()->fill($request->validated());
+
+    if ($request->user()->isDirty('email')) {
+        $request->user()->email_verified_at = null;
+    }
+
+    $request->user()->save();
+
+    return Redirect::route('profile.edit');
+}
+
+public function changePassword(Request $request): RedirectResponse
+{
+    $request->validate([
+        'old_password' => ['required', 'current_password'],
+        'new_password' => ['required', 'string', 'min:5', 'max:255', 'confirmed'],
+    ]);
+    
+    $user = Auth::user();
+    $user->password = bcrypt($request->new_password);
+    $user->save();
+
+    return Redirect::route('change-password');
+}
+
+===========================================
+2. ATTENDANCE MONITORING AND MANAGEMENT MODULE
+===========================================
+
+Attendance Controller (app/Http/Controllers/ClubAttendanceController.php):
+-----------------------------------------------------------------------
+<?php
+public function store(Request $request)
+{
+    $request->validate([
+        'club_register_id' => 'required',
+        'date' => 'required',
+        'activity' => 'required',
+        'members' => 'required|array',
+    ]);
+
+    // Store uploaded images
+    $imagePaths = [];
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $path = $image->store('club_attendances', 'public');
+            $imagePaths[] = $path;
+        }
+    }
+
+    $request['school_year_id'] = SchoolYear::current()->id;
+    $clubAttendance = ClubAttendance::create($request->all());
+    
+    $clubMembers = collect($request->members)->mapWithKeys(function ($member, $index) use ($clubAttendance) {
+        return [
+            $index => [
+                'club_attendance_id' => $clubAttendance->id,
+                'learner_id' => $member['learner_id'],
+                'status' => $member['status'] ?? 'absent',
+                'remarks' => $member['remarks'] ?? null,
+            ],
+        ];
+    })->toArray();
+    
+    $clubAttendance->clubAttendanceLearner()->attach($clubMembers);
+    
+    // Create delinquent records for absent members
+    $delinquentsMembers = $clubAttendance->clubAttendanceLearner
+        ->filter(function ($member) {
+            return $member->pivot->status !== 'present';
+        })
+        ->mapWithKeys(function ($member, $index) use ($clubAttendance) {
+            return [
+                $index => [
+                    'club_attendance_id' => $clubAttendance->id,
+                    'club_attendance_learner_id' => $member->pivot->id,
+                    'learner_name' => $member->name,
+                    'status' => $member->pivot->status,
+                    'resolved' => false,
+                    'link' => null,
+                    'resolved_by' => null,
+                    'remarks' => null,
+                ],
+            ];
+        })
+        ->values()
+        ->toArray();
+        
+    $clubAttendance->delinquents()->createMany($delinquentsMembers);
+    
+    return redirect()->route('club.attendance', ['club_register_id' => $club->id]);
+}
+
+public function monthlyAttendance(Request $request)
+{
+    $months = ClubAttendance::where('club_register_id', $request->club_id)
+        ->selectRaw('DISTINCT DATE_FORMAT(date, "%Y-%m") as month')
+        ->where('date', '>=','2025-08-01')
+        ->orderBy('month', 'asc')
+        ->pluck('month');
+    
+    $month = $months ? $months->first() : null;
+    if($request->month) {
+        $month = $request->month;
+    }
+    
+    $clubAttendance = ClubAttendance::with([
+        'clubAttendanceLearners.learner.currentEnrollment.section.gradeLevel',
+        'clubAttendanceLearners.delinquent'
+    ])
+    ->where('club_register_id', $request->club_id)
+    ->when($month, function ($query) use ($month) {
+        [$year, $month] = explode('-', $month);
+        $query->whereYear('date', $year)
+              ->whereMonth('date', $month);
+    })
+    ->orderBy('date', 'asc')
+    ->get();
+    
+    return Inertia::render('MonthlyAttendanceReport', [
+        'attendance' => $clubAttendance,
+        'months' => $months,
+        'month' => $month,
+    ]);
+}
+
+===========================================
+3. REPORTS AND SUBMISSION MANAGEMENT MODULE
+===========================================
+
+Submission Controller (app/Http/Controllers/ClubSubmissionController.php):
+-----------------------------------------------------------------------
+<?php
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required',
+        'club_register_id' => 'required',
+        'url' => 'nullable',
+        'user_id' => 'required',
+        'activity_date' => 'nullable|date',
+    ]);
+    
+    $submission = Submission::create($request->all());
+    
+    SubmissionTracker::create([
+        'submission_id' => $submission->id,
+        'status' => 'pending',
+        'remarks' => $request->remarks,
+        'updated_by' => Auth::user()->id,
+    ]);
+    
+    return redirect()->route('club.submissions');
+}
+
+public function update(Submission $submission, Request $request)
+{
+    $request->validate([
+        'status' => 'required',
+        'remarks' => 'nullable',
+        'url' => 'nullable',
+    ]);
+    
+    $submission->update([
+        'status' => request('status'),
+        'remarks' => request('remarks'),
+        'url' => request('url'),
+    ]);
+    
+    SubmissionTracker::create([
+        'submission_id' => $submission->id,
+        'status' => request('status'),
+        'updated_by' => Auth::user()->id,
+    ]);
+    
+    return redirect()->back();
+}
+
+Submission Model (app/Models/Submission.php):
+-------------------------------------------
+<?php
+class Submission extends Model
+{
+    protected $fillable = [
+        'name',
+        'remarks',
+        'club_register_id',
+        'user_id',
+        'url',
+        'status',
+        'activity_date',
+    ];
+
+    public function clubRegister()
+    {
+        return $this->belongsTo(ClubRegister::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public static function getSubmissionsForClubRegister($clubRegisterId)
+    {
+        return self::where('club_register_id', $clubRegisterId)
+            ->with('submissionTrackers.updatedBy')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
+    public function submissionTrackers()
+    {
+        return $this->hasMany(SubmissionTracker::class);
+    }
+}
+
+Accomplishment Report Controller (app/Http/Controllers/AccomplishmentReportController.php):
+------------------------------------------------------------------------------------------
+<?php
+public function index()
+{
+    $reports = AccomplishmentReport::all();
+    return Inertia::render('ClubAccomplishment', [
+        'reports' => $reports
+    ]);
+}
+
+===========================================
+4. IPCR RATING AND COMPLIANCE MANAGEMENT MODULE
+===========================================
+
+IPCR Model (app/Models/Ipcr.php):
+---------------------------------
+<?php
+class Ipcr extends Model
+{
+    protected $fillable = [
+        'school_year_id',
+        'monitoring',
+        'semester',
+        'club_type'
+    ];
+    
+    protected $table = 'ipcr';
+}
+
+IPCR Controller (app/Http/Controllers/IpcrController.php):
+--------------------------------------------------------
+<?php
+class IpcrController extends Controller
+{
+    // IPCR rating and compliance management functionality
+    // This controller handles Individual Performance Commitment and Review
+    // for teachers and staff compliance monitoring
+}
+
+===========================================
+ADDITIONAL UTILITY MODELS AND RELATIONSHIPS
+===========================================
+
+Attendance Delinquence Model:
+----------------------------
+<?php
+class AttendanceDelinquence extends Model
+{
+    // Handles tracking of attendance infractions and resolutions
+}
+
+Club Attendance Model:
+---------------------
+<?php
+class ClubAttendance extends Model
+{
+    // Manages club attendance records and related data
+}
+
+School Year Model:
+-----------------
+<?php
+class SchoolYear extends Model
+{
+    // Manages academic year periods for record keeping
+}
+
+Learner Model:
+--------------
+<?php
+class Learner extends Model
+{
+    // Student/learner information and enrollment data
+}
+
+Teacher Model:
+--------------
+<?php
+class Teacher extends Model
+{
+    // Teacher profile and assignment information
+}
+
+===========================================
+COMMON PATTERNS AND UTILITIES
+===========================================
+
+Authentication and Authorization:
+--------------------------------
+if ($club->user_id !== auth()->id()) {
+    abort(403, 'Unauthorized access.');
+}
+
+File Upload Handling:
+---------------------
+if ($request->hasFile('images')) {
+    foreach ($request->file('images') as $image) {
+        $path = $image->store('club_attendances', 'public');
+        $imagePaths[] = $path;
+    }
+}
+
+Data Validation:
+---------------
+$request->validate([
+    'name' => 'required',
+    'club_register_id' => 'required',
+    'url' => 'nullable',
+    'user_id' => 'required',
+    'activity_date' => 'nullable|date',
+]);
+
+Database Relationships:
+-----------------------
+public function club()
+{
+    return $this->belongsTo(Club::class);
+}
+
+public function clubAttendances()
+{
+    return $this->hasMany(ClubAttendance::class);
+}
+
+Inertia.js Rendering:
+---------------------
+return Inertia::render('ClubAttendanceList', [
+    'attendance' => $attendance,
+]);
+
+Current School Year Context:
+---------------------------
+$request['school_year_id'] = SchoolYear::current()->id;
