@@ -15,6 +15,7 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
                 yesteryear: ['Yesteryear', 'cursive'],
+                kaushan: ['Kaushan Script', 'cursive'],
             },
         },
     },
