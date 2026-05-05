@@ -258,6 +258,10 @@ export function submissionType() {
             value: 'accreditation_documents',
         },
         {
+            label: 'Certificate of Completion',
+            value: 'certificate_of_completion',
+        },
+        {
             label: 'Others',
             value: 'others',
         },
