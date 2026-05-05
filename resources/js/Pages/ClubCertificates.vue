@@ -113,7 +113,7 @@
                             <br />
                             Given this 11th day of May, 2026, at PSHS-CRC in Butuan City.
                         </p>
-                        <p id="cert-message-print" class="absolute px-32 leading-7">
+                        <p v-else id="cert-message-print" class="absolute px-32 leading-7">
                             has successfully completed the {{ studentClub }} under the Alternative Learning Program (ALP) during the Academic Year 2025-2026. This recognition is given in appreciation of the student’s valuable contribution, dedication, and active participation in the club’s activities.
 
                             <br />
