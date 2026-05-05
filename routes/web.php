@@ -1,28 +1,26 @@
 <?php
 
-use App\Http\Controllers\ClubController;
-use App\Http\Controllers\EnrollmentController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminClubController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\ClubAttendanceController;
-use App\Http\Controllers\AdminAttendanceController;
 use App\Http\Controllers\AdminAssessmentController;
-use App\Http\Controllers\AdminClubSubmissionController;
-use App\Http\Controllers\ClubSubmissionController;
 use App\Http\Controllers\AdminClubAttendanceController;
+use App\Http\Controllers\AdminClubController;
+use App\Http\Controllers\AdminClubSubmissionController;
 use App\Http\Controllers\AdviserAttendanceController;
+use App\Http\Controllers\ClubAccomplishmentController;
+use App\Http\Controllers\ClubAttendanceController;
+use App\Http\Controllers\ClubController;
+use App\Http\Controllers\ClubsMonitoringController;
+use App\Http\Controllers\ClubSubmissionController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FeedbackController;
-use Illuminate\Support\Facades\Route;
-use App\Models\ClubRegister;
-use Inertia\Inertia;
-use App\Http\Middleware\RoleMiddleware;
-use App\Http\Controllers\ClubsMonitoringController;
-use App\Http\Controllers\ClubAccomplishmentController;
 use App\Http\Controllers\LogRecordController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\RoleMiddleware;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -35,7 +33,7 @@ Route::get('/workflow', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/dashboard/update-schedule', [DashboardController::class, 'updateSchedule'])
-        ->middleware(RoleMiddleware::class . ':admin')
+        ->middleware(RoleMiddleware::class.':admin')
         ->name('dashboard.update-schedule');
     Route::get('/club-management', function () {
         return Inertia::render('Club');
@@ -46,11 +44,12 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin')->group(function () {
+Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin')->group(function () {
     Route::get('/log-records', [LogRecordController::class, 'index'])->name('log-records');
 });
-Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,supervisor')->group(function () {
+Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin,supervisor')->group(function () {
     Route::get('/users', [ProfileController::class, 'index'])->name('users');
+    Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
     Route::post('/users/update', [UserController::class, 'update'])->name('users.update');
     Route::post('/user/login', [UserController::class, 'adminLogin'])->name('admin.user.login');
 
@@ -63,6 +62,9 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class . ':admin,super
     Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');
     Route::get('/clubs', [AdminClubController::class, 'index'])->name('admin.club.list');
     Route::get('/club/{club}', [AdminClubController::class, 'show'])->name('admin.club.show');
+    Route::get('/clubs/register', [AdminClubController::class, 'registerPage'])->name('admin.club.register.page');
+    Route::post('/clubs/store', [AdminClubController::class, 'storeClub'])->name('admin.club.store');
+    Route::post('/clubs/register', [AdminClubController::class, 'registerClub'])->name('admin.club.register');
     Route::post('/club/register', [ClubController::class, 'registerMember'])->name('club.register');
     Route::post('/club/unregister', [AdminClubController::class, 'unregisterMember'])->name('admin.club.unregister');
     Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
