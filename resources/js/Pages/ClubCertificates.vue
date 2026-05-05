@@ -32,7 +32,7 @@
                     </td>
                     <td>
                         <button
-                            @click="generateCertificate(student.last_name, student.first_name, middleInitials(student.middle_name))"
+                            @click="generateCertificate(student.last_name, student.first_name, student.middle_name)"
                             class="text-indigo-400 flex items-center gap-1 w-fit bg-indigo-50 text-[10px] hover:bg-indigo-600 px-2 py-1 rounded hover:text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16m0 0l-6-6m6 6l-6 6" />
@@ -75,7 +75,7 @@
                <div class="flex justify-center">
                     <div class="relative w-full h-full">
                         <span id="cert-name" class="absolute font-kaushan text-center text-black font-bold">
-                            {{ decapitalizeText(studentName) }}
+                            {{ studentName }}
                         </span>
                         <p v-if="parseInt(studentClubId) === 1" id="cert-message" class="absolute px-32 leading-7">
                             for their dedicated service as a member of the Sangguniang Iskolar  for the Academic Year 2025–2026.
@@ -104,7 +104,7 @@
                        <div class="flex justify-center">
                     <div class="relative w-full h-full">
                         <span id="cert-name-print" class="absolute font-kaushan text-center text-black font-bold">
-                            {{ decapitalizeText(studentName) }}
+                            {{ studentName }}
                         </span>
                         <p v-if="parseInt(studentClubId) === 1" id="cert-message-print" class="absolute px-32 leading-7">
                             for their dedicated service as a member of the Sangguniang Iskolar  for the Academic Year 2025–2026.
@@ -151,9 +151,60 @@
     const studentClubId = ref('')
     const showModal = ref(false);
 
+    const nameSuffixPattern = /^(.*?)(?:,?\s+)?((?:jr\.?|sr\.?|ii|iii|iv|v|vi|vii|viii|ix|x))\.?$/i
+
+    const extractNameSuffix = (namePart: string) => {
+        const trimmedName = (namePart ?? '').trim()
+
+        if (!trimmedName) {
+            return {
+                name: '',
+                suffix: '',
+            }
+        }
+
+        const suffixMatch = trimmedName.match(nameSuffixPattern)
+
+        if (!suffixMatch) {
+            return {
+                name: trimmedName,
+                suffix: '',
+            }
+        }
+
+        return {
+            name: suffixMatch[1].trim(),
+            suffix: (() => {
+                const normalizedSuffix = suffixMatch[2].replace(/\./g, '').toUpperCase()
+
+                return ['JR', 'SR'].includes(normalizedSuffix)
+                    ? `${normalizedSuffix}.`
+                    : normalizedSuffix
+            })(),
+        }
+    }
+
+    const formatCertificateStudentName = (lastName: string, firstName: string, middleName: string) => {
+        const lastNameParts = extractNameSuffix(lastName)
+        const firstNameParts = extractNameSuffix(firstName)
+        const middleNameParts = extractNameSuffix(middleName)
+
+        const suffix = [firstNameParts.suffix, middleNameParts.suffix, lastNameParts.suffix].find(Boolean)
+        const middleInitial = middleInitials(middleNameParts.name)
+        const nameParts = [firstNameParts.name, middleNameParts.name, lastNameParts.name]
+            .map((part, index) => index === 1 ? middleInitial : part)
+            .filter(Boolean)
+            .map((part) => decapitalizeText(part))
+
+        return `${nameParts.join(' ')}${suffix ? ` ${suffix}` : ''}`.trim()
+    }
+
     const generateCertificate = (lastName: any, firstName: any, middleName: any) => {
-        const middleInitial = middleInitials(middleName)
-        studentName.value = firstName + ' ' + middleInitial + ' ' + lastName + ' '
+        studentName.value = formatCertificateStudentName(
+            lastName,
+            firstName,
+            middleName,
+        )
         studentClub.value = props.club?.club.name
         studentClubId.value = props.club?.club.id
         showModal.value = true
