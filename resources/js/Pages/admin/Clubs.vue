@@ -46,13 +46,14 @@
                         <div class="text-sm font-medium">Enlisted</div>
                         <div class="text-xl font-bold">{{ enlisted }}</div>
                     </a>
-                    <a
-                        href="#"
+                    <button
+                        type="button"
+                        @click="openUnlistedModal"
                         class="bg-red-100 text-red-800 px-4 py-3 rounded-lg shadow-sm hover:bg-red-200 transition-colors duration-200 cursor-pointer"
                     >
                         <div class="text-sm font-medium">Not Enlisted</div>
                         <div class="text-xl font-bold">{{ unlisted }}</div>
-                    </a>
+                    </button>
                     <a
                         href="#"
                         class="bg-blue-100 text-blue-800 px-4 py-3 rounded-lg shadow-sm hover:bg-blue-200 transition-colors duration-200 cursor-pointer"
@@ -63,7 +64,111 @@
                         </div>
                     </a>
                 </div>
-            </div>
+        </div>
+
+        <SleekModal
+            :is-visible="showUnlistedModal"
+            @close="showUnlistedModal = false"
+            size="4xl"
+        >
+            <template #header>
+                <div class="flex flex-col pr-8">
+                    <h3 class="text-2xl font-semibold text-gray-800">
+                        Not Enlisted Students
+                    </h3>
+                    <p class="text-gray-600 text-sm">
+                        Students from Grade 7 to Grade 10 who are not listed in
+                        any ALP club
+                    </p>
+                </div>
+            </template>
+            <template #body>
+                <div class="overflow-x-auto rounded-lg border border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    scope="col"
+                                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2"
+                                >
+                                    #
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Learner
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Grade / Section
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
+                                    Gender
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr
+                                v-for="(learner, index) in props.unlisted_learners"
+                                :key="learner.id"
+                                class="hover:bg-gray-50"
+                            >
+                                <td
+                                    class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                >
+                                    {{ index + 1 }}
+                                </td>
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                >
+                                    {{
+                                        ucWords(learner?.last_name) +
+                                        ", " +
+                                        ucWords(learner?.first_name) +
+                                        " " +
+                                        middleInitials(
+                                            learner?.middle_name ?? "",
+                                        )
+                                    }}
+                                </td>
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                >
+                                    {{
+                                        learner?.current_enrollment?.section
+                                            ? `${parseInt(
+                                                  learner?.current_enrollment
+                                                      ?.section
+                                                      ?.grade_level_id,
+                                              ) + 6} - ${learner?.current_enrollment?.section?.section_name}`
+                                            : "-"
+                                    }}
+                                </td>
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                >
+                                    {{ ucWords(learner?.gender) }}
+                                </td>
+                            </tr>
+                            <tr v-if="props.unlisted_learners.length === 0">
+                                <td
+                                    colspan="4"
+                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                >
+                                    No unlisted students found.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </template>
+        </SleekModal>
 
             <div class="overflow-x-auto rounded-lg border border-gray-200">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -257,11 +362,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ucWords } from "@/composables/utilities";
+import { middleInitials, ucWords } from "@/composables/utilities";
 import { computed, onMounted, ref } from "vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
+import SleekModal from "@/Components/SleekModal.vue";
 const page = usePage();
 const props = defineProps({
     registered_clubs: Array,
@@ -270,6 +376,7 @@ const props = defineProps({
     total_students_g7_g10: Number,
     unlisted_learners: Array,
 });
+const showUnlistedModal = ref(false);
 const sortBy = ref("name");
 
 const sortedClubs = computed(() => {
@@ -308,6 +415,10 @@ const totalStudentsG7G10 = computed(() => {
 
 const showClubDetails = (club_id: number) => {
     router.visit(route("admin.club.show", club_id));
+};
+
+const openUnlistedModal = () => {
+    showUnlistedModal.value = true;
 };
 
 onMounted(() => {
