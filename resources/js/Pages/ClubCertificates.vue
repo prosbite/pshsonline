@@ -151,7 +151,19 @@
     const studentClubId = ref('')
     const showModal = ref(false);
 
-    const nameSuffixPattern = /^(.*?)(?:,?\s+)?((?:jr\.?|sr\.?|ii|iii|iv|v|vi|vii|viii|ix|x))\.?$/i
+    const suffixTokens = new Set([
+        'JR',
+        'SR',
+        'II',
+        'III',
+        'IV',
+        'V',
+        'VI',
+        'VII',
+        'VIII',
+        'IX',
+        'X',
+    ])
 
     const extractNameSuffix = (namePart: string) => {
         const trimmedName = (namePart ?? '').trim()
@@ -163,9 +175,11 @@
             }
         }
 
-        const suffixMatch = trimmedName.match(nameSuffixPattern)
+        const normalizedName = trimmedName.replace(/,/g, ' ').replace(/\s+/g, ' ').trim()
+        const nameTokens = normalizedName.split(' ')
+        const lastToken = (nameTokens[nameTokens.length - 1] ?? '').replace(/\./g, '').toUpperCase()
 
-        if (!suffixMatch) {
+        if (nameTokens.length < 2 || !suffixTokens.has(lastToken)) {
             return {
                 name: trimmedName,
                 suffix: '',
@@ -173,14 +187,10 @@
         }
 
         return {
-            name: suffixMatch[1].trim(),
-            suffix: (() => {
-                const normalizedSuffix = suffixMatch[2].replace(/\./g, '').toUpperCase()
-
-                return ['JR', 'SR'].includes(normalizedSuffix)
-                    ? `${normalizedSuffix}.`
-                    : normalizedSuffix
-            })(),
+            name: nameTokens.slice(0, -1).join(' ').trim(),
+            suffix: ['JR', 'SR'].includes(lastToken)
+                ? `${lastToken}.`
+                : lastToken,
         }
     }
 
