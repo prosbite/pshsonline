@@ -35,15 +35,31 @@ class AdminClubController extends Controller
 
         $unlisted_learners = Club::unlistedMembers();
 
-        $total_students_g7_g10 = Enrollment::whereHas('section.gradeLevel', function ($query) {
-            $query->whereIn('grade_level', [7, 8, 9, 10]);
-        })
-            ->count();
+        $grade_levels = [7, 8, 9, 10];
+
+        $grade_level_breakdown = Enrollment::with('section.gradeLevel')
+            ->whereHas('section.gradeLevel', function ($query) use ($grade_levels) {
+                $query->whereIn('grade_level', $grade_levels);
+            })
+            ->get()
+            ->groupBy(function ($enrollment) {
+                return $enrollment->section?->gradeLevel?->grade_level;
+            })
+            ->map(function ($items, $grade_level) {
+                return [
+                    'grade_level' => (int) $grade_level,
+                    'count' => $items->count(),
+                ];
+            })
+            ->values();
+
+        $total_students_g7_g10 = $grade_level_breakdown->sum('count');
 
         return Inertia::render('admin/Clubs', [
             'registered_clubs' => $registered_clubs,
             'club_student_count' => $total_students_g7_g10,
             'total_students_g7_g10' => $total_students_g7_g10,
+            'grade_level_breakdown' => $grade_level_breakdown,
             'unlisted_learners' => $unlisted_learners,
         ]);
     }
