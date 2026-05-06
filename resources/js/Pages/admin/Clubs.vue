@@ -54,15 +54,16 @@
                         <div class="text-sm font-medium">Not Enlisted</div>
                         <div class="text-xl font-bold">{{ unlisted }}</div>
                     </button>
-                    <a
-                        href="#"
+                    <button
+                        type="button"
+                        @click="openGradeBreakdownModal"
                         class="bg-blue-100 text-blue-800 px-4 py-3 rounded-lg shadow-sm hover:bg-blue-200 transition-colors duration-200 cursor-pointer"
                     >
                         <div class="text-sm font-medium">Total Students</div>
                         <div class="text-xl font-bold">
                             {{ totalStudentsG7G10 }}
                         </div>
-                    </a>
+                    </button>
                 </div>
         </div>
 
@@ -166,6 +167,39 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+            </template>
+        </SleekModal>
+
+        <SleekModal
+            :is-visible="showGradeBreakdownModal"
+            @close="showGradeBreakdownModal = false"
+            size="3xl"
+        >
+            <template #header>
+                <div class="flex flex-col pr-8">
+                    <h3 class="text-2xl font-semibold text-gray-800">
+                        Grade 7 to Grade 10 Breakdown
+                    </h3>
+                    <p class="text-gray-600 text-sm">
+                        Total students enrolled per grade level
+                    </p>
+                </div>
+            </template>
+            <template #body>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div
+                        v-for="item in gradeLevelBreakdown"
+                        :key="item.grade_level"
+                        class="rounded-xl border border-gray-200 bg-gray-50 p-4"
+                    >
+                        <div class="text-sm font-medium text-gray-500">
+                            Grade {{ item.grade_level }}
+                        </div>
+                        <div class="mt-2 text-3xl font-bold text-gray-900">
+                            {{ item.count }}
+                        </div>
+                    </div>
                 </div>
             </template>
         </SleekModal>
@@ -374,9 +408,11 @@ const props = defineProps({
     sy: Object,
     club_student_count: Number,
     total_students_g7_g10: Number,
+    grade_level_breakdown: Array,
     unlisted_learners: Array,
 });
 const showUnlistedModal = ref(false);
+const showGradeBreakdownModal = ref(false);
 const sortBy = ref("name");
 
 const sortedClubs = computed(() => {
@@ -420,6 +456,25 @@ const showClubDetails = (club_id: number) => {
 const openUnlistedModal = () => {
     showUnlistedModal.value = true;
 };
+
+const openGradeBreakdownModal = () => {
+    showGradeBreakdownModal.value = true;
+};
+
+const gradeLevelBreakdown = computed(() => {
+    const baseGrades = [7, 8, 9, 10];
+    const counts = new Map(
+        (props.grade_level_breakdown ?? []).map((item: any) => [
+            Number(item.grade_level),
+            Number(item.count),
+        ]),
+    );
+
+    return baseGrades.map((grade_level) => ({
+        grade_level,
+        count: counts.get(grade_level) ?? 0,
+    }));
+});
 
 onMounted(() => {
     // console.log(props.unlisted_learners)
