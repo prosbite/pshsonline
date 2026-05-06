@@ -19,7 +19,7 @@
                 </div>
 
                 <!-- Right: Statistics and Actions -->
-                <div class="flex space-x-4">
+                <div class="flex flex-wrap gap-4">
                     <Link
                         :href="route('admin.club.register.page')"
                         v-if="page.props.auth.user?.role === 'admin'"
@@ -51,7 +51,16 @@
                         class="bg-red-100 text-red-800 px-4 py-3 rounded-lg shadow-sm hover:bg-red-200 transition-colors duration-200 cursor-pointer"
                     >
                         <div class="text-sm font-medium">Not Enlisted</div>
-                        <div class="text-xl font-bold">{{ 0 }}</div>
+                        <div class="text-xl font-bold">{{ unlisted }}</div>
+                    </a>
+                    <a
+                        href="#"
+                        class="bg-blue-100 text-blue-800 px-4 py-3 rounded-lg shadow-sm hover:bg-blue-200 transition-colors duration-200 cursor-pointer"
+                    >
+                        <div class="text-sm font-medium">Total Students</div>
+                        <div class="text-xl font-bold">
+                            {{ totalStudentsG7G10 }}
+                        </div>
                     </a>
                 </div>
             </div>
@@ -258,6 +267,7 @@ const props = defineProps({
     registered_clubs: Array,
     sy: Object,
     club_student_count: Number,
+    total_students_g7_g10: Number,
     unlisted_learners: Array,
 });
 const sortBy = ref("name");
@@ -289,7 +299,11 @@ const enlisted = computed(() => {
 });
 
 const unlisted = computed(() => {
-    return props.club_student_count - enlisted.value;
+    return totalStudentsG7G10.value - enlisted.value;
+});
+
+const totalStudentsG7G10 = computed(() => {
+    return props.total_students_g7_g10 ?? props.club_student_count ?? 0;
 });
 
 const showClubDetails = (club_id: number) => {
