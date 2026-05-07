@@ -41,16 +41,18 @@ class Learner extends Model
 
     public function clubs()
     {
-        return $this->belongsToMany(Club::class, 'club_learner', 'learner_id', 'club_id')->withTimestamps();
+        return $this->belongsToMany(Club::class, 'club_learner', 'learner_id', 'club_id')
+            ->withPivot('club_register_id', 'school_year_id', 'status')
+            ->withTimestamps();
     }
 
     public function currentClub()
     {
         return $this->belongsToMany(Club::class, 'club_learner', 'learner_id', 'club_id')
-                ->withTimestamps()
-                ->withPivot('school_year_id')
-                ->wherePivot('school_year_id', SchoolYear::current()->id)
-                ->orderBy('club_learner.created_at');
+            ->withTimestamps()
+            ->withPivot('club_register_id', 'school_year_id', 'status')
+            ->wherePivot('school_year_id', SchoolYear::current()->id)
+            ->orderBy('club_learner.created_at');
     }
 
     public function learnersWithoutClubs()
