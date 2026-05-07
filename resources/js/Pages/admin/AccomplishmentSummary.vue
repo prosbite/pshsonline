@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import MainLayout from '@/Layouts/MainLayout.vue'
+import Modal from '@/Components/Modal.vue'
 import { Head } from '@inertiajs/vue3'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { fullDate } from '@/composables/utilities'
 
 defineOptions({
@@ -19,6 +20,19 @@ const clubsWithPhotos = computed(() => {
         attendances: register.club_attendances ?? [],
     }))
 })
+
+const selectedAttendance = ref<any | null>(null)
+const selectedClubName = ref('')
+
+const openPhoto = (clubName: string, attendance: any) => {
+    selectedClubName.value = clubName
+    selectedAttendance.value = attendance
+}
+
+const closePhoto = () => {
+    selectedAttendance.value = null
+    selectedClubName.value = ''
+}
 </script>
 
 <template>
@@ -51,7 +65,7 @@ const clubsWithPhotos = computed(() => {
                         {{ club.club?.name ?? 'Unnamed Club' }}
                     </h2>
                     <p class="text-sm text-gray-500">
-                        {{ club.attendances.length }} photo{{ club.attendances.length === 1 ? '' : 's' }} found
+                        {{ club.attendances.length }} photo{{ club.attendances.length === 1 ? '' : 's' }}
                     </p>
                 </div>
             </div>
@@ -65,21 +79,27 @@ const clubsWithPhotos = computed(() => {
                     :key="attendance.id"
                     class="overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
                 >
-                    <div class="aspect-[4/3] bg-gray-100">
-                        <img
-                            :src="`/storage/${attendance.image}`"
-                            :alt="attendance.activity || 'Attendance photo'"
-                            class="h-full w-full object-cover"
-                        />
-                    </div>
-                    <div class="space-y-1 p-4">
-                        <h3 class="text-base font-semibold text-gray-900">
-                            {{ attendance.activity }}
-                        </h3>
-                        <p class="text-sm text-gray-600">
-                            {{ fullDate(attendance.date) }}
-                        </p>
-                    </div>
+                    <button
+                        type="button"
+                        class="block w-full text-left"
+                        @click="openPhoto(club.club?.name ?? 'Unnamed Club', attendance)"
+                    >
+                        <div class="aspect-[4/3] bg-gray-100">
+                            <img
+                                :src="`/storage/${attendance.image}`"
+                                :alt="attendance.activity || 'Attendance photo'"
+                                class="h-full w-full object-cover"
+                            />
+                        </div>
+                        <div class="space-y-1 p-4">
+                            <h3 class="text-base font-semibold text-gray-900">
+                                {{ attendance.activity }}
+                            </h3>
+                            <p class="text-sm text-gray-600">
+                                {{ fullDate(attendance.date) }}
+                            </p>
+                        </div>
+                    </button>
                 </article>
             </div>
 
@@ -91,4 +111,50 @@ const clubsWithPhotos = computed(() => {
             </div>
         </section>
     </div>
+
+    <Modal
+        :show="!!selectedAttendance"
+        max-width="5xl"
+        :closeable="true"
+        @close="closePhoto"
+    >
+        <div v-if="selectedAttendance" class="bg-white">
+            <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-gray-500">
+                        Photo Preview
+                    </p>
+                    <h3 class="text-xl font-bold text-gray-900">
+                        {{ selectedClubName }}
+                    </h3>
+                </div>
+                <button
+                    type="button"
+                    class="rounded-full px-3 py-2 text-sm font-semibold text-gray-500 transition hover:bg-gray-100 hover:text-gray-900"
+                    @click="closePhoto"
+                >
+                    Close
+                </button>
+            </div>
+
+            <div class="max-h-[80vh] overflow-y-auto p-6">
+                <div class="overflow-hidden rounded-2xl bg-gray-100 shadow-lg">
+                    <img
+                        :src="`/storage/${selectedAttendance.image}`"
+                        :alt="selectedAttendance.activity || 'Attendance photo'"
+                        class="max-h-[70vh] w-full object-contain"
+                    />
+                </div>
+
+                <div class="mt-4 space-y-2">
+                    <h4 class="text-lg font-semibold text-gray-900">
+                        {{ selectedAttendance.activity }}
+                    </h4>
+                    <p class="text-sm text-gray-600">
+                        {{ fullDate(selectedAttendance.date) }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </Modal>
 </template>
