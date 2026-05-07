@@ -214,6 +214,12 @@
                     </svg>
                     <span class="text-md">Attendance Infractions Summary</span>
                 </Link>
+                <Link v-if="user.role === 'admin'" :href="route('admin.accomplishment.summary')" :class="{'bg-gray-700': route().current('admin.accomplishment.summary')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h10M4 18h7" />
+                    </svg>
+                    <span class="text-md">Accomplishment Summary</span>
+                </Link>
                 <Link v-if="user.role === 'admin'" :href="route('admin.advisers.attendance')" :class="{'bg-gray-700': route().current('admin.advisers.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -455,7 +461,7 @@
         </Link>
     </nav>
     <!-- User Profile/Settings at the bottom -->
-    <div class="mt-auto pt-6 border-t border-gray-700">
+    <!-- <div class="mt-auto pt-6 border-t border-gray-700">
         <a href="#" class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
             <img src="https://placehold.co/40x40/6366f1/ffffff?text=U" alt="User Avatar" class="w-10 h-10 rounded-full border-2 border-indigo-400">
             <div class="flex flex-col">
@@ -465,7 +471,7 @@
                 <button @click="logout" class="text-sm text-left text-gray-400 hover:text-white">Logout</button>
             </div>
         </a>
-    </div>
+    </div> -->
 </aside>
 </template>
 
@@ -520,7 +526,8 @@ onMounted(() => {
     if (route().current('club.attendance.monthly') ||
         route().current('club.accomplishment.quarterly') ||
         route().current('admin.attendance.delinquents') ||
-        route().current('admin.attendance.infractions')
+        route().current('admin.attendance.infractions') ||
+        route().current('admin.accomplishment.summary')
         ) {
         isClubReportsGroupOpen.value = true
     }

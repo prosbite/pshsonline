@@ -40,9 +40,8 @@ class AuthenticatedSessionController extends Controller
             'user_id' => auth()->user()->id,
             'log_type' => 'login',
         ]);
-        $schoolYear = SchoolYear::current();
+        $schoolYear = SchoolYear::syncSession(SchoolYear::active());
         Auth::user()->clubs = ClubRegister::where('school_year_id', $schoolYear->id)->where('user_id', auth()->user()->id)->with(['club', 'user', 'schoolYear', 'club.learners.currentEnrollment.section'])->get();
-        $request->session()->put('sy', $schoolYear);
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

@@ -32,15 +32,16 @@ class AdminClubController extends Controller
             ->join('clubs', 'club_registers.club_id', '=', 'clubs.id')
             ->orderBy('clubs.name', 'asc') // Order by the club's name
             ->get();
-
+        // dd($registered_clubs);
         $unlisted_learners = Club::unlistedMembers();
-
+        // dd($unlisted_learners);
         $grade_levels = [7, 8, 9, 10];
 
         $grade_level_breakdown = Enrollment::with('section.gradeLevel')
             ->whereHas('section.gradeLevel', function ($query) use ($grade_levels) {
                 $query->whereIn('grade_level', $grade_levels);
             })
+            ->where('school_year_id', SchoolYear::current()->id)
             ->get()
             ->groupBy(function ($enrollment) {
                 return $enrollment->section?->gradeLevel?->grade_level;

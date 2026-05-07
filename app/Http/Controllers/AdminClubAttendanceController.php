@@ -18,7 +18,7 @@ class AdminClubAttendanceController extends Controller
         $date = $request->date ?? Carbon::now()->format('Y-m-d');
         // dd($date);
         $clubRegisters = ClubRegister::with('club')->where('school_year_id', SchoolYear::current()->id)->get();
-        $attendanceDates = ClubAttendance::select('date')->distinct()->orderBy('date', 'desc')->get()->pluck('date');
+        $attendanceDates = ClubAttendance::select('date')->distinct()->orderBy('date', 'desc')->where('school_year_id', SchoolYear::current()->id)->get()->pluck('date');
         if($attendanceDates->count() > 0 && !$request->date){
             $date = $attendanceDates->first();
         }
@@ -34,7 +34,7 @@ class AdminClubAttendanceController extends Controller
     public function delinquents(Request $request)
     {
         $date = $request->date ?? Carbon::now()->format('Y-m-d');
-        $attendanceDates = ClubAttendance::select('date')->distinct()->orderBy('date', 'desc')->get()->pluck('date');
+        $attendanceDates = ClubAttendance::select('date')->distinct()->orderBy('date', 'desc')->where('school_year_id', SchoolYear::current()->id)->get()->pluck('date');
         if($attendanceDates->count() > 0 && !$request->date){
             $date = $attendanceDates->first();
         }
@@ -91,5 +91,29 @@ class AdminClubAttendanceController extends Controller
         'infractions' => $infractions,
     ]);
 }
+
+    public function accomplishmentSummary()
+    {
+        $schoolYear = SchoolYear::current();
+        abort_unless($schoolYear, 404);
+
+        $clubs = ClubRegister::with([
+            'club',
+            'clubAttendances' => function ($query) {
+                $query->whereNotNull('image')
+                    ->orderBy('date', 'desc')
+                    ->orderBy('created_at', 'desc');
+            },
+        ])
+            ->where('school_year_id', $schoolYear->id)
+            ->get()
+            ->sortBy(fn ($register) => $register->club?->name ?? '')
+            ->values();
+
+        return Inertia::render('admin/AccomplishmentSummary', [
+            'clubs' => $clubs,
+            'schoolYear' => $schoolYear,
+        ]);
+    }
 
 }

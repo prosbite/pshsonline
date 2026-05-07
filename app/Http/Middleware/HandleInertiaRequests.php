@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\SchoolYear;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -29,6 +30,8 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $currentSchoolYear = SchoolYear::current();
+
         return [
             ...parent::share($request),
             'auth' => [
@@ -38,7 +41,9 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
             ],
-            'sy' => fn () => $request->session()->get('sy'),
+            'schoolYears' => fn () => SchoolYear::orderByDesc('id')->get(),
+            'currentSchoolYear' => fn () => $currentSchoolYear,
+            'sy' => fn () => $currentSchoolYear,
         ];
     }
 }

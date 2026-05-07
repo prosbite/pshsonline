@@ -130,7 +130,7 @@ const sortedAttendanceByClub = computed(() => {
     })
 })
 const noSubmission = computed(() => {
-    const clubType = props.attendance?.[0].club_register?.club?.type
+    const clubType = props.attendance?.[0]?.club_register?.club?.type
     const result =  props.clubs.filter((club) => {
         return !props.attendance.some((attendance) => attendance.club_register.id === club.id)
     })

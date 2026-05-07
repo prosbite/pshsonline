@@ -11,7 +11,11 @@ trait HasSchoolYearScope
      */
     public function scopeCurrentSchoolYear($query)
     {
-        return $query->where('school_year_id', SchoolYear::currentId());
+        $schoolYearId = SchoolYear::currentId();
+
+        return $schoolYearId
+            ? $query->where('school_year_id', $schoolYearId)
+            : $query;
     }
 
     /**
