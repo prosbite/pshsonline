@@ -39,7 +39,7 @@
                         </svg>
                     </button>
 
-                    <div v-if="page.props.auth.user.role === 'admin'" class="flex min-w-0 flex-1 items-center gap-3">
+                    <div v-if="page.props.auth.user.role === 'admin' || page.props.auth.user.role === 'club adviser'" class="flex min-w-0 flex-1 items-center gap-3">
                         <div class="flex-1 flex items-center gap-2">
                             <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">SY</p>
                             <select

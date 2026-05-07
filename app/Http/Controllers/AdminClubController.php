@@ -22,12 +22,46 @@ class AdminClubController extends Controller
             ->with(['club', 'user', 'schoolYear']) // Eager load the main relationships
             ->select(
                 'club_registers.*', // Select all columns from club_registers
-                // Subquery to count total learners for each club via the pivot table
-                DB::raw('(SELECT COUNT(cl.learner_id) FROM club_learner cl JOIN learners l ON cl.learner_id = l.id WHERE cl.club_id = club_registers.club_id) as total_members'),
-                // Subquery to count female learners for each club via the pivot table
-                DB::raw('(SELECT COUNT(cl.learner_id) FROM club_learner cl JOIN learners l ON cl.learner_id = l.id WHERE cl.club_id = club_registers.club_id AND l.gender = "Female") as female_members'),
-                // Subquery to count male learners for each club via the pivot table
-                DB::raw('(SELECT COUNT(cl.learner_id) FROM club_learner cl JOIN learners l ON cl.learner_id = l.id WHERE cl.club_id = club_registers.club_id AND l.gender = "Male") as male_members')
+                // Count learners through the new club_register_id pivot, with a fallback for legacy rows.
+                DB::raw('(
+                    SELECT COUNT(cl.learner_id)
+                    FROM club_learner cl
+                    JOIN learners l ON cl.learner_id = l.id
+                    WHERE cl.club_register_id = club_registers.id
+                       OR (
+                            cl.club_register_id IS NULL
+                            AND cl.club_id = club_registers.club_id
+                            AND cl.school_year_id = club_registers.school_year_id
+                       )
+                ) as total_members'),
+                DB::raw('(
+                    SELECT COUNT(cl.learner_id)
+                    FROM club_learner cl
+                    JOIN learners l ON cl.learner_id = l.id
+                    WHERE (
+                            cl.club_register_id = club_registers.id
+                         OR (
+                                cl.club_register_id IS NULL
+                                AND cl.club_id = club_registers.club_id
+                                AND cl.school_year_id = club_registers.school_year_id
+                            )
+                       )
+                      AND l.gender = "Female"
+                ) as female_members'),
+                DB::raw('(
+                    SELECT COUNT(cl.learner_id)
+                    FROM club_learner cl
+                    JOIN learners l ON cl.learner_id = l.id
+                    WHERE (
+                            cl.club_register_id = club_registers.id
+                         OR (
+                                cl.club_register_id IS NULL
+                                AND cl.club_id = club_registers.club_id
+                                AND cl.school_year_id = club_registers.school_year_id
+                            )
+                       )
+                      AND l.gender = "Male"
+                ) as male_members')
             )
             ->where('club_registers.school_year_id', SchoolYear::current()->id)
             // Join the clubs table to facilitate ordering by club name
@@ -88,6 +122,7 @@ class AdminClubController extends Controller
     {
         $club = $club;
         $registered_clubs = ClubRegister::with(['club'])->where('school_year_id', SchoolYear::current()->id)->get();
+        // dd($registered_clubs);
         $currentSchoolYearId = SchoolYear::current()->id;
         $current_manager = ClubManager::with(['user', 'schoolYear'])
             ->where('club_register_id', $club->id)
@@ -103,7 +138,7 @@ class AdminClubController extends Controller
             ->first();
 
         return Inertia::render('admin/ClubDetails', [
-            'club' => $club->load(['club.learners.currentEnrollment.section.gradeLevel', 'user', 'schoolYear', 'externalinks']),
+            'club' => $club->load(['learners.currentEnrollment.section.gradeLevel', 'club.learners.currentEnrollment.section.gradeLevel', 'user', 'schoolYear', 'externalinks']),
             'registered_clubs' => $registered_clubs,
             'current_club' => $club->id,
             'current_manager' => $current_manager,

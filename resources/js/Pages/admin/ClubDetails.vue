@@ -289,7 +289,7 @@
         password_confirmation: '',
     })
     const clubMembers = computed(() => {
-        return props.club.club.learners
+        return props.club.learners ?? props.club.club?.learners ?? []
     })
     const managerButtonLabel = computed(() => {
         return props.previous_manager ? '+ Renew Manager' : '+ Add Manager'
@@ -342,10 +342,6 @@
         }
         router.post(route('club.register'), data, {
             onSuccess: () => {
-                toast.success('Member registered successfully.', {
-                    autoClose: 2000,
-                    position: toast.POSITION.TOP_RIGHT,
-                })
             },
             onError: () => {
                 toast.error('Failed to register member.', {
@@ -371,10 +367,6 @@
         }
         router.post(route('admin.club.unregister'), data, {
             onSuccess: () => {
-                toast.success('Member registered successfully.', {
-                    autoClose: 2000,
-                    position: toast.POSITION.TOP_RIGHT,
-                })
             },
             onError: () => {
                 toast.error('Failed to register member.', {

@@ -16,7 +16,10 @@ class ClubController extends Controller
 {
     public function membersList()
     {
-        $my_clubs = ClubRegister::where('school_year_id', SchoolYear::current()->id)->where('user_id', auth()->user()->id)->with(['club', 'schoolYear', 'club.learners.currentEnrollment.section'])->get();
+        $my_clubs = ClubRegister::where('school_year_id', SchoolYear::current()->id)
+            ->where('user_id', auth()->user()->id)
+            ->with(['club', 'schoolYear', 'learners.currentEnrollment.section.gradeLevel'])
+            ->get();
         return Inertia::render('ClubMembers', [
             'clubs' => $my_clubs,
         ]);
@@ -26,6 +29,7 @@ class ClubController extends Controller
     {
         $request->validate([
             'learner_id' => 'required|integer',
+            'club_reg_id' => 'required|exists:club_registers,id',
             'club_id' => [
                 'required',
                 Rule::unique('club_learner')->where(function ($query) use ($request) {
@@ -36,8 +40,14 @@ class ClubController extends Controller
         ]);
 
         $currentMembersCount = DB::table('club_learner')
-            ->where('club_id', $request->club_id)
-            ->where('school_year_id', SchoolYear::current()->id)
+            ->where(function ($query) use ($request) {
+                $query->where('club_register_id', $request->club_reg_id)
+                    ->orWhere(function ($legacyQuery) use ($request) {
+                        $legacyQuery->whereNull('club_register_id')
+                            ->where('club_id', $request->club_id)
+                            ->where('school_year_id', SchoolYear::current()->id);
+                    });
+            })
             ->count();
 
         if ($currentMembersCount >= 26) {
@@ -46,6 +56,7 @@ class ClubController extends Controller
 
         $learner = Learner::find($request->learner_id);
         $learner->clubs()->attach($request->club_id, [
+            'club_register_id' => $request->club_reg_id,
             'school_year_id' => SchoolYear::current()->id,
         ]);
         return redirect()->route('admin.club.show', $request->club_reg_id)->with('success', 'Member registered successfully.');
@@ -55,6 +66,7 @@ class ClubController extends Controller
     {
         $request->validate([
             'learner_id' => 'required|integer',
+            'club_reg_id' => 'required|exists:club_registers,id',
             'club_id' => [
                 'required',
                 Rule::unique('club_learner')->where(function ($query) use ($request) {
@@ -65,8 +77,14 @@ class ClubController extends Controller
         ]);
 
         $currentMembersCount = DB::table('club_learner')
-            ->where('club_id', $request->club_id)
-            ->where('school_year_id', SchoolYear::current()->id)
+            ->where(function ($query) use ($request) {
+                $query->where('club_register_id', $request->club_reg_id)
+                    ->orWhere(function ($legacyQuery) use ($request) {
+                        $legacyQuery->whereNull('club_register_id')
+                            ->where('club_id', $request->club_id)
+                            ->where('school_year_id', SchoolYear::current()->id);
+                    });
+            })
             ->count();
 
         if ($currentMembersCount >= 26) {
@@ -75,6 +93,7 @@ class ClubController extends Controller
 
         $learner = Learner::find($request->learner_id);
         $learner->clubs()->attach($request->club_id, [
+            'club_register_id' => $request->club_reg_id,
             'school_year_id' => SchoolYear::current()->id,
         ]);
 

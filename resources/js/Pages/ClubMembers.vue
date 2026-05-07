@@ -302,7 +302,7 @@ const props = defineProps({
 })
 const printHeight = ref(0)
 const maximumMembers = computed(() => {
-    return club.value?.club?.learners?.length >= 40
+    return club.value?.learners?.length >= 40
 })
 const selectedClub = ref({})
 const hasClub = (learner: any) => {
@@ -336,14 +336,11 @@ const addNewMember = (learner: any) => {
     const data = {
         learner_id: learner.id,
         club_id: club.value?.id,
+        club_reg_id: club.value?.id,
         grade_level: learner.current_enrollment.section.grade_level.grade_level,
     }
     router.post(route('club.register'), data, {
         onSuccess: () => {
-            toast.success('Member registered successfully.', {
-                autoClose: 3000,
-                position: toast.POSITION.TOP_RIGHT,
-            })
             searchInput.value = ''
         },
         onError: () => {
@@ -443,7 +440,7 @@ const printClubMembers = () => {
     window.print()
 }
 const clubMembers = computed(() => {
-    return club.value?.club?.learners ?? []
+    return club.value?.learners ?? []
 })
 
 const csvFormat = computed(() => {
