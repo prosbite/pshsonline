@@ -214,7 +214,7 @@
                     </svg>
                     <span class="text-md">Attendance Infractions Summary</span>
                 </Link>
-                <Link v-if="user.role === 'admin'" :href="route('admin.accomplishment.summary')" :class="{'bg-gray-700': route().current('admin.accomplishment.summary')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                <Link v-if="user.role === 'admin'" :href="route('accomplishment.summary')" :class="{'bg-gray-700': route().current('accomplishment.summary')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                     <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h10M4 18h7" />
                     </svg>
@@ -422,6 +422,14 @@
                     <span class="text-md">Attendance Summary</span>
                 </Link>
             </div>
+            <div v-if="isClubReportsGroupOpen && canViewAccomplishmentSummary" class="pl-8 space-y-2 mt-2">
+                <Link :href="route('accomplishment.summary')" :class="{'bg-gray-700': route().current('accomplishment.summary')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h10M4 18h7" />
+                    </svg>
+                    <span class="text-md">Accomplishment Summary</span>
+                </Link>
+            </div>
         </div>
 
         <Link v-if="user.role === 'club adviser'" :href="route('club.certificates', { club_id: clubRegisterId })" :class="{'bg-gray-700': route().current('club.certificates', { club_id: clubRegisterId })}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
@@ -496,6 +504,9 @@ if (page.props.auth.user?.role === 'admin') {
     }
 })
 const clubRegisterId = computed(() => user.value?.club_registers?.[0].id ?? 1)
+const canViewAccomplishmentSummary = computed(() => {
+    return user.value?.role === 'admin' || user.value?.name === 'Chardy C. Fernando'
+})
 const logout = () => {
     router.post(route('logout'))
 }
@@ -527,7 +538,7 @@ onMounted(() => {
         route().current('club.accomplishment.quarterly') ||
         route().current('admin.attendance.delinquents') ||
         route().current('admin.attendance.infractions') ||
-        route().current('admin.accomplishment.summary')
+        route().current('accomplishment.summary')
         ) {
         isClubReportsGroupOpen.value = true
     }

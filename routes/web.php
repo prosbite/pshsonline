@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/update-schedule', [DashboardController::class, 'updateSchedule'])
         ->middleware(RoleMiddleware::class.':admin')
         ->name('dashboard.update-schedule');
+    Route::get('/accomplishment-summary', [AdminClubAttendanceController::class, 'accomplishmentSummary'])
+        ->name('accomplishment.summary');
     Route::get('/club-management', function () {
         return Inertia::render('Club');
     });
@@ -72,7 +74,6 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin,supervi
     Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
     Route::get('/attendances', [AdminClubAttendanceController::class, 'index'])->name('admin.attendance');
     Route::get('/attendances/infractions', [AdminClubAttendanceController::class, 'infractions'])->name('admin.attendance.infractions');
-    Route::get('/accomplishment-summary', [AdminClubAttendanceController::class, 'accomplishmentSummary'])->name('admin.accomplishment.summary');
     Route::get('/club/attendance/delinquents', [AdminClubAttendanceController::class, 'delinquents'])->name('admin.attendance.delinquents');
     Route::delete('/club/attendance/{id}', [AdminClubAttendanceController::class, 'deleteAttendance'])->name('admin.attendance.delete');
     Route::get('/clubs/submissions', [AdminClubSubmissionController::class, 'index'])->name('admin.club.submissions');

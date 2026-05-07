@@ -47,7 +47,7 @@ const closePhoto = () => {
                 Accomplishment Summary
             </h1>
             <p class="mt-3 max-w-3xl text-sm leading-6 text-indigo-100/90">
-                Club attendance documentation with photos, grouped by club and ordered by date.
+                Club attendance documentation with photos
             </p>
             <p class="mt-4 text-sm text-indigo-100/80">
                 School Year: {{ props.schoolYear?.year_start }} - {{ props.schoolYear?.year_end }}
