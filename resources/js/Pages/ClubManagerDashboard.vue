@@ -14,14 +14,14 @@
                         </p>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto">
-                        <div class="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 backdrop-blur">
+                        <div class="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 backdrop-blur col-span-2">
                             <p class="text-xs uppercase tracking-widest text-slate-300">Adviser</p>
                             <p class="text-lg font-semibold">{{ clubRegister?.user?.name ?? 'N/A' }}</p>
                         </div>
-                        <div class="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 backdrop-blur">
+                        <!-- <div class="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 backdrop-blur">
                             <p class="text-xs uppercase tracking-widest text-slate-300">Manager</p>
                             <p class="text-lg font-semibold">{{ clubManager?.user?.name ?? 'N/A' }}</p>
-                        </div>
+                        </div> -->
                         <div class="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 backdrop-blur">
                             <p class="text-xs uppercase tracking-widest text-slate-300">Members</p>
                             <p class="text-lg font-semibold">{{ clubMembers.length }}</p>
@@ -41,9 +41,15 @@
                             v-model="searchInput"
                             type="text"
                             placeholder="Search by name..."
+                            :disabled="isClubFull"
                             class="w-full rounded-xl border border-gray-300 px-4 py-3 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                            :class="isClubFull ? 'cursor-not-allowed bg-gray-100 text-gray-400' : ''"
                         >
                     </div>
+                </div>
+
+                <div v-if="isClubFull" class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
+                    This club has reached the maximum of 26 members.
                 </div>
 
                 <div v-if="searchResults.length > 0" class="mt-6 overflow-x-auto rounded-xl border border-gray-200">
@@ -73,13 +79,14 @@
                                 </td>
                                 <td class="px-4 py-3 text-right">
                                     <button
-                                        v-if="!hasClub(result)"
+                                        v-if="!hasClub(result) && !isClubFull"
                                         @click="enlist(result)"
                                         class="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700 transition-colors duration-200"
                                     >
                                         + Add
                                     </button>
-                                    <span v-else class="text-xs font-semibold text-emerald-700">Already added</span>
+                                    <span v-else-if="hasClub(result)" class="text-xs font-semibold text-emerald-700">Already added</span>
+                                    <span v-else class="text-xs font-semibold text-amber-700">Club full</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -175,6 +182,7 @@ const props = defineProps({
 const clubManager = computed(() => props.club_manager)
 const clubRegister = computed(() => clubManager.value?.clubRegister ?? clubManager.value?.club_register ?? null)
 const clubMembers = computed(() => clubRegister.value?.club?.learners ?? [])
+const isClubFull = computed(() => clubMembers.value.length >= 26)
 const { setSort, sortItems } = useLearnerSorting('name')
 const sortedClubMembers = computed(() => sortItems(clubMembers.value))
 const searchInput = ref('')
@@ -212,10 +220,6 @@ const enlist = (learner: any) => {
     enlistForm.post(route('club.manager.register'), {
         preserveScroll: true,
         onSuccess: () => {
-            toast.success('Member registered successfully.', {
-                autoClose: 2000,
-                position: toast.POSITION.TOP_RIGHT,
-            })
             enlistForm.learner_id = 0
             enlistForm.club_id = 0
             enlistForm.club_reg_id = 0
@@ -234,6 +238,12 @@ const enlist = (learner: any) => {
 watch(searchInput, (newValue) => {
     if (timeout) {
         clearTimeout(timeout)
+    }
+
+    if (isClubFull.value) {
+        searchResults.value = []
+        loading.value = false
+        return
     }
 
     if (newValue.length === 0) {

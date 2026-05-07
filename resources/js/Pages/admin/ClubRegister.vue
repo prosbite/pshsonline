@@ -38,6 +38,19 @@
                             <option value="student_organization">Student Organization</option>
                         </select>
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Adviser</label>
+                        <select
+                            v-model="clubForm.user_id"
+                            required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="">Select an adviser</option>
+                            <option v-for="user in usersWithoutClubs" :key="user.id" :value="user.id">
+                                {{ user.name }}
+                            </option>
+                        </select>
+                    </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
                         <textarea
@@ -215,12 +228,13 @@ const showToast = ref(false);
 const toastMessage = ref('');
 const toastType = ref('success');
 
-const clubForm = ref({
-    name: '',
-    description: '',
-    type: '',
-    status: 'active'
-});
+    const clubForm = ref({
+        name: '',
+        description: '',
+        type: '',
+        status: 'active',
+        user_id: ''
+    });
 
 const registrationForm = ref({
     club_id: '',
@@ -266,9 +280,9 @@ const storeClub = () => {
                 name: '',
                 description: '',
                 type: '',
-                status: 'active'
+                status: 'active',
+                user_id: ''
             };
-            showToastMessage('Club created successfully!');
             processing.value = false;
         },
         onError: () => {
@@ -284,7 +298,6 @@ const registerClub = () => {
     router.post(route('admin.club.register'), registrationForm.value, {
         onSuccess: () => {
             closeModal();
-            showToastMessage('Club registered successfully!');
             processing.value = false;
         },
         onError: () => {

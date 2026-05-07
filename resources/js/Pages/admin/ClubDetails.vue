@@ -31,9 +31,9 @@
                         <button
                                 v-if="!props.has_manager"
                                 type="button"
-                                @click="showManagerModal = true"
+                                @click="openManagerModal"
                                 class="px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
-                            + Add Manager
+                            {{ managerButtonLabel }}
                         </button>
                         <!-- <div
                                 v-else-if="props.current_manager"
@@ -176,8 +176,8 @@
             <template #header>
                 <div class="flex justify-between w-full flex-1 pr-8 gap-4">
                     <div class="flex-1">
-                        <h3 class="text-2xl font-semibold text-gray-800">Add Club Manager</h3>
-                        <p class="text-gray-600 text-sm">Create a user and assign them to this club for the current school year.</p>
+                        <h3 class="text-2xl font-semibold text-gray-800">{{ managerModalTitle }}</h3>
+                        <p class="text-gray-600 text-sm">{{ managerModalDescription }}</p>
                     </div>
                 </div>
             </template>
@@ -233,9 +233,9 @@
             </template>
             <template #footer>
                 <div class="flex items-center justify-end gap-3">
-                    <button
-                        type="button"
-                        @click="showManagerModal = false"
+                        <button
+                            type="button"
+                        @click="closeManagerModal"
                         class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-colors duration-200"
                     >
                         Cancel
@@ -246,7 +246,7 @@
                         :disabled="managerForm.processing"
                         class="px-5 py-2 bg-emerald-600 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200"
                     >
-                        {{ managerForm.processing ? 'Saving...' : 'Save Manager' }}
+                        {{ managerForm.processing ? 'Saving...' : managerSubmitLabel }}
                     </button>
                 </div>
             </template>
@@ -275,6 +275,7 @@
         user: Object,
         current_club: Number,
         current_manager: Object,
+        previous_manager: Object,
         has_manager: Boolean,
     })
     const searchInput = ref('')
@@ -289,6 +290,28 @@
     })
     const clubMembers = computed(() => {
         return props.club.club.learners
+    })
+    const managerButtonLabel = computed(() => {
+        return props.previous_manager ? '+ Renew Manager' : '+ Add Manager'
+    })
+    const managerModalTitle = computed(() => {
+        return props.previous_manager ? 'Renew Club Manager' : 'Add Club Manager'
+    })
+    const managerModalDescription = computed(() => {
+        return props.previous_manager
+            ? 'Renew the existing club manager account for the current school year.'
+            : 'Create a user and assign them to this club for the current school year.'
+    })
+    const managerSubmitLabel = computed(() => {
+        return props.previous_manager ? 'Renew Manager' : 'Save Manager'
+    })
+    const defaultManagerName = computed(() => {
+        return `${props.club?.club?.name ?? ''} Manager`.trim()
+    })
+    const defaultManagerEmail = computed(() => {
+        const clubName = props.club?.club?.name ?? ''
+
+        return `${clubName.toLowerCase().replace(/[^a-z0-9]+/g, '')}manager@alp.com`
     })
     const hasClub = (learner: any) => {
         if(learner.learner.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length > 0
@@ -417,19 +440,30 @@
         exportToCSV(csvFormat.value, `${props.club?.club?.name} members.csv`)
     }
 
+    const openManagerModal = () => {
+        const previous = props.previous_manager?.user
+
+        managerForm.name = previous?.name ?? defaultManagerName.value
+        managerForm.email = previous?.email ?? defaultManagerEmail.value
+        managerForm.password = ''
+        managerForm.password_confirmation = ''
+        showManagerModal.value = true
+    }
+
+    const closeManagerModal = () => {
+        showManagerModal.value = false
+        managerForm.reset('password', 'password_confirmation')
+    }
+
     const submitManager = () => {
         managerForm.post(route('admin.club.manager.store', { club: props.current_club }), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Club manager added successfully.', {
-                    autoClose: 2000,
-                    position: toast.POSITION.TOP_RIGHT,
-                })
                 managerForm.reset()
                 showManagerModal.value = false
             },
             onError: () => {
-                toast.error('Failed to add club manager.', {
+                toast.error(props.previous_manager ? 'Failed to renew club manager.' : 'Failed to add club manager.', {
                     autoClose: 2000,
                     position: toast.POSITION.TOP_RIGHT,
                 })

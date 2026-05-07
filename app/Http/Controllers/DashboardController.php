@@ -14,6 +14,10 @@ class DashboardController extends Controller
     public function index()
     {
         if (auth()->user()?->role === 'club manager') {
+            $schoolYear = SchoolYear::find(2);
+            abort_unless($schoolYear, 404);
+            SchoolYear::syncSession($schoolYear);
+
             $clubManager = ClubManager::with([
                 'user',
                 'schoolYear',
@@ -22,7 +26,7 @@ class DashboardController extends Controller
                 'clubRegister.schoolYear',
             ])
                 ->where('user_id', auth()->id())
-                ->where('school_year_id', SchoolYear::current()->id)
+                ->where('school_year_id', $schoolYear->id)
                 ->firstOrFail();
 
             return Inertia::render('ClubManagerDashboard', [

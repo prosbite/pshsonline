@@ -10,6 +10,7 @@ use App\Models\Section;
 use App\Models\User;
 use App\Models\SchoolYear;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class ClubController extends Controller
 {
@@ -33,6 +34,16 @@ class ClubController extends Controller
                 }),
             ],
         ]);
+
+        $currentMembersCount = DB::table('club_learner')
+            ->where('club_id', $request->club_id)
+            ->where('school_year_id', SchoolYear::current()->id)
+            ->count();
+
+        if ($currentMembersCount >= 26) {
+            return redirect()->back()->with('error', 'This club has reached the maximum of 26 members.');
+        }
+
         $learner = Learner::find($request->learner_id);
         $learner->clubs()->attach($request->club_id, [
             'school_year_id' => SchoolYear::current()->id,
@@ -52,6 +63,15 @@ class ClubController extends Controller
                 }),
             ],
         ]);
+
+        $currentMembersCount = DB::table('club_learner')
+            ->where('club_id', $request->club_id)
+            ->where('school_year_id', SchoolYear::current()->id)
+            ->count();
+
+        if ($currentMembersCount >= 26) {
+            return redirect()->back()->with('error', 'This club has reached the maximum of 26 members.');
+        }
 
         $learner = Learner::find($request->learner_id);
         $learner->clubs()->attach($request->club_id, [

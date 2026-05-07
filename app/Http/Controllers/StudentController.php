@@ -10,10 +10,14 @@ class StudentController extends Controller
     public function search(Request $request)
     {
         $search = $request->search;
+        $eligibleGradeLevels = [7, 8, 9];
+
         $learners = Enrollment::with(['learner.currentClub','section.gradeLevel'])->whereHas('learner', function ($query) use ($search) {
             $query->where('first_name', 'like', "%{$search}%")
                   ->orWhere('last_name', 'like', "%{$search}%")
                   ->orWhere('middle_name', 'like', "%{$search}%");
+        })->whereHas('section.gradeLevel', function ($query) use ($eligibleGradeLevels) {
+            $query->whereIn('grade_level', $eligibleGradeLevels);
         })->get();
 
         return response()->json($learners);

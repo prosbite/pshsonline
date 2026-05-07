@@ -34,6 +34,9 @@ Route::get('/workflow', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/school-years/current', [SchoolYearController::class, 'setCurrent'])->name('school-years.switch');
+    Route::get('/student/search', [StudentController::class, 'search'])
+        ->middleware(RoleMiddleware::class.':admin,supervisor,club manager')
+        ->name('student.search');
     Route::post('/dashboard/update-schedule', [DashboardController::class, 'updateSchedule'])
         ->middleware(RoleMiddleware::class.':admin')
         ->name('dashboard.update-schedule');
@@ -50,6 +53,8 @@ Route::middleware('auth')->group(function () {
 // Admin Routes
 Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin')->group(function () {
     Route::get('/log-records', [LogRecordController::class, 'index'])->name('log-records');
+    Route::get('/club-managers', [AdminClubController::class, 'managers'])->name('admin.club.managers');
+    Route::post('/club/{club}/manager', [AdminClubController::class, 'storeManager'])->name('admin.club.manager.store');
 });
 Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin,supervisor')->group(function () {
     Route::get('/users', [ProfileController::class, 'index'])->name('users');
@@ -60,7 +65,6 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin,supervi
     Route::get('/enrollment', [EnrollmentController::class, 'index'])->name('enrollment');
     Route::post('/enrollment', [EnrollmentController::class, 'store'])->name('enrollment.store');
     Route::post('/enrollment/bulk', [EnrollmentController::class, 'storeBulk'])->name('enrollment.bulk');
-    Route::get('/student/search', [StudentController::class, 'search'])->name('student.search');
     Route::post('/learner/update', [StudentController::class, 'update'])->name('admin.learner.update');
 
     Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');
@@ -108,6 +112,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/club/attendance/{attendance_id}/edit', [ClubAttendanceController::class, 'edit'])->name('club.attendance.edit');
     Route::get('/club/{club_register_id}/attendance/summary', [ClubAttendanceController::class, 'summary'])->name('club.attendance.summary');
     Route::post('/club/unregister', [ClubController::class, 'unregisterMember'])->name('club.unregister');
+    Route::post('/club/manager/register', [ClubController::class, 'registerManagerMember'])->name('club.manager.register');
     Route::put('/club/attendance/update', [ClubAttendanceController::class, 'update'])->name('club.attendance.update');
     Route::post('/club/attendance', [ClubAttendanceController::class, 'store'])->name('club.attendance.store');
     Route::post('/club/attendance/{attendance_id}/update-image', [ClubAttendanceController::class, 'updateImage'])->name('club.attendance.update-image');
