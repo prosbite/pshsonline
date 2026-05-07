@@ -18,6 +18,7 @@ use App\Http\Controllers\LogRecordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SchoolYearController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,6 +33,7 @@ Route::get('/workflow', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/school-years/current', [SchoolYearController::class, 'setCurrent'])->name('school-years.switch');
     Route::post('/dashboard/update-schedule', [DashboardController::class, 'updateSchedule'])
         ->middleware(RoleMiddleware::class.':admin')
         ->name('dashboard.update-schedule');
@@ -70,6 +72,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin,supervi
     Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
     Route::get('/attendances', [AdminClubAttendanceController::class, 'index'])->name('admin.attendance');
     Route::get('/attendances/infractions', [AdminClubAttendanceController::class, 'infractions'])->name('admin.attendance.infractions');
+    Route::get('/accomplishment-summary', [AdminClubAttendanceController::class, 'accomplishmentSummary'])->name('admin.accomplishment.summary');
     Route::get('/club/attendance/delinquents', [AdminClubAttendanceController::class, 'delinquents'])->name('admin.attendance.delinquents');
     Route::delete('/club/attendance/{id}', [AdminClubAttendanceController::class, 'deleteAttendance'])->name('admin.attendance.delete');
     Route::get('/clubs/submissions', [AdminClubSubmissionController::class, 'index'])->name('admin.club.submissions');
