@@ -16,18 +16,18 @@ const props = defineProps({
     todayEvents: Array,
     recentAttendance: Array,
 });
-const externalink = computed(() => {
+const externalink = (sy) => {
     if (page.props.auth.user?.role === "club adviser") {
-        return (
-            page.props?.auth?.user.club_registers?.[0]?.externalinks?.[0]
-                ?.link ?? "#"
-        );
+        const xlinks = page.props?.auth?.user.club_registers?.[0]?.externalinks ?? [];
+        if(xlinks.length > 0) {
+            return xlinks.find(link => link.school_year_id === sy)?.link || "#";
+        }
     }
     if (page.props.auth.user?.role === "admin") {
         return "https://drive.google.com/drive/folders/17CZsXYIKWQSbLXYRRSypnpM954GfnyMB?usp=drive_link";
     }
     return "#";
-});
+};
 const isAdmin = computed(() => page.props.auth.user?.role === "admin");
 const getClubLinkById = (id, data) => {
     // We use .find() for efficiency as it stops looping once the match is found
@@ -327,7 +327,7 @@ const updateSchedule = () => {
 
                     <li>
                         <a
-                            :href="externalink ?? '#'"
+                            :href="externalink(1) ?? '#'"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition"
                         >
@@ -420,13 +420,7 @@ const updateSchedule = () => {
                         </a>
                         <a
                             v-else
-                            :href="
-                                getClubLinkById(
-                                    page.props?.auth?.user.club_registers?.[0]
-                                        ?.club?.id,
-                                    reaccreditationLinks(),
-                                )
-                            "
+                            :href="externalink(2) ?? '#'"
                             target="_blank"
                             class="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-800 transition"
                         >
