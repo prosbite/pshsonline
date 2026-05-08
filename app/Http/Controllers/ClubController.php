@@ -50,7 +50,7 @@ class ClubController extends Controller
             })
             ->count();
 
-        if ($currentMembersCount >= 26) {
+        if ($currentMembersCount >= 33) {
             return redirect()->back()->with('error', 'This club has reached the maximum of 26 members.');
         }
 
