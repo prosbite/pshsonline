@@ -10,10 +10,16 @@ class Externalink extends Model
         'link',
         'name',
         'club_register_id',
+        'school_year_id',
     ];
 
     public function clubRegister()
     {
         return $this->belongsTo(ClubRegister::class);
+    }
+
+    public function schoolYear()
+    {
+        return $this->belongsTo(SchoolYear::class);
     }
 }

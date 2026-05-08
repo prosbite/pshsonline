@@ -10,6 +10,7 @@ use App\Http\Controllers\ClubAttendanceController;
 use App\Http\Controllers\ClubController;
 use App\Http\Controllers\ClubsMonitoringController;
 use App\Http\Controllers\ClubSubmissionController;
+use App\Http\Controllers\ExternalinkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EventController;
@@ -55,6 +56,10 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin')->grou
     Route::get('/log-records', [LogRecordController::class, 'index'])->name('log-records');
     Route::get('/club-managers', [AdminClubController::class, 'managers'])->name('admin.club.managers');
     Route::post('/club/{club}/manager', [AdminClubController::class, 'storeManager'])->name('admin.club.manager.store');
+    Route::get('/external-links', [ExternalinkController::class, 'index'])->name('admin.external-links');
+    Route::post('/external-links', [ExternalinkController::class, 'store'])->name('admin.external-links.store');
+    Route::put('/external-links/{externalLink}', [ExternalinkController::class, 'update'])->name('admin.external-links.update');
+    Route::delete('/external-links/{externalLink}', [ExternalinkController::class, 'destroy'])->name('admin.external-links.destroy');
 });
 Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin,supervisor')->group(function () {
     Route::get('/users', [ProfileController::class, 'index'])->name('users');
