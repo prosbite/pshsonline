@@ -434,9 +434,7 @@ const sortedClubs = computed(() => {
 const enlisted = computed(() => {
     let ecount = 0;
     props.registered_clubs.forEach((club: any) => {
-        if (club.club?.nature?.slice(0, 3).toLowerCase() === "alp") {
-            ecount += parseInt(club.total_members);
-        }
+         ecount += parseInt(club.total_members);
     });
     return ecount;
 });
