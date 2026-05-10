@@ -50,7 +50,7 @@ class AuthenticatedSessionController extends Controller
         $schoolYear = SchoolYear::syncSession($schoolYear);
         Auth::user()->clubs = ClubRegister::where('school_year_id', $schoolYear->id)
             ->where('user_id', auth()->user()->id)
-            ->with(['club', 'user', 'schoolYear', 'learners.currentEnrollment.section'])
+            ->with(['club', 'user', 'schoolYear', 'learners.currentEnrollment.section', 'clubOfficers.learner.currentEnrollment.section'])
             ->get();
 
         return redirect()->intended(route('dashboard', absolute: false));

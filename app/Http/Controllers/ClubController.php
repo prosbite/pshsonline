@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Learner;
+use App\Models\ClubOfficer;
+use App\Models\ClubManager;
 use App\Models\ClubRegister;
 use App\Models\Section;
 use App\Models\User;
@@ -112,6 +114,67 @@ class ClubController extends Controller
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Member registered successfully.');
+    }
+
+    public function storeOfficer(Request $request)
+    {
+        $request->validate([
+            'learner_id' => 'required|integer|exists:learners,id',
+            'club_reg_id' => 'required|integer|exists:club_registers,id',
+            'position' => 'required|string|max:255',
+            'order_no' => 'nullable|integer|min:1',
+        ]);
+
+        $currentSchoolYear = SchoolYear::current();
+        abort_unless($currentSchoolYear, 404);
+
+        $clubManager = ClubManager::where('user_id', auth()->id())
+            ->where('club_register_id', $request->club_reg_id)
+            ->where('school_year_id', $currentSchoolYear->id)
+            ->first();
+
+        abort_unless($clubManager, 403, 'Unauthorized access.');
+
+        $clubRegister = ClubRegister::with('learners')->findOrFail($request->club_reg_id);
+        $isClubMember = $clubRegister->learners()->where('learners.id', $request->learner_id)->exists();
+
+        abort_unless($isClubMember, 422, 'The selected learner must be an enlisted club member.');
+
+        $nextOrderNo = (int) ($request->order_no ?? (
+            ((int) ClubOfficer::where('club_register_id', $clubRegister->id)->max('order_no')) + 1
+        ));
+
+        ClubOfficer::updateOrCreate(
+            [
+                'club_register_id' => $clubRegister->id,
+                'learner_id' => $request->learner_id,
+            ],
+            [
+                'position' => $request->position,
+                'order_no' => $nextOrderNo,
+                'school_year_id' => $currentSchoolYear->id,
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Officer assigned successfully.');
+    }
+
+    public function destroyOfficer(ClubOfficer $clubOfficer)
+    {
+        $currentSchoolYear = SchoolYear::current();
+        abort_unless($currentSchoolYear, 404);
+
+        $clubManager = ClubManager::where('user_id', auth()->id())
+            ->where('club_register_id', $clubOfficer->club_register_id)
+            ->where('school_year_id', $currentSchoolYear->id)
+            ->first();
+
+        abort_unless($clubManager, 403, 'Unauthorized access.');
+        abort_unless((int) $clubOfficer->school_year_id === (int) $currentSchoolYear->id, 403, 'Unauthorized access.');
+
+        $clubOfficer->delete();
+
+        return redirect()->back()->with('success', 'Officer position dissolved successfully.');
     }
 
     public function unregisterMember(Request $request)

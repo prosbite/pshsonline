@@ -20,6 +20,7 @@ class DashboardController extends Controller
                 'user',
                 'schoolYear',
                 'clubRegister.learners.currentEnrollment.section.gradeLevel',
+                'clubRegister.clubOfficers.learner.currentEnrollment.section.gradeLevel',
                 'clubRegister.user',
                 'clubRegister.schoolYear',
             ])

@@ -5,6 +5,44 @@ export function useConstants() {
     }
 }
 
+export function clubPositions(existingPositions: Array<string | null | undefined> = []) {
+    const commonPositions = [
+        'President',
+        'Vice President',
+        'Secretary',
+        'Treasurer',
+        'Auditor',
+        'P.I.O.',
+        'Business Manager',
+        'Grade Representative',
+        'Peace Officer',
+        'Protocol Officer',
+        'Sgt. at Arms',
+        'Muse',
+        'Escort',
+    ]
+
+    const normalized = new Map<string, string>()
+
+    commonPositions.forEach((position) => {
+        normalized.set(position.trim().toLowerCase(), position)
+    })
+
+    existingPositions.forEach((position) => {
+        const trimmed = `${position ?? ''}`.trim()
+        if (!trimmed) {
+            return
+        }
+
+        const key = trimmed.toLowerCase()
+        if (!normalized.has(key)) {
+            normalized.set(key, trimmed)
+        }
+    })
+
+    return Array.from(normalized.values())
+}
+
 export function ucWords(str: string) {
     if (str === '' || !str) {
         return '';

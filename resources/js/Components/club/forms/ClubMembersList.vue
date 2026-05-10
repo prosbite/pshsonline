@@ -2,24 +2,24 @@
   <div class="w-full flex justify-center bg-gray-200 py-6 print:bg-white print:py-0">
     <!-- Printable Paper -->
     <div
-      class="bg-white text-black shadow-md print:shadow-none"
+      class="bg-white text-black shadow-md print:shadow-none flex flex-col"
       style="width: 8.5in; min-height: 11in;"
     >
-      <div class="px-16 pt-16 pb-10 font-[Times_New_Roman] text-[15px] leading-tight">
+      <div class="flex flex-1 flex-col px-16 pt-16 pb-10 font-[Times_New_Roman] text-[15px] leading-tight">
         <!-- Header -->
         <div class="text-center leading-tight">
           <p class="font-bold uppercase">
             {{ props.headerTitle }}
           </p>
 
-          <div class="mt-4">
+          <div class="">
             <span class="font-bold uppercase">CAMPUS:</span>
             <span class="inline-block border-b border-black min-w-64 align-middle text-center">
               {{ props.campusName }}
             </span>
           </div>
 
-          <p class="uppercase mt-1">
+          <p class="uppercase mt-2">
             {{ props.programName }}
           </p>
 
@@ -76,7 +76,7 @@
                 </span>
               </td>
 
-              <td class="border border-black px-3 align-middle text-center uppercase">
+              <td class="border border-black px-3 align-middle text-center">
                 {{ member.sex ?? '' }}
               </td>
 
@@ -98,7 +98,7 @@
             <p>Prepared by:</p>
 
             <div class="mt-10">
-              <p class="font-bold underline">
+              <p class="font-bold uppercase underline">
                 {{ props.adviserName }}
               </p>
               <p>{{ props.adviserLabel }}</p>
@@ -134,7 +134,7 @@
 
               <div class="mt-10">
                 <p class="font-bold underline">
-                  MELBA C. PATAKSIL, PhD
+                  MELBA C. PATACSIL, PhD
                 </p>
                 <p>Campus Director</p>
               </div>
@@ -143,7 +143,7 @@
         </div>
 
         <!-- Footer -->
-        <div class="mt-20 text-[12px] text-gray-700">
+        <div class="mt-auto pt-8 text-[12px] text-gray-700">
           {{ props.footerCode }}
         </div>
       </div>
@@ -223,7 +223,7 @@ const formatMemberName = (learner: any) => {
   const middleName = middleInitials(learner?.middle_name ?? '')
   const lastName = ucWords(learner?.last_name ?? '')
 
-  return [firstName, middleName, lastName].filter(Boolean).join(' ')
+  return [lastName, firstName, middleName].filter(Boolean).join(' ')
 }
 
 const printableRows = computed(() => {
