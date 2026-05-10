@@ -61,7 +61,7 @@
                     >
                         <div class="text-sm font-medium">Total Students</div>
                         <div class="text-xl font-bold">
-                            {{ totalStudentsG7G10 }}
+                            {{ totalStudentsG7G9 }}
                         </div>
                     </button>
                 </div>
@@ -78,8 +78,8 @@
                         Not Enlisted Students
                     </h3>
                     <p class="text-gray-600 text-sm">
-                        Students from Grade 7 to Grade 10 who are not listed in
-                        any ALP club
+                        Students from Grade 7 to Grade 9 who are not listed in
+                        any club
                     </p>
                 </div>
             </template>
@@ -179,7 +179,7 @@
             <template #header>
                 <div class="flex flex-col pr-8">
                     <h3 class="text-2xl font-semibold text-gray-800">
-                        Grade 7 to Grade 10 Breakdown
+                        Grade 7 to Grade 9 Breakdown
                     </h3>
                     <p class="text-gray-600 text-sm">
                         Total students enrolled per grade level
@@ -407,7 +407,7 @@ const props = defineProps({
     registered_clubs: Array,
     sy: Object,
     club_student_count: Number,
-    total_students_g7_g10: Number,
+    total_students_g7_g9: Number,
     grade_level_breakdown: Array,
     unlisted_learners: Array,
 });
@@ -442,11 +442,11 @@ const enlisted = computed(() => {
 });
 
 const unlisted = computed(() => {
-    return totalStudentsG7G10.value - enlisted.value;
+    return totalStudentsG7G9.value - enlisted.value;
 });
 
-const totalStudentsG7G10 = computed(() => {
-    return props.total_students_g7_g10 ?? props.club_student_count ?? 0;
+const totalStudentsG7G9 = computed(() => {
+    return props.total_students_g7_g9 ?? props.club_student_count ?? 0;
 });
 
 const showClubDetails = (clubRegisterId: number) => {

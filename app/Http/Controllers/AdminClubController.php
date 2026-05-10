@@ -18,48 +18,30 @@ class AdminClubController extends Controller
 {
     public function index()
     {
+        $gradeLevels = [7, 8, 9];
+
         $registered_clubs = ClubRegister::query()
             ->with(['club', 'user', 'schoolYear']) // Eager load the main relationships
             ->select(
                 'club_registers.*', // Select all columns from club_registers
-                // Count learners through the new club_register_id pivot, with a fallback for legacy rows.
+                // Count learners through the club_register_id pivot for the current registration.
                 DB::raw('(
                     SELECT COUNT(cl.learner_id)
                     FROM club_learner cl
-                    JOIN learners l ON cl.learner_id = l.id
                     WHERE cl.club_register_id = club_registers.id
-                       OR (
-                            cl.club_register_id IS NULL
-                            AND cl.club_id = club_registers.club_id
-                            AND cl.school_year_id = club_registers.school_year_id
-                       )
                 ) as total_members'),
                 DB::raw('(
                     SELECT COUNT(cl.learner_id)
                     FROM club_learner cl
                     JOIN learners l ON cl.learner_id = l.id
-                    WHERE (
-                            cl.club_register_id = club_registers.id
-                         OR (
-                                cl.club_register_id IS NULL
-                                AND cl.club_id = club_registers.club_id
-                                AND cl.school_year_id = club_registers.school_year_id
-                            )
-                       )
+                    WHERE cl.club_register_id = club_registers.id
                       AND l.gender = "Female"
                 ) as female_members'),
                 DB::raw('(
                     SELECT COUNT(cl.learner_id)
                     FROM club_learner cl
                     JOIN learners l ON cl.learner_id = l.id
-                    WHERE (
-                            cl.club_register_id = club_registers.id
-                         OR (
-                                cl.club_register_id IS NULL
-                                AND cl.club_id = club_registers.club_id
-                                AND cl.school_year_id = club_registers.school_year_id
-                            )
-                       )
+                    WHERE cl.club_register_id = club_registers.id
                       AND l.gender = "Male"
                 ) as male_members')
             )
@@ -69,13 +51,16 @@ class AdminClubController extends Controller
             ->orderBy('clubs.name', 'asc') // Order by the club's name
             ->get();
         // dd($registered_clubs);
-        $unlisted_learners = Club::unlistedMembers();
-        // dd($unlisted_learners);
-        $grade_levels = [7, 8, 9, 10];
+        $unlisted_learners = Learner::with(['currentEnrollment.section.gradeLevel', 'currentClubRegisters.club'])
+            ->whereHas('currentEnrollment.section.gradeLevel', function ($query) use ($gradeLevels) {
+                $query->whereIn('grade_level', $gradeLevels);
+            })
+            ->whereDoesntHave('currentClubRegisters')
+            ->get();
 
         $grade_level_breakdown = Enrollment::with('section.gradeLevel')
-            ->whereHas('section.gradeLevel', function ($query) use ($grade_levels) {
-                $query->whereIn('grade_level', $grade_levels);
+            ->whereHas('section.gradeLevel', function ($query) use ($gradeLevels) {
+                $query->whereIn('grade_level', $gradeLevels);
             })
             ->where('school_year_id', SchoolYear::current()->id)
             ->get()
@@ -90,12 +75,13 @@ class AdminClubController extends Controller
             })
             ->values();
 
-        $total_students_g7_g10 = $grade_level_breakdown->sum('count');
+        $total_students_g7_g9 = $grade_level_breakdown->sum('count');
+        $enlisted_students_g7_g9 = $total_students_g7_g9 - $unlisted_learners->count();
 
         return Inertia::render('admin/Clubs', [
             'registered_clubs' => $registered_clubs,
-            'club_student_count' => $total_students_g7_g10,
-            'total_students_g7_g10' => $total_students_g7_g10,
+            'club_student_count' => $enlisted_students_g7_g9,
+            'total_students_g7_g9' => $total_students_g7_g9,
             'grade_level_breakdown' => $grade_level_breakdown,
             'unlisted_learners' => $unlisted_learners,
         ]);
