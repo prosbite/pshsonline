@@ -75,7 +75,7 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr v-for="member,index in searchResults" :key="index">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ member.last_name }}, {{ member.first_name }} {{ middleInitials(member.middle_name ?? '') }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ formatMemberName(member) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ parseInt(member.current_enrollment.section.grade_level_id) + 6 + ' - ' + member.current_enrollment.section.section_name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span
@@ -125,18 +125,37 @@
                     </tbody>
                 </table>
                 <div class="flex justify-end gap-4 w-full py-12 no-print">
-                    <button @click.prevent="downloadCSV" class="flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white hover:text-green-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- File icon with folded corner -->
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <!-- Download arrow -->
-                            <path d="M12 11v6"/>
-                            <path d="M9 14l3 3 3-3"/>
-                        </svg>
-
-                        Download CSV
-                    </button>
+                    <div class="relative">
+                        <button
+                            type="button"
+                            @click="toggleGenerateMenu"
+                            class="inline-flex items-center gap-2 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                        >
+                            Generate
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <div
+                            v-if="showGenerateMenu"
+                            class="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg overflow-hidden z-20"
+                        >
+                            <button
+                                type="button"
+                                @click="downloadCSV"
+                                class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                            >
+                                CSV File
+                            </button>
+                            <button
+                                type="button"
+                                @click="generateConsentForms"
+                                class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                            >
+                                Consent Form
+                            </button>
+                        </div>
+                    </div>
                     <button @click.prevent="printClubMembers" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -227,7 +246,7 @@
                                                 {{ index + 1 }}
                                             </td>
                                             <td class="border border-black px-2 py-1 text-left">
-                                                {{ ucWords(learner?.last_name) + ', ' + ucWords(learner?.first_name) + ' ' + middleInitials(learner?.middle_name?? '') }}
+                                                {{ formatMemberName(learner) }}
                                             </td>
                                             <td class="border border-black px-2 py-1 text-center">
                                                 {{ parseInt(learner.current_enrollment?.section.grade_level_id) + 6 }}
@@ -280,17 +299,34 @@
                 </tbody>
             </table>
         </Teleport>
+        <Teleport to="body">
+            <div v-if="showConsentPrint" class="consent-print-shell">
+                <ConsentForm
+                    v-for="member in consentFormMembers"
+                    :key="member.id"
+                    :student-name="member.studentName"
+                    :grade-section="member.gradeSection"
+                    :activity-title="member.activityTitle"
+                    :venue="member.venue"
+                    :schedule="member.schedule"
+                    :club-name="member.clubName"
+                    :school-year="member.schoolYear"
+                    :adviser-name="member.adviserName"
+                    :consent-date="member.consentDate"
+                />
+            </div>
+        </Teleport>
     </MainLayout>
 </template>
 
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
-import { middleInitials, ucWords } from '@/composables/utilities'
-import { exportToCSV } from '@/composables/utilities'
+import { exportToCSV, fullDate, middleInitials, ucWords } from '@/composables/utilities'
+import ConsentForm from '@/Components/club/forms/ConsentForm.vue'
 
 const page = usePage()
 const props = defineProps({
@@ -301,6 +337,8 @@ const props = defineProps({
     }
 })
 const printHeight = ref(0)
+const showGenerateMenu = ref(false)
+const showConsentPrint = ref(false)
 const maximumMembers = computed(() => {
     return club.value?.learners?.length >= 40
 })
@@ -443,6 +481,26 @@ const clubMembers = computed(() => {
     return club.value?.learners ?? []
 })
 
+const schoolYearLabel = computed(() => {
+    const schoolYear = page.props.sy
+
+    if (!schoolYear) {
+        return ''
+    }
+
+    return `SY ${schoolYear.year_start}-${schoolYear.year_end}`
+})
+
+const consentDate = computed(() => fullDate(new Date().toISOString()))
+
+const formatMemberName = (learner: any) => {
+    const firstName = ucWords(learner?.first_name ?? '')
+    const middleName = middleInitials(learner?.middle_name ?? '')
+    const lastName = ucWords(learner?.last_name ?? '')
+
+    return [firstName, middleName, lastName].filter(Boolean).join(' ')
+}
+
 const csvFormat = computed(() => {
     let data = []
     sortedMembers.value.map((learner: any) => {
@@ -459,8 +517,55 @@ const csvFormat = computed(() => {
     return data
 })
 
+const consentFormMembers = computed(() => {
+    return sortedMembers.value.map((learner: any) => {
+        const gradeLevel = learner?.current_enrollment?.section?.grade_level?.grade_level ?? ''
+        const sectionName = learner?.current_enrollment?.section?.section_name ?? ''
+
+        return {
+            id: learner.id,
+            studentName: formatMemberName(learner),
+            gradeSection: [gradeLevel, sectionName].filter(Boolean).join(' - '),
+            activityTitle: `${club.value?.club?.name ?? ''} Activities`,
+            venue: 'Philippine Science High School - Caraga Region Campus in Butuan City',
+            schedule: schoolYearLabel.value,
+            clubName: club.value?.club?.name ?? '',
+            schoolYear: schoolYearLabel.value,
+            adviserName: page.props.auth.user?.name ?? '',
+            consentDate: consentDate.value,
+        }
+    })
+})
+
+const toggleGenerateMenu = () => {
+    showGenerateMenu.value = !showGenerateMenu.value
+}
+
 const downloadCSV = () => {
+    showGenerateMenu.value = false
     exportToCSV(csvFormat.value, `${club.value?.club?.name} members.csv`)
+}
+
+const generateConsentForms = async () => {
+    showGenerateMenu.value = false
+    if (!consentFormMembers.value.length) {
+        toast.info('No club members available for consent form generation.', {
+            autoClose: 2000,
+            position: toast.POSITION.TOP_RIGHT,
+        })
+        return
+    }
+    showConsentPrint.value = true
+    await nextTick()
+    window.print()
+}
+
+const closeConsentPrint = () => {
+    showConsentPrint.value = false
+}
+
+const handleAfterPrint = () => {
+    closeConsentPrint()
 }
 
 onMounted(() => {
@@ -468,6 +573,11 @@ onMounted(() => {
     if(clubs.value?.length > 0) {
         selectedClub.value = clubs.value[0].id
     }
+    window.addEventListener('afterprint', handleAfterPrint)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('afterprint', handleAfterPrint)
 })
 </script>
 
@@ -504,5 +614,17 @@ header {
         break-before: page; /* Standard property */
         page-break-before: always; /* Older property for broader compatibility */
     }
+
+    body > *:not(.consent-print-shell) {
+        display: none !important;
+    }
+
+    .consent-print-shell {
+        display: block;
+    }
+}
+
+.consent-print-shell {
+    display: none;
 }
 </style>

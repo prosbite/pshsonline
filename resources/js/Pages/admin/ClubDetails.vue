@@ -40,17 +40,37 @@
                                 class="px-4 py-3 bg-emerald-50 text-emerald-800 font-semibold rounded-lg border border-emerald-200">
                             Manager: {{ props.current_manager?.user?.name }}
                         </div> -->
-                        <button @click.prevent="downloadCSV"
-                                class="px-3 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white hover:text-green-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <!-- File icon with folded corner -->
-                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
-                                    <!-- Download arrow -->
-                                    <path d="M12 11v6"/>
-                                    <path d="M9 14l3 3 3-3"/>
+                        <div class="relative">
+                            <button
+                                type="button"
+                                @click="toggleGenerateMenu"
+                                class="inline-flex items-center gap-2 px-5 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                            >
+                                Generate
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
                                 </svg>
-                        </button>
+                            </button>
+                            <div
+                                v-if="showGenerateMenu"
+                                class="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg overflow-hidden z-20"
+                            >
+                                <button
+                                    type="button"
+                                    @click="downloadCSV"
+                                    class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                                >
+                                    CSV File
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="generateConsentForms"
+                                    class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                                >
+                                    Consent Form
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -90,7 +110,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         <div class="flex flex-col">
-                            <span class="font-semibold text-sm">{{ ucWords(learner.last_name ?? '') + ', ' + ucWords(learner.first_name ?? '')}}</span>
+                            <span class="font-semibold text-sm">{{ formatMemberName(learner) }}</span>
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -141,7 +161,7 @@
                     <table class="w-full">
                         <tbody>
                             <tr v-for="(learner,index) in searchResults" :key="index" class="border-b hover:bg-gray-100">
-                                <td class="py-2">{{learner.learner.last_name}}, {{learner.learner.first_name}}</td>
+                                <td class="py-2">{{ formatMemberName(learner.learner) }}</td>
                                 <td class="py-2">{{learner.section.grade_level_id + 6 + ' - ' + learner.section.section_name}}</td>
                                 <td class="py-2 text-gray-500">{{ joinedClubs(learner.learner.current_club) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -251,20 +271,36 @@
                 </div>
             </template>
         </SleekModal>
+        <Teleport to="body">
+            <div v-if="showConsentPrint" class="consent-print-shell">
+                <ConsentForm
+                    v-for="member in consentFormMembers"
+                    :key="member.id"
+                    :student-name="member.studentName"
+                    :grade-section="member.gradeSection"
+                    :activity-title="member.activityTitle"
+                    :venue="member.venue"
+                    :schedule="member.schedule"
+                    :club-name="member.clubName"
+                    :school-year="member.schoolYear"
+                    :adviser-name="member.adviserName"
+                    :consent-date="member.consentDate"
+                />
+            </div>
+        </Teleport>
     </MainLayout>
-
     </template>
 
     <script lang="ts" setup>
-    import { exportToCSV, ucWords } from '@/composables/utilities'
-    import { computed, onMounted, ref, watch } from 'vue'
+    import { exportToCSV, fullDate, middleInitials, ucWords,fullDateTime } from '@/composables/utilities'
+    import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
     import MainLayout from '@/Layouts/MainLayout.vue'
     import { useForm, usePage, router } from '@inertiajs/vue3'
     import SleekModal from '@/Components/SleekModal.vue'
+    import ConsentForm from '@/Components/club/forms/ConsentForm.vue'
     import { toast } from 'vue3-toastify'
     import 'vue3-toastify/dist/index.css'
     import axios from 'axios'
-    import { fullDateTime } from '@/composables/utilities'
 
     const page = usePage()
     const selectedClub = ref(null)
@@ -277,10 +313,13 @@
         current_manager: Object,
         previous_manager: Object,
         has_manager: Boolean,
+        current_school_year: Object,
     })
     const searchInput = ref('')
     const showModal = ref(false)
     const showManagerModal = ref(false)
+    const showGenerateMenu = ref(false)
+    const showConsentPrint = ref(false)
     const sortBy = ref('name')
     const managerForm = useForm({
         name: '',
@@ -305,6 +344,16 @@
     const managerSubmitLabel = computed(() => {
         return props.previous_manager ? 'Renew Manager' : 'Save Manager'
     })
+    const schoolYearLabel = computed(() => {
+        const schoolYear = props.current_school_year ?? props.club?.schoolYear
+
+        if (!schoolYear) {
+            return ''
+        }
+
+        return `SY ${schoolYear.year_start}-${schoolYear.year_end}`
+    })
+    const consentDate = computed(() => fullDate(new Date().toISOString()))
     const defaultManagerName = computed(() => {
         return `${props.club?.club?.name ?? ''} Manager`.trim()
     })
@@ -326,6 +375,18 @@
             return 'No clubs yet'
         }
         return clubs.map((c: { name: any }) => c.name).join(', ')
+    }
+
+    const toggleGenerateMenu = () => {
+        showGenerateMenu.value = !showGenerateMenu.value
+    }
+
+    const formatMemberName = (learner: any) => {
+        const firstName = ucWords(learner?.first_name ?? '')
+        const middleName = middleInitials(learner?.middle_name ?? '')
+        const lastName = ucWords(learner?.last_name ?? '')
+
+        return [firstName, middleName, lastName].filter(Boolean).join(' ')
     }
 
     const switchClub = () => {
@@ -429,7 +490,42 @@
     })
 
     const downloadCSV = () => {
+        showGenerateMenu.value = false
         exportToCSV(csvFormat.value, `${props.club?.club?.name} members.csv`)
+    }
+
+    const consentFormMembers = computed(() => {
+        return sortedClubMembers.value.map((learner: any) => {
+            const gradeLevel = learner?.current_enrollment?.section?.grade_level?.grade_level ?? ''
+            const sectionName = learner?.current_enrollment?.section?.section_name ?? ''
+
+            return {
+                id: learner.id,
+                studentName: formatMemberName(learner),
+                gradeSection: [gradeLevel, sectionName].filter(Boolean).join(' - '),
+                activityTitle: `${props.club?.club?.name ?? ''} Activities`,
+                venue: 'Philippine Science High School - Caraga Region Campus in Butuan City',
+                schedule: schoolYearLabel.value,
+                clubName: props.club?.club?.name ?? '',
+                schoolYear: schoolYearLabel.value,
+                adviserName: props.club?.user?.name ?? '',
+                consentDate: consentDate.value,
+            }
+        })
+    })
+
+    const generateConsentForms = async () => {
+        showGenerateMenu.value = false
+        if (!consentFormMembers.value.length) {
+            toast.info('No club members available for consent form generation.', {
+                autoClose: 2000,
+                position: toast.POSITION.TOP_RIGHT,
+            })
+            return
+        }
+        showConsentPrint.value = true
+        await nextTick()
+        window.print()
     }
 
     const openManagerModal = () => {
@@ -463,6 +559,14 @@
         })
     }
 
+    const closeConsentPrint = () => {
+        showConsentPrint.value = false
+    }
+
+    const handleAfterPrint = () => {
+        closeConsentPrint()
+    }
+
     // const sortedClubs = computed(() => {
     //     if (sortBy.value === 'name') {
     //         return [...props.registered_clubs].sort((a, b) =>
@@ -481,6 +585,27 @@
 
     onMounted(() => {
         selectedClub.value = props.current_club
+        window.addEventListener('afterprint', handleAfterPrint)
         // console.log(unlisted.value)
     })
+
+    onUnmounted(() => {
+        window.removeEventListener('afterprint', handleAfterPrint)
+    })
     </script>
+
+<style scoped>
+.consent-print-shell {
+    display: none;
+}
+
+@media print {
+    :global(body > *:not(.consent-print-shell)) {
+        display: none !important;
+    }
+
+    .consent-print-shell {
+        display: block;
+    }
+}
+</style>

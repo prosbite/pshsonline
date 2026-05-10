@@ -124,6 +124,7 @@ class AdminClubController extends Controller
         $registered_clubs = ClubRegister::with(['club'])->where('school_year_id', SchoolYear::current()->id)->get();
         // dd($registered_clubs);
         $currentSchoolYearId = SchoolYear::current()->id;
+        $currentSchoolYear = SchoolYear::current();
         $current_manager = ClubManager::with(['user', 'schoolYear'])
             ->where('club_register_id', $club->id)
             ->where('school_year_id', $currentSchoolYearId)
@@ -144,6 +145,7 @@ class AdminClubController extends Controller
             'current_manager' => $current_manager,
             'previous_manager' => $previous_manager,
             'has_manager' => (bool) $current_manager,
+            'current_school_year' => $currentSchoolYear,
         ]);
     }
 

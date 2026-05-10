@@ -290,7 +290,7 @@
                                 class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right"
                             >
                                 <button
-                                    @click="showClubDetails(club.club.id)"
+                                    @click="showClubDetails(club.id)"
                                     class="px-3 mr-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
                                     <svg
@@ -449,8 +449,8 @@ const totalStudentsG7G10 = computed(() => {
     return props.total_students_g7_g10 ?? props.club_student_count ?? 0;
 });
 
-const showClubDetails = (club_id: number) => {
-    router.visit(route("admin.club.show", club_id));
+const showClubDetails = (clubRegisterId: number) => {
+    router.visit(route("admin.club.show", clubRegisterId));
 };
 
 const openUnlistedModal = () => {
