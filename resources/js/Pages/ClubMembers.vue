@@ -60,6 +60,43 @@
             <!-- <div v-else class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
                 <span class="text-left text-gray-500">Maximum number of members reached.</span>
             </div> -->
+            <div v-if="sortedClubOfficers.length > 0" class="bg-white rounded-xl shadow-md border border-gray-200 overflow-x-auto p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-900">Club Officers</h2>
+                        <p class="text-sm text-gray-500">Assigned officers for the selected club.</p>
+                    </div>
+                    <span class="rounded-full bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700">
+                        {{ sortedClubOfficers.length }} officers
+                    </span>
+                </div>
+
+                <table class="min-w-full divide-y divide-gray-200 border border-collapse">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">#</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Position</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Grade/Section</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr v-for="(officer, index) in sortedClubOfficers" :key="officer.id">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ formatMemberName(officer.learner ?? officer) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <span class="inline-flex rounded-full bg-indigo-100 px-2 py-1 text-xs font-semibold text-indigo-700">
+                                    {{ officer.position }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ parseInt(officer.learner?.current_enrollment?.section?.grade_level_id) + 6 + ' - ' + officer.learner?.current_enrollment?.section?.section_name }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-x-auto p-6">
                 <table class="min-w-full divide-y divide-gray-200 border border-collapse">
                     <thead class="bg-gray-50">
@@ -138,7 +175,7 @@
                         </button>
                         <div
                             v-if="showGenerateMenu"
-                            class="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg overflow-hidden z-20"
+                            class="absolute right-0 bottom-full mb-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg overflow-hidden z-20"
                         >
                             <button
                                 type="button"
@@ -156,27 +193,46 @@
                             </button>
                         </div>
                     </div>
-                    <button @click.prevent="printClubMembers" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="w-5 h-5 text-white dark:text-white"
+                    <div class="relative">
+                        <button
+                            type="button"
+                            @click="togglePrintMenu"
+                            class="inline-flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
-                            <!-- Printer body -->
-                            <path d="M6 9V2h12v7" />
-                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                            <rect x="6" y="14" width="12" height="8" rx="2" ry="2" />
-                            <!-- Paper coming out -->
-                            <line x1="8" y1="18" x2="8" y2="22" />
-                            <line x1="16" y1="18" x2="16" y2="22" />
-                        </svg>
-                        Print
-                    </button>
+                            Print
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <div
+                            v-if="showPrintMenu"
+                            class="absolute right-0 bottom-full mb-2 w-56 rounded-lg border border-gray-200 bg-white shadow-lg overflow-hidden z-20"
+                        >
+                            <button
+                                type="button"
+                                @click="printClubMembers"
+                                class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                            >
+                                Class List
+                            </button>
+                            <button
+                                v-if="sortedClubOfficers.length > 0"
+                                type="button"
+                                @click="printClubOfficers"
+                                class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                            >
+                                Officers
+                            </button>
+                            <button
+                                v-if="sortedClubOfficers.length > 0"
+                                type="button"
+                                @click="printClubCertification"
+                                class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                            >
+                                Certification
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -294,6 +350,41 @@
             </div>
         </Teleport>
         <Teleport to="body">
+            <div v-if="showOfficersPrint" class="officers-print-shell">
+                <ClubMembersList
+                    :members="officersPrintRows"
+                    :club-name="club?.club?.name ?? ''"
+                    :school-year="printSchoolYear"
+                    :adviser-name="page.props.auth.user?.name ?? ''"
+                    campus-name="Caraga Region Campus in Butuan City"
+                    document-title="OFFICIAL LIST OF CLUB OFFICERS"
+                    program-label="ALP"
+                    adviser-label="Club Adviser"
+                    right-column-label="Position"
+                    :minimum-rows="0"
+                    :show-row-numbers="false"
+                    footer-code="PSHS-00-F-DSA-27-Ver02-Rev0 05/08/2026"
+                />
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div v-if="showCertificationPrint" class="certification-print-shell">
+                <ClubOfficerStanding
+                    :officers="certificationOfficers"
+                    :club-name="club?.club?.name ?? ''"
+                    :school-year="printSchoolYear"
+                    campus-name="Caraga Region Campus in Butuan City"
+                    document-title="CERTIFICATION OF STUDENT RECORD"
+                    program-name="ALTERNATIVE LEARNING PROGRAM (ALP)"
+                    intro-text="This is to certify that the following ALP student officers are in good academic standing and fit to lead the Alternative Learning Program "
+                    signatory-name="MARIE FE D. MALLONGA"
+                    signatory-title="Campus Registrar"
+                    footer-code="PSHS-00-F-DSA-28-Ver02-Rev0 05/08/2026"
+                    :minimum-rows="2"
+                />
+            </div>
+        </Teleport>
+        <Teleport to="body">
             <div v-if="showConsentPrint" class="consent-print-shell">
                 <ConsentForm
                     v-for="member in consentFormMembers"
@@ -321,6 +412,7 @@ import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { exportToCSV, fullDate, middleInitials, ucWords } from '@/composables/utilities'
 import ConsentForm from '@/Components/club/forms/ConsentForm.vue'
+import ClubOfficerStanding from '@/Components/club/forms/ClubOfficerStanding.vue'
 import ClubMembersList from '@/Components/club/forms/ClubMembersList.vue'
 
 const page = usePage()
@@ -333,8 +425,11 @@ const props = defineProps({
 })
 const printHeight = ref(0)
 const showGenerateMenu = ref(false)
+const showPrintMenu = ref(false)
 const showConsentPrint = ref(false)
 const showMembersPrint = ref(false)
+const showOfficersPrint = ref(false)
+const showCertificationPrint = ref(false)
 const maximumMembers = computed(() => {
     return club.value?.learners?.length >= 40
 })
@@ -449,26 +544,86 @@ const club = computed(() => {
         return parseInt(clb.id) === parseInt(selectedClub.value)
     })?.[0]
 })
+const clubOfficers = computed(() => club.value?.club_officers ?? club.value?.clubOfficers ?? [])
+const officerLearnerIds = computed(() => clubOfficers.value.map((officer: any) => Number(officer.learner_id)))
+const clubMembers = computed(() => {
+    return (club.value?.learners ?? []).filter((learner: any) => !officerLearnerIds.value.includes(Number(learner.id)))
+})
 const sortedMembers = computed(() => {
   return [...clubMembers.value].sort((a, b) =>
     a.last_name.localeCompare(b.last_name)
   )
+})
+const sortedClubOfficers = computed(() => {
+    return [...clubOfficers.value].sort((a: any, b: any) => {
+        const orderDiff = Number(a.order_no ?? 0) - Number(b.order_no ?? 0)
+        if (orderDiff !== 0) {
+            return orderDiff
+        }
+
+        return `${a.learner?.last_name ?? ''} ${a.learner?.first_name ?? ''}`.localeCompare(
+            `${b.learner?.last_name ?? ''} ${b.learner?.first_name ?? ''}`,
+        )
+    })
+})
+const officersPrintRows = computed(() => {
+    return sortedClubOfficers.value.map((officer: any) => ({
+        id: officer.id,
+        first_name: officer.learner?.first_name ?? '',
+        middle_name: officer.learner?.middle_name ?? '',
+        last_name: officer.learner?.last_name ?? '',
+        gender: officer.learner?.gender ?? '',
+        current_enrollment: officer.learner?.current_enrollment ?? null,
+        rightColumnValue: officer.position ?? '',
+    }))
+})
+const certificationOfficers = computed(() => {
+    return sortedClubOfficers.value.map((officer: any) => ({
+        id: officer.id,
+        first_name: officer.learner?.first_name ?? '',
+        middle_name: officer.learner?.middle_name ?? '',
+        last_name: officer.learner?.last_name ?? '',
+        gender: officer.learner?.gender ?? '',
+        current_enrollment: officer.learner?.current_enrollment ?? null,
+        position: officer.position ?? '',
+        remarks: officer.remarks ?? '',
+    }))
 })
 const breakpoint = computed(() => {
     return false
     return (sortedMembers.value.length > 25 && sortedMembers.value.length < 33)
 })
 const printClubMembers = async () => {
+    showPrintMenu.value = false
+    showOfficersPrint.value = false
     showMembersPrint.value = true
     await nextTick()
     document.body.classList.add('club-members-print-mode')
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
     window.print()
 }
-const clubMembers = computed(() => {
-    return club.value?.learners ?? []
-})
 
+const printClubOfficers = async () => {
+    showPrintMenu.value = false
+    showMembersPrint.value = false
+    showOfficersPrint.value = true
+    showCertificationPrint.value = false
+    await nextTick()
+    document.body.classList.add('officers-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    window.print()
+}
+
+const printClubCertification = async () => {
+    showPrintMenu.value = false
+    showMembersPrint.value = false
+    showOfficersPrint.value = false
+    showCertificationPrint.value = true
+    await nextTick()
+    document.body.classList.add('certification-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    window.print()
+}
 const schoolYearLabel = computed(() => {
     const schoolYear = page.props.sy
 
@@ -529,6 +684,10 @@ const toggleGenerateMenu = () => {
     showGenerateMenu.value = !showGenerateMenu.value
 }
 
+const togglePrintMenu = () => {
+    showPrintMenu.value = !showPrintMenu.value
+}
+
 const downloadCSV = () => {
     showGenerateMenu.value = false
     exportToCSV(csvFormat.value, `${club.value?.club?.name} members.csv`)
@@ -558,7 +717,12 @@ const closeConsentPrint = () => {
 const handleAfterPrint = () => {
     closeConsentPrint()
     showMembersPrint.value = false
+    showOfficersPrint.value = false
+    showCertificationPrint.value = false
+    showPrintMenu.value = false
     document.body.classList.remove('club-members-print-mode')
+    document.body.classList.remove('officers-print-mode')
+    document.body.classList.remove('certification-print-mode')
 }
 
 onMounted(() => {
@@ -623,9 +787,33 @@ header {
     body.club-members-print-mode .club-members-print-shell {
         display: block !important;
     }
+
+    body.officers-print-mode > *:not(.officers-print-shell) {
+        display: none !important;
+    }
+
+    body.officers-print-mode .officers-print-shell {
+        display: block !important;
+    }
+
+    body.certification-print-mode > *:not(.certification-print-shell) {
+        display: none !important;
+    }
+
+    body.certification-print-mode .certification-print-shell {
+        display: block !important;
+    }
 }
 
 .club-members-print-shell {
+    display: none;
+}
+
+.officers-print-shell {
+    display: none;
+}
+
+.certification-print-shell {
     display: none;
 }
 

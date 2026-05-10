@@ -42,6 +42,9 @@
             {{ props.clubName }}
           </span>
         </div>
+        <p v-if="props.programLabel==='ALP'" class="mt-2">
+            The following is the list of scholars who will serve as the official officers:
+        </p>
 
         <!-- Table -->
         <table class="w-full border border-black border-collapse mt-4 text-[15px]">
@@ -57,7 +60,7 @@
                 Grade and Section
               </th>
               <th class="border border-black font-normal w-[16%]">
-                Signature/s
+                {{ props.rightColumnLabel }}
               </th>
             </tr>
           </thead>
@@ -69,8 +72,10 @@
               class="h-8 !text-sm"
             >
               <td class="border border-black px-4 align-middle">
-                <span v-if="member.isBlank">{{ index + 1 }}.</span>
-                <span v-else class="mr-2">{{ index + 1 }}.</span>
+                <span v-if="props.showRowNumbers">
+                  <span v-if="member.isBlank">{{ index + 1 }}.</span>
+                  <span v-else class="mr-2">{{ index + 1 }}.</span>
+                </span>
                 <span>
                     {{ member.studentName ?? '' }}
                 </span>
@@ -85,7 +90,7 @@
               </td>
 
               <td class="border border-black px-3 align-middle text-center">
-                <span class="inline-block w-full"></span>
+                {{ member.rightColumnValue ?? '' }}
               </td>
             </tr>
           </tbody>
@@ -200,9 +205,17 @@ const props = defineProps({
     type: String,
     default: 'PSHS-00-F-DSA-29-Ver02-Rev0 05/08/2026',
   },
+  rightColumnLabel: {
+    type: String,
+    default: 'Signature/s',
+  },
   minimumRows: {
     type: Number,
     default: 5,
+  },
+  showRowNumbers: {
+    type: Boolean,
+    default: true,
   },
 })
 
@@ -237,18 +250,20 @@ const printableRows = computed(() => {
       studentName: formatMemberName(member),
       sex: ucWords(member?.gender ?? ''),
       gradeSection: [gradeLevel, sectionName].filter(Boolean).join(' - '),
+      rightColumnValue: member?.rightColumnValue ?? '',
     }
   })
 
   while (rows.length < props.minimumRows) {
-    rows.push({
-      id: `blank-${rows.length + 1}`,
-      isBlank: true,
-      studentName: '',
-      sex: '',
-      gradeSection: '',
-    })
-  }
+      rows.push({
+        id: `blank-${rows.length + 1}`,
+        isBlank: true,
+        studentName: '',
+        sex: '',
+        gradeSection: '',
+        rightColumnValue: '',
+      })
+    }
 
   return rows
 })
@@ -257,7 +272,6 @@ const printableRows = computed(() => {
 <style scoped>
 @media print {
   @page {
-    size: letter;
     margin: 0;
   }
 
