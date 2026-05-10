@@ -9,48 +9,54 @@
         <!-- Header -->
         <div class="text-center leading-tight">
           <p class="font-bold uppercase">
-            PHILIPPINE SCIENCE HIGH SCHOOL SYSTEM
+            {{ props.headerTitle }}
           </p>
 
           <div class="mt-4">
             <span class="font-bold uppercase">CAMPUS:</span>
-            <span class="inline-block border-b border-black w-64 align-middle"></span>
+            <span class="inline-block border-b border-black min-w-64 align-middle text-center">
+              {{ props.campusName }}
+            </span>
           </div>
 
           <p class="uppercase mt-1">
-            ALTERNATIVE LEARNING PROGRAM (ALP)
+            {{ props.programName }}
           </p>
 
-          <p class="uppercase">OFFICIAL CLASS LIST</p>
+          <p class="uppercase">{{ props.documentTitle }}</p>
 
           <div class="mt-1">
             <span>S.Y.</span>
-            <span class="inline-block border-b border-black w-20 align-middle"></span>
+            <span class="inline-block border-b border-black min-w-20 align-middle text-center">
+              {{ schoolYearLabel }}
+            </span>
           </div>
         </div>
 
         <!-- ALP Name -->
         <div class="mt-16">
-          <span class="font-bold text-[16px]">
-            Alternative Learning Program:
+          <span class="font-bold text-[16px] mr-2">
+            {{ props.programLabel }}:
           </span>
-          <span class="inline-block border-b border-black w-64 align-middle"></span>
+          <span class="inline-block border-b border-black min-w-12 align-middle text-left">
+            {{ props.clubName }}
+          </span>
         </div>
 
         <!-- Table -->
         <table class="w-full border border-black border-collapse mt-4 text-[15px]">
           <thead>
             <tr>
-              <th class="border border-black font-normal py-1 w-[50%]">
+              <th class="border border-black font-normal w-[48%]">
                 Name/s
               </th>
-              <th class="border border-black font-normal py-1 w-[12%]">
+              <th class="border border-black font-normal w-[12%]">
                 Sex
               </th>
-              <th class="border border-black font-normal py-1 w-[22%]">
+              <th class="border border-black font-normal w-[24%]">
                 Grade and Section
               </th>
-              <th class="border border-black font-normal py-1 w-[16%]">
+              <th class="border border-black font-normal w-[16%]">
                 Signature/s
               </th>
             </tr>
@@ -58,19 +64,29 @@
 
           <tbody>
             <tr
-              v-for="n in 5"
-              :key="n"
-              class="h-12"
+              v-for="(member, index) in printableRows"
+              :key="`${member.id ?? 'blank'}-${index}`"
+              class="h-8 !text-sm"
             >
               <td class="border border-black px-4 align-middle">
-                {{ n }}.
+                <span v-if="member.isBlank">{{ index + 1 }}.</span>
+                <span v-else class="mr-2">{{ index + 1 }}.</span>
+                <span>
+                    {{ member.studentName ?? '' }}
+                </span>
               </td>
 
-              <td class="border border-black"></td>
+              <td class="border border-black px-3 align-middle text-center uppercase">
+                {{ member.sex ?? '' }}
+              </td>
 
-              <td class="border border-black"></td>
+              <td class="border border-black px-3 align-middle">
+                {{ member.gradeSection ?? '' }}
+              </td>
 
-              <td class="border border-black"></td>
+              <td class="border border-black px-3 align-middle text-center">
+                <span class="inline-block w-full"></span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -82,18 +98,18 @@
             <p>Prepared by:</p>
 
             <div class="mt-10">
-              <p class="font-bold uppercase">
-                FULL NAME AND SIGNATURE
+              <p class="font-bold underline">
+                {{ props.adviserName }}
               </p>
-              <p>ALP Adviser</p>
+              <p>{{ props.adviserLabel }}</p>
             </div>
 
             <div class="mt-10">
               <p>Recommended by:</p>
 
               <div class="mt-10">
-                <p class="font-bold uppercase">
-                  FULL NAME AND SIGNATURE
+                <p class="font-bold underline">
+                  JOHN RIDAN D. DECHUSA
                 </p>
                 <p>
                   Assistant CID Chief for Student Affairs/DSA Chief
@@ -107,8 +123,8 @@
             <p>Noted by:</p>
 
             <div class="mt-10">
-              <p class="font-bold uppercase">
-                FULL NAME AND SIGNATURE
+              <p class="font-bold underline">
+                GRETCHEN MAE B. EMPUESTO, PhD
               </p>
               <p>ALP Coordinator</p>
             </div>
@@ -117,8 +133,8 @@
               <p>Approved by:</p>
 
               <div class="mt-10">
-                <p class="font-bold uppercase">
-                  FULL NAME AND SIGNATURE
+                <p class="font-bold underline">
+                  MELBA C. PATAKSIL, PhD
                 </p>
                 <p>Campus Director</p>
               </div>
@@ -128,15 +144,114 @@
 
         <!-- Footer -->
         <div class="mt-20 text-[12px] text-gray-700">
-          PSHS-00-F-DSA-29-Ver02-Rev0 05/08/2026
+          {{ props.footerCode }}
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-// Vue 3 Component
+<script setup lang="ts">
+import { computed } from 'vue'
+import { middleInitials, ucWords } from '@/composables/utilities'
+
+const props = defineProps({
+  members: {
+    type: Array,
+    default: () => [],
+  },
+  clubName: {
+    type: String,
+    default: '',
+  },
+  schoolYear: {
+    type: [Object, String],
+    default: null,
+  },
+  adviserName: {
+    type: String,
+    default: '',
+  },
+  campusName: {
+    type: String,
+    default: '',
+  },
+  headerTitle: {
+    type: String,
+    default: 'PHILIPPINE SCIENCE HIGH SCHOOL SYSTEM',
+  },
+  programName: {
+    type: String,
+    default: 'ALTERNATIVE LEARNING PROGRAM (ALP)',
+  },
+  documentTitle: {
+    type: String,
+    default: 'OFFICIAL CLASS LIST',
+  },
+  programLabel: {
+    type: String,
+    default: 'Alternative Learning Program',
+  },
+  adviserLabel: {
+    type: String,
+    default: 'ALP Adviser',
+  },
+  footerCode: {
+    type: String,
+    default: 'PSHS-00-F-DSA-29-Ver02-Rev0 05/08/2026',
+  },
+  minimumRows: {
+    type: Number,
+    default: 5,
+  },
+})
+
+const schoolYearLabel = computed(() => {
+  if (typeof props.schoolYear === 'string') {
+    return props.schoolYear
+  }
+
+  if (props.schoolYear?.year_start) {
+    return `${props.schoolYear.year_start}-${props.schoolYear.year_end}`
+  }
+
+  return ''
+})
+
+const formatMemberName = (learner: any) => {
+  const firstName = ucWords(learner?.first_name ?? '')
+  const middleName = middleInitials(learner?.middle_name ?? '')
+  const lastName = ucWords(learner?.last_name ?? '')
+
+  return [firstName, middleName, lastName].filter(Boolean).join(' ')
+}
+
+const printableRows = computed(() => {
+  const rows = (props.members ?? []).map((member: any) => {
+    const gradeLevel = member?.current_enrollment?.section?.grade_level?.grade_level
+      ?? (member?.current_enrollment?.section?.grade_level_id ? Number(member.current_enrollment.section.grade_level_id) + 6 : '')
+    const sectionName = member?.current_enrollment?.section?.section_name ?? ''
+
+    return {
+      id: member.id,
+      studentName: formatMemberName(member),
+      sex: ucWords(member?.gender ?? ''),
+      gradeSection: [gradeLevel, sectionName].filter(Boolean).join(' - '),
+    }
+  })
+
+  while (rows.length < props.minimumRows) {
+    rows.push({
+      id: `blank-${rows.length + 1}`,
+      isBlank: true,
+      studentName: '',
+      sex: '',
+      gradeSection: '',
+    })
+  }
+
+  return rows
+})
 </script>
 
 <style scoped>

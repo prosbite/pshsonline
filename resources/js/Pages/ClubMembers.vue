@@ -181,123 +181,117 @@
             </div>
         </div>
         <Teleport to="body">
-            <table class="to-print w-full">
-                <thead>
-                    <tr>
-                        <th id="header" class="flex items-center justify-between mb-6">
-                            <!-- <div class="flex gap-2 items-center">
-                                <img src="/img/pisaylogo.png" class="h-[70px]" alt="Pisay Logo">
-                                <div class="flex flex-col gap-0">
-                                    <span class="text-left text-xs">
-                                        Republic of the Philippines
-                                    </span>
-                                    <b class="text-left text-sm font-bold leading-snug">
-                                        PHILIPPINE SCIENCE HIGH SCHOOL
-                                    </b>
-                                    <span class="text-left text-xs leading-snug">
-                                        CARAGA REGION CAMPUS IN BUTUAN CITY
-                                    </span>
-                                    <b class="text-left text-xs font-bold leading-snug">
-                                        DEPARTMENT OF SCIENCE AND TECHNOLOGY
-                                    </b>
-                                </div>
-                            </div> -->
-                            <img src="/img/pisay_header_left.png" class="h-[70px]" alt="Pisay Logo">
-                            <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div id="printContent" class="w-full flex flex-col bg-white">
-                                <div class="flex-col w-full font-bold text-lg mb-6">
-                                    <span class="text-center block uppercase">
-                                        {{ club?.club?.name }}
-                                    </span>
-                                    <span class="text-center block uppercase mb-4">
-                                        SY {{ page.props.sy?.year_start }} - {{ page.props.sy?.year_end }}
-                                    </span>
-                                    <span class="text-center block uppercase">
-                                        List of Club Members
-                                    </span>
-                                </div>
+            <div v-if="showMembersPrint" class="club-members-print-shell">
+                <ClubMembersList
+                    v-if="useNewMembersListTemplate"
+                    :members="sortedMembers"
+                    :club-name="club?.club?.name ?? ''"
+                    :school-year="printSchoolYear"
+                    :adviser-name="page.props.auth.user?.name ?? ''"
+                    campus-name="Caraga Region Campus in Butuan City"
+                />
 
-                                <table class="w-full border border-black border-collapse mb-10">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th></th>
-                                            <th class="flex flex-col text-lg" colspan="2">
-                                                <span clas="block">
-                                                    Name
+                <table v-else class="to-print w-full">
+                    <thead>
+                        <tr>
+                            <th id="header" class="flex items-center justify-between mb-6">
+                                <img src="/img/pisay_header_left.png" class="h-[70px]" alt="Pisay Logo">
+                                <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div id="printContent" class="w-full flex flex-col bg-white">
+                                    <div class="flex-col w-full font-bold text-lg mb-6">
+                                        <span class="text-center block uppercase">
+                                            {{ club?.club?.name }}
+                                        </span>
+                                        <span class="text-center block uppercase mb-4">
+                                            SY {{ page.props.sy?.year_start }} - {{ page.props.sy?.year_end }}
+                                        </span>
+                                        <span class="text-center block uppercase">
+                                            List of Club Members
+                                        </span>
+                                    </div>
+
+                                    <table class="w-full border border-black border-collapse mb-10">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th></th>
+                                                <th class="flex flex-col text-lg" colspan="2">
+                                                    <span clas="block">
+                                                        Name
+                                                    </span>
+                                                </th>
+                                                <th class="border border-black">
+                                                    Grade Level
+                                                </th>
+                                                <th class="border border-black">
+                                                    Section
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="learner,index in sortedMembers" :key="learner.id">
+                                                <td class="border border-black px-0 py-1 text-center">
+                                                    {{ index + 1 }}
+                                                </td>
+                                                <td class="border border-black px-2 py-1 text-left">
+                                                    {{ formatMemberName(learner) }}
+                                                </td>
+                                                <td class="border border-black px-2 py-1 text-center">
+                                                    {{ parseInt(learner.current_enrollment?.section.grade_level_id) + 6 }}
+                                                </td>
+                                                <td class="border border-black px-2 py-1 text-center uppercase">
+                                                    {{ learner.current_enrollment?.section.section_name }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="flex flex-col gap-6 mt-2" :class="{ 'page-break-before': breakpoint }">
+                                        <div class="flex justify-start">
+                                            <div class="flex flex-col flex-1">
+                                                <span class="mb-6 text-sm">Prepared by:</span>
+                                                <span class="font-bold underline text-md uppercase">
+                                                    {{ page.props.auth.user.name }}
                                                 </span>
-                                            </th>
-                                            <th class="border border-black">
-                                                Grade Level
-                                            </th>
-                                            <th class="border border-black">
-                                                Section
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="learner,index in sortedMembers">
-                                            <td class="border border-black px-0 py-1 text-center">
-                                                {{ index + 1 }}
-                                            </td>
-                                            <td class="border border-black px-2 py-1 text-left">
-                                                {{ formatMemberName(learner) }}
-                                            </td>
-                                            <td class="border border-black px-2 py-1 text-center">
-                                                {{ parseInt(learner.current_enrollment?.section.grade_level_id) + 6 }}
-                                            </td>
-                                            <td class="border border-black px-2 py-1 text-center uppercase">
-                                                {{ learner.current_enrollment?.section.section_name }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                <span class="text-md">
+                                                    {{ club?.club?.name }} Adviser
+                                                </span>
+                                                <span class="text-sm">Date Printed: <span id="printed-date">{{ new Date().toLocaleString() }}</span></span>
+                                            </div>
 
-                                <div class="flex flex-col gap-6 mt-2" :class="{ 'page-break-before': breakpoint }">
-                                    <div class="flex justify-start">
-                                        <div class="flex flex-col flex-1">
-                                            <span class="mb-6 text-sm">Prepared by:</span>
-                                            <span class="font-bold underline text-md uppercase">
-                                                {{ page.props.auth.user.name }}
-                                            </span>
-                                            <span class="text-md">
-                                                {{ club?.club?.name }} Adviser
-                                            </span>
-                                            <span class="text-sm">Date Printed: <span id="printed-date">{{ new Date().toLocaleString() }}</span></span>
+                                            <div class="flex flex-col flex-1">
+                                                <span class="mb-6 text-sm">Reviewed by:</span>
+                                                <span class="font-bold underline text-md">
+                                                    GRETCHEN MAE B. EMPUESTO, PhD
+                                                </span>
+                                                <span class="text-md">
+                                                    ALP Coordinator
+                                                </span>
+                                            </div>
                                         </div>
-
-                                        <div class="flex flex-col flex-1">
-                                            <span class="mb-6 text-sm">Reviewed by:</span>
-                                            <span class="font-bold underline text-md">
-                                                GRETCHEN MAE B. EMPUESTO, PhD
-                                            </span>
-                                            <span class="text-md">
-                                                ALP Coordinator
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <div class="flex flex-col">
-                                            <span class="mb-6 text-sm">Approved by:</span>
-                                            <span class="font-bold underline text-md uppercase">
-                                                JOHN RIDAN D. DECHUSA
-                                            </span>
-                                            <span class="text-md">
-                                                Assistant CID Chief for Student Affairs
-                                            </span>
+                                        <div class="flex justify-between">
+                                            <div class="flex flex-col">
+                                                <span class="mb-6 text-sm">Approved by:</span>
+                                                <span class="font-bold underline text-md uppercase">
+                                                    JOHN RIDAN D. DECHUSA
+                                                </span>
+                                                <span class="text-md">
+                                                    Assistant CID Chief for Student Affairs
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </Teleport>
         <Teleport to="body">
             <div v-if="showConsentPrint" class="consent-print-shell">
@@ -327,6 +321,7 @@ import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { exportToCSV, fullDate, middleInitials, ucWords } from '@/composables/utilities'
 import ConsentForm from '@/Components/club/forms/ConsentForm.vue'
+import ClubMembersList from '@/Components/club/forms/ClubMembersList.vue'
 
 const page = usePage()
 const props = defineProps({
@@ -339,10 +334,13 @@ const props = defineProps({
 const printHeight = ref(0)
 const showGenerateMenu = ref(false)
 const showConsentPrint = ref(false)
+const showMembersPrint = ref(false)
 const maximumMembers = computed(() => {
     return club.value?.learners?.length >= 40
 })
 const selectedClub = ref({})
+const printSchoolYear = computed(() => club.value?.schoolYear ?? page.props.sy ?? null)
+const useNewMembersListTemplate = computed(() => Number(printSchoolYear.value?.year_start ?? 0) >= 2026)
     const hasClub = (learner: any) => {
         return (learner.current_club?.length ?? 0) > 0
     }
@@ -460,7 +458,11 @@ const breakpoint = computed(() => {
     return false
     return (sortedMembers.value.length > 25 && sortedMembers.value.length < 33)
 })
-const printClubMembers = () => {
+const printClubMembers = async () => {
+    showMembersPrint.value = true
+    await nextTick()
+    document.body.classList.add('club-members-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
     window.print()
 }
 const clubMembers = computed(() => {
@@ -555,6 +557,8 @@ const closeConsentPrint = () => {
 
 const handleAfterPrint = () => {
     closeConsentPrint()
+    showMembersPrint.value = false
+    document.body.classList.remove('club-members-print-mode')
 }
 
 onMounted(() => {
@@ -611,6 +615,18 @@ header {
     body.consent-print-mode .consent-print-shell {
         display: block !important;
     }
+
+    body.club-members-print-mode > *:not(.club-members-print-shell) {
+        display: none !important;
+    }
+
+    body.club-members-print-mode .club-members-print-shell {
+        display: block !important;
+    }
+}
+
+.club-members-print-shell {
+    display: none;
 }
 
 .consent-print-shell {
