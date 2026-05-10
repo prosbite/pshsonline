@@ -5,7 +5,7 @@
                 <!-- Left: Title -->
                 <div class="flex justify-between w-full items-center pb-6 pt-6">
                     <div>
-                        <h3 class="text-2xl font-semibold text-gray-800">{{ club.club.name }}</h3>
+                        <h3 class="text-2xl font-semibold text-gray-800">{{ club?.club?.name }}</h3>
                         <p class="text-gray-600 text-sm">Adviser: {{ club.user.name }}</p>
                     </div>
                     <div v-if="page.props.auth.user?.role === 'admin'" class="flex items-center gap-2">
@@ -134,7 +134,7 @@
                         </button>
                     </td>
                 </tr>
-                <tr v-if="props.club?.club?.learners.length === 0">
+                <tr v-if="props.club?.learners?.length === 0">
                     <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         No members yet.
                     </td>
@@ -363,11 +363,7 @@
         return `${clubName.toLowerCase().replace(/[^a-z0-9]+/g, '')}manager@alp.com`
     })
     const hasClub = (learner: any) => {
-        if(learner.learner.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length > 0
-        && props.club.club.nature.slice(0, 3).toLowerCase() === 'alp') {
-            return true
-        }
-        return false
+        return (learner.learner.current_club?.length ?? 0) > 0
     }
 
     const joinedClubs = (clubs: any[]) => {

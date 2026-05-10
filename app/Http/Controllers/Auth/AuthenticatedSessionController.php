@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\SchoolYear;
 use Inertia\Response;
+use App\Models\ClubManager;
 use App\Models\ClubRegister;
 use App\Models\LogRecord;
 
@@ -40,8 +41,17 @@ class AuthenticatedSessionController extends Controller
             'user_id' => auth()->user()->id,
             'log_type' => 'login',
         ]);
-        $schoolYear = SchoolYear::syncSession(SchoolYear::active());
-        Auth::user()->clubs = ClubRegister::where('school_year_id', $schoolYear->id)->where('user_id', auth()->user()->id)->with(['club', 'user', 'schoolYear', 'club.learners.currentEnrollment.section'])->get();
+        if (auth()->user()?->role === 'club manager') {
+            $schoolYear = SchoolYear::findOrFail(2);
+        } else {
+            $schoolYear = SchoolYear::active();
+        }
+
+        $schoolYear = SchoolYear::syncSession($schoolYear);
+        Auth::user()->clubs = ClubRegister::where('school_year_id', $schoolYear->id)
+            ->where('user_id', auth()->user()->id)
+            ->with(['club', 'user', 'schoolYear', 'learners.currentEnrollment.section'])
+            ->get();
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

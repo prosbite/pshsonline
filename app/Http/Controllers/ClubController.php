@@ -31,7 +31,8 @@ class ClubController extends Controller
             'learner_id' => 'required|integer',
             'club_reg_id' => 'required|exists:club_registers,id',
             'club_id' => [
-                'required',
+                'nullable',
+                'exists:clubs,id',
                 Rule::unique('club_learner')->where(function ($query) use ($request) {
                     return $query->where('learner_id', $request->learner_id)
                                  ->where('school_year_id', SchoolYear::current()->id);
@@ -54,8 +55,14 @@ class ClubController extends Controller
             return redirect()->back()->with('error', 'This club has reached the maximum of 26 members.');
         }
 
+        $clubRegister = ClubRegister::with('club')->findOrFail($request->club_reg_id);
+        $resolvedClubId = $clubRegister->club_id ?? $request->club_id;
+
+        abort_unless($resolvedClubId, 422, 'Unable to resolve club id for registration.');
+
         $learner = Learner::find($request->learner_id);
-        $learner->clubs()->attach($request->club_id, [
+        $learner->clubRegisters()->attach($request->club_reg_id, [
+            'club_id' => $resolvedClubId,
             'club_register_id' => $request->club_reg_id,
             'school_year_id' => SchoolYear::current()->id,
         ]);
@@ -68,7 +75,8 @@ class ClubController extends Controller
             'learner_id' => 'required|integer',
             'club_reg_id' => 'required|exists:club_registers,id',
             'club_id' => [
-                'required',
+                'nullable',
+                'exists:clubs,id',
                 Rule::unique('club_learner')->where(function ($query) use ($request) {
                     return $query->where('learner_id', $request->learner_id)
                                  ->where('school_year_id', SchoolYear::current()->id);
@@ -91,8 +99,14 @@ class ClubController extends Controller
             return redirect()->back()->with('error', 'This club has reached the maximum of 26 members.');
         }
 
+        $clubRegister = ClubRegister::with('club')->findOrFail($request->club_reg_id);
+        $resolvedClubId = $clubRegister->club_id ?? $request->club_id;
+
+        abort_unless($resolvedClubId, 422, 'Unable to resolve club id for registration.');
+
         $learner = Learner::find($request->learner_id);
-        $learner->clubs()->attach($request->club_id, [
+        $learner->clubRegisters()->attach($request->club_reg_id, [
+            'club_id' => $resolvedClubId,
             'club_register_id' => $request->club_reg_id,
             'school_year_id' => SchoolYear::current()->id,
         ]);
@@ -104,16 +118,16 @@ class ClubController extends Controller
     {
         $request->validate([
             'learner_id' => 'required|integer',
-            'club_id' => 'required|integer',
+            'club_reg_id' => 'required|integer|exists:club_registers,id',
         ]);
         $learner = Learner::find($request->learner_id);
-        $learner->clubs()->detach($request->club_id);
+        $learner->clubRegisters()->detach($request->club_reg_id);
         return redirect()->route('club.members')->with('success', 'Member unregistered successfully.');
     }
 
     public function clubsList()
     {
-        $clubs = ClubRegister::where('school_year_id', SchoolYear::current()->id)->with(['club', 'user', 'schoolYear', 'club.learners.currentEnrollment.section'])->get();
+        $clubs = ClubRegister::where('school_year_id', SchoolYear::current()->id)->with(['club', 'user', 'schoolYear', 'learners.currentEnrollment.section'])->get();
         return Inertia::render('Clubs', [
             'clubs' => $clubs,
             'entrants' => Learner::clubEntrants(),

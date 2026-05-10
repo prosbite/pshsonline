@@ -181,7 +181,7 @@ const props = defineProps({
 
 const clubManager = computed(() => props.club_manager)
 const clubRegister = computed(() => clubManager.value?.clubRegister ?? clubManager.value?.club_register ?? null)
-const clubMembers = computed(() => clubRegister.value?.club?.learners ?? [])
+const clubMembers = computed(() => clubRegister.value?.learners ?? [])
 const isClubFull = computed(() => clubMembers.value.length >= 26)
 const { setSort, sortItems } = useLearnerSorting('name')
 const sortedClubMembers = computed(() => sortItems(clubMembers.value))
@@ -196,13 +196,7 @@ const enlistForm = useForm({
 let timeout: ReturnType<typeof setTimeout> | null = null
 
 const hasClub = (learner: any) => {
-    if (
-        learner.learner.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length > 0 &&
-        clubRegister.value?.club?.nature.slice(0, 3).toLowerCase() === 'alp'
-    ) {
-        return true
-    }
-    return false
+    return (learner.learner.current_club?.length ?? 0) > 0
 }
 
 const joinedClubs = (clubs: any[]) => {

@@ -343,23 +343,9 @@ const maximumMembers = computed(() => {
     return club.value?.learners?.length >= 40
 })
 const selectedClub = ref({})
-const hasClub = (learner: any) => {
-    let hasClub = false
-    if(club.value?.club?.nature.slice(0, 3).toLowerCase() === 'alp') {
-        learner.current_club?.map((clb: any) => {
-            if(clb.nature.slice(0, 3).toLowerCase() === club.value?.club?.nature.slice(0, 3).toLowerCase()) {
-                hasClub = true
-            }
-        })
-    } else {
-        learner.current_club?.map((clb: any) => {
-            if(clb.id === club.value?.club?.id) {
-                hasClub = true
-            }
-        })
+    const hasClub = (learner: any) => {
+        return (learner.current_club?.length ?? 0) > 0
     }
-    return hasClub
-}
 const joinedClubs = (learner: any) => {
     let clubs = []
     if(learner.current_club?.length === 0) {
@@ -370,13 +356,13 @@ const joinedClubs = (learner: any) => {
     })
     return clubs.join(', ')
 }
-const addNewMember = (learner: any) => {
-    const data = {
-        learner_id: learner.id,
-        club_id: club.value?.id,
-        club_reg_id: club.value?.id,
-        grade_level: learner.current_enrollment.section.grade_level.grade_level,
-    }
+    const addNewMember = (learner: any) => {
+        const data = {
+            learner_id: learner.id,
+            club_id: club.value?.club?.id,
+            club_reg_id: club.value?.id,
+            grade_level: learner.current_enrollment.section.grade_level.grade_level,
+        }
     router.post(route('club.register'), data, {
         onSuccess: () => {
             searchInput.value = ''
@@ -393,14 +379,14 @@ const addNewMember = (learner: any) => {
     })
 }
 
-const unregisterMember = (learner: any) => {
-    if (!confirm('Are you sure you want to unregister this member?')) {
-        return
-    }
-    const data = {
-        learner_id: learner.id,
-        club_id: club.value?.id,
-    }
+    const unregisterMember = (learner: any) => {
+        if (!confirm('Are you sure you want to unregister this member?')) {
+            return
+        }
+        const data = {
+            learner_id: learner.id,
+            club_reg_id: club.value?.id,
+        }
     router.post(route('club.unregister'), data, {
         onSuccess: () => {
             toast.success('Member unregistered successfully.', {
@@ -557,11 +543,14 @@ const generateConsentForms = async () => {
     }
     showConsentPrint.value = true
     await nextTick()
+    document.body.classList.add('consent-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
     window.print()
 }
 
 const closeConsentPrint = () => {
     showConsentPrint.value = false
+    document.body.classList.remove('consent-print-mode')
 }
 
 const handleAfterPrint = () => {
@@ -615,12 +604,12 @@ header {
         page-break-before: always; /* Older property for broader compatibility */
     }
 
-    body > *:not(.consent-print-shell) {
+    body.consent-print-mode > *:not(.consent-print-shell) {
         display: none !important;
     }
 
-    .consent-print-shell {
-        display: block;
+    body.consent-print-mode .consent-print-shell {
+        display: block !important;
     }
 }
 

@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Learner extends Model
 {
+    protected $appends = [
+        'current_club',
+    ];
+
     protected $fillable = [
         'last_name',
         'first_name',
@@ -46,23 +50,53 @@ class Learner extends Model
             ->withTimestamps();
     }
 
-    public function currentClub()
+    public function clubRegisters()
     {
-        return $this->belongsToMany(Club::class, 'club_learner', 'learner_id', 'club_id')
+        return $this->belongsToMany(ClubRegister::class, 'club_learner', 'learner_id', 'club_register_id')
+            ->withPivot('club_id', 'school_year_id', 'status')
             ->withTimestamps()
-            ->withPivot('club_register_id', 'school_year_id', 'status')
-            ->wherePivot('school_year_id', SchoolYear::current()->id)
             ->orderBy('club_learner.created_at');
+    }
+
+    public function currentClubRegisters()
+    {
+        return $this->belongsToMany(ClubRegister::class, 'club_learner', 'learner_id', 'club_register_id')
+            ->withPivot('club_id', 'school_year_id', 'status')
+            ->wherePivot('school_year_id', SchoolYear::current()->id)
+            ->withTimestamps()
+            ->orderBy('club_learner.created_at');
+    }
+
+    public function getCurrentClubAttribute()
+    {
+        $registrations = $this->relationLoaded('currentClubRegisters')
+            ? $this->getRelation('currentClubRegisters')
+            : $this->currentClubRegisters;
+
+        $clubs = $registrations
+            ->map(fn ($registration) => $registration->club)
+            ->filter()
+            ->values();
+
+        $legacyClubs = $this->clubs()
+            ->wherePivot('school_year_id', SchoolYear::current()->id)
+            ->wherePivotNull('club_register_id')
+            ->get();
+
+        return $clubs
+            ->merge($legacyClubs)
+            ->unique('id')
+            ->values();
     }
 
     public function learnersWithoutClubs()
     {
-        return $this->whereDoesntHave('clubs');
+        return $this->whereDoesntHave('currentClubRegisters');
     }
 
     public static function clubEntrants()
     {
-        return Enrollment::with(['learner.currentClub', 'section.gradeLevel'])
+        return Enrollment::with(['learner.currentClubRegisters.club', 'section.gradeLevel'])
         ->whereHas('section.gradeLevel', function ($query) {
             $query->whereNotIn('grade_level', [11, 12]);
         })

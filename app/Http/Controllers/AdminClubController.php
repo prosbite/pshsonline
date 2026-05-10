@@ -139,7 +139,7 @@ class AdminClubController extends Controller
             ->first();
 
         return Inertia::render('admin/ClubDetails', [
-            'club' => $club->load(['learners.currentEnrollment.section.gradeLevel', 'club.learners.currentEnrollment.section.gradeLevel', 'user', 'schoolYear', 'externalinks']),
+            'club' => $club->load(['learners.currentEnrollment.section.gradeLevel', 'user', 'club', 'schoolYear', 'externalinks']),
             'registered_clubs' => $registered_clubs,
             'current_club' => $club->id,
             'current_manager' => $current_manager,
@@ -159,8 +159,9 @@ class AdminClubController extends Controller
 
         $currentSchoolYear = SchoolYear::current();
         abort_unless($currentSchoolYear, 404);
+        $currentClubRegisterId = $club->id;
 
-        $currentManager = ClubManager::where('club_register_id', $club->id)
+        $currentManager = ClubManager::where('club_register_id', $currentClubRegisterId)
             ->where('school_year_id', $currentSchoolYear->id)
             ->first();
 
@@ -176,13 +177,45 @@ class AdminClubController extends Controller
             ->orderByDesc('id')
             ->first();
 
-        if ($previousManager) {
-            $user = $previousManager->user;
-            if (! $user) {
-                return redirect()->back()->with('error', 'Previous club manager account could not be found.');
+        DB::transaction(function () use ($previousManager, $request, $club, $currentSchoolYear, $currentClubRegisterId) {
+            if ($previousManager) {
+                $user = $previousManager->user;
+
+                if (! $user) {
+                    abort(404, 'Previous club manager account could not be found.');
+                }
+
+                $user->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'role' => 'club manager',
+                    'status' => 'active',
+                ]);
+
+                $renewedManager = ClubManager::where('user_id', $user->id)
+                    ->where('school_year_id', $currentSchoolYear->id)
+                    ->latest('id')
+                    ->first();
+
+                if ($renewedManager) {
+                    $renewedManager->update([
+                        'club_register_id' => $currentClubRegisterId,
+                        'status' => 'active',
+                    ]);
+                } else {
+                    ClubManager::create([
+                        'user_id' => $user->id,
+                        'club_register_id' => $currentClubRegisterId,
+                        'school_year_id' => $currentSchoolYear->id,
+                        'status' => 'active',
+                    ]);
+                }
+
+                return;
             }
 
-            $user->update([
+            $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
@@ -190,41 +223,25 @@ class AdminClubController extends Controller
                 'status' => 'active',
             ]);
 
-            $previousManager->update([
-                'club_register_id' => $club->id,
+            ClubManager::create([
+                'user_id' => $user->id,
+                'club_register_id' => $currentClubRegisterId,
                 'school_year_id' => $currentSchoolYear->id,
                 'status' => 'active',
             ]);
+        });
 
-            return redirect()->back()->with('success', 'Club manager renewed successfully.');
-        }
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'club manager',
-            'status' => 'active',
-        ]);
-
-        ClubManager::create([
-            'user_id' => $user->id,
-            'club_register_id' => $club->id,
-            'school_year_id' => $currentSchoolYear->id,
-            'status' => 'active',
-        ]);
-
-        return redirect()->back()->with('success', 'Club manager added successfully.');
+        return redirect()->back()->with('success', $previousManager ? 'Club manager renewed successfully.' : 'Club manager added successfully.');
     }
 
     public function unregisterMember(Request $request)
     {
         $request->validate([
             'learner_id' => 'required|integer',
-            'club_id' => 'required|integer',
+            'club_reg_id' => 'required|integer|exists:club_registers,id',
         ]);
         $learner = Learner::find($request->learner_id);
-        $learner->clubs()->detach($request->club_id);
+        $learner->clubRegisters()->detach($request->club_reg_id);
 
         return redirect()->route('admin.club.show', $request->club_reg_id)->with('success', 'Member unregistered successfully.');
     }

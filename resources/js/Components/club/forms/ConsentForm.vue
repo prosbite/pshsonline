@@ -198,13 +198,5 @@ const props = defineProps({
     margin: 0;
     padding: 0;
   }
-
-  :global(body > *:not(.consent-print-shell)) {
-    display: none !important;
-  }
-
-  :global(.consent-print-shell) {
-    display: block !important;
-  }
 }
 </style>
