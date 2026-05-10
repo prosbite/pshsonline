@@ -211,7 +211,7 @@ const props = defineProps({
   },
   minimumRows: {
     type: Number,
-    default: 5,
+    default: 2,
   },
   showRowNumbers: {
     type: Boolean,

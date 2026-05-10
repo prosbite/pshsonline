@@ -89,8 +89,8 @@
               <td class="border border-black px-2 py-1 text-center">
                 {{ officer.position }}
               </td>
-              <td class="border border-black px-2 py-1">
-                {{ officer.remarks }}
+              <td class="border border-black px-2 py-1 text-center">
+                Outstanding
               </td>
             </tr>
           </tbody>

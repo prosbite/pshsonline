@@ -23,6 +23,7 @@ class DashboardController extends Controller
                 'clubRegister.clubOfficers.learner.currentEnrollment.section.gradeLevel',
                 'clubRegister.user',
                 'clubRegister.schoolYear',
+                'clubRegister.club'
             ])
                 ->where('user_id', auth()->id())
                 ->where('school_year_id', $schoolYear?->id)

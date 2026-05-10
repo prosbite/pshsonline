@@ -3,62 +3,21 @@
         <div class="page">
             <h1 class="text-4xl font-extrabold text-gray-900 mb-8">{{ club?.club?.name }}</h1>
 
-            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
+            <!-- <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
                 <div class="flex flex-col md:flex-row gap-4">
                     <div class="flex flex-col gap-2 flex-1">
                         <input v-model="searchInput" type="text" placeholder="Search by name, @gender, @section or @grade" class="flex-grow p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <!-- <span class="text-sm text-gray-400 ita">Note: Use @gender, @section or @grade to filter by gender, section or grade level.</span> -->
                     </div>
                     <select v-if="clubs?.length > 1" v-model="selectedClub" class="p-3 border border-gray-300 w-56 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <!-- <option disabled value="">Select Club</option> -->
                         <option v-for="club in clubs" :key="club.id" :value="club.id">{{ club.club.name }}</option>
                     </select>
-                    <!-- <select class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="">Filter by Role</option>
-                        <option value="leader">Leader</option>
-                        <option value="member">Member</option>
-                    </select>
-                    <select class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="">Filter by Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select> -->
+
                 </div>
                 <span v-if="maximumMembers" class="text-red-500">Maximum number of members reached.</span>
-                <!-- <div v-if="searchResults.length > 0" class="flex flex-col gap-2 py-4">
-                    <table class="w-full">
-                        <tbody>
-                            <tr v-for="(learner,index) in searchResults" :key="index" class="border-b hover:bg-gray-100">
-                                <td class="py-2">{{learner.last_name}}, {{learner.first_name}}</td>
-                                <td class="py-2">{{learner.current_enrollment.section.grade_level_id + 6 + ' - ' + learner.current_enrollment.section.section_name}}</td>
-                                <td class="py-2 text-gray-500">{{ joinedClubs(learner) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                    :class="{'bg-green-100 text-green-800': learner.gender === 'male', 'bg-red-100 text-red-800': learner.gender === 'female'}"
-                                    >{{ ucWords(learner.gender) }}</span>
-                                </td>
-                                <td>
-                                    <div class="flex w-full justify-end">
-                                        <button v-if="!hasClub(learner)" @click="addNewMember(learner)" class="px-2 py-1 bg-indigo-600 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">+ Add</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> -->
-                <!-- <div v-if="searchResults.length === 0 && searchInput.length > 1" class="py-4">
-                    <span class="text-left text-gray-500">No results found.</span>
-                </div> -->
+
                 <div class="flex flex-wrap gap-4">
-                    <!-- <button @click="addNewMember" v-if="checkedLearners.length > 0" class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">Add New Member</button> -->
-                    <!-- <button v-else class="px-5 py-2 bg-gray-300 text-white font-semibold rounded-lg shadow-md">Add New Member</button> -->
-                    <!-- <button class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-colors duration-200">Bulk Import</button> -->
-                    <!-- <button class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-colors duration-200">Assign from School DB</button> -->
+
                 </div>
-            </div>
-            <!-- <div v-else class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
-                <span class="text-left text-gray-500">Maximum number of members reached.</span>
             </div> -->
             <div v-if="sortedClubOfficers.length > 0" class="bg-white rounded-xl shadow-md border border-gray-200 overflow-x-auto p-6 mb-6">
                 <div class="flex items-center justify-between mb-4">
@@ -74,7 +33,7 @@
                 <table class="min-w-full divide-y divide-gray-200 border border-collapse">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">#</th>
+                            <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">#</th> -->
                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Name</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Position</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Grade/Section</th>
@@ -82,7 +41,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr v-for="(officer, index) in sortedClubOfficers" :key="officer.id">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td>
+                            <!-- <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td> -->
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ formatMemberName(officer.learner ?? officer) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 <span class="inline-flex rounded-full bg-indigo-100 px-2 py-1 text-xs font-semibold text-indigo-700">
@@ -221,7 +180,7 @@
                                 @click="printClubOfficers"
                                 class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
                             >
-                                Officers
+                                Officers List
                             </button>
                             <button
                                 v-if="sortedClubOfficers.length > 0"
@@ -229,7 +188,7 @@
                                 @click="printClubCertification"
                                 class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
                             >
-                                Certification
+                                Officers Certification
                             </button>
                         </div>
                     </div>
@@ -240,10 +199,11 @@
             <div v-if="showMembersPrint" class="club-members-print-shell">
                 <ClubMembersList
                     v-if="useNewMembersListTemplate"
-                    :members="sortedMembers"
+                    :members="sortedAllClubMembers"
                     :club-name="club?.club?.name ?? ''"
                     :school-year="printSchoolYear"
                     :adviser-name="page.props.auth.user?.name ?? ''"
+                    :minimum-rows="0"
                     campus-name="Caraga Region Campus in Butuan City"
                 />
 
@@ -290,7 +250,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="learner,index in sortedMembers" :key="learner.id">
+                                            <tr v-for="learner,index in sortedAllClubMembers" :key="learner.id">
                                                 <td class="border border-black px-0 py-1 text-center">
                                                     {{ index + 1 }}
                                                 </td>
@@ -546,11 +506,19 @@ const club = computed(() => {
 })
 const clubOfficers = computed(() => club.value?.club_officers ?? club.value?.clubOfficers ?? [])
 const officerLearnerIds = computed(() => clubOfficers.value.map((officer: any) => Number(officer.learner_id)))
+const allClubMembers = computed(() => {
+    return club.value?.learners ?? []
+})
 const clubMembers = computed(() => {
-    return (club.value?.learners ?? []).filter((learner: any) => !officerLearnerIds.value.includes(Number(learner.id)))
+    return allClubMembers.value.filter((learner: any) => !officerLearnerIds.value.includes(Number(learner.id)))
 })
 const sortedMembers = computed(() => {
   return [...clubMembers.value].sort((a, b) =>
+    a.last_name.localeCompare(b.last_name)
+  )
+})
+const sortedAllClubMembers = computed(() => {
+  return [...allClubMembers.value].sort((a, b) =>
     a.last_name.localeCompare(b.last_name)
   )
 })
@@ -661,7 +629,7 @@ const csvFormat = computed(() => {
 })
 
 const consentFormMembers = computed(() => {
-    return sortedMembers.value.map((learner: any) => {
+    return [...allClubMembers.value].sort((a, b) => a.last_name.localeCompare(b.last_name)).map((learner: any) => {
         const gradeLevel = learner?.current_enrollment?.section?.grade_level?.grade_level ?? ''
         const sectionName = learner?.current_enrollment?.section?.section_name ?? ''
 

@@ -9,9 +9,9 @@
                         <h1 class="text-4xl font-extrabold tracking-tight">
                             {{ clubRegister?.club?.name ?? 'Club Dashboard' }}
                         </h1>
-                        <p class="mt-3 text-slate-200 text-sm max-w-2xl">
+                        <!-- <p class="mt-3 text-slate-200 text-sm max-w-2xl">
                             Manage your club members, search students, and enlist new members for the current school year.
-                        </p>
+                        </p> -->
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 w-full lg:w-auto">
                         <div class="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 backdrop-blur col-span-2">
@@ -118,7 +118,7 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 w-[40px]">#</th>
+                                <!-- <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 w-[40px]">#</th> -->
                                 <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Name</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Position</th>
                                 <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Grade/Section</th>
@@ -127,7 +127,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
                             <tr v-for="(officer, index) in sortedClubOfficers" :key="officer.id" class="hover:bg-gray-50">
-                                <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ index + 1 + '.' }}</td>
+                                <!-- <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ index + 1 + '.' }}</td> -->
                                 <td class="px-4 py-3 text-sm font-medium text-gray-900">
                                     {{ ucWords(officer.learner?.last_name ?? '') }}, {{ ucWords(officer.learner?.first_name ?? '') }}
                                 </td>
