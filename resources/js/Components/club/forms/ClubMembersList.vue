@@ -236,7 +236,7 @@ const formatMemberName = (learner: any) => {
   const middleName = middleInitials(learner?.middle_name ?? '')
   const lastName = ucWords(learner?.last_name ?? '')
 
-  return [lastName, firstName, middleName].filter(Boolean).join(' ')
+  return [lastName + ',', firstName, middleName].filter(Boolean).join(' ')
 }
 
 const printableRows = computed(() => {
