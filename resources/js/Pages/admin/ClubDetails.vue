@@ -351,7 +351,7 @@
             return ''
         }
 
-        return `SY ${schoolYear.year_start}-${schoolYear.year_end}`
+        return `${schoolYear.year_start}-${schoolYear.year_end}`
     })
     const consentDate = computed(() => fullDate(new Date().toISOString()))
     const defaultManagerName = computed(() => {

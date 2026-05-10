@@ -53,8 +53,7 @@
             This is to attest that I voluntarily allow my child to participate in all
             activities, meetings, and learning experiences under
             <span class="font-bold underline">{{ clubName }}</span>
-            for School Year
-            <span class="inline-block min-w-24 border-b border-black px-2 text-center align-middle">{{ schoolYear }}</span>.
+            for School Year <span class="underline">{{ schoolYear }}</span>
           </p>
 
           <p class="mt-8">
@@ -93,8 +92,8 @@
               </div>
 
               <div class="mt-1">
-                <span>Date:</span>
-                <span class="inline-block min-w-24 border-b border-black px-2 text-center align-middle"></span>
+                <span>Date:_____________</span>
+                <!-- <span class="inline-block min-w-24 border-b border-black px-2 text-center align-middle"></span> -->
               </div>
             </div>
 
@@ -107,8 +106,8 @@
                 <p>ALP Adviser</p>
 
                 <div class="mt-1">
-                  <span>Date:</span>
-                  <span class="inline-block min-w-24 border-b border-black px-2 text-center align-middle"></span>
+                  <span>Date:_____________</span>
+                  <!-- <span class="inline-block min-w-24 border-b border-black px-2 text-center align-middle"></span> -->
                 </div>
               </div>
             </div>
