@@ -78,4 +78,15 @@ class EnrollmentController extends Controller
             'learners' => Learner::with(['currentEnrollment.section'])->get(),
         ]);
     }
+
+    public function destroy(Enrollment $enrollment)
+    {
+        $currentSchoolYear = SchoolYear::current();
+        abort_unless($currentSchoolYear, 404);
+        abort_unless((int) $enrollment->school_year_id === (int) $currentSchoolYear->id, 403, 'Unauthorized access.');
+
+        $enrollment->delete();
+
+        return redirect()->route('enrollment')->with('success', 'Student enrollment removed successfully.');
+    }
 }

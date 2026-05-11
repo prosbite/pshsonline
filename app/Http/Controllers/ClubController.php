@@ -190,8 +190,11 @@ class ClubController extends Controller
             'learner_id' => 'required|integer',
             'club_reg_id' => 'required|integer|exists:club_registers,id',
         ]);
-        $learner = Learner::find($request->learner_id);
-        $learner->clubRegisters()->detach($request->club_reg_id);
+
+        DB::table('club_learner')
+            ->where('learner_id', $request->learner_id)
+            ->where('club_register_id', $request->club_reg_id)
+            ->delete();
         return redirect()->route('club.members')->with('success', 'Member unregistered successfully.');
     }
 

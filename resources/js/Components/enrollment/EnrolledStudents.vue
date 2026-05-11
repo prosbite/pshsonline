@@ -3,24 +3,71 @@
   <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4 space-y-4 md:space-y-6">
     <div>
       <h3 class="text-2xl font-semibold text-gray-800">Enrolled Students</h3>
-      <p class="text-gray-600 text-sm">Filter and view enrolled students by section.</p>
+      <p class="text-gray-600 text-sm">Filter by section or search all enrolled students.</p>
     </div>
-    <div class="pb-8">
-      <!-- <label for="sectionFilter" class="sr-only">Filter by section</label> -->
-      <select
-        id="sectionFilter"
-        v-model="selectedSection"
-        class="w-full md:w-64 px-4 py-2 border border-gray-300 text-gray-700 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      >
-        <option :value="null" disabled>Select Section</option>
-        <option
-          v-for="section in props.sections"
-          :key="section.id"
-          :value="section.id"
+    <div class="flex flex-col gap-3 pb-8 w-full md:w-auto">
+      <div class="flex flex-col gap-2 md:flex-row md:items-start md:gap-2">
+        <div class="relative w-full md:w-[28rem]">
+          <input
+            v-model="searchInput"
+            type="text"
+            placeholder="Search enrolled students..."
+            @input="performSearch"
+            class="w-full px-4 py-2 border border-gray-300 text-gray-700 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+          <div
+            v-if="showSearchDropdown"
+            class="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl"
+          >
+            <div v-if="loading" class="px-4 py-3 text-sm text-gray-500">
+              Searching...
+            </div>
+            <div v-else-if="searchResults.length > 0">
+              <div
+                v-for="result in searchResults"
+                :key="result.id"
+                class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm hover:bg-indigo-50"
+                @click="pickSearchResult(result)"
+              >
+                <div>
+                  <p class="font-semibold text-gray-800">{{ formatLearnerName(result) }}</p>
+                  <p class="text-xs text-gray-500">
+                    {{ formatGradeSection(result) }} · {{ ucWords(result?.learner?.gender) }}
+                  </p>
+                </div>
+                <span class="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
+                  Enrolled
+                </span>
+                <button
+                  v-if="page?.props?.auth?.user?.role === 'admin'"
+                  type="button"
+                  @click.stop="removeEnrollment(result)"
+                  class="inline-flex items-center gap-1 rounded-lg bg-red-100 px-3 py-2 text-xs font-semibold text-red-700 transition-colors duration-200 hover:bg-red-200"
+                >
+                  Unenroll
+                </button>
+              </div>
+            </div>
+            <div v-else class="px-4 py-3 text-sm text-gray-500">
+              No matches found.
+            </div>
+          </div>
+        </div>
+        <select
+          id="sectionFilter"
+          v-model="selectedSection"
+          class="w-full md:w-72 px-4 py-2 border border-gray-300 text-gray-700 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          {{ parseInt(section.grade_level_id) + 6 }} - {{ section.section_name }}
-        </option>
-      </select>
+          <option :value="null" disabled>Select Section</option>
+          <option
+            v-for="section in props.sections"
+            :key="section.id"
+            :value="section.id"
+          >
+            {{ parseInt(section.grade_level_id) + 6 }} - {{ section.section_name }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
 
@@ -32,6 +79,7 @@
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade/Section</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
+            <th v-if="page?.props?.auth?.user?.role === 'admin'" scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
@@ -51,22 +99,20 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {{ ucWords(learner?.learner?.gender) }}
             </td>
-            <td v-if="page?.props?.auth?.user?.role === 'admin'">
-                <button @click="editLearner(learner)" class="px-3 py-1 bg-green-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-green-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                    <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="6" y="6" width="30" height="36" rx="2" ry="2" stroke="black" stroke-width="2" fill="white"/>
-                        <line x1="10" y1="14" x2="30" y2="14" stroke="black" stroke-width="2"/>
-                        <line x1="10" y1="20" x2="30" y2="20" stroke="black" stroke-width="2"/>
-                        <line x1="10" y1="26" x2="24" y2="26" stroke="black" stroke-width="2"/>
-                        <path d="M32 30l6 6-10 10H22v-6l10-10z" stroke="black" stroke-width="2" fill="none"/>
-                        <line x1="30" y1="32" x2="36" y2="38" stroke="black" stroke-width="2"/>
+            <td v-if="page?.props?.auth?.user?.role === 'admin'" class="px-6 py-4 whitespace-nowrap text-right">
+                <button
+                    @click="removeEnrollment(learner)"
+                    class="inline-flex items-center gap-2 rounded-lg bg-red-100 px-4 py-2 text-sm font-semibold text-red-700 transition-colors duration-200 hover:bg-red-200"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-3-3v3m-7 0h14" />
                     </svg>
-
+                    Unenroll
                 </button>
             </td>
         </tr>
         <tr v-if="filteredLearners.length === 0">
-            <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td :colspan="page?.props?.auth?.user?.role === 'admin' ? 5 : 4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 No learners found.
             </td>
         </tr>
@@ -147,13 +193,17 @@
 import { ref, computed }  from 'vue';
 import { ucWords, middleInitials } from '@/composables/utilities';
 import SleekModal from '../SleekModal.vue';
-import { router } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import { usePage } from '@inertiajs/vue3';
+import axios from 'axios';
 
 const page = usePage()
 const selectedSection = ref(1)
+const searchInput = ref('')
+const searchResults = ref<any[]>([])
+const loading = ref(false)
+let searchTimeout: ReturnType<typeof setTimeout> | null = null
 const selectedLearner = ref({
     last_name: '',
     first_name: '',
@@ -164,11 +214,54 @@ const selectedLearner = ref({
 })
 const editMode = ref(false)
 const showModal = ref(false)
-const filteredLearners = computed(() => {
-    if (!selectedSection.value) {
-        return props.learners
+const showSearchDropdown = computed(() => searchInput.value.trim().length >= 2)
+const performSearch = () => {
+    const query = searchInput.value.trim()
+
+    if (searchTimeout) {
+        clearTimeout(searchTimeout)
     }
-    return props.learners.filter((learner) => learner.section_id === selectedSection.value)
+
+    if (query.length < 2) {
+        searchResults.value = []
+        loading.value = false
+        return
+    }
+
+    loading.value = true
+    searchTimeout = setTimeout(() => {
+        axios.get(route('student.search', { search: query }))
+            .then((response) => {
+                searchResults.value = response.data
+            })
+            .catch((error) => {
+                console.error(error)
+                searchResults.value = []
+            })
+            .finally(() => {
+                loading.value = false
+            })
+    }, 350)
+}
+const pickSearchResult = (result: any) => {
+    searchInput.value = formatLearnerName(result)
+    searchResults.value = []
+}
+const formatLearnerName = (learner: any) => {
+    const source = learner?.learner ?? learner ?? {}
+    return `${ucWords(source?.last_name)} ${ucWords(source?.first_name)} ${middleInitials(source?.middle_name ?? '')}`.trim().replace(/\s+/g, ' ')
+}
+const formatGradeSection = (learner: any) => {
+    const source = learner?.section ?? learner?.learner?.current_enrollment?.section ?? {}
+    return source?.section_name
+        ? `${parseInt(source?.grade_level_id) + 6} - ${source?.section_name}`
+        : 'N/A'
+}
+const filteredLearners = computed(() => {
+    const bySection = !selectedSection.value
+        ? props.learners
+        : props.learners.filter((learner) => learner.section_id === selectedSection.value)
+    return bySection
 })
 const editLearner = (learner: any) => {
     showModal.value = true
@@ -193,6 +286,25 @@ const updateStudent = () => {
             showModal.value = false
             editMode.value = false
         }
+    })
+}
+const removeEnrollment = (learner: any) => {
+    if (!confirm('Unenroll this student for the current school year?')) {
+        return
+    }
+
+    router.delete(route('enrollment.destroy', { enrollment: learner.id }), {
+        preserveScroll: true,
+        onSuccess: () => {
+            searchInput.value = ''
+            searchResults.value = []
+        },
+        onError: () => {
+            toast.error('Failed to remove enrollment.', {
+                autoClose: 2000,
+                position: toast.POSITION.TOP_RIGHT,
+            })
+        },
     })
 }
 const props = defineProps({

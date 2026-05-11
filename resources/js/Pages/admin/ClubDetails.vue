@@ -230,11 +230,11 @@
                         {{ fullDateTime(learner.pivot.created_at) }}
                     </td>
                     <td v-if="page.props.auth.user?.role === 'admin'" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
-                        <button @click="unlist(learner)" class="bg-red-100 hover:bg-red-200 text-red-100 hover:text-red-600 px-4 py-2 rounded-lg transition-colors duration-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500 hover:text-red-600 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <button @click="unlist(learner)" class="inline-flex items-center gap-2 rounded-lg bg-red-100 px-4 py-2 text-sm font-semibold text-red-700 transition-colors duration-200 hover:bg-red-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m-3-3v3m-7 0h14" />
                             </svg>
-
+                            Delete
                         </button>
                     </td>
                 </tr>
@@ -255,7 +255,22 @@
                         <p class="text-gray-600 text-sm">Search new students to enlist.</p>
                     </div>
                     <div class="flex flex-col gap-2 flex-1">
-                        <input v-model="searchInput" type="text" placeholder="Search by name..." class="flex-grow p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <div class="flex gap-2">
+                            <input
+                                v-model="searchInput"
+                                type="text"
+                                placeholder="Search by name..."
+                                @keyup.enter.prevent="performStudentSearch"
+                                class="flex-grow p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            >
+                            <button
+                                type="button"
+                                @click="performStudentSearch"
+                                class="px-5 py-3 rounded-lg bg-indigo-600 text-white font-semibold shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                                Search
+                            </button>
+                        </div>
                         <!-- <span class="text-sm text-gray-400 ita">Note: Use @gender, @section or @grade to filter by gender, section or grade level.</span> -->
                     </div>
                 </div>
@@ -601,30 +616,38 @@
 
     let timeout = null
     const searchResults = ref([])
-    watch(searchInput, (newValue) => {
-        if(newValue.length > 1) {
-            loading.value = true
-            clearTimeout(timeout)
-            timeout = setTimeout(() => {
-                if (newValue.trim()) {
-                    axios.get(`${route('student.search', { search: newValue })}`)
-                        .then(response => {
-                            searchResults.value = response.data
-                            loading.value = false
-                        })
-                        .catch(error => {
-                            console.error(error)
-                        })
-                } else {
-                    searchResults.value = []
-                }
-                loading.value = false
-            }, 1000) // 1-second debounce
-        }
-        if(newValue.length === 0) {
+    const performStudentSearch = () => {
+        const query = searchInput.value.trim()
+
+        if (query.length <= 1) {
             searchResults.value = []
             loading.value = false
+            return
         }
+
+        loading.value = true
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+            axios.get(route('student.search', { search: query }))
+                .then(response => {
+                    searchResults.value = response.data
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+                .finally(() => {
+                    loading.value = false
+                })
+        }, 1000)
+    }
+    watch(searchInput, (newValue) => {
+        if (newValue.length === 0) {
+            searchResults.value = []
+            loading.value = false
+            return
+        }
+
+        performStudentSearch()
     })
     const sortedClubMembers = computed(() => {
         return [...clubMembers.value].sort((a, b) =>
