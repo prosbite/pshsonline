@@ -52,11 +52,10 @@ class ClubAttendanceController extends Controller
         }
         $previousAttendance = ClubAttendance::with('delinquentsPivot','delinquents')->where('club_register_id', $request->club_register_id)->orderBy('date','desc')->first();
         // dd($previousAttendance);
-        $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
+        $club = ClubRegister::with('learners.currentEnrollment.section.gradeLevel', 'club')->findOrFail($request->club_register_id);
         if ($previousAttendance) {
             $delinquents = AttendanceDelinquence::today($previousAttendance->id);
         }
-        $club = ClubRegister::with('club.learners.currentEnrollment.section')->findOrFail($request->club_register_id);
         return Inertia::render('ClubAttendanceCreate', [
             'club' => $club,
             'delinquents' => $delinquents ?? [],
@@ -343,16 +342,16 @@ class ClubAttendanceController extends Controller
 
     public function certificates(Request $request){
         $schoolYear = SchoolYear::current();
-        abort_unless($schoolYear, 404);
+        abort_unless($schoolYear?->id === 1, 404);
 
-        $club = ClubRegister::with('club', 'club.learners', 'club.learners.currentEnrollment', 'club.learners.currentEnrollment.section', 'club.learners.currentEnrollment.gradeLevel')
+        $club = ClubRegister::with('club', 'learners.currentEnrollment', 'learners.currentEnrollment.section', 'learners.currentEnrollment.gradeLevel')
             ->where('school_year_id', $schoolYear->id)
             ->where('user_id', auth()->id())
             ->findOrFail($request->club_id);
         // Sort the learners collection within the club object
-        $club->club->setRelation(
+        $club->setRelation(
             'learners',
-            $club->club->learners->sortBy('last_name')->values()
+            $club->learners->sortBy('last_name')->values()
         );
 
         $feedbackExists = Feedback::where('club_register_id', $club->id)

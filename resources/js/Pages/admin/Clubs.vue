@@ -61,7 +61,7 @@
                     >
                         <div class="text-sm font-medium">Total Students</div>
                         <div class="text-xl font-bold">
-                            {{ totalStudentsG7G10 }}
+                            {{ totalStudentsG7G9 }}
                         </div>
                     </button>
                 </div>
@@ -78,8 +78,8 @@
                         Not Enlisted Students
                     </h3>
                     <p class="text-gray-600 text-sm">
-                        Students from Grade 7 to Grade 10 who are not listed in
-                        any ALP club
+                        Students from Grade 7 to Grade 9 who are not listed in
+                        any club
                     </p>
                 </div>
             </template>
@@ -179,7 +179,7 @@
             <template #header>
                 <div class="flex flex-col pr-8">
                     <h3 class="text-2xl font-semibold text-gray-800">
-                        Grade 7 to Grade 10 Breakdown
+                        Grade 7 to Grade 9 Breakdown
                     </h3>
                     <p class="text-gray-600 text-sm">
                         Total students enrolled per grade level
@@ -290,7 +290,7 @@
                                 class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right"
                             >
                                 <button
-                                    @click="showClubDetails(club.club.id)"
+                                    @click="showClubDetails(club.id)"
                                     class="px-3 mr-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
                                     <svg
@@ -407,7 +407,7 @@ const props = defineProps({
     registered_clubs: Array,
     sy: Object,
     club_student_count: Number,
-    total_students_g7_g10: Number,
+    total_students_g7_g9: Number,
     grade_level_breakdown: Array,
     unlisted_learners: Array,
 });
@@ -434,23 +434,21 @@ const sortedClubs = computed(() => {
 const enlisted = computed(() => {
     let ecount = 0;
     props.registered_clubs.forEach((club: any) => {
-        if (club.club?.nature?.slice(0, 3).toLowerCase() === "alp") {
-            ecount += parseInt(club.total_members);
-        }
+         ecount += parseInt(club.total_members);
     });
     return ecount;
 });
 
 const unlisted = computed(() => {
-    return totalStudentsG7G10.value - enlisted.value;
+    return totalStudentsG7G9.value - enlisted.value;
 });
 
-const totalStudentsG7G10 = computed(() => {
-    return props.total_students_g7_g10 ?? props.club_student_count ?? 0;
+const totalStudentsG7G9 = computed(() => {
+    return props.total_students_g7_g9 ?? props.club_student_count ?? 0;
 });
 
-const showClubDetails = (club_id: number) => {
-    router.visit(route("admin.club.show", club_id));
+const showClubDetails = (clubRegisterId: number) => {
+    router.visit(route("admin.club.show", clubRegisterId));
 };
 
 const openUnlistedModal = () => {

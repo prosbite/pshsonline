@@ -61,10 +61,6 @@ const updateUser = async () => {
 const storeUser = async () => {
     router.post(route("users.store"), newUser.value, {
         onSuccess: () => {
-            toast.success("User created successfully.", {
-                autoClose: 2000,
-                position: toast.POSITION.TOP_RIGHT,
-            });
             newUser.value = {
                 name: "",
                 email: "",

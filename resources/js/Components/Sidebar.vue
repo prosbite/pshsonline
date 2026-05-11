@@ -194,6 +194,19 @@
                     <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2m14 0v-2a4 4 0 00-3-3.87M16 7a4 4 0 11-8 0 4 4 0 018 0zM20 8a2 2 0 11-4 0 2 2 0 014 0zM20 20v-1.5a2.5 2.5 0 00-1.5-2.3" /></svg>
                     <span class="text-md">Clubs List</span>
                 </Link>
+                <Link v-if="user.role === 'admin'" :href="route('admin.external-links')" :class="{'bg-gray-700': route().current('admin.external-links')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-2.828 2.828a4 4 0 105.656 5.656l1.414-1.414" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.172 13.828a4 4 0 005.656 0l2.828-2.828a4 4 0 10-5.656-5.656l-1.414 1.414" />
+                    </svg>
+                    <span class="text-md">External Links</span>
+                </Link>
+                <Link v-if="user.role === 'admin'" :href="route('admin.club.managers')" :class="{'bg-gray-700': route().current('admin.club.managers')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6 5.87v-2a4 4 0 00-3-3.87m6 5.87v-2a4 4 0 013-3.87M15 11a3 3 0 100-6 3 3 0 000 6zM9 11a3 3 0 100-6 3 3 0 000 6z" />
+                    </svg>
+                    <span class="text-md">Club Managers</span>
+                </Link>
                 <Link v-if="user.role === 'admin'" :href="route('admin.attendance')" :class="{'bg-gray-700': route().current('admin.attendance')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                     <svg class="w-6 h-6 text-white-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -214,7 +227,7 @@
                     </svg>
                     <span class="text-md">Attendance Infractions Summary</span>
                 </Link>
-                <Link v-if="user.role === 'admin'" :href="route('admin.accomplishment.summary')" :class="{'bg-gray-700': route().current('admin.accomplishment.summary')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                <Link v-if="user.role === 'admin'" :href="route('accomplishment.summary')" :class="{'bg-gray-700': route().current('accomplishment.summary')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                     <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h10M4 18h7" />
                     </svg>
@@ -422,6 +435,14 @@
                     <span class="text-md">Attendance Summary</span>
                 </Link>
             </div>
+            <div v-if="isClubReportsGroupOpen && canViewAccomplishmentSummary" class="pl-8 space-y-2 mt-2">
+                <Link :href="route('accomplishment.summary')" :class="{'bg-gray-700': route().current('accomplishment.summary')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h10M4 18h7" />
+                    </svg>
+                    <span class="text-md">Accomplishment Summary</span>
+                </Link>
+            </div>
         </div>
 
         <Link v-if="user.role === 'club adviser'" :href="route('club.certificates', { club_id: clubRegisterId })" :class="{'bg-gray-700': route().current('club.certificates', { club_id: clubRegisterId })}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
@@ -496,6 +517,9 @@ if (page.props.auth.user?.role === 'admin') {
     }
 })
 const clubRegisterId = computed(() => user.value?.club_registers?.[0].id ?? 1)
+const canViewAccomplishmentSummary = computed(() => {
+    return user.value?.role === 'admin' || user.value?.name === 'Chardy C. Fernando'
+})
 const logout = () => {
     router.post(route('logout'))
 }
@@ -517,6 +541,9 @@ onMounted(() => {
     if (route().current('admin.club.list')) {
         isClubManagementGroupOpen.value = true
     }
+    if (route().current('admin.club.managers')) {
+        isClubManagementGroupOpen.value = true
+    }
     if (route().current('admin.attendance.delinquents') ||
         route().current('admin.advisers.attendance') ||
         route().current('admin.advisers.attendance.create') ||
@@ -527,7 +554,7 @@ onMounted(() => {
         route().current('club.accomplishment.quarterly') ||
         route().current('admin.attendance.delinquents') ||
         route().current('admin.attendance.infractions') ||
-        route().current('admin.accomplishment.summary')
+        route().current('accomplishment.summary')
         ) {
         isClubReportsGroupOpen.value = true
     }

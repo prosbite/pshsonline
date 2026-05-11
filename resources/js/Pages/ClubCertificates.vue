@@ -18,7 +18,7 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="student, index in props.club.club.learners" :key="index">
+                <tr v-for="(student, index) in props.club.learners" :key="index">
                     <td class="px-4 py-3 text-sm text-gray-500">{{ index + 1 }}</td>
                     <td class="px-4 py-3 text-sm text-gray-500">
                         <div class="flex flex-col gap-1">
@@ -41,7 +41,7 @@
                         </button>
                     </td>
                 </tr>
-                <tr v-if="props.club.club.learners.length === 0" >
+                <tr v-if="props.club.learners.length === 0" >
                     <td colspan="6" class="px-6 py-4 text-sm text-gray-500">
                         No members yet.
                     </td>

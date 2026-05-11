@@ -14,19 +14,33 @@ class DashboardController extends Controller
     public function index()
     {
         if (auth()->user()?->role === 'club manager') {
+            $schoolYear = SchoolYear::findOrFail(2);
+
             $clubManager = ClubManager::with([
                 'user',
                 'schoolYear',
-                'clubRegister.club.learners.currentEnrollment.section.gradeLevel',
+                'clubRegister.learners.currentEnrollment.section.gradeLevel',
+                'clubRegister.clubOfficers.learner.currentEnrollment.section.gradeLevel',
                 'clubRegister.user',
                 'clubRegister.schoolYear',
+                'clubRegister.club'
             ])
                 ->where('user_id', auth()->id())
-                ->where('school_year_id', SchoolYear::current()->id)
-                ->firstOrFail();
+                ->where('school_year_id', $schoolYear?->id)
+                ->orderByDesc('id')
+                ->first();
+
+            SchoolYear::syncSession($schoolYear);
+
+            if (! $clubManager) {
+                return Inertia::render('ClubManagerRenewalRequired', [
+                    'school_year' => $schoolYear,
+                ]);
+            }
 
             return Inertia::render('ClubManagerDashboard', [
                 'club_manager' => $clubManager,
+                'school_year' => $schoolYear,
             ]);
         }
 

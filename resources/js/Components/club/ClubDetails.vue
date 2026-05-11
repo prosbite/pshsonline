@@ -16,7 +16,7 @@
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             <tr
-              v-for="(learner, index) in props.club.club.learners" :key="index"
+              v-for="(learner, index) in props.club.learners ?? props.club.club?.learners ?? []" :key="index"
             >
                 <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     {{ index + 1 }}
@@ -31,7 +31,7 @@
                     {{ ucWords(learner?.gender) }}
                 </td>
             </tr>
-            <tr v-if="props.club.club.learners.length === 0">
+            <tr v-if="(props.club.learners ?? props.club.club?.learners ?? []).length === 0">
                 <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     No members yet.
                 </td>

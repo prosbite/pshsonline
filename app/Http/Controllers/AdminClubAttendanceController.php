@@ -94,6 +94,9 @@ class AdminClubAttendanceController extends Controller
 
     public function accomplishmentSummary()
     {
+        $user = auth()->user();
+        abort_unless($user && ($user->role === 'admin' || $user->name === 'Chardy C. Fernando'), 403);
+
         $schoolYear = SchoolYear::current();
         abort_unless($schoolYear, 404);
 

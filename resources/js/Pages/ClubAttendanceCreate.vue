@@ -251,7 +251,7 @@ const setClubAttendance = () => {
     clubAttendance.date = null
     clubAttendance.activity = 'Weekly Meeting'
     clubAttendance.members = []
-    props.club?.club?.learners.forEach((learner: any) => {
+    props.club?.learners.forEach((learner: any) => {
         clubAttendance.members.push({
             learner_id: learner.id,
             learner_name: learner.last_name + ', ' + learner.first_name + ' ' + middleInitials(learner.middle_name ?? ''),

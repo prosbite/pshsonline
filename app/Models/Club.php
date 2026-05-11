@@ -41,14 +41,18 @@ class Club extends Model
 
     public function learners()
     {
-        return $this->belongsToMany(Learner::class, 'club_learner', 'club_id', 'learner_id')->withTimestamps();
+        return $this->belongsToMany(Learner::class, 'club_learner', 'club_id', 'learner_id')
+            ->withPivot('club_register_id', 'school_year_id', 'status')
+            ->withTimestamps();
     }
 
     public static function unlistedMembers()
     {
-        return Learner::with('currentClub', 'currentEnrollment.section.gradeLevel')
-            ->whereDoesntHave('currentClub', function (Builder $query) {
-                $query->where('nature', 'like', 'ALP%');
+        return Learner::with('currentClubRegisters.club', 'currentEnrollment.section.gradeLevel')
+            ->whereDoesntHave('currentClubRegisters', function (Builder $query) {
+                $query->whereHas('club', function (Builder $clubQuery) {
+                    $clubQuery->where('nature', 'like', 'ALP%');
+                });
             })
             ->whereHas('currentEnrollment.section.gradeLevel', function ($query) {
                 $query->whereNotIn('grade_level', [11, 12]);
