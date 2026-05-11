@@ -105,19 +105,19 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr v-else>
-                            <td colspan="5" class="text-left px-6 py-4 text-gray-500">
-                                <span class="mr-4">
-                                    Total members: {{ clubMembers.length }}
-                                </span>
-                                <span class="mr-4">
-                                    Male: {{ clubMembers.filter((member: any) => member.gender === 'male').length }}
-                                </span>
-                                <span>
-                                    Female: {{ clubMembers.filter((member: any) => member.gender === 'female').length }}
-                                </span>
-                            </td>
-                        </tr>
+                                <tr v-else>
+                                    <td colspan="5" class="text-left px-6 py-4 text-gray-500">
+                                    <span class="mr-4">
+                                        Total members: {{ allClubMembers.length }}
+                                    </span>
+                                    <span class="mr-4">
+                                        Male: {{ allClubMembers.filter((member: any) => member.gender === 'male').length }}
+                                    </span>
+                                    <span>
+                                        Female: {{ allClubMembers.filter((member: any) => member.gender === 'female').length }}
+                                    </span>
+                                    </td>
+                                </tr>
                     </tbody>
                 </table>
                 <div class="flex justify-end gap-4 w-full py-12 no-print">
@@ -143,15 +143,119 @@
                             >
                                 CSV File
                             </button>
-                            <button
-                                type="button"
-                                @click="generateConsentForms"
-                                class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
-                            >
-                                Consent Form
-                            </button>
+                                <button
+                                    type="button"
+                                    @click="generateConsentForms"
+                                    class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                                >
+                                    Consent Form
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="printAdvisershipLetter"
+                                    class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                                >
+                                    Acceptance Letter of Advisership
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="printRecognitionLetter"
+                                    class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                                >
+                                    Application Letter for Recognition
+                                </button>
                         </div>
                     </div>
+                    <SleekModal :is-visible="showAdvisershipPurposeModal" @close="closeAdvisershipPurposeModal" size="2xl">
+                        <template #header>
+                            <div>
+                                <h3 class="text-2xl font-semibold text-gray-800">Advisership Letter Purpose</h3>
+                                <p class="text-gray-600 text-sm">Type the club's nature, advocacy, and purpose before printing.</p>
+                            </div>
+                        </template>
+                        <template #body>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="advisership-purpose" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Nature, advocacy, and purpose
+                                    </label>
+                                    <textarea
+                                        id="advisership-purpose"
+                                        v-model="advisershipPurposeDraft"
+                                        rows="6"
+                                        class="block w-full rounded-lg border border-gray-300 p-3 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        placeholder="Enter a short statement describing what the club is committed to..."
+                                    />
+                                </div>
+                                <p class="text-sm text-gray-500">
+                                    This statement will appear in the sentence that starts with "The club is an Alternative Learning Program organization committed to..."
+                                </p>
+                            </div>
+                        </template>
+                        <template #footer>
+                            <div class="flex items-center justify-end gap-3">
+                                <button
+                                    type="button"
+                                    @click="closeAdvisershipPurposeModal"
+                                    class="px-5 py-2 rounded-lg bg-gray-200 font-semibold text-gray-800 hover:bg-gray-300 transition-colors duration-200"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="confirmAdvisershipLetter"
+                                    class="px-5 py-2 rounded-lg bg-indigo-600 font-semibold text-white hover:bg-indigo-700 transition-colors duration-200"
+                                >
+                                    Continue to Print
+                                </button>
+                            </div>
+                        </template>
+                    </SleekModal>
+                    <SleekModal :is-visible="showRecognitionPurposeModal" @close="closeRecognitionPurposeModal" size="2xl">
+                        <template #header>
+                            <div>
+                                <h3 class="text-2xl font-semibold text-gray-800">Recognition Letter Purpose</h3>
+                                <p class="text-gray-600 text-sm">Type the club's nature, advocacy, and purpose before printing.</p>
+                            </div>
+                        </template>
+                        <template #body>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="recognition-purpose" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Nature, advocacy, and purpose
+                                    </label>
+                                    <textarea
+                                        id="recognition-purpose"
+                                        v-model="recognitionPurposeDraft"
+                                        rows="6"
+                                        class="block w-full rounded-lg border border-gray-300 p-3 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        placeholder="Enter a short statement describing what the club is committed to..."
+                                    />
+                                </div>
+                                <p class="text-sm text-gray-500">
+                                    This statement will appear in the sentence that starts with "The club is an Alternative Learning Program dedicated to..."
+                                </p>
+                            </div>
+                        </template>
+                        <template #footer>
+                            <div class="flex items-center justify-end gap-3">
+                                <button
+                                    type="button"
+                                    @click="closeRecognitionPurposeModal"
+                                    class="px-5 py-2 rounded-lg bg-gray-200 font-semibold text-gray-800 hover:bg-gray-300 transition-colors duration-200"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="confirmRecognitionLetter"
+                                    class="px-5 py-2 rounded-lg bg-indigo-600 font-semibold text-white hover:bg-indigo-700 transition-colors duration-200"
+                                >
+                                    Continue to Print
+                                </button>
+                            </div>
+                        </template>
+                    </SleekModal>
                     <div class="relative">
                         <button
                             type="button"
@@ -361,8 +465,44 @@
                 />
             </div>
         </Teleport>
+        <Teleport to="body">
+            <div v-if="showAdvisershipPrint" class="advisership-print-shell">
+                <AdvisershipLetter
+                    :club-name="advisershipLetterData.clubName"
+                    :club-purpose="advisershipLetterData.clubPurpose"
+                    :school-year="advisershipLetterData.schoolYear"
+                    :advisership-date="advisershipLetterData.advisershipDate"
+                    :intended-adviser-name="advisershipLetterData.intendedAdviserName"
+                    :intended-adviser-title="advisershipLetterData.intendedAdviserTitle"
+                    :requester-name="advisershipLetterData.requesterName"
+                    :requester-title="advisershipLetterData.requesterTitle"
+                    :accepted-by-name="advisershipLetterData.acceptedByName"
+                    :accepted-by-title="advisershipLetterData.acceptedByTitle"
+                />
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div v-if="showRecognitionPrint" class="recognition-print-shell">
+                <ApplicationLetterForRecognition
+                    :club-name="recognitionLetterData.clubName"
+                    :club-purpose="recognitionLetterData.clubPurpose"
+                    :school-year="recognitionLetterData.schoolYear"
+                    :recognition-date="recognitionLetterData.recognitionDate"
+                    :recipient-name="recognitionLetterData.recipientName"
+                    :recipient-title="recognitionLetterData.recipientTitle"
+                    :contact-details="recognitionLetterData.contactDetails"
+                    :total-members="recognitionLetterData.totalMembers"
+                    :male-members="recognitionLetterData.maleMembers"
+                    :female-members="recognitionLetterData.femaleMembers"
+                    :president-name="recognitionLetterData.presidentName"
+                    :president-title="recognitionLetterData.presidentTitle"
+                    :adviser-name="recognitionLetterData.adviserName"
+                    :adviser-title="recognitionLetterData.adviserTitle"
+                />
+            </div>
+        </Teleport>
     </MainLayout>
-</template>
+    </template>
 
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue'
@@ -371,9 +511,12 @@ import { usePage, router } from '@inertiajs/vue3'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { exportToCSV, fullDate, middleInitials, ucWords } from '@/composables/utilities'
+import SleekModal from '@/Components/SleekModal.vue'
 import ConsentForm from '@/Components/club/forms/ConsentForm.vue'
 import ClubOfficerStanding from '@/Components/club/forms/ClubOfficerStanding.vue'
 import ClubMembersList from '@/Components/club/forms/ClubMembersList.vue'
+import AdvisershipLetter from '@/Components/club/forms/AdvisershipLetter.vue'
+import ApplicationLetterForRecognition from '@/Components/club/forms/ApplicationLetterForRecognition.vue'
 
 const page = usePage()
 const props = defineProps({
@@ -390,6 +533,12 @@ const showConsentPrint = ref(false)
 const showMembersPrint = ref(false)
 const showOfficersPrint = ref(false)
 const showCertificationPrint = ref(false)
+const showAdvisershipPrint = ref(false)
+const showAdvisershipPurposeModal = ref(false)
+const showRecognitionPrint = ref(false)
+const showRecognitionPurposeModal = ref(false)
+const advisershipPurposeDraft = ref('')
+const recognitionPurposeDraft = ref('')
 const maximumMembers = computed(() => {
     return club.value?.learners?.length >= 40
 })
@@ -534,6 +683,11 @@ const sortedClubOfficers = computed(() => {
         )
     })
 })
+const clubPresidentOfficer = computed(() => {
+    return sortedClubOfficers.value.find((officer: any) =>
+        `${officer.position ?? ''}`.toLowerCase().includes('president')
+    ) ?? sortedClubOfficers.value[0] ?? null
+})
 const officersPrintRows = computed(() => {
     return sortedClubOfficers.value.map((officer: any) => ({
         id: officer.id,
@@ -592,6 +746,44 @@ const printClubCertification = async () => {
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
     window.print()
 }
+const printAdvisershipLetter = async () => {
+    showGenerateMenu.value = false
+    showConsentPrint.value = false
+    showMembersPrint.value = false
+    showOfficersPrint.value = false
+    showCertificationPrint.value = false
+    showRecognitionPrint.value = false
+    advisershipPurposeDraft.value = advisershipPurposeDefault.value
+    showAdvisershipPurposeModal.value = true
+}
+
+const confirmAdvisershipLetter = async () => {
+    showAdvisershipPurposeModal.value = false
+    showAdvisershipPrint.value = true
+    await nextTick()
+    document.body.classList.add('advisership-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    window.print()
+}
+const printRecognitionLetter = async () => {
+    showGenerateMenu.value = false
+    showConsentPrint.value = false
+    showMembersPrint.value = false
+    showOfficersPrint.value = false
+    showCertificationPrint.value = false
+    showAdvisershipPrint.value = false
+    recognitionPurposeDraft.value = recognitionPurposeDefault.value
+    showRecognitionPurposeModal.value = true
+}
+
+const confirmRecognitionLetter = async () => {
+    showRecognitionPurposeModal.value = false
+    showRecognitionPrint.value = true
+    await nextTick()
+    document.body.classList.add('recognition-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    window.print()
+}
 const schoolYearLabel = computed(() => {
     const schoolYear = page.props.sy
 
@@ -603,6 +795,12 @@ const schoolYearLabel = computed(() => {
 })
 
 const consentDate = computed(() => fullDate(new Date().toISOString()))
+const advisershipPurposeDefault = computed(() => {
+    return club.value?.club?.description ?? club.value?.club?.type ?? 'promoting leadership, service, and holistic student development'
+})
+const recognitionPurposeDefault = computed(() => {
+    return club.value?.club?.description ?? club.value?.club?.type ?? 'promoting leadership, service, and holistic student development'
+})
 
 const formatMemberName = (learner: any) => {
     const firstName = ucWords(learner?.first_name ?? '')
@@ -647,6 +845,51 @@ const consentFormMembers = computed(() => {
         }
     })
 })
+const advisershipLetterData = computed(() => {
+    const adviserName = club.value?.user?.name ?? page.props.auth.user?.name ?? ''
+    const presidentName = clubPresidentOfficer.value?.learner
+        ? formatMemberName(clubPresidentOfficer.value.learner)
+        : ''
+
+    return {
+        clubName: club.value?.club?.name ?? '',
+        clubPurpose: advisershipPurposeDraft.value.trim() || advisershipPurposeDefault.value,
+        schoolYear: printSchoolYear.value,
+        advisershipDate: fullDate(new Date().toISOString()),
+        intendedAdviserName: adviserName,
+        intendedAdviserTitle: 'Special Science Teacher',
+        requesterName: presidentName,
+        requesterTitle: clubPresidentOfficer.value?.position ?? 'ALP President',
+        acceptedByName: adviserName,
+        acceptedByTitle: 'ALP Adviser',
+    }
+})
+const recognitionLetterData = computed(() => {
+    const adviserName = club.value?.user?.name ?? page.props.auth.user?.name ?? ''
+    const presidentName = clubPresidentOfficer.value?.learner
+        ? formatMemberName(clubPresidentOfficer.value.learner)
+        : ''
+    const totalMembers = allClubMembers.value.length
+    const maleMembers = allClubMembers.value.filter((member: any) => `${member.gender ?? ''}`.toLowerCase() === 'male').length
+    const femaleMembers = allClubMembers.value.filter((member: any) => `${member.gender ?? ''}`.toLowerCase() === 'female').length
+
+    return {
+        clubName: club.value?.club?.name ?? '',
+        clubPurpose: recognitionPurposeDraft.value.trim() || recognitionPurposeDefault.value,
+        schoolYear: printSchoolYear.value,
+        recognitionDate: fullDate(new Date().toISOString()),
+        recipientName: 'GRETCHEN MAE B. EMPUESTO, PhD',
+        recipientTitle: 'ALP Coordinator',
+        contactDetails: adviserName,
+        totalMembers,
+        maleMembers,
+        femaleMembers,
+        presidentName,
+        presidentTitle: clubPresidentOfficer.value?.position ?? 'ALP President',
+        adviserName,
+        adviserTitle: 'ALP Adviser',
+    }
+})
 
 const toggleGenerateMenu = () => {
     showGenerateMenu.value = !showGenerateMenu.value
@@ -682,15 +925,39 @@ const closeConsentPrint = () => {
     document.body.classList.remove('consent-print-mode')
 }
 
+const closeAdvisershipPrint = () => {
+    showAdvisershipPrint.value = false
+    document.body.classList.remove('advisership-print-mode')
+}
+
+const closeAdvisershipPurposeModal = () => {
+    showAdvisershipPurposeModal.value = false
+}
+
+const closeRecognitionPrint = () => {
+    showRecognitionPrint.value = false
+    document.body.classList.remove('recognition-print-mode')
+}
+
+const closeRecognitionPurposeModal = () => {
+    showRecognitionPurposeModal.value = false
+}
+
 const handleAfterPrint = () => {
     closeConsentPrint()
+    closeAdvisershipPrint()
+    closeAdvisershipPurposeModal()
+    closeRecognitionPrint()
+    closeRecognitionPurposeModal()
     showMembersPrint.value = false
     showOfficersPrint.value = false
     showCertificationPrint.value = false
     showPrintMenu.value = false
+    showGenerateMenu.value = false
     document.body.classList.remove('club-members-print-mode')
     document.body.classList.remove('officers-print-mode')
     document.body.classList.remove('certification-print-mode')
+    document.body.classList.remove('recognition-print-mode')
 }
 
 onMounted(() => {
@@ -771,6 +1038,22 @@ header {
     body.certification-print-mode .certification-print-shell {
         display: block !important;
     }
+
+    body.advisership-print-mode > *:not(.advisership-print-shell) {
+        display: none !important;
+    }
+
+    body.advisership-print-mode .advisership-print-shell {
+        display: block !important;
+    }
+
+    body.recognition-print-mode > *:not(.recognition-print-shell) {
+        display: none !important;
+    }
+
+    body.recognition-print-mode .recognition-print-shell {
+        display: block !important;
+    }
 }
 
 .club-members-print-shell {
@@ -786,6 +1069,14 @@ header {
 }
 
 .consent-print-shell {
+    display: none;
+}
+
+.advisership-print-shell {
+    display: none;
+}
+
+.recognition-print-shell {
     display: none;
 }
 </style>
