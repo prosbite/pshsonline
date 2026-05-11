@@ -342,7 +342,7 @@ class ClubAttendanceController extends Controller
 
     public function certificates(Request $request){
         $schoolYear = SchoolYear::current();
-        abort_unless($schoolYear, 404);
+        abort_unless($schoolYear?->id === 1, 404);
 
         $club = ClubRegister::with('club', 'learners.currentEnrollment', 'learners.currentEnrollment.section', 'learners.currentEnrollment.gradeLevel')
             ->where('school_year_id', $schoolYear->id)

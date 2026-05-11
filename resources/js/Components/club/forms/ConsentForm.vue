@@ -13,70 +13,69 @@
           <p class="uppercase">PARENT CONSENT FORM</p>
         </div>
 
-        <div class="consent-body flex flex-col">
-        <!-- Details -->
-        <div class="mt-8 space-y-1">
-          <div class="flex items-end gap-2">
-            <span>DATE:</span>
-            <span class="inline-block min-w-36 border-b border-black px-2 text-center align-middle">{{ consentDate }}</span>
+        <div class="consent-body flex flex-1 flex-col">
+          <!-- Details -->
+          <div class="mt-8 space-y-1">
+            <div class="flex items-end gap-2">
+              <span>DATE:</span>
+              <span class="inline-block min-w-36 border-b border-black px-2 text-center align-middle">{{ consentDate }}</span>
+            </div>
+
+            <div class="flex items-end gap-2">
+              <span>NAME OF STUDENT:</span>
+              <span class="inline-block min-w-44 border-b border-black px-2 text-center align-middle">{{ studentName }}</span>
+            </div>
+
+            <div class="flex items-end gap-2">
+              <span>GRADE AND SECTION:</span>
+              <span class="inline-block min-w-40 border-b border-black px-2 text-center align-middle">Grade {{ gradeSection }}</span>
+            </div>
+
+            <div class="flex items-end gap-2">
+              <span>TITLE OF ACTIVITY:</span>
+              <span class="inline-block min-w-40 border-b border-black px-2 text-center align-middle">{{ activityTitle }}</span>
+            </div>
+
+            <div class="flex items-end gap-2">
+              <span>VENUE:</span>
+              <span class="inline-block min-w-48 border-b border-black px-2 text-center align-middle">{{ venue }}</span>
+            </div>
+
+            <div class="flex items-end gap-2">
+              <span>SCHEDULE:</span>
+              <span class="inline-block min-w-44 border-b border-black px-2 text-center align-middle">{{ schedule }}</span>
+            </div>
           </div>
 
-          <div class="flex items-end gap-2">
-            <span>NAME OF STUDENT:</span>
-            <span class="inline-block min-w-44 border-b border-black px-2 text-center align-middle">{{ studentName }}</span>
+          <!-- Body -->
+          <div class="mt-10 text-justify indent-10 leading-relaxed">
+            <p>
+              This is to attest that I voluntarily allow my child to participate in all
+              activities, meetings, and learning experiences under
+              <span class="font-bold underline">{{ clubName }}</span>
+              for School Year <span class="underline">{{ schoolYear }}</span>
+            </p>
+
+            <p class="mt-8">
+              I acknowledge that each Alternative Learning Program supports different
+              learner needs and involves varied learning strategies such as life-skills,
+              project and community-based learning, supervised instructional and
+              developmental activities.
+            </p>
+
+            <p class="mt-8">
+              I authorize the school to manage, monitor, and communicate with me
+              regarding any concerns or adjustments needed in relation to the program. I
+              affirm that I am informed about the nature of the ALP and understand its
+              purpose and objective.
+            </p>
+
+            <p class="mt-8">
+              I also understand that participation in ALP may include activities inside
+              or outside the classroom/school under the supervision of an authorized
+              school personnel.
+            </p>
           </div>
-
-          <div class="flex items-end gap-2">
-            <span>GRADE AND SECTION:</span>
-            <span class="inline-block min-w-40 border-b border-black px-2 text-center align-middle">Grade {{ gradeSection }}</span>
-          </div>
-
-          <div class="flex items-end gap-2">
-            <span>TITLE OF ACTIVITY:</span>
-            <span class="inline-block min-w-40 border-b border-black px-2 text-center align-middle">{{ activityTitle }}</span>
-          </div>
-
-          <div class="flex items-end gap-2">
-            <span>VENUE:</span>
-            <span class="inline-block min-w-48 border-b border-black px-2 text-center align-middle">{{ venue }}</span>
-          </div>
-
-          <div class="flex items-end gap-2">
-            <span>SCHEDULE:</span>
-            <span class="inline-block min-w-44 border-b border-black px-2 text-center align-middle">{{ schedule }}</span>
-          </div>
-        </div>
-
-        <!-- Body -->
-        <div class="mt-10 text-justify indent-10 leading-relaxed">
-          <p>
-            This is to attest that I voluntarily allow my child to participate in all
-            activities, meetings, and learning experiences under
-            <span class="font-bold underline">{{ clubName }}</span>
-            for School Year
-            <span class="inline-block min-w-24 border-b border-black px-2 text-center align-middle">{{ schoolYear }}</span>.
-          </p>
-
-          <p class="mt-8">
-            I acknowledge that each Alternative Learning Program supports different
-            learner needs and involves varied learning strategies such as life-skills,
-            project and community-based learning, supervised instructional and
-            developmental activities.
-          </p>
-
-          <p class="mt-8">
-            I authorize the school to manage, monitor, and communicate with me
-            regarding any concerns or adjustments needed in relation to the program. I
-            affirm that I am informed about the nature of the ALP and understand its
-            purpose and objective.
-          </p>
-
-          <p class="mt-8">
-                I also understand that participation in ALP may include activities inside
-                or outside the classroom/school under the supervision of an authorized
-                school personnel.
-          </p>
-        </div>
 
           <!-- Signature Blocks -->
           <div class="mt-auto pt-8">
@@ -93,8 +92,8 @@
               </div>
 
               <div class="mt-1">
-                <span>Date:</span>
-                <span class="inline-block min-w-24 border-b border-black px-2 text-center align-middle"></span>
+                <span>Date:_____________</span>
+                <!-- <span class="inline-block min-w-24 border-b border-black px-2 text-center align-middle"></span> -->
               </div>
             </div>
 
@@ -107,8 +106,8 @@
                 <p>ALP Adviser</p>
 
                 <div class="mt-1">
-                  <span>Date:</span>
-                  <span class="inline-block min-w-24 border-b border-black px-2 text-center align-middle"></span>
+                  <span>Date:_____________</span>
+                  <!-- <span class="inline-block min-w-24 border-b border-black px-2 text-center align-middle"></span> -->
                 </div>
               </div>
             </div>
@@ -182,6 +181,8 @@ const props = defineProps({
 .consent-sheet {
   min-height: 11in;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .consent-body {
@@ -197,14 +198,6 @@ const props = defineProps({
   body {
     margin: 0;
     padding: 0;
-  }
-
-  :global(body > *:not(.consent-print-shell)) {
-    display: none !important;
-  }
-
-  :global(.consent-print-shell) {
-    display: block !important;
   }
 }
 </style>

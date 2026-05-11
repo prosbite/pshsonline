@@ -3,63 +3,59 @@
         <div class="page">
             <h1 class="text-4xl font-extrabold text-gray-900 mb-8">{{ club?.club?.name }}</h1>
 
-            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
+            <!-- <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
                 <div class="flex flex-col md:flex-row gap-4">
                     <div class="flex flex-col gap-2 flex-1">
                         <input v-model="searchInput" type="text" placeholder="Search by name, @gender, @section or @grade" class="flex-grow p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <!-- <span class="text-sm text-gray-400 ita">Note: Use @gender, @section or @grade to filter by gender, section or grade level.</span> -->
                     </div>
                     <select v-if="clubs?.length > 1" v-model="selectedClub" class="p-3 border border-gray-300 w-56 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <!-- <option disabled value="">Select Club</option> -->
                         <option v-for="club in clubs" :key="club.id" :value="club.id">{{ club.club.name }}</option>
                     </select>
-                    <!-- <select class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="">Filter by Role</option>
-                        <option value="leader">Leader</option>
-                        <option value="member">Member</option>
-                    </select>
-                    <select class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="">Filter by Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select> -->
+
                 </div>
                 <span v-if="maximumMembers" class="text-red-500">Maximum number of members reached.</span>
-                <!-- <div v-if="searchResults.length > 0" class="flex flex-col gap-2 py-4">
-                    <table class="w-full">
-                        <tbody>
-                            <tr v-for="(learner,index) in searchResults" :key="index" class="border-b hover:bg-gray-100">
-                                <td class="py-2">{{learner.last_name}}, {{learner.first_name}}</td>
-                                <td class="py-2">{{learner.current_enrollment.section.grade_level_id + 6 + ' - ' + learner.current_enrollment.section.section_name}}</td>
-                                <td class="py-2 text-gray-500">{{ joinedClubs(learner) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                    :class="{'bg-green-100 text-green-800': learner.gender === 'male', 'bg-red-100 text-red-800': learner.gender === 'female'}"
-                                    >{{ ucWords(learner.gender) }}</span>
-                                </td>
-                                <td>
-                                    <div class="flex w-full justify-end">
-                                        <button v-if="!hasClub(learner)" @click="addNewMember(learner)" class="px-2 py-1 bg-indigo-600 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">+ Add</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> -->
-                <!-- <div v-if="searchResults.length === 0 && searchInput.length > 1" class="py-4">
-                    <span class="text-left text-gray-500">No results found.</span>
-                </div> -->
+
                 <div class="flex flex-wrap gap-4">
-                    <!-- <button @click="addNewMember" v-if="checkedLearners.length > 0" class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">Add New Member</button> -->
-                    <!-- <button v-else class="px-5 py-2 bg-gray-300 text-white font-semibold rounded-lg shadow-md">Add New Member</button> -->
-                    <!-- <button class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-colors duration-200">Bulk Import</button> -->
-                    <!-- <button class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 transition-colors duration-200">Assign from School DB</button> -->
+
                 </div>
-            </div>
-            <!-- <div v-else class="bg-white p-6 rounded-xl shadow-md border border-gray-200 mb-6">
-                <span class="text-left text-gray-500">Maximum number of members reached.</span>
             </div> -->
+            <div v-if="sortedClubOfficers.length > 0" class="bg-white rounded-xl shadow-md border border-gray-200 overflow-x-auto p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-900">Club Officers</h2>
+                        <p class="text-sm text-gray-500">Assigned officers for the selected club.</p>
+                    </div>
+                    <span class="rounded-full bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700">
+                        {{ sortedClubOfficers.length }} officers
+                    </span>
+                </div>
+
+                <table class="min-w-full divide-y divide-gray-200 border border-collapse">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">#</th> -->
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Position</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Grade/Section</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr v-for="(officer, index) in sortedClubOfficers" :key="officer.id">
+                            <!-- <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ index + 1 }}</td> -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ formatMemberName(officer.learner ?? officer) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <span class="inline-flex rounded-full bg-indigo-100 px-2 py-1 text-xs font-semibold text-indigo-700">
+                                    {{ officer.position }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ parseInt(officer.learner?.current_enrollment?.section?.grade_level_id) + 6 + ' - ' + officer.learner?.current_enrollment?.section?.section_name }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-x-auto p-6">
                 <table class="min-w-full divide-y divide-gray-200 border border-collapse">
                     <thead class="bg-gray-50">
@@ -109,19 +105,19 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr v-else>
-                            <td colspan="5" class="text-left px-6 py-4 text-gray-500">
-                                <span class="mr-4">
-                                    Total members: {{ clubMembers.length }}
-                                </span>
-                                <span class="mr-4">
-                                    Male: {{ clubMembers.filter((member: any) => member.gender === 'male').length }}
-                                </span>
-                                <span>
-                                    Female: {{ clubMembers.filter((member: any) => member.gender === 'female').length }}
-                                </span>
-                            </td>
-                        </tr>
+                                <tr v-else>
+                                    <td colspan="5" class="text-left px-6 py-4 text-gray-500">
+                                    <span class="mr-4">
+                                        Total members: {{ allClubMembers.length }}
+                                    </span>
+                                    <span class="mr-4">
+                                        Male: {{ allClubMembers.filter((member: any) => member.gender === 'male').length }}
+                                    </span>
+                                    <span>
+                                        Female: {{ allClubMembers.filter((member: any) => member.gender === 'female').length }}
+                                    </span>
+                                    </td>
+                                </tr>
                     </tbody>
                 </table>
                 <div class="flex justify-end gap-4 w-full py-12 no-print">
@@ -138,7 +134,7 @@
                         </button>
                         <div
                             v-if="showGenerateMenu"
-                            class="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg overflow-hidden z-20"
+                            class="absolute right-0 bottom-full mb-2 w-48 rounded-lg border border-gray-200 bg-white shadow-lg overflow-hidden z-20"
                         >
                             <button
                                 type="button"
@@ -147,157 +143,310 @@
                             >
                                 CSV File
                             </button>
+                                <button
+                                    type="button"
+                                    @click="generateConsentForms"
+                                    class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                                >
+                                    Consent Form
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="printAdvisershipLetter"
+                                    class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                                >
+                                    Acceptance Letter of Advisership
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="printRecognitionLetter"
+                                    class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                                >
+                                    Application Letter for Recognition
+                                </button>
+                        </div>
+                    </div>
+                    <SleekModal :is-visible="showAdvisershipPurposeModal" @close="closeAdvisershipPurposeModal" size="2xl">
+                        <template #header>
+                            <div>
+                                <h3 class="text-2xl font-semibold text-gray-800">Advisership Letter Purpose</h3>
+                                <p class="text-gray-600 text-sm">Type the club's nature, advocacy, and purpose before printing.</p>
+                            </div>
+                        </template>
+                        <template #body>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="advisership-purpose" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Nature, advocacy, and purpose
+                                    </label>
+                                    <textarea
+                                        id="advisership-purpose"
+                                        v-model="advisershipPurposeDraft"
+                                        rows="6"
+                                        class="block w-full rounded-lg border border-gray-300 p-3 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        placeholder="Enter a short statement describing what the club is committed to..."
+                                    />
+                                </div>
+                                <p class="text-sm text-gray-500">
+                                    This statement will appear in the sentence that starts with "The club is an Alternative Learning Program organization committed to..."
+                                </p>
+                            </div>
+                        </template>
+                        <template #footer>
+                            <div class="flex items-center justify-end gap-3">
+                                <button
+                                    type="button"
+                                    @click="closeAdvisershipPurposeModal"
+                                    class="px-5 py-2 rounded-lg bg-gray-200 font-semibold text-gray-800 hover:bg-gray-300 transition-colors duration-200"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="confirmAdvisershipLetter"
+                                    class="px-5 py-2 rounded-lg bg-indigo-600 font-semibold text-white hover:bg-indigo-700 transition-colors duration-200"
+                                >
+                                    Continue to Print
+                                </button>
+                            </div>
+                        </template>
+                    </SleekModal>
+                    <SleekModal :is-visible="showRecognitionPurposeModal" @close="closeRecognitionPurposeModal" size="2xl">
+                        <template #header>
+                            <div>
+                                <h3 class="text-2xl font-semibold text-gray-800">Recognition Letter Purpose</h3>
+                                <p class="text-gray-600 text-sm">Type the club's nature, advocacy, and purpose before printing.</p>
+                            </div>
+                        </template>
+                        <template #body>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="recognition-purpose" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Nature, advocacy, and purpose
+                                    </label>
+                                    <textarea
+                                        id="recognition-purpose"
+                                        v-model="recognitionPurposeDraft"
+                                        rows="6"
+                                        class="block w-full rounded-lg border border-gray-300 p-3 text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        placeholder="Enter a short statement describing what the club is committed to..."
+                                    />
+                                </div>
+                                <p class="text-sm text-gray-500">
+                                    This statement will appear in the sentence that starts with "The club is an Alternative Learning Program dedicated to..."
+                                </p>
+                            </div>
+                        </template>
+                        <template #footer>
+                            <div class="flex items-center justify-end gap-3">
+                                <button
+                                    type="button"
+                                    @click="closeRecognitionPurposeModal"
+                                    class="px-5 py-2 rounded-lg bg-gray-200 font-semibold text-gray-800 hover:bg-gray-300 transition-colors duration-200"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="confirmRecognitionLetter"
+                                    class="px-5 py-2 rounded-lg bg-indigo-600 font-semibold text-white hover:bg-indigo-700 transition-colors duration-200"
+                                >
+                                    Continue to Print
+                                </button>
+                            </div>
+                        </template>
+                    </SleekModal>
+                    <div class="relative">
+                        <button
+                            type="button"
+                            @click="togglePrintMenu"
+                            class="inline-flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                            Print
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                        <div
+                            v-if="showPrintMenu"
+                            class="absolute right-0 bottom-full mb-2 w-56 rounded-lg border border-gray-200 bg-white shadow-lg overflow-hidden z-20"
+                        >
                             <button
                                 type="button"
-                                @click="generateConsentForms"
+                                @click="printClubMembers"
                                 class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
                             >
-                                Consent Form
+                                Class List
+                            </button>
+                            <button
+                                v-if="sortedClubOfficers.length > 0"
+                                type="button"
+                                @click="printClubOfficers"
+                                class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                            >
+                                Officers List
+                            </button>
+                            <button
+                                v-if="sortedClubOfficers.length > 0"
+                                type="button"
+                                @click="printClubCertification"
+                                class="w-full px-4 py-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors duration-150"
+                            >
+                                Officers Certification
                             </button>
                         </div>
                     </div>
-                    <button @click.prevent="printClubMembers" class="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-indigo-50 font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="w-5 h-5 text-white dark:text-white"
-                        >
-                            <!-- Printer body -->
-                            <path d="M6 9V2h12v7" />
-                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                            <rect x="6" y="14" width="12" height="8" rx="2" ry="2" />
-                            <!-- Paper coming out -->
-                            <line x1="8" y1="18" x2="8" y2="22" />
-                            <line x1="16" y1="18" x2="16" y2="22" />
-                        </svg>
-                        Print
-                    </button>
                 </div>
             </div>
         </div>
         <Teleport to="body">
-            <table class="to-print w-full">
-                <thead>
-                    <tr>
-                        <th id="header" class="flex items-center justify-between mb-6">
-                            <!-- <div class="flex gap-2 items-center">
-                                <img src="/img/pisaylogo.png" class="h-[70px]" alt="Pisay Logo">
-                                <div class="flex flex-col gap-0">
-                                    <span class="text-left text-xs">
-                                        Republic of the Philippines
-                                    </span>
-                                    <b class="text-left text-sm font-bold leading-snug">
-                                        PHILIPPINE SCIENCE HIGH SCHOOL
-                                    </b>
-                                    <span class="text-left text-xs leading-snug">
-                                        CARAGA REGION CAMPUS IN BUTUAN CITY
-                                    </span>
-                                    <b class="text-left text-xs font-bold leading-snug">
-                                        DEPARTMENT OF SCIENCE AND TECHNOLOGY
-                                    </b>
-                                </div>
-                            </div> -->
-                            <img src="/img/pisay_header_left.png" class="h-[70px]" alt="Pisay Logo">
-                            <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div id="printContent" class="w-full flex flex-col bg-white">
-                                <div class="flex-col w-full font-bold text-lg mb-6">
-                                    <span class="text-center block uppercase">
-                                        {{ club?.club?.name }}
-                                    </span>
-                                    <span class="text-center block uppercase mb-4">
-                                        SY {{ page.props.sy?.year_start }} - {{ page.props.sy?.year_end }}
-                                    </span>
-                                    <span class="text-center block uppercase">
-                                        List of Club Members
-                                    </span>
-                                </div>
+            <div v-if="showMembersPrint" class="club-members-print-shell">
+                <ClubMembersList
+                    v-if="useNewMembersListTemplate"
+                    :members="sortedAllClubMembers"
+                    :club-name="club?.club?.name ?? ''"
+                    :school-year="printSchoolYear"
+                    :adviser-name="page.props.auth.user?.name ?? ''"
+                    :minimum-rows="0"
+                    campus-name="Caraga Region Campus in Butuan City"
+                />
 
-                                <table class="w-full border border-black border-collapse mb-10">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th></th>
-                                            <th class="flex flex-col text-lg" colspan="2">
-                                                <span clas="block">
-                                                    Name
+                <table v-else class="to-print w-full">
+                    <thead>
+                        <tr>
+                            <th id="header" class="flex items-center justify-between mb-6">
+                                <img src="/img/pisay_header_left.png" class="h-[70px]" alt="Pisay Logo">
+                                <img src="/img/bplogo.png" class="h-[70px]" alt="Pisay Logo">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div id="printContent" class="w-full flex flex-col bg-white">
+                                    <div class="flex-col w-full font-bold text-lg mb-6">
+                                        <span class="text-center block uppercase">
+                                            {{ club?.club?.name }}
+                                        </span>
+                                        <span class="text-center block uppercase mb-4">
+                                            SY {{ page.props.sy?.year_start }} - {{ page.props.sy?.year_end }}
+                                        </span>
+                                        <span class="text-center block uppercase">
+                                            List of Club Members
+                                        </span>
+                                    </div>
+
+                                    <table class="w-full border border-black border-collapse mb-10">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th></th>
+                                                <th class="flex flex-col text-lg" colspan="2">
+                                                    <span clas="block">
+                                                        Name
+                                                    </span>
+                                                </th>
+                                                <th class="border border-black">
+                                                    Grade Level
+                                                </th>
+                                                <th class="border border-black">
+                                                    Section
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="learner,index in sortedAllClubMembers" :key="learner.id">
+                                                <td class="border border-black px-0 py-1 text-center">
+                                                    {{ index + 1 }}
+                                                </td>
+                                                <td class="border border-black px-2 py-1 text-left">
+                                                    {{ formatMemberName(learner) }}
+                                                </td>
+                                                <td class="border border-black px-2 py-1 text-center">
+                                                    {{ parseInt(learner.current_enrollment?.section.grade_level_id) + 6 }}
+                                                </td>
+                                                <td class="border border-black px-2 py-1 text-center uppercase">
+                                                    {{ learner.current_enrollment?.section.section_name }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="flex flex-col gap-6 mt-2" :class="{ 'page-break-before': breakpoint }">
+                                        <div class="flex justify-start">
+                                            <div class="flex flex-col flex-1">
+                                                <span class="mb-6 text-sm">Prepared by:</span>
+                                                <span class="font-bold underline text-md uppercase">
+                                                    {{ page.props.auth.user.name }}
                                                 </span>
-                                            </th>
-                                            <th class="border border-black">
-                                                Grade Level
-                                            </th>
-                                            <th class="border border-black">
-                                                Section
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="learner,index in sortedMembers">
-                                            <td class="border border-black px-0 py-1 text-center">
-                                                {{ index + 1 }}
-                                            </td>
-                                            <td class="border border-black px-2 py-1 text-left">
-                                                {{ formatMemberName(learner) }}
-                                            </td>
-                                            <td class="border border-black px-2 py-1 text-center">
-                                                {{ parseInt(learner.current_enrollment?.section.grade_level_id) + 6 }}
-                                            </td>
-                                            <td class="border border-black px-2 py-1 text-center uppercase">
-                                                {{ learner.current_enrollment?.section.section_name }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                <span class="text-md">
+                                                    {{ club?.club?.name }} Adviser
+                                                </span>
+                                                <span class="text-sm">Date Printed: <span id="printed-date">{{ new Date().toLocaleString() }}</span></span>
+                                            </div>
 
-                                <div class="flex flex-col gap-6 mt-2" :class="{ 'page-break-before': breakpoint }">
-                                    <div class="flex justify-start">
-                                        <div class="flex flex-col flex-1">
-                                            <span class="mb-6 text-sm">Prepared by:</span>
-                                            <span class="font-bold underline text-md uppercase">
-                                                {{ page.props.auth.user.name }}
-                                            </span>
-                                            <span class="text-md">
-                                                {{ club?.club?.name }} Adviser
-                                            </span>
-                                            <span class="text-sm">Date Printed: <span id="printed-date">{{ new Date().toLocaleString() }}</span></span>
+                                            <div class="flex flex-col flex-1">
+                                                <span class="mb-6 text-sm">Reviewed by:</span>
+                                                <span class="font-bold underline text-md">
+                                                    GRETCHEN MAE B. EMPUESTO, PhD
+                                                </span>
+                                                <span class="text-md">
+                                                    ALP Coordinator
+                                                </span>
+                                            </div>
                                         </div>
-
-                                        <div class="flex flex-col flex-1">
-                                            <span class="mb-6 text-sm">Reviewed by:</span>
-                                            <span class="font-bold underline text-md">
-                                                GRETCHEN MAE B. EMPUESTO, PhD
-                                            </span>
-                                            <span class="text-md">
-                                                ALP Coordinator
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <div class="flex flex-col">
-                                            <span class="mb-6 text-sm">Approved by:</span>
-                                            <span class="font-bold underline text-md uppercase">
-                                                JOHN RIDAN D. DECHUSA
-                                            </span>
-                                            <span class="text-md">
-                                                Assistant CID Chief for Student Affairs
-                                            </span>
+                                        <div class="flex justify-between">
+                                            <div class="flex flex-col">
+                                                <span class="mb-6 text-sm">Approved by:</span>
+                                                <span class="font-bold underline text-md uppercase">
+                                                    JOHN RIDAN D. DECHUSA
+                                                </span>
+                                                <span class="text-md">
+                                                    Assistant CID Chief for Student Affairs
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div v-if="showOfficersPrint" class="officers-print-shell">
+                <ClubMembersList
+                    :members="officersPrintRows"
+                    :club-name="club?.club?.name ?? ''"
+                    :school-year="printSchoolYear"
+                    :adviser-name="page.props.auth.user?.name ?? ''"
+                    campus-name="Caraga Region Campus in Butuan City"
+                    document-title="OFFICIAL LIST OF CLUB OFFICERS"
+                    program-label="ALP"
+                    adviser-label="Club Adviser"
+                    right-column-label="Position"
+                    :minimum-rows="0"
+                    :show-row-numbers="false"
+                    footer-code="PSHS-00-F-DSA-27-Ver02-Rev0 05/08/2026"
+                />
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div v-if="showCertificationPrint" class="certification-print-shell">
+                <ClubOfficerStanding
+                    :officers="certificationOfficers"
+                    :club-name="club?.club?.name ?? ''"
+                    :school-year="printSchoolYear"
+                    campus-name="Caraga Region Campus in Butuan City"
+                    document-title="CERTIFICATION OF STUDENT RECORD"
+                    program-name="ALTERNATIVE LEARNING PROGRAM (ALP)"
+                    intro-text="This is to certify that the following ALP student officers are in good academic standing and fit to lead the Alternative Learning Program "
+                    signatory-name="MARIE FE D. MALLONGA"
+                    signatory-title="Campus Registrar"
+                    footer-code="PSHS-00-F-DSA-28-Ver02-Rev0 05/08/2026"
+                    :minimum-rows="2"
+                />
+            </div>
         </Teleport>
         <Teleport to="body">
             <div v-if="showConsentPrint" class="consent-print-shell">
@@ -316,8 +465,44 @@
                 />
             </div>
         </Teleport>
+        <Teleport to="body">
+            <div v-if="showAdvisershipPrint" class="advisership-print-shell">
+                <AdvisershipLetter
+                    :club-name="advisershipLetterData.clubName"
+                    :club-purpose="advisershipLetterData.clubPurpose"
+                    :school-year="advisershipLetterData.schoolYear"
+                    :advisership-date="advisershipLetterData.advisershipDate"
+                    :intended-adviser-name="advisershipLetterData.intendedAdviserName"
+                    :intended-adviser-title="advisershipLetterData.intendedAdviserTitle"
+                    :requester-name="advisershipLetterData.requesterName"
+                    :requester-title="advisershipLetterData.requesterTitle"
+                    :accepted-by-name="advisershipLetterData.acceptedByName"
+                    :accepted-by-title="advisershipLetterData.acceptedByTitle"
+                />
+            </div>
+        </Teleport>
+        <Teleport to="body">
+            <div v-if="showRecognitionPrint" class="recognition-print-shell">
+                <ApplicationLetterForRecognition
+                    :club-name="recognitionLetterData.clubName"
+                    :club-purpose="recognitionLetterData.clubPurpose"
+                    :school-year="recognitionLetterData.schoolYear"
+                    :recognition-date="recognitionLetterData.recognitionDate"
+                    :recipient-name="recognitionLetterData.recipientName"
+                    :recipient-title="recognitionLetterData.recipientTitle"
+                    :contact-details="recognitionLetterData.contactDetails"
+                    :total-members="recognitionLetterData.totalMembers"
+                    :male-members="recognitionLetterData.maleMembers"
+                    :female-members="recognitionLetterData.femaleMembers"
+                    :president-name="recognitionLetterData.presidentName"
+                    :president-title="recognitionLetterData.presidentTitle"
+                    :adviser-name="recognitionLetterData.adviserName"
+                    :adviser-title="recognitionLetterData.adviserTitle"
+                />
+            </div>
+        </Teleport>
     </MainLayout>
-</template>
+    </template>
 
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue'
@@ -326,7 +511,12 @@ import { usePage, router } from '@inertiajs/vue3'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { exportToCSV, fullDate, middleInitials, ucWords } from '@/composables/utilities'
+import SleekModal from '@/Components/SleekModal.vue'
 import ConsentForm from '@/Components/club/forms/ConsentForm.vue'
+import ClubOfficerStanding from '@/Components/club/forms/ClubOfficerStanding.vue'
+import ClubMembersList from '@/Components/club/forms/ClubMembersList.vue'
+import AdvisershipLetter from '@/Components/club/forms/AdvisershipLetter.vue'
+import ApplicationLetterForRecognition from '@/Components/club/forms/ApplicationLetterForRecognition.vue'
 
 const page = usePage()
 const props = defineProps({
@@ -338,28 +528,26 @@ const props = defineProps({
 })
 const printHeight = ref(0)
 const showGenerateMenu = ref(false)
+const showPrintMenu = ref(false)
 const showConsentPrint = ref(false)
+const showMembersPrint = ref(false)
+const showOfficersPrint = ref(false)
+const showCertificationPrint = ref(false)
+const showAdvisershipPrint = ref(false)
+const showAdvisershipPurposeModal = ref(false)
+const showRecognitionPrint = ref(false)
+const showRecognitionPurposeModal = ref(false)
+const advisershipPurposeDraft = ref('')
+const recognitionPurposeDraft = ref('')
 const maximumMembers = computed(() => {
     return club.value?.learners?.length >= 40
 })
 const selectedClub = ref({})
-const hasClub = (learner: any) => {
-    let hasClub = false
-    if(club.value?.club?.nature.slice(0, 3).toLowerCase() === 'alp') {
-        learner.current_club?.map((clb: any) => {
-            if(clb.nature.slice(0, 3).toLowerCase() === club.value?.club?.nature.slice(0, 3).toLowerCase()) {
-                hasClub = true
-            }
-        })
-    } else {
-        learner.current_club?.map((clb: any) => {
-            if(clb.id === club.value?.club?.id) {
-                hasClub = true
-            }
-        })
+const printSchoolYear = computed(() => club.value?.schoolYear ?? page.props.sy ?? null)
+const useNewMembersListTemplate = computed(() => Number(printSchoolYear.value?.year_start ?? 0) >= 2026)
+    const hasClub = (learner: any) => {
+        return (learner.current_club?.length ?? 0) > 0
     }
-    return hasClub
-}
 const joinedClubs = (learner: any) => {
     let clubs = []
     if(learner.current_club?.length === 0) {
@@ -370,13 +558,13 @@ const joinedClubs = (learner: any) => {
     })
     return clubs.join(', ')
 }
-const addNewMember = (learner: any) => {
-    const data = {
-        learner_id: learner.id,
-        club_id: club.value?.id,
-        club_reg_id: club.value?.id,
-        grade_level: learner.current_enrollment.section.grade_level.grade_level,
-    }
+    const addNewMember = (learner: any) => {
+        const data = {
+            learner_id: learner.id,
+            club_id: club.value?.club?.id,
+            club_reg_id: club.value?.id,
+            grade_level: learner.current_enrollment.section.grade_level.grade_level,
+        }
     router.post(route('club.register'), data, {
         onSuccess: () => {
             searchInput.value = ''
@@ -393,14 +581,14 @@ const addNewMember = (learner: any) => {
     })
 }
 
-const unregisterMember = (learner: any) => {
-    if (!confirm('Are you sure you want to unregister this member?')) {
-        return
-    }
-    const data = {
-        learner_id: learner.id,
-        club_id: club.value?.id,
-    }
+    const unregisterMember = (learner: any) => {
+        if (!confirm('Are you sure you want to unregister this member?')) {
+            return
+        }
+        const data = {
+            learner_id: learner.id,
+            club_reg_id: club.value?.id,
+        }
     router.post(route('club.unregister'), data, {
         onSuccess: () => {
             toast.success('Member unregistered successfully.', {
@@ -465,22 +653,137 @@ const club = computed(() => {
         return parseInt(clb.id) === parseInt(selectedClub.value)
     })?.[0]
 })
+const clubOfficers = computed(() => club.value?.club_officers ?? club.value?.clubOfficers ?? [])
+const officerLearnerIds = computed(() => clubOfficers.value.map((officer: any) => Number(officer.learner_id)))
+const allClubMembers = computed(() => {
+    return club.value?.learners ?? []
+})
+const clubMembers = computed(() => {
+    return allClubMembers.value.filter((learner: any) => !officerLearnerIds.value.includes(Number(learner.id)))
+})
 const sortedMembers = computed(() => {
   return [...clubMembers.value].sort((a, b) =>
     a.last_name.localeCompare(b.last_name)
   )
 })
+const sortedAllClubMembers = computed(() => {
+  return [...allClubMembers.value].sort((a, b) =>
+    a.last_name.localeCompare(b.last_name)
+  )
+})
+const sortedClubOfficers = computed(() => {
+    return [...clubOfficers.value].sort((a: any, b: any) => {
+        const orderDiff = Number(a.order_no ?? 0) - Number(b.order_no ?? 0)
+        if (orderDiff !== 0) {
+            return orderDiff
+        }
+
+        return `${a.learner?.last_name ?? ''} ${a.learner?.first_name ?? ''}`.localeCompare(
+            `${b.learner?.last_name ?? ''} ${b.learner?.first_name ?? ''}`,
+        )
+    })
+})
+const clubPresidentOfficer = computed(() => {
+    return sortedClubOfficers.value.find((officer: any) =>
+        `${officer.position ?? ''}`.toLowerCase().includes('president')
+    ) ?? sortedClubOfficers.value[0] ?? null
+})
+const officersPrintRows = computed(() => {
+    return sortedClubOfficers.value.map((officer: any) => ({
+        id: officer.id,
+        first_name: officer.learner?.first_name ?? '',
+        middle_name: officer.learner?.middle_name ?? '',
+        last_name: officer.learner?.last_name ?? '',
+        gender: officer.learner?.gender ?? '',
+        current_enrollment: officer.learner?.current_enrollment ?? null,
+        rightColumnValue: officer.position ?? '',
+    }))
+})
+const certificationOfficers = computed(() => {
+    return sortedClubOfficers.value.map((officer: any) => ({
+        id: officer.id,
+        first_name: officer.learner?.first_name ?? '',
+        middle_name: officer.learner?.middle_name ?? '',
+        last_name: officer.learner?.last_name ?? '',
+        gender: officer.learner?.gender ?? '',
+        current_enrollment: officer.learner?.current_enrollment ?? null,
+        position: officer.position ?? '',
+        remarks: officer.remarks ?? '',
+    }))
+})
 const breakpoint = computed(() => {
     return false
     return (sortedMembers.value.length > 25 && sortedMembers.value.length < 33)
 })
-const printClubMembers = () => {
+const printClubMembers = async () => {
+    showPrintMenu.value = false
+    showOfficersPrint.value = false
+    showMembersPrint.value = true
+    await nextTick()
+    document.body.classList.add('club-members-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
     window.print()
 }
-const clubMembers = computed(() => {
-    return club.value?.learners ?? []
-})
 
+const printClubOfficers = async () => {
+    showPrintMenu.value = false
+    showMembersPrint.value = false
+    showOfficersPrint.value = true
+    showCertificationPrint.value = false
+    await nextTick()
+    document.body.classList.add('officers-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    window.print()
+}
+
+const printClubCertification = async () => {
+    showPrintMenu.value = false
+    showMembersPrint.value = false
+    showOfficersPrint.value = false
+    showCertificationPrint.value = true
+    await nextTick()
+    document.body.classList.add('certification-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    window.print()
+}
+const printAdvisershipLetter = async () => {
+    showGenerateMenu.value = false
+    showConsentPrint.value = false
+    showMembersPrint.value = false
+    showOfficersPrint.value = false
+    showCertificationPrint.value = false
+    showRecognitionPrint.value = false
+    advisershipPurposeDraft.value = advisershipPurposeDefault.value
+    showAdvisershipPurposeModal.value = true
+}
+
+const confirmAdvisershipLetter = async () => {
+    showAdvisershipPurposeModal.value = false
+    showAdvisershipPrint.value = true
+    await nextTick()
+    document.body.classList.add('advisership-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    window.print()
+}
+const printRecognitionLetter = async () => {
+    showGenerateMenu.value = false
+    showConsentPrint.value = false
+    showMembersPrint.value = false
+    showOfficersPrint.value = false
+    showCertificationPrint.value = false
+    showAdvisershipPrint.value = false
+    recognitionPurposeDraft.value = recognitionPurposeDefault.value
+    showRecognitionPurposeModal.value = true
+}
+
+const confirmRecognitionLetter = async () => {
+    showRecognitionPurposeModal.value = false
+    showRecognitionPrint.value = true
+    await nextTick()
+    document.body.classList.add('recognition-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    window.print()
+}
 const schoolYearLabel = computed(() => {
     const schoolYear = page.props.sy
 
@@ -488,10 +791,16 @@ const schoolYearLabel = computed(() => {
         return ''
     }
 
-    return `SY ${schoolYear.year_start}-${schoolYear.year_end}`
+    return `${schoolYear.year_start}-${schoolYear.year_end}`
 })
 
 const consentDate = computed(() => fullDate(new Date().toISOString()))
+const advisershipPurposeDefault = computed(() => {
+    return club.value?.club?.description ?? club.value?.club?.type ?? 'promoting leadership, service, and holistic student development'
+})
+const recognitionPurposeDefault = computed(() => {
+    return club.value?.club?.description ?? club.value?.club?.type ?? 'promoting leadership, service, and holistic student development'
+})
 
 const formatMemberName = (learner: any) => {
     const firstName = ucWords(learner?.first_name ?? '')
@@ -518,7 +827,7 @@ const csvFormat = computed(() => {
 })
 
 const consentFormMembers = computed(() => {
-    return sortedMembers.value.map((learner: any) => {
+    return [...allClubMembers.value].sort((a, b) => a.last_name.localeCompare(b.last_name)).map((learner: any) => {
         const gradeLevel = learner?.current_enrollment?.section?.grade_level?.grade_level ?? ''
         const sectionName = learner?.current_enrollment?.section?.section_name ?? ''
 
@@ -536,9 +845,58 @@ const consentFormMembers = computed(() => {
         }
     })
 })
+const advisershipLetterData = computed(() => {
+    const adviserName = club.value?.user?.name ?? page.props.auth.user?.name ?? ''
+    const presidentName = clubPresidentOfficer.value?.learner
+        ? formatMemberName(clubPresidentOfficer.value.learner)
+        : ''
+
+    return {
+        clubName: club.value?.club?.name ?? '',
+        clubPurpose: advisershipPurposeDraft.value.trim() || advisershipPurposeDefault.value,
+        schoolYear: printSchoolYear.value,
+        advisershipDate: fullDate(new Date().toISOString()),
+        intendedAdviserName: adviserName,
+        intendedAdviserTitle: 'Special Science Teacher',
+        requesterName: presidentName,
+        requesterTitle: clubPresidentOfficer.value?.position ?? 'ALP President',
+        acceptedByName: adviserName,
+        acceptedByTitle: 'ALP Adviser',
+    }
+})
+const recognitionLetterData = computed(() => {
+    const adviserName = club.value?.user?.name ?? page.props.auth.user?.name ?? ''
+    const presidentName = clubPresidentOfficer.value?.learner
+        ? formatMemberName(clubPresidentOfficer.value.learner)
+        : ''
+    const totalMembers = allClubMembers.value.length
+    const maleMembers = allClubMembers.value.filter((member: any) => `${member.gender ?? ''}`.toLowerCase() === 'male').length
+    const femaleMembers = allClubMembers.value.filter((member: any) => `${member.gender ?? ''}`.toLowerCase() === 'female').length
+
+    return {
+        clubName: club.value?.club?.name ?? '',
+        clubPurpose: recognitionPurposeDraft.value.trim() || recognitionPurposeDefault.value,
+        schoolYear: printSchoolYear.value,
+        recognitionDate: fullDate(new Date().toISOString()),
+        recipientName: 'GRETCHEN MAE B. EMPUESTO, PhD',
+        recipientTitle: 'ALP Coordinator',
+        contactDetails: adviserName,
+        totalMembers,
+        maleMembers,
+        femaleMembers,
+        presidentName,
+        presidentTitle: clubPresidentOfficer.value?.position ?? 'ALP President',
+        adviserName,
+        adviserTitle: 'ALP Adviser',
+    }
+})
 
 const toggleGenerateMenu = () => {
     showGenerateMenu.value = !showGenerateMenu.value
+}
+
+const togglePrintMenu = () => {
+    showPrintMenu.value = !showPrintMenu.value
 }
 
 const downloadCSV = () => {
@@ -557,15 +915,49 @@ const generateConsentForms = async () => {
     }
     showConsentPrint.value = true
     await nextTick()
+    document.body.classList.add('consent-print-mode')
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
     window.print()
 }
 
 const closeConsentPrint = () => {
     showConsentPrint.value = false
+    document.body.classList.remove('consent-print-mode')
+}
+
+const closeAdvisershipPrint = () => {
+    showAdvisershipPrint.value = false
+    document.body.classList.remove('advisership-print-mode')
+}
+
+const closeAdvisershipPurposeModal = () => {
+    showAdvisershipPurposeModal.value = false
+}
+
+const closeRecognitionPrint = () => {
+    showRecognitionPrint.value = false
+    document.body.classList.remove('recognition-print-mode')
+}
+
+const closeRecognitionPurposeModal = () => {
+    showRecognitionPurposeModal.value = false
 }
 
 const handleAfterPrint = () => {
     closeConsentPrint()
+    closeAdvisershipPrint()
+    closeAdvisershipPurposeModal()
+    closeRecognitionPrint()
+    closeRecognitionPurposeModal()
+    showMembersPrint.value = false
+    showOfficersPrint.value = false
+    showCertificationPrint.value = false
+    showPrintMenu.value = false
+    showGenerateMenu.value = false
+    document.body.classList.remove('club-members-print-mode')
+    document.body.classList.remove('officers-print-mode')
+    document.body.classList.remove('certification-print-mode')
+    document.body.classList.remove('recognition-print-mode')
 }
 
 onMounted(() => {
@@ -615,16 +1007,76 @@ header {
         page-break-before: always; /* Older property for broader compatibility */
     }
 
-    body > *:not(.consent-print-shell) {
+    body.consent-print-mode > *:not(.consent-print-shell) {
         display: none !important;
     }
 
-    .consent-print-shell {
-        display: block;
+    body.consent-print-mode .consent-print-shell {
+        display: block !important;
+    }
+
+    body.club-members-print-mode > *:not(.club-members-print-shell) {
+        display: none !important;
+    }
+
+    body.club-members-print-mode .club-members-print-shell {
+        display: block !important;
+    }
+
+    body.officers-print-mode > *:not(.officers-print-shell) {
+        display: none !important;
+    }
+
+    body.officers-print-mode .officers-print-shell {
+        display: block !important;
+    }
+
+    body.certification-print-mode > *:not(.certification-print-shell) {
+        display: none !important;
+    }
+
+    body.certification-print-mode .certification-print-shell {
+        display: block !important;
+    }
+
+    body.advisership-print-mode > *:not(.advisership-print-shell) {
+        display: none !important;
+    }
+
+    body.advisership-print-mode .advisership-print-shell {
+        display: block !important;
+    }
+
+    body.recognition-print-mode > *:not(.recognition-print-shell) {
+        display: none !important;
+    }
+
+    body.recognition-print-mode .recognition-print-shell {
+        display: block !important;
     }
 }
 
+.club-members-print-shell {
+    display: none;
+}
+
+.officers-print-shell {
+    display: none;
+}
+
+.certification-print-shell {
+    display: none;
+}
+
 .consent-print-shell {
+    display: none;
+}
+
+.advisership-print-shell {
+    display: none;
+}
+
+.recognition-print-shell {
     display: none;
 }
 </style>

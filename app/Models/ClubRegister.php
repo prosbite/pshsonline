@@ -50,6 +50,11 @@ class ClubRegister extends Model
         return $this->hasMany(ClubManager::class);
     }
 
+    public function clubOfficers()
+    {
+        return $this->hasMany(ClubOfficer::class);
+    }
+
     public function learners()
     {
         return $this->belongsToMany(Learner::class, 'club_learner', 'club_register_id', 'learner_id')

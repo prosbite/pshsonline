@@ -9,19 +9,19 @@
                         <h1 class="text-4xl font-extrabold tracking-tight">
                             {{ clubRegister?.club?.name ?? 'Club Dashboard' }}
                         </h1>
-                        <p class="mt-3 text-slate-200 text-sm max-w-2xl">
+                        <!-- <p class="mt-3 text-slate-200 text-sm max-w-2xl">
                             Manage your club members, search students, and enlist new members for the current school year.
-                        </p>
+                        </p> -->
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto">
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 w-full lg:w-auto">
                         <div class="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 backdrop-blur col-span-2">
                             <p class="text-xs uppercase tracking-widest text-slate-300">Adviser</p>
                             <p class="text-lg font-semibold">{{ clubRegister?.user?.name ?? 'N/A' }}</p>
                         </div>
-                        <!-- <div class="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 backdrop-blur">
-                            <p class="text-xs uppercase tracking-widest text-slate-300">Manager</p>
-                            <p class="text-lg font-semibold">{{ clubManager?.user?.name ?? 'N/A' }}</p>
-                        </div> -->
+                        <div class="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 backdrop-blur">
+                            <p class="text-xs uppercase tracking-widest text-slate-300">Officers</p>
+                            <p class="text-lg font-semibold">{{ clubOfficers.length }}</p>
+                        </div>
                         <div class="rounded-2xl bg-white/10 border border-white/10 px-4 py-3 backdrop-blur">
                             <p class="text-xs uppercase tracking-widest text-slate-300">Members</p>
                             <p class="text-lg font-semibold">{{ clubMembers.length }}</p>
@@ -30,7 +30,7 @@
                 </div>
             </section>
 
-            <section class="rounded-2xl bg-white p-6 shadow-md border border-gray-200">
+            <!-- <section class="rounded-2xl bg-white p-6 shadow-md border border-gray-200">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
                         <h2 class="text-2xl font-semibold text-gray-800">Enlist New Members</h2>
@@ -101,6 +101,57 @@
                     <img src="/img/ellipses_loader.gif" alt="" class="h-14 w-14">
                     <p class="mt-2 text-gray-500">Searching...</p>
                 </div>
+            </section> -->
+
+            <section v-if="sortedClubOfficers.length > 0" class="rounded-2xl bg-white p-6 shadow-md border border-gray-200">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-800">Club Officers</h2>
+                        <p class="text-gray-600 text-sm">Assigned club officers for the current school year.</p>
+                    </div>
+                    <div class="rounded-full bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700">
+                        {{ sortedClubOfficers.length }} officers
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <!-- <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500 w-[40px]">#</th> -->
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Name</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Position</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Grade/Section</th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            <tr v-for="(officer, index) in sortedClubOfficers" :key="officer.id" class="hover:bg-gray-50">
+                                <!-- <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ index + 1 + '.' }}</td> -->
+                                <td class="px-4 py-3 text-sm font-medium text-gray-900">
+                                    {{ ucWords(officer.learner?.last_name ?? '') }}, {{ ucWords(officer.learner?.first_name ?? '') }}
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600">
+                                    <span class="inline-flex rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
+                                        {{ officer.position }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600">
+                                    {{ officer.learner?.current_enrollment?.section?.grade_level?.grade_level }} - {{ officer.learner?.current_enrollment?.section?.section_name }}
+                                </td>
+                                <td class="px-4 py-3 text-right">
+                                    <button
+                                        type="button"
+                                        @click="dissolveOfficer(officer)"
+                                        class="rounded-lg bg-rose-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-rose-700 transition-colors duration-200"
+                                    >
+                                        Dissolve
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
             <section class="rounded-2xl bg-white p-6 shadow-md border border-gray-200">
@@ -137,6 +188,12 @@
                                 >
                                     Gender
                                 </th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                                    Position
+                                </th>
+                                <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
@@ -151,9 +208,21 @@
                                 <td class="px-4 py-3 text-sm text-gray-600">
                                     {{ ucWords(learner.gender) }}
                                 </td>
+                                <td class="px-4 py-3 text-sm text-gray-600">
+                                    Member
+                                </td>
+                                <td class="px-4 py-3 text-right">
+                                    <button
+                                        type="button"
+                                        @click="openOfficerModal(learner)"
+                                        class="rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-700 transition-colors duration-200"
+                                    >
+                                        Assign Position
+                                    </button>
+                                </td>
                             </tr>
                             <tr v-if="clubMembers.length === 0">
-                                <td colspan="4" class="px-4 py-8 text-center text-sm text-gray-500">
+                                <td colspan="6" class="px-4 py-8 text-center text-sm text-gray-500">
                                     No members yet.
                                 </td>
                             </tr>
@@ -161,6 +230,70 @@
                     </table>
                 </div>
             </section>
+
+            <SleekModal :is-visible="showOfficerModal" @close="closeOfficerModal" size="lg">
+                <template #header>
+                    <div class="flex flex-col pr-8">
+                        <h3 class="text-2xl font-semibold text-gray-800">Assign Position</h3>
+                        <p class="text-gray-600 text-sm">
+                            Set an officer position for {{ selectedOfficerName || 'the selected member' }}.
+                        </p>
+                    </div>
+                </template>
+                <template #body>
+                    <form id="officer-form" @submit.prevent="submitOfficer" class="space-y-4">
+                        <div>
+                            <label for="officer-position" class="block text-sm font-medium text-gray-700 mb-1">Position</label>
+                            <input
+                                id="officer-position"
+                                v-model="officerForm.position"
+                                list="club-position-suggestions"
+                                type="text"
+                                class="block w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                                placeholder="President, Vice President, Secretary..."
+                            >
+                            <p v-if="officerForm.errors.position" class="mt-1 text-sm text-red-600">{{ officerForm.errors.position }}</p>
+                            <datalist id="club-position-suggestions">
+                                <option v-for="position in positionSuggestions" :key="position" :value="position" />
+                            </datalist>
+                        </div>
+                        <div>
+                            <label for="officer-order" class="block text-sm font-medium text-gray-700 mb-1">Order No.</label>
+                            <input
+                                id="officer-order"
+                                v-model="officerForm.order_no"
+                                type="number"
+                                min="1"
+                                class="block w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-emerald-500 focus:ring-emerald-500"
+                                placeholder="1"
+                            >
+                            <p v-if="officerForm.errors.order_no" class="mt-1 text-sm text-red-600">{{ officerForm.errors.order_no }}</p>
+                        </div>
+                        <div v-if="selectedOfficerName" class="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+                            <span class="font-semibold">Member:</span> {{ selectedOfficerName }}
+                        </div>
+                    </form>
+                </template>
+                <template #footer>
+                    <div class="flex items-center justify-end gap-3">
+                        <button
+                            type="button"
+                            @click="closeOfficerModal"
+                            class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-colors duration-200"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            form="officer-form"
+                            :disabled="officerForm.processing"
+                            class="px-5 py-2 bg-emerald-600 text-white font-semibold rounded-lg shadow-md hover:bg-emerald-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200"
+                        >
+                            {{ officerForm.processing ? 'Saving...' : 'Assign Position' }}
+                        </button>
+                    </div>
+                </template>
+            </SleekModal>
         </div>
     </MainLayout>
 </template>
@@ -172,8 +305,9 @@ import { computed, ref, watch } from 'vue'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import axios from 'axios'
-import { ucWords } from '@/composables/utilities'
+import { clubPositions, ucWords } from '@/composables/utilities'
 import { useLearnerSorting, sortLearners } from '@/composables/learnerSorting'
+import SleekModal from '@/Components/SleekModal.vue'
 
 const props = defineProps({
     club_manager: Object,
@@ -181,28 +315,54 @@ const props = defineProps({
 
 const clubManager = computed(() => props.club_manager)
 const clubRegister = computed(() => clubManager.value?.clubRegister ?? clubManager.value?.club_register ?? null)
-const clubMembers = computed(() => clubRegister.value?.club?.learners ?? [])
-const isClubFull = computed(() => clubMembers.value.length >= 26)
+const allClubMembers = computed(() => clubRegister.value?.learners ?? [])
+const clubOfficers = computed(() => clubRegister.value?.club_officers ?? clubRegister.value?.clubOfficers ?? [])
+const positionSuggestions = computed(() => clubPositions(clubOfficers.value.map((officer: any) => officer.position)))
+const officerLearnerIds = computed(() => clubOfficers.value.map((officer: any) => Number(officer.learner_id)))
+const clubMembers = computed(() => allClubMembers.value.filter((learner: any) => !officerLearnerIds.value.includes(Number(learner.id))))
+const isClubFull = computed(() => allClubMembers.value.length >= 26)
 const { setSort, sortItems } = useLearnerSorting('name')
 const sortedClubMembers = computed(() => sortItems(clubMembers.value))
+const sortedClubOfficers = computed(() => {
+    return [...clubOfficers.value].sort((a: any, b: any) => {
+        const orderDiff = Number(a.order_no ?? 0) - Number(b.order_no ?? 0)
+        if (orderDiff !== 0) {
+            return orderDiff
+        }
+
+        return `${a.learner?.last_name ?? ''} ${a.learner?.first_name ?? ''}`.localeCompare(
+            `${b.learner?.last_name ?? ''} ${b.learner?.first_name ?? ''}`,
+        )
+    })
+})
 const searchInput = ref('')
 const loading = ref(false)
 const searchResults = ref<any[]>([])
+const showOfficerModal = ref(false)
+const selectedOfficer = ref<any | null>(null)
 const enlistForm = useForm({
     learner_id: 0,
     club_id: 0,
     club_reg_id: 0,
 })
+const officerForm = useForm({
+    learner_id: 0,
+    club_reg_id: 0,
+    position: '',
+    order_no: 1,
+})
 let timeout: ReturnType<typeof setTimeout> | null = null
+const nextOfficerOrder = computed(() => (sortedClubOfficers.value.length ?? 0) + 1)
+const selectedOfficerName = computed(() => {
+    if (!selectedOfficer.value) {
+        return ''
+    }
+
+    return `${ucWords(selectedOfficer.value?.last_name ?? '')}, ${ucWords(selectedOfficer.value?.first_name ?? '')}`.trim()
+})
 
 const hasClub = (learner: any) => {
-    if (
-        learner.learner.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length > 0 &&
-        clubRegister.value?.club?.nature.slice(0, 3).toLowerCase() === 'alp'
-    ) {
-        return true
-    }
-    return false
+    return (learner.learner.current_club?.length ?? 0) > 0
 }
 
 const joinedClubs = (clubs: any[]) => {
@@ -228,6 +388,53 @@ const enlist = (learner: any) => {
         },
         onError: () => {
             toast.error('Failed to register member.', {
+                autoClose: 2000,
+                position: toast.POSITION.TOP_RIGHT,
+            })
+        },
+    })
+}
+
+const openOfficerModal = (learner: any) => {
+    selectedOfficer.value = learner
+    officerForm.learner_id = learner.id
+    officerForm.club_reg_id = clubRegister.value?.id ?? 0
+    officerForm.position = ''
+    officerForm.order_no = nextOfficerOrder.value
+    showOfficerModal.value = true
+}
+
+const closeOfficerModal = () => {
+    showOfficerModal.value = false
+    selectedOfficer.value = null
+    officerForm.reset('position', 'order_no')
+}
+
+const submitOfficer = () => {
+    officerForm.post(route('club.officers.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            closeOfficerModal()
+        },
+        onError: () => {
+            toast.error('Failed to assign position.', {
+                autoClose: 2000,
+                position: toast.POSITION.TOP_RIGHT,
+            })
+        },
+    })
+}
+
+const dissolveOfficer = (officer: any) => {
+    const confirmed = window.confirm(`Dissolve ${ucWords(officer.learner?.last_name ?? '')}, ${ucWords(officer.learner?.first_name ?? '')}'s position?`)
+    if (!confirmed) {
+        return
+    }
+
+    useForm({}).delete(route('club.officers.destroy', { clubOfficer: officer.id }), {
+        preserveScroll: true,
+        onError: () => {
+            toast.error('Failed to dissolve position.', {
                 autoClose: 2000,
                 position: toast.POSITION.TOP_RIGHT,
             })

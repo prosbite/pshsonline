@@ -47,13 +47,13 @@
                 </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ club.club.learners?.length }}
+                {{ club.learners?.length }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ club.club.learners?.filter((learner) => learner.gender === 'male').length }}
+                {{ club.learners?.filter((learner) => learner.gender === 'male').length }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ club.club.learners?.filter((learner) => learner.gender === 'female').length }}
+                {{ club.learners?.filter((learner) => learner.gender === 'female').length }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-right">
                 <button @click="showClubDetails(club)" class="px-3 mr-2 py-1 bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
@@ -205,7 +205,7 @@ const notListedSections = computed(() => {
 const enlisted = computed(() => {
     let students = []
     props.entrants?.map((entrant: any) => {
-        if(entrant.learner?.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length > 0) {
+        if((entrant.learner?.current_club?.length ?? 0) > 0) {
             students.push(entrant)
         }
     })
@@ -214,7 +214,7 @@ const enlisted = computed(() => {
 const unlisted = computed(() => {
     let students = []
     props.entrants?.map((entrant: any) => {
-        if(entrant.learner?.current_club?.filter((club: any) => club.nature.slice(0, 3).toLowerCase() === 'alp').length === 0) {
+        if((entrant.learner?.current_club?.length ?? 0) === 0) {
             students.push(entrant)
         }
     })
@@ -244,6 +244,6 @@ onMounted(() => {
 })
 
 const sortedClubs = computed(() => {
-  return [...props.clubs].sort((a, b) => b.club.learners.length - a.club.learners.length)
+  return [...props.clubs].sort((a, b) => (b.learners?.length ?? 0) - (a.learners?.length ?? 0))
 })
 </script>
