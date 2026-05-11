@@ -110,10 +110,10 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin,supervi
 // Club Adviser Routes
 Route::middleware('auth')->group(function () {
     Route::post('/club/officers', [ClubController::class, 'storeOfficer'])
-        ->middleware(RoleMiddleware::class.':club manager')
+        ->middleware(RoleMiddleware::class.':club manager,club adviser')
         ->name('club.officers.store');
     Route::delete('/club/officers/{clubOfficer}', [ClubController::class, 'destroyOfficer'])
-        ->middleware(RoleMiddleware::class.':club manager')
+        ->middleware(RoleMiddleware::class.':club manager,club adviser')
         ->name('club.officers.destroy');
     Route::get('/club/{club_id}/attendance/infractions', [ClubAttendanceController::class, 'clubAttendanceInfractions'])->name('club.attendance.infractions');
     Route::get('/club/members', [ClubController::class, 'membersList'])->name('club.members');

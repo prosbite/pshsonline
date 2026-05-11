@@ -37,6 +37,7 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Name</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Position</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Grade/Section</th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">Action</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -50,6 +51,15 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ parseInt(officer.learner?.current_enrollment?.section?.grade_level_id) + 6 + ' - ' + officer.learner?.current_enrollment?.section?.section_name }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <button
+                                    type="button"
+                                    @click="dissolveOfficer(officer)"
+                                    class="rounded-lg bg-rose-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-rose-700 transition-colors duration-200"
+                                >
+                                    Dissolve
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -65,7 +75,7 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Grade/Section</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Gender</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Status</th>
-                            <!-- <th scope="col" class="px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">Actions</th> -->
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -81,19 +91,24 @@
                                 <!-- <span :class="{'bg-green-100 text-green-800': member.status === 'Active', 'bg-red-100 text-red-800': member.status === 'Inactive'}" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">{{ member.status }}</span> -->
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Member</td>
-                            <!-- <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"> -->
-                                <!-- <a href="#" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a> -->
-                                <!-- <a @click.prevent="unregisterMember(member)" href="#" class="text-red-600 hover:text-red-900">Remove</a> -->
-                            <!-- </td> -->
+                            <td class="px-6 py-4 whitespace-nowrap text-right">
+                                <button
+                                    type="button"
+                                    @click="openOfficerModal(member)"
+                                    class="rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-700 transition-colors duration-200"
+                                >
+                                    Assign Position
+                                </button>
+                            </td>
                         </tr>
                         <tr v-if="searchResults.length === 0 && searchInput.length > 1">
-                            <td colspan="5" class="text-left px-6 py-4 text-gray-500">No results found.</td>
+                            <td colspan="6" class="text-left px-6 py-4 text-gray-500">No results found.</td>
                         </tr>
                         <tr v-if="clubMembers.length === 0">
-                            <td colspan="5" class="text-left px-6 py-4 text-gray-500">No members yet.</td>
+                            <td colspan="6" class="text-left px-6 py-4 text-gray-500">No members yet.</td>
                         </tr>
                         <tr v-if="searchInput.length > 0">
-                            <td colspan="5" class="text-left px-6 py-4 text-gray-500">
+                            <td colspan="6" class="text-left px-6 py-4 text-gray-500">
                                 <span class="mr-4">
                                     Total Results: {{ searchResults.length }}
                                 </span>
@@ -106,7 +121,7 @@
                             </td>
                         </tr>
                                 <tr v-else>
-                                    <td colspan="5" class="text-left px-6 py-4 text-gray-500">
+                                    <td colspan="6" class="text-left px-6 py-4 text-gray-500">
                                     <span class="mr-4">
                                         Total members: {{ allClubMembers.length }}
                                     </span>
@@ -164,8 +179,71 @@
                                 >
                                     Application Letter for Recognition
                                 </button>
-                        </div>
                     </div>
+                </div>
+                <SleekModal :is-visible="showOfficerModal" @close="closeOfficerModal" size="lg">
+                    <template #header>
+                        <div class="flex flex-col pr-8">
+                            <h3 class="text-2xl font-semibold text-gray-800">Assign Position</h3>
+                            <p class="text-gray-600 text-sm">
+                                Set an officer position for {{ selectedOfficerName || 'the selected member' }}.
+                            </p>
+                        </div>
+                    </template>
+                    <template #body>
+                        <form id="officer-form" @submit.prevent="submitOfficer" class="space-y-4">
+                            <div>
+                                <label for="officer-position" class="block text-sm font-medium text-gray-700 mb-1">Position</label>
+                                <input
+                                    id="officer-position"
+                                    v-model="officerForm.position"
+                                    list="club-position-suggestions"
+                                    type="text"
+                                    class="block w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    placeholder="President, Vice President, Secretary..."
+                                >
+                                <p v-if="officerForm.errors.position" class="mt-1 text-sm text-red-600">{{ officerForm.errors.position }}</p>
+                                <datalist id="club-position-suggestions">
+                                    <option v-for="position in positionSuggestions" :key="position" :value="position" />
+                                </datalist>
+                            </div>
+                            <div>
+                                <label for="officer-order" class="block text-sm font-medium text-gray-700 mb-1">Order No.</label>
+                                <input
+                                    id="officer-order"
+                                    v-model="officerForm.order_no"
+                                    type="number"
+                                    min="1"
+                                    class="block w-full rounded-lg border border-gray-300 px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    placeholder="1"
+                                >
+                                <p v-if="officerForm.errors.order_no" class="mt-1 text-sm text-red-600">{{ officerForm.errors.order_no }}</p>
+                            </div>
+                            <div v-if="selectedOfficerName" class="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+                                <span class="font-semibold">Member:</span> {{ selectedOfficerName }}
+                            </div>
+                        </form>
+                    </template>
+                    <template #footer>
+                        <div class="flex items-center justify-end gap-3">
+                            <button
+                                type="button"
+                                @click="closeOfficerModal"
+                                class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-colors duration-200"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                form="officer-form"
+                                :disabled="officerForm.processing"
+                                class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-200"
+                            >
+                                {{ officerForm.processing ? 'Saving...' : 'Assign Position' }}
+                            </button>
+                        </div>
+                    </template>
+                </SleekModal>
                     <SleekModal :is-visible="showAdvisershipPurposeModal" @close="closeAdvisershipPurposeModal" size="2xl">
                         <template #header>
                             <div>
@@ -507,10 +585,10 @@
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
-import { usePage, router } from '@inertiajs/vue3'
+import { usePage, router, useForm } from '@inertiajs/vue3'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
-import { exportToCSV, fullDate, middleInitials, ucWords } from '@/composables/utilities'
+import { clubPositions, exportToCSV, fullDate, middleInitials, ucWords } from '@/composables/utilities'
 import SleekModal from '@/Components/SleekModal.vue'
 import ConsentForm from '@/Components/club/forms/ConsentForm.vue'
 import ClubOfficerStanding from '@/Components/club/forms/ClubOfficerStanding.vue'
@@ -539,6 +617,14 @@ const showRecognitionPrint = ref(false)
 const showRecognitionPurposeModal = ref(false)
 const advisershipPurposeDraft = ref('')
 const recognitionPurposeDraft = ref('')
+const showOfficerModal = ref(false)
+const selectedOfficer = ref<any | null>(null)
+const officerForm = useForm({
+    learner_id: 0,
+    club_reg_id: 0,
+    position: '',
+    order_no: 1,
+})
 const maximumMembers = computed(() => {
     return club.value?.learners?.length >= 40
 })
@@ -655,6 +741,7 @@ const club = computed(() => {
 })
 const clubOfficers = computed(() => club.value?.club_officers ?? club.value?.clubOfficers ?? [])
 const officerLearnerIds = computed(() => clubOfficers.value.map((officer: any) => Number(officer.learner_id)))
+const positionSuggestions = computed(() => clubPositions(clubOfficers.value.map((officer: any) => officer.position)))
 const allClubMembers = computed(() => {
     return club.value?.learners ?? []
 })
@@ -683,10 +770,18 @@ const sortedClubOfficers = computed(() => {
         )
     })
 })
+const nextOfficerOrder = computed(() => (sortedClubOfficers.value.length ?? 0) + 1)
 const clubPresidentOfficer = computed(() => {
     return sortedClubOfficers.value.find((officer: any) =>
         `${officer.position ?? ''}`.toLowerCase().includes('president')
     ) ?? sortedClubOfficers.value[0] ?? null
+})
+const selectedOfficerName = computed(() => {
+    if (!selectedOfficer.value) {
+        return ''
+    }
+
+    return formatMemberName(selectedOfficer.value)
 })
 const officersPrintRows = computed(() => {
     return sortedClubOfficers.value.map((officer: any) => ({
@@ -920,6 +1015,53 @@ const generateConsentForms = async () => {
     window.print()
 }
 
+const openOfficerModal = (learner: any) => {
+    selectedOfficer.value = learner
+    officerForm.learner_id = learner.id
+    officerForm.club_reg_id = club.value?.id ?? 0
+    officerForm.position = ''
+    officerForm.order_no = nextOfficerOrder.value
+    showOfficerModal.value = true
+}
+
+const closeOfficerModal = () => {
+    showOfficerModal.value = false
+    selectedOfficer.value = null
+    officerForm.reset('position', 'order_no')
+}
+
+const submitOfficer = () => {
+    officerForm.post(route('club.officers.store'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            closeOfficerModal()
+        },
+        onError: () => {
+            toast.error('Failed to assign position.', {
+                autoClose: 3000,
+                position: toast.POSITION.TOP_RIGHT,
+            })
+        },
+    })
+}
+
+const dissolveOfficer = (officer: any) => {
+    const confirmed = window.confirm(`Dissolve ${formatMemberName(officer.learner ?? officer)}'s position?`)
+    if (!confirmed) {
+        return
+    }
+
+    useForm({}).delete(route('club.officers.destroy', { clubOfficer: officer.id }), {
+        preserveScroll: true,
+        onError: () => {
+            toast.error('Failed to dissolve position.', {
+                autoClose: 3000,
+                position: toast.POSITION.TOP_RIGHT,
+            })
+        },
+    })
+}
+
 const closeConsentPrint = () => {
     showConsentPrint.value = false
     document.body.classList.remove('consent-print-mode')
@@ -945,6 +1087,7 @@ const closeRecognitionPurposeModal = () => {
 
 const handleAfterPrint = () => {
     closeConsentPrint()
+    closeOfficerModal()
     closeAdvisershipPrint()
     closeAdvisershipPurposeModal()
     closeRecognitionPrint()

@@ -133,14 +133,14 @@ class ClubController extends Controller
         $currentSchoolYear = SchoolYear::current();
         abort_unless($currentSchoolYear, 404);
 
-        $clubManager = ClubManager::where('user_id', auth()->id())
-            ->where('club_register_id', $request->club_reg_id)
-            ->where('school_year_id', $currentSchoolYear->id)
-            ->first();
-
-        abort_unless($clubManager, 403, 'Unauthorized access.');
-
         $clubRegister = ClubRegister::with('learners')->findOrFail($request->club_reg_id);
+        $isClubManager = ClubManager::where('user_id', auth()->id())
+            ->where('club_register_id', $clubRegister->id)
+            ->where('school_year_id', $currentSchoolYear->id)
+            ->exists();
+        $isClubAdviser = auth()->id() === (int) $clubRegister->user_id;
+
+        abort_unless($isClubManager || $isClubAdviser, 403, 'Unauthorized access.');
         $isClubMember = $clubRegister->learners()->where('learners.id', $request->learner_id)->exists();
 
         abort_unless($isClubMember, 422, 'The selected learner must be an enlisted club member.');
@@ -169,12 +169,14 @@ class ClubController extends Controller
         $currentSchoolYear = SchoolYear::current();
         abort_unless($currentSchoolYear, 404);
 
-        $clubManager = ClubManager::where('user_id', auth()->id())
-            ->where('club_register_id', $clubOfficer->club_register_id)
+        $clubRegister = ClubRegister::findOrFail($clubOfficer->club_register_id);
+        $isClubManager = ClubManager::where('user_id', auth()->id())
+            ->where('club_register_id', $clubRegister->id)
             ->where('school_year_id', $currentSchoolYear->id)
-            ->first();
+            ->exists();
+        $isClubAdviser = auth()->id() === (int) $clubRegister->user_id;
 
-        abort_unless($clubManager, 403, 'Unauthorized access.');
+        abort_unless($isClubManager || $isClubAdviser, 403, 'Unauthorized access.');
         abort_unless((int) $clubOfficer->school_year_id === (int) $currentSchoolYear->id, 403, 'Unauthorized access.');
 
         $clubOfficer->delete();
