@@ -11,7 +11,7 @@ class StudentController extends Controller
     public function search(Request $request)
     {
         $search = $request->search;
-        $eligibleGradeLevels = [7, 8, 9];
+        $eligibleGradeLevels = [7, 8, 9, 10];
         $currentSchoolYearId = SchoolYear::current()?->id;
 
         $learners = Enrollment::with(['learner.currentClubRegisters.club', 'section.gradeLevel'])

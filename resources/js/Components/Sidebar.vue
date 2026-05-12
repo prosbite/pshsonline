@@ -201,6 +201,14 @@
                     </svg>
                     <span class="text-md">External Links</span>
                 </Link>
+                <Link v-if="user.role === 'admin'" :href="route('admin.reports.accomplishment')" :class="{'bg-gray-700': route().current('admin.reports.accomplishment')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 3h6l4 4v14H5V3h4z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v4h4" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h8M8 16h8" />
+                    </svg>
+                    <span class="text-md">Accomplishment Report</span>
+                </Link>
                 <Link v-if="user.role === 'admin'" :href="route('admin.club.managers')" :class="{'bg-gray-700': route().current('admin.club.managers')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                     <svg class="w-5 h-5 text-indigo-200 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6 5.87v-2a4 4 0 00-3-3.87m6 5.87v-2a4 4 0 013-3.87M15 11a3 3 0 100-6 3 3 0 000 6zM9 11a3 3 0 100-6 3 3 0 000 6z" />
@@ -554,6 +562,7 @@ onMounted(() => {
         route().current('club.accomplishment.quarterly') ||
         route().current('admin.attendance.delinquents') ||
         route().current('admin.attendance.infractions') ||
+        route().current('admin.reports.accomplishment') ||
         route().current('accomplishment.summary')
         ) {
         isClubReportsGroupOpen.value = true

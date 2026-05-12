@@ -15,6 +15,10 @@ class AccomplishmentReport extends Model
         'status',
     ];
 
+    protected $casts = [
+        'report' => 'array',
+    ];
+
     public function clubRegister()
     {
         return $this->belongsTo(ClubRegister::class);

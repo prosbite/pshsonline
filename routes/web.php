@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminAssessmentController;
 use App\Http\Controllers\AdminClubAttendanceController;
 use App\Http\Controllers\AdminClubController;
 use App\Http\Controllers\AdminClubSubmissionController;
+use App\Http\Controllers\AccomplishmentReportController;
 use App\Http\Controllers\AdviserAttendanceController;
 use App\Http\Controllers\ClubAccomplishmentController;
 use App\Http\Controllers\ClubAttendanceController;
@@ -92,6 +93,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin,supervi
     Route::get('/clubs/monitoring', [ClubsMonitoringController::class, 'index'])->name('admin.clubs.monitoring');
     Route::post('/clubs/monitoring', [ClubsMonitoringController::class, 'store'])->name('admin.clubs.monitoring.store');
     Route::post('/clubs/monitoring/update', [ClubsMonitoringController::class, 'update'])->name('admin.clubs.monitoring.update');
+    Route::get('/reports/accomplishment', [AccomplishmentReportController::class, 'index'])->name('admin.reports.accomplishment');
 
     Route::get('/advisers/attendance', [AdviserAttendanceController::class, 'index'])->name('admin.advisers.attendance');
     Route::get('/advisers/attendance/create', [AdviserAttendanceController::class, 'create'])->name('admin.advisers.attendance.create');

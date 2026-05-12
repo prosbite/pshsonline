@@ -30,7 +30,7 @@
                 </div>
             </section>
 
-            <section class="rounded-2xl bg-white p-6 shadow-md border border-gray-200">
+            <!-- <section class="rounded-2xl bg-white p-6 shadow-md border border-gray-200">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
                         <h2 class="text-2xl font-semibold text-gray-800">Enlist New Members</h2>
@@ -46,7 +46,7 @@
                             :class="isClubFull ? 'cursor-not-allowed bg-gray-100 text-gray-400' : ''"
                         >
                     </div>
-                </div>
+                </div> -->
 
                 <div v-if="isClubFull" class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
                     This club has reached the maximum of 26 members.
