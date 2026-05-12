@@ -519,7 +519,7 @@
                     document-title="CERTIFICATION OF STUDENT RECORD"
                     program-name="ALTERNATIVE LEARNING PROGRAM (ALP)"
                     intro-text="This is to certify that the following ALP student officers are in good academic standing and fit to lead the Alternative Learning Program "
-                    signatory-name="MARIE FE D. MALLONGA"
+                    signatory-name="MARIFE D. MALLONGA"
                     signatory-title="Campus Registrar"
                     footer-code="PSHS-00-F-DSA-28-Ver02-Rev0 05/08/2026"
                     :minimum-rows="0"
