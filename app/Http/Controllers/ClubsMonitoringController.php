@@ -206,7 +206,7 @@ class ClubsMonitoringController extends Controller
             'accomplishment2' => $accomplishment2,
             'target11' => $target11,
             'ipcr' => $ipcr,
-            'semester' => $request->semester,
+            'semester' => $request->semester ?? 's2',
             'major_activity_proposal' => $major_activity_proposal,
             'major_activity_report' => $major_activity_report
         ]);
