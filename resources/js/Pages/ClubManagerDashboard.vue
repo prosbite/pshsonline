@@ -30,7 +30,7 @@
                 </div>
             </section>
 
-            <section class="rounded-2xl bg-white p-6 shadow-md border border-gray-200">
+            <!-- <section class="rounded-2xl bg-white p-6 shadow-md border border-gray-200">
                 <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div>
                         <h2 class="text-2xl font-semibold text-gray-800">Enlist New Members</h2>
@@ -101,7 +101,7 @@
                     <img src="/img/ellipses_loader.gif" alt="" class="h-14 w-14">
                     <p class="mt-2 text-gray-500">Searching...</p>
                 </div>
-            </section>
+            </section> -->
 
             <section v-if="sortedClubOfficers.length > 0" class="rounded-2xl bg-white p-6 shadow-md border border-gray-200">
                 <div class="flex items-center justify-between mb-4">
