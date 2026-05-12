@@ -179,7 +179,7 @@ const props = defineProps({
   },
   minimumRows: {
     type: Number,
-    default: 2,
+    default: 0,
   },
 })
 

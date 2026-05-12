@@ -522,7 +522,7 @@
                     signatory-name="MARIE FE D. MALLONGA"
                     signatory-title="Campus Registrar"
                     footer-code="PSHS-00-F-DSA-28-Ver02-Rev0 05/08/2026"
-                    :minimum-rows="2"
+                    :minimum-rows="0"
                 />
             </div>
         </Teleport>
