@@ -82,7 +82,7 @@
                      Target 3 (Major Activity)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                     Target 4 (Community-Based Activity)
+                     Target 4 (School-Based Activity)
                  </th>
                  <th colspan="5" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
                      Target 5 (ALP Attendance)
@@ -536,7 +536,7 @@
                                     Target 3 <br> (Major Activity)
                                 </th>
                                 <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
-                                    Target 4 <br> (Community-Based Activity)
+                                    Target 4 <br> (School-Based Activity)
                                 </th>
                                 <th colspan="5" class="px-1 py-1 text-center text-xs font-semibold border-r border-indigo-400">
                                     Target 5 <br> (ALP Attendance)
