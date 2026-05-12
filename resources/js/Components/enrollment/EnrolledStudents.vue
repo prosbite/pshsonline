@@ -35,17 +35,26 @@
                     {{ formatGradeSection(result) }} · {{ ucWords(result?.learner?.gender) }}
                   </p>
                 </div>
-                <span class="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
-                  Enrolled
-                </span>
-                <button
-                  v-if="page?.props?.auth?.user?.role === 'admin'"
-                  type="button"
-                  @click.stop="removeEnrollment(result)"
-                  class="inline-flex items-center gap-1 rounded-lg bg-red-100 px-3 py-2 text-xs font-semibold text-red-700 transition-colors duration-200 hover:bg-red-200"
-                >
-                  Unenroll
-                </button>
+                <div class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    @click.stop="editLearner(result)"
+                    class="inline-flex items-center gap-1 rounded-lg bg-indigo-100 px-3 py-2 text-xs font-semibold text-indigo-700 transition-colors duration-200 hover:bg-indigo-200"
+                  >
+                    Edit
+                  </button>
+                  <span class="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">
+                    Enrolled
+                  </span>
+                  <button
+                    v-if="page?.props?.auth?.user?.role === 'admin'"
+                    type="button"
+                    @click.stop="removeEnrollment(result)"
+                    class="inline-flex items-center gap-1 rounded-lg bg-red-100 px-3 py-2 text-xs font-semibold text-red-700 transition-colors duration-200 hover:bg-red-200"
+                  >
+                    Unenroll
+                  </button>
+                </div>
               </div>
             </div>
             <div v-else class="px-4 py-3 text-sm text-gray-500">
@@ -79,7 +88,7 @@
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade/Section</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
-            <th v-if="page?.props?.auth?.user?.role === 'admin'" scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
@@ -99,8 +108,17 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {{ ucWords(learner?.learner?.gender) }}
             </td>
-            <td v-if="page?.props?.auth?.user?.role === 'admin'" class="px-6 py-4 whitespace-nowrap text-right">
+            <td class="px-6 py-4 whitespace-nowrap text-right">
+                <div class="inline-flex items-center gap-2">
                 <button
+                    type="button"
+                    @click="editLearner(learner)"
+                    class="inline-flex items-center gap-1 rounded-lg bg-indigo-100 px-3 py-2 text-xs font-semibold text-indigo-700 transition-colors duration-200 hover:bg-indigo-200"
+                >
+                    Edit
+                </button>
+                <button
+                    v-if="page?.props?.auth?.user?.role === 'admin'"
                     @click="removeEnrollment(learner)"
                     class="inline-flex items-center gap-2 rounded-lg bg-red-100 px-4 py-2 text-sm font-semibold text-red-700 transition-colors duration-200 hover:bg-red-200"
                 >
@@ -109,10 +127,11 @@
                     </svg>
                     Unenroll
                 </button>
+                </div>
             </td>
         </tr>
         <tr v-if="filteredLearners.length === 0">
-            <td :colspan="page?.props?.auth?.user?.role === 'admin' ? 5 : 4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 No learners found.
             </td>
         </tr>
@@ -205,6 +224,7 @@ const searchResults = ref<any[]>([])
 const loading = ref(false)
 let searchTimeout: ReturnType<typeof setTimeout> | null = null
 const selectedLearner = ref({
+    id: '',
     last_name: '',
     first_name: '',
     middle_name: '',
@@ -266,25 +286,27 @@ const filteredLearners = computed(() => {
 const editLearner = (learner: any) => {
     showModal.value = true
     editMode.value = true
-    selectedLearner.value = learner?.learner
+    selectedLearner.value = {
+        id: learner?.id ?? '',
+        last_name: learner?.learner?.last_name ?? learner?.last_name ?? '',
+        first_name: learner?.learner?.first_name ?? learner?.first_name ?? '',
+        middle_name: learner?.learner?.middle_name ?? learner?.middle_name ?? '',
+        gender: learner?.learner?.gender ?? learner?.gender ?? '',
+        email: learner?.learner?.email ?? learner?.email ?? '',
+        section_id: learner?.section_id ?? learner?.learner?.current_enrollment?.section_id ?? '',
+    }
 }
 const updateStudent = () => {
     router.post(route('admin.learner.update'), selectedLearner.value, {
         onSuccess: () => {
-            toast.success('Member updated successfully.', {
-                autoClose: 2000,
-                position: toast.POSITION.TOP_RIGHT,
-            })
+            showModal.value = false
+            editMode.value = false
         },
         onError: () => {
             toast.error('Failed to update member.', {
                 autoClose: 2000,
                 position: toast.POSITION.TOP_RIGHT,
             })
-        },
-        onFinish: () => {
-            showModal.value = false
-            editMode.value = false
         }
     })
 }
