@@ -70,7 +70,7 @@ class ClubsMonitoringController extends Controller
         $monthly_attendance_reports = [];
         $monthly_attendance_reports2 = [];
         $ipcr = Ipcr::where('school_year_id',SchoolYear::current()->id)
-                ->where('semester', $request->semester ?? 1)
+                ->where('semester', $request->semester ?? 2)
                 ->where('club_type', $clubType)
                 ->first();
 
