@@ -22,4 +22,19 @@ class Feedback extends Model
     protected $casts = [
         'feedback' => 'array',
     ];
+
+    public function clubRegister()
+    {
+        return $this->belongsTo(ClubRegister::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function schoolYear()
+    {
+        return $this->belongsTo(SchoolYear::class);
+    }
 }

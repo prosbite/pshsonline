@@ -96,16 +96,11 @@
           </tbody>
         </table>
 
-        <!-- Extra Line -->
-        <div class="mt-10">
-          <span class="inline-block border-b border-black w-2"></span>
-        </div>
-
         <!-- Signature -->
         <div class="mt-8">
           <p>Signed by:</p>
 
-          <div class="mt-12">
+          <div class="mt-5">
             <p class="font-bold uppercase border-b border-black w-max">
               {{ props.signatoryName }}
             </p>
@@ -120,7 +115,7 @@
         </div>
 
         <!-- Footer -->
-        <div class="mt-72 text-[12px] text-gray-700">
+        <div class="mt-20 text-[12px] text-gray-700">
           {{ props.footerCode }}
         </div>
       </div>
@@ -167,7 +162,7 @@ const props = defineProps({
   },
   signatoryName: {
     type: String,
-    default: 'FULL NAME & SIGNATURE',
+    default: 'MARIFE D. MALLONGA',
   },
   signatoryTitle: {
     type: String,

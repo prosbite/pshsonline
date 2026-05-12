@@ -18,7 +18,10 @@ class ClubAttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        $club = ClubRegister::findOrFail($request->club_register_id);
+        $clubRegisterId = $request->club_register_id ?? auth()->user()->clubRegisters[0]?->id;
+        abort_unless($clubRegisterId, 404);
+
+        $club = ClubRegister::with('club')->findOrFail($clubRegisterId);
 
         if ($club->user_id !== auth()->id()) {
             abort(403, 'Unauthorized access.');
@@ -37,9 +40,14 @@ class ClubAttendanceController extends Controller
         //     }
         // }
         // $delinquents = AttendanceDelinquence::today($previousAttendance->id);
-        $attendance = ClubAttendance::with('clubAttendanceLearner')->where('club_register_id', $request->club_register_id)->orderBy('date','desc')->get();
+        $attendance = ClubAttendance::with('clubAttendanceLearner')
+            ->where('club_register_id', $clubRegisterId)
+            ->orderBy('date', 'desc')
+            ->get();
+
         return Inertia::render('ClubAttendanceList', [
             'attendance' => $attendance,
+            'club' => $club->club,
         ]);
     }
 

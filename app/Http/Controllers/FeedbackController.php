@@ -11,6 +11,19 @@ use Inertia\Inertia;
 
 class FeedbackController extends Controller
 {
+    public function index()
+    {
+        $feedbacks = Feedback::with([
+            'clubRegister.club',
+            'user',
+            'schoolYear',
+        ])->latest()->get();
+
+        return Inertia::render('admin/FeedbackResults', [
+            'feedbacks' => $feedbacks,
+        ]);
+    }
+
     public function create(Request $request)
     {
         $schoolYear = SchoolYear::current();

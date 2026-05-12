@@ -562,6 +562,7 @@
                         :officers="certificationOfficers"
                         :club-name="clubRegister?.club?.name ?? ''"
                         :school-year="printSchoolYear"
+                        signatory-name="MARIFE D. MALLONGA"
                         campus-name="Caraga Region Campus in Butuan City"
                     />
                 </div>

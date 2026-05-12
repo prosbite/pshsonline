@@ -201,6 +201,21 @@
                     </svg>
                     <span class="text-md">External Links</span>
                 </Link>
+                <Link v-if="user.role === 'admin'" :href="route('feedback.results')" :class="{'bg-gray-700': route().current('feedback.results')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <svg class="w-5 h-5 text-emerald-300 group-hover:text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 19.5V4.5A1.5 1.5 0 0 1 5.5 3h13A1.5 1.5 0 0 1 20 4.5v15a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.5Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 8h8M8 12h8M8 16h5" />
+                    </svg>
+                    <span class="text-md">Feedback Results</span>
+                </Link>
+                <Link v-if="user.role === 'admin'" :href="route('log-records')" :class="{'bg-gray-700': route().current('log-records')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <svg class="w-5 h-5 text-emerald-300 group-hover:text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 3h6l4 4v14H5V3h4z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v4h4" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h8M8 16h8" />
+                    </svg>
+                    <span class="text-md">Log Records</span>
+                </Link>
                 <Link v-if="user.role === 'admin'" :href="route('admin.reports.accomplishment')" :class="{'bg-gray-700': route().current('admin.reports.accomplishment')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                     <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 3h6l4 4v14H5V3h4z" />
@@ -550,6 +565,12 @@ onMounted(() => {
         isClubManagementGroupOpen.value = true
     }
     if (route().current('admin.club.managers')) {
+        isClubManagementGroupOpen.value = true
+    }
+    if (route().current('log-records')) {
+        isClubManagementGroupOpen.value = true
+    }
+    if (route().current('feedback.results')) {
         isClubManagementGroupOpen.value = true
     }
     if (route().current('admin.attendance.delinquents') ||

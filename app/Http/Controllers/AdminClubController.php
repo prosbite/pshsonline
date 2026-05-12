@@ -18,7 +18,7 @@ class AdminClubController extends Controller
 {
     public function index()
     {
-        $gradeLevels = [7, 8, 9, 10];
+        $gradeLevels = [7, 8, 9];
 
         $registered_clubs = ClubRegister::query()
             ->with(['club', 'user', 'schoolYear']) // Eager load the main relationships

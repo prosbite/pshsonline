@@ -94,6 +94,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin,supervi
     Route::post('/clubs/monitoring', [ClubsMonitoringController::class, 'store'])->name('admin.clubs.monitoring.store');
     Route::post('/clubs/monitoring/update', [ClubsMonitoringController::class, 'update'])->name('admin.clubs.monitoring.update');
     Route::get('/reports/accomplishment', [AccomplishmentReportController::class, 'index'])->name('admin.reports.accomplishment');
+    Route::get('/feedback/results', [FeedbackController::class, 'index'])->name('feedback.results');
 
     Route::get('/advisers/attendance', [AdviserAttendanceController::class, 'index'])->name('admin.advisers.attendance');
     Route::get('/advisers/attendance/create', [AdviserAttendanceController::class, 'create'])->name('admin.advisers.attendance.create');
