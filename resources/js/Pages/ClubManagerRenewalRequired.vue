@@ -54,6 +54,14 @@ const schoolYearLabel = computed(() => {
         return 'the current school year'
     }
 
+    if (typeof year === 'string') {
+        return `SY ${year}`
+    }
+
+    if (year?.school_year) {
+        return `SY ${year.school_year}`
+    }
+
     return `SY ${year.year_start}-${year.year_end}`
 })
 </script>

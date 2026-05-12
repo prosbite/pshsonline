@@ -572,7 +572,7 @@
 
 <script lang="ts" setup>
 import MainLayout from '@/Layouts/MainLayout.vue'
-import { Head, useForm } from '@inertiajs/vue3'
+import { Head, useForm, usePage } from '@inertiajs/vue3'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
@@ -589,6 +589,8 @@ import ApplicationLetterForRecognition from '@/Components/club/forms/Application
 const props = defineProps({
     club_manager: Object,
 })
+
+const page = usePage()
 
 const clubManager = computed(() => props.club_manager)
 const clubRegister = computed(() => clubManager.value?.clubRegister ?? clubManager.value?.club_register ?? null)
@@ -657,9 +659,7 @@ const officerForm = useForm({
 })
 let timeout: ReturnType<typeof setTimeout> | null = null
 const nextOfficerOrder = computed(() => (sortedClubOfficers.value.length ?? 0) + 1)
-const schoolYearLabel = computed(() => {
-    const schoolYear = clubRegister.value?.schoolYear ?? clubRegister.value?.current_school_year ?? null
-
+const normalizeSchoolYear = (schoolYear: any) => {
     if (!schoolYear) {
         return ''
     }
@@ -668,9 +668,26 @@ const schoolYearLabel = computed(() => {
         return schoolYear
     }
 
-    return `${schoolYear.year_start}-${schoolYear.year_end}`
+    if (schoolYear?.school_year) {
+        return schoolYear.school_year
+    }
+
+    if (schoolYear?.year_start) {
+        return `${schoolYear.year_start}-${schoolYear.year_end}`
+    }
+
+    return ''
+}
+const schoolYearLabel = computed(() => {
+    return normalizeSchoolYear(
+        page.props.school_year
+        ?? page.props.current_school_year
+        ?? page.props.sy
+        ?? clubRegister.value?.schoolYear
+        ?? clubRegister.value?.current_school_year
+    )
 })
-const printSchoolYear = computed(() => clubRegister.value?.schoolYear ?? clubRegister.value?.current_school_year ?? schoolYearLabel.value)
+const printSchoolYear = computed(() => schoolYearLabel.value)
 const advisershipPurposeDefault = computed(() => {
     return clubRegister.value?.club?.description ?? clubRegister.value?.club?.type ?? 'promoting leadership, service, and holistic student development'
 })

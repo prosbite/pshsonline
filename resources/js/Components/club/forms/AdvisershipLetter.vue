@@ -264,6 +264,10 @@ const schoolYearLabel = computed(() => {
     return props.schoolYear
   }
 
+  if (props.schoolYear?.school_year) {
+    return props.schoolYear.school_year
+  }
+
   if (props.schoolYear?.year_start) {
     return `${props.schoolYear.year_start}-${props.schoolYear.year_end}`
   }

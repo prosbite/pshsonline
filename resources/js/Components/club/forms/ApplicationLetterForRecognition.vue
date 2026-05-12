@@ -33,7 +33,7 @@
         </div>
 
         <div class="mt-5 leading-tight">
-          <p class="font-bold uppercase">
+          <p class="font-bold">
             {{ recipientName }}
           </p>
 
@@ -292,6 +292,10 @@ const props = defineProps({
 const schoolYearLabel = computed(() => {
   if (typeof props.schoolYear === 'string') {
     return props.schoolYear
+  }
+
+  if (props.schoolYear?.school_year) {
+    return props.schoolYear.school_year
   }
 
   if (props.schoolYear?.year_start) {
