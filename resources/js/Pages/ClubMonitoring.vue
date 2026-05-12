@@ -8,7 +8,7 @@
             </div>
             <select @change="handleSemesterChange" v-model="currentSemester" id="attendanceDate" required class="border w-60 !mt-0 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 <option value="" disabled selected>Select Semester</option>
-                <option value="s1">1st Semester</option>
+                <!-- <option value="s1">1st Semester</option> -->
                 <option value="s2">2nd Semester</option>
             </select>
         </div>

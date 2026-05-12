@@ -91,7 +91,7 @@ class ClubsMonitoringController extends Controller
             'monthly_attendance_reports2' => $monthly_attendance_reports2,
             'ipcr' => $ipcr,
             'clubs' => $clubs,
-            'semester' => $request->semester ?? 1,
+            'semester' => $request->semester ?? 2,
         ]);
     }
     public function store(Request $request)
