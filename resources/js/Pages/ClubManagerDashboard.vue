@@ -145,7 +145,7 @@
                                         @click="dissolveOfficer(officer)"
                                         class="rounded-lg bg-rose-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-rose-700 transition-colors duration-200"
                                     >
-                                        Dissolve
+                                        Revoke
                                     </button>
                                 </td>
                             </tr>
