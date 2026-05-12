@@ -102,17 +102,17 @@
           <div>
             <p>Prepared by:</p>
 
-            <div class="mt-10">
+            <div class="mt-4">
               <p class="font-bold uppercase underline">
                 {{ props.adviserName }}
               </p>
               <p>{{ props.adviserLabel }}</p>
             </div>
 
-            <div class="mt-10">
+            <div class="mt-4">
               <p>Recommended by:</p>
 
-              <div class="mt-10">
+              <div class="mt-4">
                 <p class="font-bold underline">
                   JOHN RIDAN D. DECHUSA
                 </p>
@@ -127,17 +127,17 @@
           <div>
             <p>Noted by:</p>
 
-            <div class="mt-10">
+            <div class="mt-4">
               <p class="font-bold underline">
                 GRETCHEN MAE B. EMPUESTO, PhD
               </p>
               <p>ALP Coordinator</p>
             </div>
 
-            <div class="mt-10">
+            <div class="mt-4">
               <p>Approved by:</p>
 
-              <div class="mt-10">
+              <div class="mt-4">
                 <p class="font-bold underline">
                   MELBA C. PATACSIL, PhD
                 </p>

@@ -48,7 +48,7 @@
           <p>Dear Sir/Ma'am,</p>
         </div>
 
-        <div class="mt-6 space-y-6 text-justify leading-relaxed">
+        <div class="mt-6 space-y-6 text-justify leading-tight">
           <p>
             Greetings of integrity, excellence, and service!
           </p>
@@ -104,8 +104,8 @@
           </div>
         </div>
 
-        <div class="mt-10 grid grid-cols-2 gap-16">
-          <div class="space-y-10">
+        <div class="mt-5 grid grid-cols-2 gap-7">
+          <div class="space-y-5">
             <div>
               <p>Accepted by:</p>
 
@@ -133,7 +133,7 @@
             </div>
           </div>
 
-          <div class="space-y-10">
+          <div class="space-y-5">
             <div>
               <p>Noted by:</p>
 

@@ -7,7 +7,7 @@
                 <div>
                     <p class="text-emerald-300 uppercase tracking-[0.25em] text-xs font-semibold mb-3">Club Manager Access</p>
                     <h1 class="text-4xl font-extrabold tracking-tight">Renewal required</h1>
-                    <p class="mt-3 text-slate-200 leading-relaxed">
+                    <p class="mt-3 text-slate-200 leading-tight">
                         Your club manager record has not yet been renewed for
                         <span class="font-semibold text-white">{{ schoolYearLabel }}</span>.
                         Please contact the administrator to renew your club registration for this school year.

@@ -44,7 +44,7 @@
           <p>Greetings of integrity, excellence, and service!</p>
         </div>
 
-        <div class="mt-6 space-y-6 text-justify leading-relaxed">
+        <div class="mt-6 space-y-6 text-justify leading-tight">
           <p>
             The
             <span class="font-bold">{{ clubName }}</span>
@@ -114,11 +114,11 @@
           </div>
         </div>
 
-        <div class="mt-10 grid grid-cols-2 gap-20">
+        <div class="mt-5 grid grid-cols-2 gap-7">
           <div>
             <p>Prepared by:</p>
 
-            <div class="mt-10">
+            <div class="mt-5">
               <p class="font-bold uppercase border-b border-black !w-fit">
                 {{ adviserName }}
               </p>
@@ -130,8 +130,8 @@
           <div>
             <p>Noted by:</p>
 
-            <div class="mt-10">
-              <p class="font-bold uppercase border-b border-black !w-fit">
+            <div class="mt-5">
+              <p class="font-bold border-b border-black !w-fit">
                 {{ coordinatorName }}
               </p>
 
@@ -139,10 +139,10 @@
             </div>
           </div>
 
-           <div>
+          <div>
             <p>Recommended by:</p>
 
-            <div class="mt-10">
+            <div class="mt-5">
               <p class="font-bold uppercase border-b border-black !w-fit">
                 {{ recommendedByName }}
               </p>
@@ -156,7 +156,7 @@
           <div>
             <p>Approved by:</p>
 
-            <div class="mt-10">
+            <div class="mt-5">
               <p class="font-bold border-b border-black !w-fit">
                 {{ approvedByName }}
               </p>

@@ -36,7 +36,7 @@
         </div>
 
         <!-- Intro Paragraph -->
-        <div class="mt-14 text-justify leading-relaxed">
+        <div class="mt-14 text-justify leading-tight">
           <p>
             {{ props.introText }}
             <span class="inline-block border-b border-black min-w-14 align-middle">

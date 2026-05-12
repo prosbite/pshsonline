@@ -48,7 +48,7 @@
           </div>
 
           <!-- Body -->
-          <div class="mt-10 text-justify indent-10 leading-relaxed">
+          <div class="mt-10 text-justify indent-10 leading-tight">
             <p>
               This is to attest that I voluntarily allow my child to participate in all
               activities, meetings, and learning experiences under
