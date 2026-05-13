@@ -66,9 +66,9 @@
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendance2Report(adviser.adviser) ? '5' : '-' }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendance2Report(adviser.adviser) ? '5' : '-' }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendance2Report(adviser.adviser) ? (isTimely(adviser.adviser) ? '5' : '1') : '-' }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalQ / attendanceCount).toFixed(1) }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalE / attendanceCount).toFixed(1) }}</td>
-                    <td class="px-2 py-2 text-center text-sm border-r"> {{ (adviser.totalT / attendanceCount).toFixed(1) }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ getAverageScore(adviser, adviser.totalQ, 'q') }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ getAverageScore(adviser, adviser.totalE, 'e') }}</td>
+                    <td class="px-2 py-2 text-center text-sm border-r"> {{ getAverageScore(adviser, adviser.totalT, 't') }}</td>
                 </tr>
             </tbody>
             </table>
@@ -155,6 +155,29 @@ const hasMonthlyAttendanceReport = (adviser: string) => {
 }
 const hasMonthlyAttendance2Report = (adviser: string) => {
     return props.monthly_attendance_reports2.some((report: any) => report.user.name === adviser)
+}
+const getSubmissionCount = (adviser: string) => {
+    return [
+        hasMonthlyAttendanceReport(adviser),
+        hasMonthlyAttendance2Report(adviser),
+    ].filter(Boolean).length
+}
+const getSubmissionScore = (adviser: string, axis: 'q' | 'e' | 't') => {
+    const firstReportScore = hasMonthlyAttendanceReport(adviser) ? 5 : 0
+    const secondReportScore = hasMonthlyAttendance2Report(adviser)
+        ? (axis === 't' ? (isTimely(adviser) ? 5 : 1) : 5)
+        : 0
+
+    return firstReportScore + secondReportScore
+}
+const getAverageScore = (adviser: any, baseTotal: number, axis: 'q' | 'e' | 't') => {
+    const totalCount = attendanceCount.value + getSubmissionCount(adviser.adviser)
+    if (totalCount === 0) {
+        return '-'
+    }
+
+    const totalScore = baseTotal + getSubmissionScore(adviser.adviser, axis)
+    return (totalScore / totalCount).toFixed(1)
 }
 const isTimely = (adviser: string) => {
     const report = props.monthly_attendance_reports2?.find((report: any) => report.user.name === adviser)

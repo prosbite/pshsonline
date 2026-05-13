@@ -62,9 +62,9 @@
                         <td class="px-2 py-2 text-center text-sm border-r">{{ props.submission2 ? 5 : '-' }}</td>
                         <td class="px-2 py-2 text-center text-sm border-r">{{ props.submission2 ? 5 : '-' }}</td>
                         <td class="px-2 py-2 text-center text-sm border-r">{{ props.submission2 ? 5 : '-' }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r font-bold"> {{ (adviser.totalQ / attendanceCount).toFixed(1) }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r font-bold"> {{ (adviser.totalE / attendanceCount).toFixed(1) }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r font-bold"> {{ (adviser.totalT / attendanceCount).toFixed(1) }}</td>
+                        <td class="px-2 py-2 text-center text-sm border-r font-bold"> {{ getAverageScore(adviser.totalQ, attendanceCount, 'q') }}</td>
+                        <td class="px-2 py-2 text-center text-sm border-r font-bold"> {{ getAverageScore(adviser.totalE, attendanceCount, 'e') }}</td>
+                        <td class="px-2 py-2 text-center text-sm border-r font-bold"> {{ getAverageScore(adviser.totalT, attendanceCount, 't') }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -88,6 +88,19 @@ const props = defineProps({
     attendanceCount: Number,
     semester: String,
 })
+
+const getSubmissionScore = (submission: any) => submission ? 5 : 0
+
+const getAverageScore = (baseTotal: number, attendanceCount: number) => {
+    const submissionCount = [props.submission, props.submission2].filter(Boolean).length
+    const totalCount = attendanceCount + submissionCount
+    if (totalCount === 0) {
+        return '-'
+    }
+
+    const totalScore = baseTotal + getSubmissionScore(props.submission) + getSubmissionScore(props.submission2)
+    return (totalScore / totalCount).toFixed(1)
+}
 </script>
 
 <style>
