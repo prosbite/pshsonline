@@ -168,18 +168,21 @@ class ClubsMonitoringController extends Controller
                         't' => $adviserData->date->isSameDay($adviserData->created_at) ? 5 : 1,
                     ]);
                 } else {
-                    $mergedData->push([
-                        'adviser' => $adviser,
-                        'submitted_on' => null,
-                        'edited_on' => null,
-                        'club' => null,
-                        'q' => 1,
-                        'e' => 2,
-                        't' => 1,
-                    ]);
+                    // $mergedData->push([
+                    //     'adviser' => $adviser,
+                    //     'submitted_on' => null,
+                    //     'edited_on' => null,
+                    //     'club' => null,
+                    //     'q' => 1,
+                    //     'e' => 2,
+                    //     't' => 1,
+                    // ]);
                 }
             }
             return $mergedData;
+        });
+        $aa = $attendances->filter(function ($item) {
+            return $item->isNotEmpty();
         });
         $monthly_attendance_report1 = $request->semester === 's1' ? 'monthly_attendance_report' : 'monthly_attendance_report_3rd_quarter';
         $monthly_attendance_report2 = $request->semester === 's1' ? 'monthly_attendance_report_2nd_quarter' : 'monthly_attendance_report_4th_quarter';
@@ -199,7 +202,7 @@ class ClubsMonitoringController extends Controller
         return Inertia::render('ClubMonitoring', [
             'club' => $club,
             'advisers' => $adviser,
-            'attendances' => $attendances,
+            'attendances' => $aa,
             'submission' => $submission,
             'accomplishment' => $accomplishment,
             'submission2' => $submission2,
