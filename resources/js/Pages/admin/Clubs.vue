@@ -232,13 +232,13 @@
                                 scope="col"
                                 class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                             >
-                                Male
+                                Female
                             </th>
                             <th
                                 scope="col"
                                 class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                             >
-                                Female
+                                Male
                             </th>
                             <th
                                 scope="col"
