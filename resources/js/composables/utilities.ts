@@ -57,8 +57,17 @@ export function middleInitials(str: string) {
     return str.replace(/\b\w/g, (match) => match.toUpperCase()).slice(0, 1) + '.';
 }
 
-export function fullDate(date: string) {
-    return new Date(date).toLocaleDateString('en-US', {
+export function fullDate(date: string | null | undefined) {
+    if (!date) {
+        return '-';
+    }
+
+    const parsedDate = new Date(date);
+    if (Number.isNaN(parsedDate.getTime())) {
+        return '-';
+    }
+
+    return parsedDate.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',

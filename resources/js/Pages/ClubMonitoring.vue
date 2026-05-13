@@ -223,6 +223,7 @@ const sortedData = computed(() => {
             totalQ: 0,
             totalE: 0,
             totalT: 0,
+            realAttendanceCount: 0,
         }
         for (let i in attendances) {
             let count = 0
@@ -232,20 +233,12 @@ const sortedData = computed(() => {
                     adviserData.totalQ += a.q
                     adviserData.totalE += a.e
                     adviserData.totalT += a.t
+                    adviserData.realAttendanceCount++
                     count++
                 }
             });
             if(count === 0){
-                adviserData.attendances[i] = {
-                    adviser: adviser,
-                    club: null,
-                    q: 0,
-                    e: 0,
-                    t: 0,
-                }
-                adviserData.totalQ += 0
-                adviserData.totalE += 0
-                adviserData.totalT += 0
+                adviserData.attendances[i] = null
             }
         }
         finalData.push(adviserData)

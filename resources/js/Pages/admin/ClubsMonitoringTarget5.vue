@@ -12,9 +12,9 @@
                 <th rowspan="2" class="px-4 py-3 text-left text-sm font-semibold border-r border-indigo-400">
                     Adviser’s Name
                 </th>
-                <th v-for="attendance,index in attendances" colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
-                    {{ fullDate(index) }}
-                </th>
+                    <th v-for="date in attendanceDates" :key="date" colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
+                        {{ fullDate(date) }}
+                    </th>
                 <th colspan="3" class="px-4 py-2 text-center text-sm font-semibold border-r border-indigo-400">
                     Printed Copies (1st Quarter)
                 </th>
@@ -26,7 +26,7 @@
                 </th>
                 </tr>
                 <tr class="bg-indigo-100 text-indigo-900">
-                <template v-for="attendance,index in attendances">
+                <template v-for="date in attendanceDates" :key="date">
                     <th class="px-2 py-2 text-sm font-medium border-r border-gray-300">Q</th>
                     <th class="px-2 py-2 text-sm font-medium border-r border-gray-300">E</th>
                     <th class="px-2 py-2 text-sm font-medium border-r border-gray-300">T</th>
@@ -55,10 +55,10 @@
                     <td class="px-4 py-3 text-sm text-gray-700 font-medium border-r border-gray-200">
                         {{ adviser.adviser }}
                     </td>
-                    <template v-for="attendance,index in adviser.attendances">
-                        <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.q }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.e }}</td>
-                        <td class="px-2 py-2 text-center text-sm border-r"> {{ attendance.t }}</td>
+                    <template v-for="date in attendanceDates" :key="date">
+                        <td class="px-2 py-2 text-center text-sm border-r"> {{ adviser.attendances?.[date] ? adviser.attendances[date].q : '-' }}</td>
+                        <td class="px-2 py-2 text-center text-sm border-r"> {{ adviser.attendances?.[date] ? adviser.attendances[date].e : '-' }}</td>
+                        <td class="px-2 py-2 text-center text-sm border-r"> {{ adviser.attendances?.[date] ? adviser.attendances[date].t : '-' }}</td>
                     </template>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '-' }}</td>
                     <td class="px-2 py-2 text-center text-sm border-r"> {{ hasMonthlyAttendanceReport(adviser.adviser) ? '5' : '-' }}</td>
@@ -143,9 +143,35 @@ const props = defineProps({
     monthly_attendance_reports: Array,
     monthly_attendance_reports2: Array,
 })
+const validAttendances = computed(() => {
+    const filtered: Record<string, any> = {}
+
+    Object.entries(props.attendances ?? {}).forEach(([date, attendances]) => {
+        if (!date || date === 'null' || date === 'undefined') {
+            return
+        }
+
+        const validRows = (attendances as any[]).filter((attendance: any) => attendance?.created_at && attendance?.updated_at)
+        if (validRows.length === 0) {
+            return
+        }
+
+        filtered[date] = validRows
+    })
+
+    return filtered
+})
+const validatedFinalAttendances = computed(() => {
+    return Object.fromEntries(
+        Object.entries(validAttendances.value).filter(([, attendances]) => {
+            return Array.isArray(attendances) && attendances.length > 0
+        })
+    )
+})
+const attendanceDates = computed(() => Object.keys(validatedFinalAttendances.value))
 const attendanceCount = computed(() => {
     let count = 0
-    for (let i in props.attendances) {
+    for (let i in validatedFinalAttendances.value) {
         count++
     }
     return count
@@ -171,7 +197,7 @@ const getSubmissionScore = (adviser: string, axis: 'q' | 'e' | 't') => {
     return firstReportScore + secondReportScore
 }
 const getAverageScore = (adviser: any, baseTotal: number, axis: 'q' | 'e' | 't') => {
-    const totalCount = attendanceCount.value + getSubmissionCount(adviser.adviser)
+    const totalCount = adviser.realAttendanceCount + getSubmissionCount(adviser.adviser)
     if (totalCount === 0) {
         return '-'
     }
@@ -190,7 +216,8 @@ const isTimely = (adviser: string) => {
 }
 const sortedData = computed(() => {
     let advisers = props.advisers;
-    const attendances = props.attendances;
+    const attendances = validatedFinalAttendances.value;
+    const dates = attendanceDates.value;
     let finalData = []
     advisers.forEach((adviser: any, index: number) => {
         let adviserData = {
@@ -199,31 +226,20 @@ const sortedData = computed(() => {
             totalQ: 0,
             totalE: 0,
             totalT: 0,
+            realAttendanceCount: 0,
         }
-        for (let i in attendances) {
-            let count = 0
-            attendances[i].forEach((a: any, j: number) => {
-                if (a.adviser === adviser) {
-                    adviserData.attendances[i] = a
-                    adviserData.totalQ += a.q
-                    adviserData.totalE += a.e
-                    adviserData.totalT += a.t
-                    count++
-                }
-            });
-            if(count === 0){
-                adviserData.attendances[i] = {
-                    adviser: adviser,
-                    club: null,
-                    q: 0,
-                    e: 0,
-                    t: 0,
-                }
-                adviserData.totalQ += 0
-                adviserData.totalE += 0
-                adviserData.totalT += 0
+        dates.forEach((date) => {
+            const match = attendances[date]?.find((a: any) => a.adviser === adviser && a.created_at && a.updated_at)
+            if (match) {
+                adviserData.attendances[date] = match
+                adviserData.totalQ += match.q
+                adviserData.totalE += match.e
+                adviserData.totalT += match.t
+                adviserData.realAttendanceCount++
+            } else {
+                adviserData.attendances[date] = null
             }
-        }
+        })
         finalData.push(adviserData)
     });
     return finalData

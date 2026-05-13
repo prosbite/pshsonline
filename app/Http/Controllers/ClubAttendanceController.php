@@ -228,8 +228,16 @@ class ClubAttendanceController extends Controller
                 'remarks' => $learner['pivot']['remarks'],
             ];
         }
-        $clubAttendance->update($request->attendance);
-        $clubAttendance->touch();
+        $attendanceData = collect($request->attendance)->only([
+            'club_register_id',
+            'school_year_id',
+            'activity',
+            'date',
+            'image',
+            'remarks',
+        ])->all();
+
+        ClubAttendance::where('id', $clubAttendance->id)->update($attendanceData);
         $clubAttendance->clubAttendanceLearner()->detach();
         $clubAttendance->clubAttendanceLearner()->attach($clubAttendanceLearners);
         $clubAttendance->delinquents()->delete();

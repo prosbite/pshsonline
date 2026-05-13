@@ -15,6 +15,39 @@ use Carbon\Carbon;
 
 class ClubsMonitoringController extends Controller
 {
+    private function findAdviserAttendance($group, string $adviser)
+    {
+        return $group->first(function ($item) use ($adviser) {
+            $itemName = data_get($item, 'clubRegister.user.name');
+
+            if (!is_string($itemName)) {
+                return false;
+            }
+
+            return strcasecmp(trim($itemName), trim($adviser)) === 0;
+        });
+    }
+
+    private function buildAttendanceRow(string $adviser, $adviserData, bool $includeClub = true): array
+    {
+        $row = [
+            'adviser' => $adviser,
+            'created_at' => Carbon::parse($adviserData->created_at)->toDateTimeString(),
+            'updated_at' => Carbon::parse($adviserData->updated_at ?? $adviserData->created_at)->toDateTimeString(),
+            'submitted_on' => Carbon::parse($adviserData->created_at)->format('Y-m-d'),
+            'edited_on' => Carbon::parse($adviserData->updated_at ?? $adviserData->created_at)->format('Y-m-d'),
+            'q' => $adviserData->date->isSameDay($adviserData->updated_at ?? $adviserData->created_at) ? 5 : 4,
+            'e' => 5,
+            't' => $adviserData->date->isSameDay($adviserData->created_at) ? 5 : 1,
+        ];
+
+        if ($includeClub) {
+            $row['club'] = $adviserData->clubRegister->club->name;
+        }
+
+        return $row;
+    }
+
     public function index(Request $request)
     {
         $clubType = $request->club_type ?? 'club';
@@ -30,6 +63,7 @@ class ClubsMonitoringController extends Controller
         ->whereHas('clubRegister.club', function ($q) use ($clubType) {
             $q->where('type', $clubType);
         })
+        ->whereNotNull('date')
         ->orderBy('date', 'asc')
         ->where('date', '>=', '2025-08-14')
         ->where('date', '<=', '2025-12-05')
@@ -39,21 +73,15 @@ class ClubsMonitoringController extends Controller
             $mergedData = collect([]);
 
             foreach ($allAdvisers as $adviser) {
-                $adviserData = $group->firstWhere('clubRegister.user.name', $adviser);
+                $adviserData = $this->findAdviserAttendance($group, $adviser);
 
                 if ($adviserData) {
-                    $mergedData->push([
-                        'adviser' => $adviser,
-                        'submitted_on' => Carbon::parse($adviserData->created_at)->format('Y-m-d'),
-                        'edited_on' => Carbon::parse($adviserData->updated_at)->format('Y-m-d'),
-                        'club' => $adviserData->clubRegister->club->name,
-                        'q' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 4,
-                        'e' => 5,
-                        't' => $adviserData->date->isSameDay($adviserData->created_at) ? 5 : 1,
-                    ]);
+                    $mergedData->push($this->buildAttendanceRow($adviser, $adviserData));
                 } else {
                     $mergedData->push([
                         'adviser' => $adviser,
+                        'created_at' => null,
+                        'updated_at' => null,
                         'submitted_on' => null,
                         'edited_on' => null,
                         'club' => null,
@@ -146,6 +174,7 @@ class ClubsMonitoringController extends Controller
         ->whereHas('clubRegister.club', function ($q) use ($clubType) {
             $q->where('type', $clubType);
         })
+        ->whereNotNull('date')
         ->orderBy('date', 'asc')
         ->where('date', '>=', $startDate)
         ->where('date', '<=', $endDate)
@@ -155,21 +184,15 @@ class ClubsMonitoringController extends Controller
             $mergedData = collect([]);
 
             foreach ($adviser as $adviser) {
-                $adviserData = $group->firstWhere('clubRegister.user.name', $adviser);
+                $adviserData = $this->findAdviserAttendance($group, $adviser);
 
                 if ($adviserData) {
-                    $mergedData->push([
-                        'adviser' => $adviser,
-                        'club' => $adviserData->clubRegister->club->name,
-                        'submitted_on' => Carbon::parse($adviserData->created_at)->format('Y-m-d'),
-                        'edited_on' => Carbon::parse($adviserData->updated_at)->format('Y-m-d'),
-                        'q' => $adviserData->date->isSameDay($adviserData->updated_at) ? 5 : 4,
-                        'e' => 5,
-                        't' => $adviserData->date->isSameDay($adviserData->created_at) ? 5 : 1,
-                    ]);
+                    $mergedData->push($this->buildAttendanceRow($adviser, $adviserData));
                 } else {
                     $mergedData->push([
                         'adviser' => $adviser,
+                        'created_at' => null,
+                        'updated_at' => null,
                         'submitted_on' => null,
                         'edited_on' => null,
                         'club' => null,

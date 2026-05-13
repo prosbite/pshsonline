@@ -236,6 +236,12 @@
                     </svg>
                     <span class="text-md">Attendance</span>
                 </Link>
+                <Link v-if="user.role === 'admin'" :href="route('admin.attendance.audit')" :class="{'bg-gray-700': route().current('admin.attendance.audit')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
+                    <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m5-3a8 8 0 11-16 0 8 8 0 0116 0z" />
+                    </svg>
+                    <span class="text-md">Attendance Audit</span>
+                </Link>
                 <Link v-if="user.role === 'admin'" :href="route('admin.attendance.delinquents')" :class="{'bg-gray-700': route().current('admin.attendance.delinquents')}" class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 group">
                     <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -589,6 +595,7 @@ onMounted(() => {
         isClubReportsGroupOpen.value = true
     }
     if (route().current('admin.attendance') ||
+        route().current('admin.attendance.audit') ||
         route().current('admin.advisers.attendance')) {
         isSupervisorAttendanceGroupOpen.value = true
     }

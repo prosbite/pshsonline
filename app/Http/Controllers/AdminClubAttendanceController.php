@@ -13,6 +13,128 @@ use Carbon\Carbon;
 
 class AdminClubAttendanceController extends Controller
 {
+    private function attendanceDateString($value): ?string
+    {
+        return $value ? Carbon::parse($value)->toDateString() : null;
+    }
+
+    private function buildWednesdayDates($startDate, $endDate): array
+    {
+        $dates = [];
+        $cursor = Carbon::parse($startDate)->startOfWeek(Carbon::WEDNESDAY);
+        $end = Carbon::parse($endDate)->startOfWeek(Carbon::WEDNESDAY);
+
+        while ($cursor->lte($end)) {
+            $dates[] = $cursor->copy();
+            $cursor->addWeek();
+        }
+
+        return $dates;
+    }
+
+    private function findWeeklyAttendance($attendances, int $clubRegisterId, Carbon $wednesday)
+    {
+        $weekStart = $wednesday->copy()->startOfDay();
+        $weekEnd = $wednesday->copy()->addDays(6)->endOfDay();
+        $wednesdayString = $wednesday->toDateString();
+
+        $weeklyAttendances = $attendances
+            ->filter(function ($attendance) use ($clubRegisterId, $weekStart, $weekEnd) {
+                $attendanceDate = Carbon::parse($attendance->date);
+
+                return (int) $attendance->club_register_id === $clubRegisterId
+                    && $attendanceDate->betweenIncluded($weekStart, $weekEnd);
+            })
+            ->sortBy(function ($attendance) {
+                return Carbon::parse($attendance->date)->timestamp;
+            })
+            ->values();
+
+        if ($weeklyAttendances->isEmpty()) {
+            return null;
+        }
+
+        $exactMatch = $weeklyAttendances->first(function ($attendance) use ($wednesdayString) {
+            return Carbon::parse($attendance->date)->toDateString() === $wednesdayString;
+        });
+
+        return $exactMatch ?? $weeklyAttendances->first();
+    }
+
+    private function formatAuditCell($attendance, Carbon $wednesday): array
+    {
+        if (! $attendance) {
+            return [
+                'attendance' => null,
+                'label' => '-',
+                'is_exact' => false,
+                'edit_url' => null,
+            ];
+        }
+
+        $attendanceDate = Carbon::parse($attendance->date);
+
+        return [
+            'attendance' => $attendance,
+            'label' => $attendanceDate->format('M j'),
+            'is_exact' => $attendanceDate->toDateString() === $wednesday->toDateString(),
+            'edit_url' => route('club.attendance.edit', ['attendance_id' => $attendance->id]),
+        ];
+    }
+
+    public function audit()
+    {
+        $schoolYear = SchoolYear::current();
+        $auditStart = Carbon::create(now()->year, 1, 1)->startOfDay();
+        $auditEnd = Carbon::create(now()->year, 4, 22)->endOfDay();
+
+        $clubs = ClubRegister::with('club', 'user')
+            ->where('school_year_id', $schoolYear->id)
+            ->get()
+            ->sortBy(fn ($clubRegister) => $clubRegister->club?->name ?? '')
+            ->values();
+
+        $attendances = ClubAttendance::with(['clubRegister.club', 'clubRegister.user'])
+            ->where('school_year_id', $schoolYear->id)
+            ->whereBetween('date', [$auditStart->toDateString(), $auditEnd->toDateString()])
+            ->orderBy('date', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        if ($attendances->isEmpty()) {
+            return Inertia::render('admin/ClubAttendanceAudit', [
+                'attendance' => [],
+                'clubs' => $clubs,
+                'wednesdays' => [],
+            ]);
+        }
+
+        $wednesdays = $this->buildWednesdayDates(
+            $auditStart,
+            $auditEnd
+        );
+
+        $attendanceRows = collect($wednesdays)->map(function (Carbon $wednesday) use ($clubs, $attendances) {
+            $cells = $clubs->map(function ($clubRegister) use ($attendances, $wednesday) {
+                $weeklyAttendance = $this->findWeeklyAttendance($attendances, $clubRegister->id, $wednesday);
+
+                return $this->formatAuditCell($weeklyAttendance, $wednesday);
+            })->values();
+
+            return [
+                'date' => $wednesday->toDateString(),
+                'label' => $wednesday->format('F j, Y'),
+                'cells' => $cells,
+            ];
+        })->values();
+
+        return Inertia::render('admin/ClubAttendanceAudit', [
+            'attendance' => $attendanceRows,
+            'clubs' => $clubs,
+            'wednesdays' => collect($wednesdays)->map(fn (Carbon $date) => $date->toDateString())->values(),
+        ]);
+    }
+
     public function index(Request $request)
     {
         $date = $request->date ?? Carbon::now()->format('Y-m-d');

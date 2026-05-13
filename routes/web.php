@@ -83,6 +83,7 @@ Route::prefix('admin')->middleware('auth', RoleMiddleware::class.':admin,supervi
     Route::post('/club/register', [ClubController::class, 'registerMember'])->name('club.register');
     Route::post('/club/unregister', [AdminClubController::class, 'unregisterMember'])->name('admin.club.unregister');
     Route::post('/club/update', [ClubController::class, 'updateClub'])->name('club.update');
+    Route::get('/attendances/audit', [AdminClubAttendanceController::class, 'audit'])->name('admin.attendance.audit');
     Route::get('/attendances', [AdminClubAttendanceController::class, 'index'])->name('admin.attendance');
     Route::get('/attendances/infractions', [AdminClubAttendanceController::class, 'infractions'])->name('admin.attendance.infractions');
     Route::get('/club/attendance/delinquents', [AdminClubAttendanceController::class, 'delinquents'])->name('admin.attendance.delinquents');
