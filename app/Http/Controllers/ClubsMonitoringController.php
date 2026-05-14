@@ -197,7 +197,7 @@ class ClubsMonitoringController extends Controller
         $target11 = Submission::where(['club_register_id' => $id, 'name' => 'attendance_summary_report_1st_semester', 'status' => 'completed'])->first();
         $ipcr = Ipcr::where('school_year_id',SchoolYear::current()->id)
                 ->where('semester', $request->semester === 's1' ? 1 : 2)
-                ->where('club_type', $clubType)
+                ->where('club_type', 'club')
                 ->first();
         return Inertia::render('ClubMonitoring', [
             'club' => $club,
