@@ -517,7 +517,7 @@
                         <div class="overflow-x-auto rounded-lg">
                             <div class="text-center mb-8">
                                 <h1 class="font-bold text-lg">Alternative Learning Program Accomplishment Monitoring</h1>
-                                <p class="text-black">First Semester, S.Y. 2025-2026</p>
+                                <p class="text-black">Second Semester, S.Y. 2025-2026</p>
                             </div>
                             <p class="font-bold text-black mb-1">{{ clubType.replace('_', ' ').toUpperCase() }}</p>
                             <table class="min-w-full border border-black bg-white">
